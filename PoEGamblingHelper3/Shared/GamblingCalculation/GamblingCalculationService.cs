@@ -25,7 +25,7 @@ public class GamblingCalculationService
         var request = new HttpRequestMessage();
         request.Method = HttpMethod.Get;
         request.RequestUri = new Uri("https://poe.ninja/api/data/itemoverview?league=Sentinel&type=SkillGem");
-        request.SetBrowserRequestMode(BrowserRequestMode.NoCors);
+        // request.SetBrowserRequestMode(BrowserRequestMode.NoCors);
         request.SetBrowserRequestCache(BrowserRequestCache.NoStore);
         var result = await _httpClient.SendAsync(request);
         Console.WriteLine(result);
