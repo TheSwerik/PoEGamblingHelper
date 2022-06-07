@@ -5,3 +5,11 @@
 <h1>Hello, world!</h1>
 
 Welcome to your new app.
+<button @onclick="LoadGamblingData">wtf</button>
+
+@foreach (var data in GamblingData)
+{
+    <div>
+        <p>@data.Name</p>
+    </div>
+}

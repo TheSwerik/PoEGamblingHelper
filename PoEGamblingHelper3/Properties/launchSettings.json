@@ -17,6 +17,18 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
+    },
+    "Local-reload": {
+      "commandName": "Executable",
+      "workingDirectory": "$(ProjectDir)",
+      "executablePath": "dotnet.exe",
+      "commandLineArgs": "watch run --non-interactive",
+      "dotnetRunMessages": true,
+      "applicationUrl": "https://localhost:4201;http://localhost:4200",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Local",
+        "DOTNET_WATCH_SUPPRESS_EMOJIS": "true"
+      }
     }
   }
 }
