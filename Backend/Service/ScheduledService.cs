@@ -26,8 +26,8 @@ public class ScheduledService : IHostedService
                                                "itemoverview?league=Sentinel&type=SkillGem",
                                                cancellationToken)
                                            .Result;
-                              _logger.LogInformation(!result.Equals(_result) ? "{Time}: NEW DATA" : "{Time}: Same",
-                                                     DateTime.Now);
+                              _logger.LogInformation("{Time}: {Message}", DateTime.Now,
+                                                     result.Equals(_result) ? "Same" : "NEW DATA");
                               _result = result;
                           };
         _timer.AutoReset = true;
