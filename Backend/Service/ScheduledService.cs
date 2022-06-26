@@ -17,7 +17,6 @@ public class ScheduledService : IHostedService
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
-        var file = File.AppendText("logs.txt");
         _timer = new Timer(60 * 1000);
         // _timer = new Timer(30 * 60 * 1000);
         _timer.Elapsed += (a, b) =>
@@ -27,16 +26,9 @@ public class ScheduledService : IHostedService
                                                "itemoverview?league=Sentinel&type=SkillGem",
                                                cancellationToken)
                                            .Result;
-                              if (!result.Equals(_result))
-                              {
-                                  file.WriteLine(_result = result);
-                                  _logger.LogInformation(
-                                      "{Time}: NEW DATA", DateTime.Now);
-                              }
-                              else
-                              {
-                                  _logger.LogInformation("{Time}: Same", DateTime.Now);
-                              }
+                              _logger.LogInformation(!result.Equals(_result) ? "{Time}: NEW DATA" : "{Time}: Same",
+                                                     DateTime.Now);
+                              _result = result;
                           };
         _timer.AutoReset = true;
         Task.Delay(Math.Abs(25 - DateTime.Now.Minute % 30), cancellationToken)
