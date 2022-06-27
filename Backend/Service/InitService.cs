@@ -5,11 +5,11 @@ namespace Backend.Service;
 public class InitService : IHostedService
 {
     private readonly ILogger<InitService> _logger;
-    private readonly PoEDataService _poeDataService;
+    private readonly IPoEDataService _poeDataService;
 
     private Timer? _priceDataTimer;
 
-    public InitService(ILogger<InitService> logger, PoEDataService poeDataService)
+    public InitService(ILogger<InitService> logger, IPoEDataService poeDataService)
     {
         _logger = logger;
         _poeDataService = poeDataService;
@@ -17,6 +17,8 @@ public class InitService : IHostedService
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
+        _logger.LogInformation("Start initialization...");
+
         await _poeDataService.GetCurrentLeague();
 
         #region 5 Minute Timer
@@ -27,6 +29,8 @@ public class InitService : IHostedService
         _priceDataTimer.Start();
 
         #endregion
+
+        _logger.LogInformation("Initialization finished");
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
