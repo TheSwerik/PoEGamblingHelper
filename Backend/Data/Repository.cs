@@ -20,9 +20,15 @@ public class Repository<T> : IRepository<T> where T : Entity
 
     public async Task<T> Save(T entity)
     {
-        var result = await _entities.AddAsync(entity);
+        var result = _entities.Add(entity);
         await _applicationDbContext.SaveChangesAsync();
         return result.Entity;
+    }
+
+    public async Task Save(IEnumerable<T> entities)
+    {
+        _entities.AddRange(entities);
+        await _applicationDbContext.SaveChangesAsync();
     }
 
     public async Task<T> Update(T entity)
