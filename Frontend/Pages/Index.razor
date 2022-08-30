@@ -4,6 +4,7 @@
 
 <h1>PoE Gambling Helper</h1>
 <div class="vertical-content">
+    <Filter/>
     <div class="card">
         <div class="card-body d-flex">
             <h5 class="card-title">search</h5>
@@ -16,10 +17,3 @@
 
 Welcome to your new app.
 <button @onclick="LoadGamblingData">wtf</button>
-
-@foreach (var data in GamblingData)
-{
-    <div>
-        <p>@data.Name</p>
-    </div>
-}

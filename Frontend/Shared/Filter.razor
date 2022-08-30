@@ -1,0 +1,48 @@
+﻿@using PoEGamblingHelper3.Shared.Model
+@inject HttpClient HttpClient
+
+
+<div class="card">
+    <div class="card-body d-flex">
+        <BlazoredTypeahead SearchMethod="@Search"@bind-Value="@Gem">
+            <SelectedTemplate>
+                @context.Name
+            </SelectedTemplate>
+            <ResultTemplate>
+                @context.Name
+            </ResultTemplate>
+        </BlazoredTypeahead>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                @SelectedInt
+            </button>
+            <ul class="dropdown-menu">
+                @foreach (var sort in Sorts)
+                {
+                    <li>
+                        <a class="dropdown-item" @onclick="() => SelectedInt = sort">@sort</a>
+                    </li>
+                }
+            </ul>
+        </div>
+        <h5 class="card-title">price per try</h5>
+        <h5 class="card-title">only show profitable</h5>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public IEnumerable<Gem> Gems { get; set; }
+
+    public Gem Gem { get; set; }
+    public IEnumerable<int> Sorts { get; set; } = new[] { 1, 2, 3, 4 };
+    public int SelectedInt { get; set; } = 7;
+
+    private async Task<IEnumerable<Gem>> Search(string searchText)
+    {
+        var response = new[] { new Gem { Name = "test-name" } };
+        return response;
+    }
+
+}
