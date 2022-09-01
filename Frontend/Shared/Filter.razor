@@ -25,8 +25,25 @@
                 }
             </ul>
         </div>
-        <h5 class="card-title">price per try</h5>
-        <h5 class="card-title">only show profitable</h5>
+        <div class="card">
+            <div class="card-header d-flex">
+                price per try
+            </div>
+            <div class="card-body d-flex">
+                <div class="form-floating">
+                    <input type="number" id="priceFrom" class="form-control" placeholder="from"/>
+                    <label for="priceFrom">from</label>
+                </div>
+                <div class="form-floating">
+                    <input type="number" id="priceTo" class="form-control" placeholder="to"/>
+                    <label for="priceTo">to</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-check form-switch">
+            <label class="form-check-label" for="flexSwitchCheckDefault">Only show profitable</label>
+            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+        </div>
     </div>
 </div>
 
@@ -36,8 +53,8 @@
     public IEnumerable<Gem> Gems { get; set; }
 
     public Gem Gem { get; set; }
-    public IEnumerable<int> Sorts { get; set; } = new[] { 1, 2, 3, 4 };
-    public int SelectedInt { get; set; } = 7;
+    public IEnumerable<string> Sorts { get; set; } = new[] { "PricePerTryAsc", "PricePerTryDesc", "ProfitPerTryAsc", "ProfitPerTryDesc", "MaxProfitPerTryAsc", "MaxProfitPerTryDesc" };
+    public string SelectedInt { get; set; } = "nothing selected";
 
     private async Task<IEnumerable<Gem>> Search(string searchText)
     {
