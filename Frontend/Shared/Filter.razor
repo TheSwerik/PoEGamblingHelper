@@ -3,24 +3,24 @@
 
 
 <div class="card">
-    <div class="card-body d-flex">
-        <BlazoredTypeahead SearchMethod="@Search"@bind-Value="@Gem">
+    <EditForm Model="@FilterValues" class="card-body d-flex justify-content-between">
+        <BlazoredTypeahead SearchMethod="@Search"@bind-Value="@FilterValues.Gem" Context="search">
             <SelectedTemplate>
-                @context.Name
+                @search.Name
             </SelectedTemplate>
             <ResultTemplate>
-                @context.Name
+                @search.Name
             </ResultTemplate>
         </BlazoredTypeahead>
         <div class="dropdown">
             <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                @SelectedInt
+                @(FilterValues.Sort is null ? "Nothing Selected" : FilterValues.Sort)
             </button>
             <ul class="dropdown-menu">
-                @foreach (var sort in Sorts)
+                @foreach (var sort in Enum.GetValues<Sort>())
                 {
                     <li>
-                        <a class="dropdown-item" @onclick="() => SelectedInt = sort">@sort</a>
+                        <a class="dropdown-item" @onclick="() => FilterValues.Sort = sort">@sort</a>
                     </li>
                 }
             </ul>
@@ -31,11 +31,23 @@
             </div>
             <div class="card-body d-flex">
                 <div class="form-floating">
-                    <input type="number" id="priceFrom" class="form-control" placeholder="from"/>
+                    <input type="number"
+                           id="priceFrom"
+                           class="form-control"
+                           placeholder="from"
+                           min="0"
+                           max="@FilterValues.PricePerTryTo"
+                           @bind-value="FilterValues.PricePerTryFrom"/>
                     <label for="priceFrom">from</label>
                 </div>
                 <div class="form-floating">
-                    <input type="number" id="priceTo" class="form-control" placeholder="to"/>
+                    <input type="number"
+                           id="priceTo"
+                           class="form-control"
+                           placeholder="to"
+                           min="@FilterValues.PricePerTryFrom"
+                           max="2100000000"
+                           @bind-value="FilterValues.PricePerTryTo"/>
                     <label for="priceTo">to</label>
                 </div>
             </div>
@@ -44,7 +56,7 @@
             <label class="form-check-label" for="flexSwitchCheckDefault">Only show profitable</label>
             <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
         </div>
-    </div>
+    </EditForm>
 </div>
 
 @code {
@@ -52,8 +64,8 @@
     [Parameter]
     public IEnumerable<Gem> Gems { get; set; }
 
+    public FilterValues FilterValues { get; set; } = new();
     public Gem Gem { get; set; }
-    public IEnumerable<string> Sorts { get; set; } = new[] { "PricePerTryAsc", "PricePerTryDesc", "ProfitPerTryAsc", "ProfitPerTryDesc", "MaxProfitPerTryAsc", "MaxProfitPerTryDesc" };
     public string SelectedInt { get; set; } = "nothing selected";
 
     private async Task<IEnumerable<Gem>> Search(string searchText)
