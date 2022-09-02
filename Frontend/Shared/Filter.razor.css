@@ -8,8 +8,7 @@
     width: 25vw;
     display: flex;
     flex-direction: column;
-    background: #fbfbfb;
-    border-right: 1px solid #e6e6e6;
+    backdrop-filter: brightness(90%);
     position: sticky;
     top: 0;
     padding: 2%;
