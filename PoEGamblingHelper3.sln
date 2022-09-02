@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frontend", "Frontend\Fronte
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend", "Backend\Backend.csproj", "{BBF486EA-CB3B-4F00-943B-B91EFE12B021}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorApp1", "BlazorApp1\BlazorApp1.csproj", "{2439B18B-1ECC-47E2-A2CD-F74263461705}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{BBF486EA-CB3B-4F00-943B-B91EFE12B021}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BBF486EA-CB3B-4F00-943B-B91EFE12B021}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BBF486EA-CB3B-4F00-943B-B91EFE12B021}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2439B18B-1ECC-47E2-A2CD-F74263461705}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2439B18B-1ECC-47E2-A2CD-F74263461705}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2439B18B-1ECC-47E2-A2CD-F74263461705}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2439B18B-1ECC-47E2-A2CD-F74263461705}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

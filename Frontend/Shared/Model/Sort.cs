@@ -2,10 +2,10 @@
 
 public enum Sort
 {
-    PricePerTryAsc,
-    PricePerTryDesc,
-    ProfitPerTryAsc,
-    ProfitPerTryDesc,
+    CostPerTryAsc,
+    CostPerTryDesc,
+    AverageProfitPerTryAsc,
+    AverageProfitPerTryDesc,
     MaxProfitPerTryAsc,
     MaxProfitPerTryDesc
 }

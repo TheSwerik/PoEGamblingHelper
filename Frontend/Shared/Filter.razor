@@ -2,9 +2,24 @@
 @inject HttpClient HttpClient
 
 
-<div class="card w-100">
-    <EditForm Model="@FilterValues" class="card-body d-flex justify-content-between align-items-center">
-        <BlazoredTypeahead SearchMethod="@Search"@bind-Value="@FilterValues.Gem" Context="search">
+<div class="sidebar">
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title">Data</h4>
+        </div>
+        <div class="card-body">
+            <p class="card-text">Last PoENinja Update: just now</p>
+            <p class="card-text">Temple Cost: 187c</p>
+            <p class="card-text">Chaos per Divine: 210c</p>
+
+        </div>
+    </div>
+    <EditForm Model="@FilterValues" class="d-flex flex-column w-100 h-100 justify-content-evenly align-items-center">
+        <BlazoredTypeahead SearchMethod="@Search"
+                           EnableDropDown="true"
+                           @bind-Value="@FilterValues.Gem"
+                           Context="search"
+                           placeholder="Search...">
             <SelectedTemplate>
                 @search.Name
             </SelectedTemplate>
@@ -12,8 +27,10 @@
                 @search.Name
             </ResultTemplate>
         </BlazoredTypeahead>
-        <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+
+        <div class="dropdown w-100 d-flex justify-content-between align-items-center">
+            <label for="sort">Sort:</label>
+            <button class="btn btn-secondary dropdown-toggle w-75" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="sort">
                 @(FilterValues.Sort is null ? "Nothing Selected" : FilterValues.Sort)
             </button>
             <ul class="dropdown-menu">
@@ -26,23 +43,19 @@
             </ul>
         </div>
 
-        <div class="input-group mb-3">
-            <span class="input-group-text">@@</span>
-            <div class="form-floating">
-                <input type="text" class="form-control" id="floatingInputGroup1" placeholder="Username">
-                <label for="floatingInputGroup1">Username</label>
-            </div>
-        </div>
-
-        <div class="card w-25">
+        <div class="card w-100">
             <div class="card-header d-flex">
                 price per try
             </div>
-            <div class="card-body d-flex justify-content-between">
-                <div class="input-group">
-                    <span class="input-group-text">c</span>
-                    @* <div class="form-floating w-50"> *@
-                    <div class="form-floating">
+            <div class="card-body d-flex flex-column justify-content-between" style="height: 20vh">
+                <div class="d-flex justify-content-center w-100">
+                    <div class="form-check form-switch">
+                        <label class="form-check-label" for="flexSwitchCheckDefault">Only show profitable</label>
+                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <div class="input-group form-floating">
                         <input type="number"
                                id="priceFrom"
                                class="form-control"
@@ -51,15 +64,36 @@
                                max="@FilterValues.PricePerTryTo"
                                @bind-value="FilterValues.PricePerTryFrom"/>
                         <label for="priceFrom">from</label>
-                        @* <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Currency</button> *@
-                        @* <ul class="dropdown-menu dropdown-menu-end"> *@
-                        @*     <li> *@
-                        @*         <a class="dropdown-item" href="#">c</a> *@
-                        @*     </li> *@
-                        @*     <li> *@
-                        @*         <a class="dropdown-item" href="#">div</a> *@
-                        @*     </li> *@
-                        @* </ul> *@
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">c</button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="#">c</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">div</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <div class="input-group form-floating">
+                        <input type="number"
+                               id="priceTo"
+                               class="form-control"
+                               placeholder="from"
+                               min="@FilterValues.PricePerTryFrom"
+                               max="2100000000"
+                               @bind-value="FilterValues.PricePerTryTo"/>
+                        <label for="priceTo">from</label>
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">c</button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="#">c</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">div</a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
 
@@ -74,10 +108,6 @@
                 @*     <label for="priceTo">to</label> *@
                 @* </div> *@
             </div>
-        </div>
-        <div class="form-check form-switch">
-            <label class="form-check-label" for="flexSwitchCheckDefault">Only show profitable</label>
-            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
         </div>
     </EditForm>
 </div>
