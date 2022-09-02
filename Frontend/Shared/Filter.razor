@@ -25,31 +25,54 @@
                 }
             </ul>
         </div>
+
+        <div class="input-group mb-3">
+            <span class="input-group-text">@@</span>
+            <div class="form-floating">
+                <input type="text" class="form-control" id="floatingInputGroup1" placeholder="Username">
+                <label for="floatingInputGroup1">Username</label>
+            </div>
+        </div>
+
         <div class="card w-25">
             <div class="card-header d-flex">
                 price per try
             </div>
             <div class="card-body d-flex justify-content-between">
-                <div class="form-floating w-50 me-2">
-                    <input type="number"
-                           id="priceFrom"
-                           class="form-control"
-                           placeholder="from"
-                           min="0"
-                           max="@FilterValues.PricePerTryTo"
-                           @bind-value="FilterValues.PricePerTryFrom"/>
-                    <label for="priceFrom">from</label>
+                <div class="input-group">
+                    <span class="input-group-text">c</span>
+                    @* <div class="form-floating w-50"> *@
+                    <div class="form-floating">
+                        <input type="number"
+                               id="priceFrom"
+                               class="form-control"
+                               placeholder="from"
+                               min="0"
+                               max="@FilterValues.PricePerTryTo"
+                               @bind-value="FilterValues.PricePerTryFrom"/>
+                        <label for="priceFrom">from</label>
+                        @* <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Currency</button> *@
+                        @* <ul class="dropdown-menu dropdown-menu-end"> *@
+                        @*     <li> *@
+                        @*         <a class="dropdown-item" href="#">c</a> *@
+                        @*     </li> *@
+                        @*     <li> *@
+                        @*         <a class="dropdown-item" href="#">div</a> *@
+                        @*     </li> *@
+                        @* </ul> *@
+                    </div>
                 </div>
-                <div class="form-floating w-50">
-                    <input type="number"
-                           id="priceTo"
-                           class="form-control"
-                           placeholder="to"
-                           min="@FilterValues.PricePerTryFrom"
-                           max="2100000000"
-                           @bind-value="FilterValues.PricePerTryTo"/>
-                    <label for="priceTo">to</label>
-                </div>
+
+                @* <div class="form-floating w-50"> *@
+                @*     <input type="number" *@
+                @*            id="priceTo" *@
+                @*            class="form-control" *@
+                @*            placeholder="to" *@
+                @*            min="@FilterValues.PricePerTryFrom" *@
+                @*            max="2100000000" *@
+                @*            @bind-value="FilterValues.PricePerTryTo"/> *@
+                @*     <label for="priceTo">to</label> *@
+                @* </div> *@
             </div>
         </div>
         <div class="form-check form-switch">
