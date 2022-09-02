@@ -8,7 +8,8 @@
     width: 25vw;
     display: flex;
     flex-direction: column;
-    border-right: 2px solid #888888;
+    background: #fbfbfb;
+    border-right: 1px solid #e6e6e6;
     position: sticky;
     top: 0;
     padding: 2%;

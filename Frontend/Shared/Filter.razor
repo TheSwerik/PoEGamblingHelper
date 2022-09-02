@@ -43,6 +43,29 @@
             </ul>
         </div>
 
+        <div class="dropdown w-100">
+            <button class="btn btn-secondary dropdown-toggle w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Gemtypes
+            </button>
+            <ul class="dropdown-menu w-100" @onclick:stopPropagation="true" @onclick:preventDefault="true">
+                @foreach (var type in Enum.GetValues<GemType>())
+                {
+                    <div onclick="event.stopPropagation()">
+                        <li class="ps-2 pe-2 w-100">
+                            <input class="form-check-input me-1"
+                                   type="checkbox"
+                                   id="select-@type"
+                                   value="@FilterValues.GemTypes.Contains(type)"
+                                   @onclick="() => ToggleGemType(type)">
+                            <label class="form-check-label" for="select-@type" @onclick="() => ToggleGemType(type)">
+                                @type
+                            </label>
+                        </li>
+                    </div>
+                }
+            </ul>
+        </div>
+
         <div class="card w-100">
             <div class="card-header d-flex">
                 price per try
@@ -96,17 +119,6 @@
                         </ul>
                     </div>
                 </div>
-
-                @* <div class="form-floating w-50"> *@
-                @*     <input type="number" *@
-                @*            id="priceTo" *@
-                @*            class="form-control" *@
-                @*            placeholder="to" *@
-                @*            min="@FilterValues.PricePerTryFrom" *@
-                @*            max="2100000000" *@
-                @*            @bind-value="FilterValues.PricePerTryTo"/> *@
-                @*     <label for="priceTo">to</label> *@
-                @* </div> *@
             </div>
         </div>
     </EditForm>
@@ -125,6 +137,12 @@
     {
         var response = new[] { new Gem { Name = "test-name" } };
         return response;
+    }
+
+    private void ToggleGemType(GemType type)
+    {
+        if (FilterValues.GemTypes.Contains(type)) FilterValues.GemTypes.Remove(type);
+        else FilterValues.GemTypes.Add(type);
     }
 
 }
