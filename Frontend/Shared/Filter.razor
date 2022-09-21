@@ -9,28 +9,56 @@
         </div>
         <div class="card-body d-flex flex-column w-100">
             <div class="row justify-content-between">
-                <p class="w-75">
+                <p class="w-65">
                     Last Update from PoENinja
                 </p>
-                <p class="w-25 text-end">
-                    just now
+                <p class="w-35 text-end">
+                    @LastPoeNinjaUpdateText()
                 </p>
             </div>
             <div class="row justify-content-between">
-                <p class="w-75">
+                <p class="w-65">
                     Temple Cost
                 </p>
-                <p class="w-25 text-end">
-                    187
-                </p>
+                <div class="input-group w-35">
+                    <input type="number"
+                           id="templeCost"
+                           class="form-control w-50"
+                           min="0"
+                           @bind-value="TempleCost"/>
+                    <button class="btn btn-outline-secondary dropdown-toggle w-50" type="button" data-bs-toggle="dropdown" aria-expanded="false">c</button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item" href="#">c</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">div</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
             <div class="row justify-content-between">
-                <p class="w-75">
+                <p class="w-65">
                     Chaos per Divine
                 </p>
-                <p class="w-25 text-end">
-                    210
-                </p>
+                <div class="input-group w-35">
+                    <input type="number"
+                           id="chaosPerDivine"
+                           class="form-control w-50"
+                           min="0"
+                           @bind-value="ChaosPerDivine"/>
+                    <button class="btn btn-outline-secondary dropdown-toggle w-50" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        c/div
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item" href="#">c</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">div</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
@@ -152,6 +180,9 @@
     public FilterValues FilterValues { get; set; } = new();
     public Gem Gem { get; set; }
     public string SelectedInt { get; set; } = "nothing selected";
+    public DateTime LastPoeNinjaUpdate { get; set; } = DateTime.Now;
+    public decimal TempleCost { get; set; } = 0;
+    public decimal ChaosPerDivine { get; set; } = 0;
 
     private async Task<IEnumerable<Gem>> Search(string searchText)
     {
@@ -163,6 +194,13 @@
     {
         if (FilterValues.GemTypes.Contains(type)) FilterValues.GemTypes.Remove(type);
         else FilterValues.GemTypes.Add(type);
+    }
+
+    private string LastPoeNinjaUpdateText()
+    {
+        var now = DateTime.Now;
+        var difference = now - LastPoeNinjaUpdate;
+        return difference.Minutes < 1 ? "just now" : $"{difference.Minutes} minutes ago";
     }
 
 }
