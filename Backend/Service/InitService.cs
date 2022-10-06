@@ -20,10 +20,10 @@ public class InitService : IHostedService
         _logger.LogInformation("Start initialization...");
 
         await _poeDataService.GetCurrentLeague();
+        await _poeDataService.GetPriceData();
 
         #region 5 Minute Timer
 
-        await _poeDataService.GetPriceData();
         _priceDataTimer = new Timer(5 * 60 * 1000);
         _priceDataTimer.Elapsed += async (_, _) => await _poeDataService.GetPriceData();
         _priceDataTimer.AutoReset = true;
