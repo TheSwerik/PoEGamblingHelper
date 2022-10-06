@@ -20,21 +20,16 @@
                 <p class="w-65">
                     Temple Cost
                 </p>
-                <div class="input-group w-35">
+                <div class="input-group w-35 flex-nowrap">
                     <input type="number"
                            id="templeCost"
-                           class="form-control w-50"
+                           class="form-control w-25"
                            min="0"
                            @bind-value="TempleCost"/>
-                    <button class="btn btn-outline-secondary dropdown-toggle w-50" type="button" data-bs-toggle="dropdown" aria-expanded="false">c</button>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a class="dropdown-item" href="#">c</a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="#">div</a>
-                        </li>
-                    </ul>
+                    <CurrencyDropDown></CurrencyDropDown>
+                    <button class="btn btn-outline-danger w-25" type="button">
+                        <img src="icons/fa-arrows-rotate.svg" class="icon" alt="refresh"/>
+                    </button>
                 </div>
             </div>
             <div class="row justify-content-between">
@@ -47,17 +42,7 @@
                            class="form-control w-50"
                            min="0"
                            @bind-value="ChaosPerDivine"/>
-                    <button class="btn btn-outline-secondary dropdown-toggle w-50" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        c/div
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a class="dropdown-item" href="#">c</a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="#">div</a>
-                        </li>
-                    </ul>
+                    <CurrencyDropDown></CurrencyDropDown>
                 </div>
             </div>
         </div>
@@ -135,15 +120,7 @@
                                max="@FilterValues.PricePerTryTo"
                                @bind-value="FilterValues.PricePerTryFrom"/>
                         <label for="priceFrom">from</label>
-                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">c</button>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a class="dropdown-item" href="#">c</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="#">div</a>
-                            </li>
-                        </ul>
+                        <CurrencyDropDown></CurrencyDropDown>
                     </div>
                 </div>
                 <div class="d-flex justify-content-between">
@@ -156,15 +133,7 @@
                                max="2100000000"
                                @bind-value="FilterValues.PricePerTryTo"/>
                         <label for="priceTo">from</label>
-                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">c</button>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a class="dropdown-item" href="#">c</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="#">div</a>
-                            </li>
-                        </ul>
+                        <CurrencyDropDown></CurrencyDropDown>
                     </div>
                 </div>
             </div>
