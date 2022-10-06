@@ -54,7 +54,8 @@ public class PoEDataService : Service, IPoEDataService
                                              .Select(league => league.Name)
                                              .First();
         var result = await _client.GetFromJsonAsync<PriceData>(gemUrl + $"&league={currentLeague}");
-        Logger.LogInformation("Got {Result} pricedata lines", result.Lines.Length);
+        if (result is null) throw new NullReferenceException();
+        Logger.LogInformation("Got data from {Result} gems", result.Lines.Length);
         var trackedGems = _gemRepository.GetAll().Select(gem => gem.Id).ToArray();
         await _gemRepository.Save(result.Lines.Where(gem => !trackedGems.Contains(gem.Id)));
         await _gemRepository.Update(result.Lines.Where(gem => !trackedGems.Contains(gem.Id)));
