@@ -14,8 +14,8 @@ public class GemController : ControllerBase
     {
         _logger = logger;
         _gemRepository = gemRepository;
-        _gemRepository.Save(new Gem { Id = Guid.Empty, Name = "haha", MaxLevel = 187 });
-        _gemRepository.Save(new Gem { Id = Guid.Empty, Name = "sdsd", MaxLevel = 420 });
+        _gemRepository.Save(new Gem { Id = 0, Name = "haha" });
+        _gemRepository.Save(new Gem { Id = 1, Name = "sdsd" });
     }
 
     [HttpGet] public ActionResult<IAsyncEnumerable<Gem>> GetAllGems() { return Ok(_gemRepository.GetAll()); }

@@ -1,15 +1,15 @@
-﻿using Backend.Model;
+﻿namespace Backend.Service;
 
-namespace Backend.Service;
-
-public abstract class Service
+public abstract class Service : IDisposable
 {
-    protected readonly IRepository<Gem> _gemRepository;
-    protected readonly ILogger<Service> _logger;
+    protected readonly ILogger<Service> Logger;
+    protected readonly IServiceScope Scope;
 
-    protected Service(ILogger<Service> logger, IRepository<Gem> gemRepository)
+    protected Service(ILogger<Service> logger, IServiceScopeFactory serviceScopeFactory)
     {
-        _logger = logger;
-        _gemRepository = gemRepository;
+        Logger = logger;
+        Scope = serviceScopeFactory.CreateScope();
     }
+
+    public void Dispose() { Scope.Dispose(); }
 }

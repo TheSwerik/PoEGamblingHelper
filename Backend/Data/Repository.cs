@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Data;
 
-public class Repository<T> : IRepository<T> where T : Entity
+public class Repository<T> : IRepository<T> where T : CustomIdEntity
 {
     private readonly ApplicationDbContext _applicationDbContext;
     private readonly DbSet<T> _entities;
@@ -14,7 +14,15 @@ public class Repository<T> : IRepository<T> where T : Entity
         _entities = _applicationDbContext.Set<T>();
     }
 
-    public IAsyncEnumerable<T> GetAll() { return _entities.AsAsyncEnumerable(); }
+    public IAsyncEnumerable<T> GetAllAsync() { return _entities.AsAsyncEnumerable(); }
+    public IEnumerable<T> GetAll() { return _entities; }
+
+    public IAsyncEnumerable<T> GetAll(Func<DbSet<T>, IAsyncEnumerable<T>> function)
+    {
+        return function.Invoke(_entities);
+    }
+
+    public IEnumerable<T> GetAll(Func<DbSet<T>, IEnumerable<T>> function) { return function.Invoke(_entities); }
 
     public async Task<T?> Get(Guid id) { return await _entities.FindAsync(id); }
 
@@ -36,6 +44,12 @@ public class Repository<T> : IRepository<T> where T : Entity
         var result = _entities.Update(entity);
         await _applicationDbContext.SaveChangesAsync();
         return result.Entity;
+    }
+
+    public async Task Update(IEnumerable<T> entities)
+    {
+        _entities.UpdateRange(entities);
+        await _applicationDbContext.SaveChangesAsync();
     }
 
     public async void Delete(Guid id)

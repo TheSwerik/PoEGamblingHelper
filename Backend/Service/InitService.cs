@@ -23,7 +23,8 @@ public class InitService : IHostedService
 
         #region 5 Minute Timer
 
-        _priceDataTimer = new Timer(5 * 60 * 1000);
+        // _priceDataTimer = new Timer(5 * 60 * 1000);
+        _priceDataTimer = new Timer(10000);
         _priceDataTimer.Elapsed += async (_, _) => await _poeDataService.GetPriceData();
         _priceDataTimer.AutoReset = true;
         _priceDataTimer.Start();

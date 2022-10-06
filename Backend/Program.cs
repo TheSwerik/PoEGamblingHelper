@@ -18,6 +18,7 @@ builder.Services.AddSwaggerGen();
 #region Data
 
 builder.Services.AddDbContext<ApplicationDbContext>(opt => { opt.UseInMemoryDatabase("PoEGamblingHelper"); });
+// builder.Services.AddTransient<ApplicationDbContext>(opt => { opt.UseInMemoryDatabase("PoEGamblingHelper"); });
 // builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IRepository<Gem>, Repository<Gem>>();
 builder.Services.AddScoped<IRepository<League>, Repository<League>>();
