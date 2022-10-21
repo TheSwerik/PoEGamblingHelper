@@ -69,13 +69,7 @@ public class PoEDataService : Service, IPoEDataService
                 continue;
             }
 
-            var league = new League
-                         {
-                             Name = name,
-                             StartDate = date,
-                             Version = version
-                         };
-
+            var league = new League { Name = name, StartDate = date, Version = version };
             Logger.LogInformation("Saved League: {League}", league);
             await _leagueRepository.Save(league);
         }
