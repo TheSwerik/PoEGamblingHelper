@@ -16,6 +16,35 @@ public class PoEDataService : Service, IPoEDataService
     private readonly IRepository<Gem> _gemRepository;
     private readonly IRepository<League> _leagueRepository;
 
+    #region Helper Methods
+
+    private static (int versionColumn, int nameColumn, int releaseColumn) GetIndexesFromTitleRow(HtmlNode titleRow)
+    {
+        var versionColumn = titleRow.ChildNodes.First(
+            td => td.InnerText.Equals("version", StringComparison.InvariantCultureIgnoreCase)
+        );
+        if (versionColumn is null) throw new NullReferenceException("no version column");
+        var versionColumnIndex = titleRow.ChildNodes.IndexOf(versionColumn);
+
+        var nameColumn = titleRow.ChildNodes.First(
+            td => td.InnerText.Equals("league", StringComparison.InvariantCultureIgnoreCase)
+        );
+        if (nameColumn is null) throw new NullReferenceException("no name column");
+        var nameColumnIndex = titleRow.ChildNodes.IndexOf(nameColumn);
+
+        var releaseColumn = titleRow.ChildNodes.First(
+            td => td.InnerText.Equals("international", StringComparison.InvariantCultureIgnoreCase)
+        );
+        if (releaseColumn is null) throw new NullReferenceException("no release column");
+        var releaseColumnIndex = titleRow.ChildNodes.IndexOf(releaseColumn);
+
+        return (versionColumnIndex, nameColumnIndex, releaseColumnIndex);
+    }
+
+    #endregion
+
+    #region Con- and Destruction
+
     public PoEDataService(
         ILogger<PoEDataService> logger,
         IServiceScopeFactory factory
@@ -25,6 +54,16 @@ public class PoEDataService : Service, IPoEDataService
         _gemRepository = Scope.ServiceProvider.GetRequiredService<IRepository<Gem>>();
         _leagueRepository = Scope.ServiceProvider.GetRequiredService<IRepository<League>>();
     }
+
+    public new void Dispose()
+    {
+        base.Dispose();
+        _client.Dispose();
+    }
+
+    #endregion
+
+    #region public methods
 
     public async Task GetCurrentLeague()
     {
@@ -91,31 +130,5 @@ public class PoEDataService : Service, IPoEDataService
         await _gemRepository.Update(result.Lines.Where(gem => !trackedGems.Contains(gem.Id)));
     }
 
-    public new void Dispose()
-    {
-        base.Dispose();
-        _client.Dispose();
-    }
-
-    private (int versionColumn, int nameColumn, int releaseColumn) GetIndexesFromTitleRow(HtmlNode titleRow)
-    {
-        var versionColumn =
-            titleRow.ChildNodes.First(
-                td => td.InnerText.Equals("version", StringComparison.InvariantCultureIgnoreCase));
-        if (versionColumn is null) throw new NullReferenceException("no version column");
-        var versionColumnIndex = titleRow.ChildNodes.IndexOf(versionColumn);
-
-        var nameColumn =
-            titleRow.ChildNodes.First(td => td.InnerText.Equals("league", StringComparison.InvariantCultureIgnoreCase));
-        if (nameColumn is null) throw new NullReferenceException("no name column");
-        var nameColumnIndex = titleRow.ChildNodes.IndexOf(nameColumn);
-
-        var releaseColumn =
-            titleRow.ChildNodes.First(
-                td => td.InnerText.Equals("international", StringComparison.InvariantCultureIgnoreCase));
-        if (releaseColumn is null) throw new NullReferenceException("no release column");
-        var releaseColumnIndex = titleRow.ChildNodes.IndexOf(releaseColumn);
-
-        return (versionColumnIndex, nameColumnIndex, releaseColumnIndex);
-    }
+    #endregion
 }
