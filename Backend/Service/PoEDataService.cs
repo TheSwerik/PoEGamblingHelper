@@ -47,31 +47,34 @@ public class PoEDataService : Service, IPoEDataService
                 date = new DateTime(int.Parse(row.ChildNodes[releaseColumn].InnerText), 12, 31);
             else if (fullDateRegex.IsMatch(row.ChildNodes[releaseColumn].InnerText))
                 date = DateTime.Parse(row.ChildNodes[releaseColumn].InnerText);
+            date = DateTime.SpecifyKind(date, DateTimeKind.Utc);
 
             var name = nameExpansionRegex.Replace(row.ChildNodes[nameColumn].InnerText, "").Trim();
+            var version = row.ChildNodes[versionColumn].InnerText;
+
+            var dbLeague = _leagueRepository
+                           .GetAll()
+                           .FirstOrDefault(dbLeague => dbLeague.Version.Equals(
+                                               version,
+                                               StringComparison.InvariantCultureIgnoreCase
+                                           ));
+
+            if (dbLeague is not null)
+            {
+                dbLeague.Name = name;
+                dbLeague.StartDate = date;
+                dbLeague.Version = version;
+                Logger.LogInformation("Updated League: {League}", dbLeague);
+                await _leagueRepository.Update(dbLeague);
+                continue;
+            }
 
             var league = new League
                          {
                              Name = name,
                              StartDate = date,
-                             Version = row.ChildNodes[versionColumn].InnerText
+                             Version = version
                          };
-            var dbLeague = _leagueRepository
-                           .GetAll(dbLeagues => dbLeagues.Where(
-                                       dbLeague => dbLeague.Version.Equals(
-                                           league.Version,
-                                           StringComparison.InvariantCultureIgnoreCase)
-                                   )
-                           )
-                           .FirstOrDefault();
-
-            if (dbLeague is not null)
-            {
-                league.Id = dbLeague.Id;
-                Logger.LogInformation("Updated League: {League}", league);
-                await _leagueRepository.Update(league);
-                continue;
-            }
 
             Logger.LogInformation("Saved League: {League}", league);
             await _leagueRepository.Save(league);

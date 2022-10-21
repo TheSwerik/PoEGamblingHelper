@@ -17,7 +17,11 @@ builder.Services.AddSwaggerGen();
 
 #region Data
 
-builder.Services.AddDbContext<ApplicationDbContext>(opt => { opt.UseInMemoryDatabase("PoEGamblingHelper"); });
+// builder.Services.AddDbContext<ApplicationDbContext>(opt => { opt.UseInMemoryDatabase("PoEGamblingHelper"); });
+builder.Services.AddEntityFrameworkNpgsql()
+       .AddDbContext<ApplicationDbContext>(
+           opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("MyConnection")));
+// builder.Services.AddDbContext<ApplicationDbContext>(opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("MyConnection")));
 // builder.Services.AddTransient<ApplicationDbContext>(opt => { opt.UseInMemoryDatabase("PoEGamblingHelper"); });
 // builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IRepository<Gem>, Repository<Gem>>();
