@@ -45,11 +45,7 @@ public class PoEDataService : Service, IPoEDataService
 
     #region Con- and Destruction
 
-    public PoEDataService(
-        ILogger<PoEDataService> logger,
-        IServiceScopeFactory factory
-    )
-        : base(logger, factory)
+    public PoEDataService(ILogger<PoEDataService> logger, IServiceScopeFactory factory) : base(logger, factory)
     {
         _gemRepository = Scope.ServiceProvider.GetRequiredService<IRepository<Gem>>();
         _leagueRepository = Scope.ServiceProvider.GetRequiredService<IRepository<League>>();
@@ -69,18 +65,24 @@ public class PoEDataService : Service, IPoEDataService
     {
         var web = new HtmlWeb();
         var doc = web.Load(PoeDbUrl + "League#LeaguesList");
-        if (doc is null) throw new NullReferenceException("poedb is down");
+        if (doc is null) throw new NullReferenceException("PoeDB is down");
+
         var leaguesTable = doc.DocumentNode.SelectNodes("//table").First(n => n.HasChildNodes);
+        if (leaguesTable is null) throw new NullReferenceException("No tables found");
+
         var leagues = leaguesTable.SelectNodes(".//tr").Where(n => n.HasChildNodes).ToArray();
+        if (leagues.Length == 0) throw new NullReferenceException("No rows found");
         var titleRow = leagues[0];
-        if (titleRow is null) throw new NullReferenceException("No rows found");
+
         var (versionColumn, nameColumn, releaseColumn) = GetIndexesFromTitleRow(titleRow);
 
         var yearRegex = new Regex("^\\d\\d\\d\\d$");
         var fullDateRegex = new Regex("^\\d\\d\\d\\d-\\d\\d-\\d\\d$");
         var nameExpansionRegex = new Regex("&lt;.+&gt;");
-        foreach (var row in leagues.Skip(1).Where(row => row.HasChildNodes))
+        foreach (var row in leagues.Skip(1).Where(row => row is not null && row.HasChildNodes))
         {
+            #region date
+
             var date = DateTime.MaxValue;
             if (yearRegex.IsMatch(row.ChildNodes[releaseColumn].InnerText))
                 date = new DateTime(int.Parse(row.ChildNodes[releaseColumn].InnerText), 12, 31);
@@ -88,29 +90,30 @@ public class PoEDataService : Service, IPoEDataService
                 date = DateTime.Parse(row.ChildNodes[releaseColumn].InnerText);
             date = DateTime.SpecifyKind(date, DateTimeKind.Utc);
 
+            #endregion
+
             var name = nameExpansionRegex.Replace(row.ChildNodes[nameColumn].InnerText, "").Trim();
             var version = row.ChildNodes[versionColumn].InnerText;
 
             var dbLeague = _leagueRepository
                            .GetAll()
-                           .FirstOrDefault(dbLeague => dbLeague.Version.Equals(
-                                               version,
-                                               StringComparison.InvariantCultureIgnoreCase
-                                           ));
+                           .FirstOrDefault(
+                               dbLeague => dbLeague.Version.Equals(version, StringComparison.InvariantCultureIgnoreCase)
+                           );
 
-            if (dbLeague is not null)
+            if (dbLeague is null)
             {
-                dbLeague.Name = name;
-                dbLeague.StartDate = date;
-                dbLeague.Version = version;
-                Logger.LogInformation("Updated League: {League}", dbLeague);
-                await _leagueRepository.Update(dbLeague);
+                var league = new League { Name = name, StartDate = date, Version = version };
+                Logger.LogInformation("Saved League: {League}", league);
+                await _leagueRepository.Save(league);
                 continue;
             }
 
-            var league = new League { Name = name, StartDate = date, Version = version };
-            Logger.LogInformation("Saved League: {League}", league);
-            await _leagueRepository.Save(league);
+            dbLeague.Name = name;
+            dbLeague.StartDate = date;
+            dbLeague.Version = version;
+            Logger.LogInformation("Updated League: {League}", dbLeague);
+            await _leagueRepository.Update(dbLeague);
         }
     }
 
