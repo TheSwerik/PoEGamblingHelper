@@ -10,28 +10,28 @@ public class InitService : IHostedService
     private const int Day = 24 * Hour;
 
     private readonly ILogger<InitService> _logger;
-    private readonly IPoEDataService _poeDataService;
+    private readonly IPoeDataFetchService _poeDataFetchService;
 
     private Timer? _dailyTimer;
     private Timer? _fiveMinuteTimer;
 
-    public InitService(ILogger<InitService> logger, IPoEDataService poeDataService)
+    public InitService(ILogger<InitService> logger, IPoeDataFetchService poeDataFetchService)
     {
         _logger = logger;
-        _poeDataService = poeDataService;
+        _poeDataFetchService = poeDataFetchService;
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         _logger.LogInformation("Start initialization...");
 
-        await _poeDataService.GetCurrentLeague();
-        await _poeDataService.GetPriceData();
+        await _poeDataFetchService.GetCurrentLeague();
+        await _poeDataFetchService.GetPriceData();
 
         #region Daily Timer
 
         _dailyTimer = new Timer(Day);
-        _dailyTimer.Elapsed += async (_, _) => await _poeDataService.GetCurrentLeague();
+        _dailyTimer.Elapsed += async (_, _) => await _poeDataFetchService.GetCurrentLeague();
         _dailyTimer.AutoReset = true;
         _dailyTimer.Start();
 
@@ -40,7 +40,7 @@ public class InitService : IHostedService
         #region 5 Minute Timer
 
         _fiveMinuteTimer = new Timer(5 * Minute);
-        _fiveMinuteTimer.Elapsed += async (_, _) => await _poeDataService.GetPriceData();
+        _fiveMinuteTimer.Elapsed += async (_, _) => await _poeDataFetchService.GetPriceData();
         _fiveMinuteTimer.AutoReset = true;
         _fiveMinuteTimer.Start();
 

@@ -1,6 +1,6 @@
 ﻿namespace Backend.Service;
 
-public interface IPoEDataService : IDisposable
+public interface IPoeDataFetchService : IDisposable
 {
     Task GetCurrentLeague();
     Task GetPriceData();

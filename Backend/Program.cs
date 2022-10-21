@@ -28,7 +28,7 @@ builder.Services.AddScoped<IRepository<League>, Repository<League>>();
 
 #region Service
 
-builder.Services.AddSingleton<IPoEDataService, PoEDataService>();
+builder.Services.AddSingleton<IPoeDataFetchService, PoeDataFetchService>();
 builder.Services.AddHostedService<InitService>();
 
 #endregion

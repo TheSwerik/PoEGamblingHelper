@@ -4,7 +4,7 @@ using HtmlAgilityPack;
 
 namespace Backend.Service;
 
-public class PoEDataService : Service, IPoEDataService
+public class PoeDataFetchService : Service, IPoeDataFetchService
 {
     //https://github.com/5k-mirrors/misc-poe-tools/blob/master/doc/poe-ninja-api.md
     //https://www.pathofexile.com/developer/docs/reference#leagues
@@ -45,7 +45,8 @@ public class PoEDataService : Service, IPoEDataService
 
     #region Con- and Destruction
 
-    public PoEDataService(ILogger<PoEDataService> logger, IServiceScopeFactory factory) : base(logger, factory)
+    public PoeDataFetchService(ILogger<PoeDataFetchService> logger, IServiceScopeFactory factory) : base(
+        logger, factory)
     {
         _gemRepository = Scope.ServiceProvider.GetRequiredService<IRepository<Gem>>();
         _leagueRepository = Scope.ServiceProvider.GetRequiredService<IRepository<League>>();
