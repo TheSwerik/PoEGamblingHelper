@@ -34,35 +34,27 @@ public class PoEDataService : Service, IPoEDataService
         var leaguesTable = doc.DocumentNode.SelectNodes("//table").First(n => n.HasChildNodes);
         var leagues = leaguesTable.SelectNodes(".//tr").Where(n => n.HasChildNodes).ToArray();
         var titleRow = leagues[0];
-        var versionColumn =
-            titleRow.ChildNodes.First(
-                td => td.InnerText.Equals("version", StringComparison.InvariantCultureIgnoreCase));
-        if (versionColumn is null) throw new NullReferenceException("no version column");
-        var versionColumnIndex = titleRow.ChildNodes.IndexOf(versionColumn);
-        var nameColumn =
-            titleRow.ChildNodes.First(td => td.InnerText.Equals("league", StringComparison.InvariantCultureIgnoreCase));
-        if (nameColumn is null) throw new NullReferenceException("no name column");
-        var nameColumnIndex = titleRow.ChildNodes.IndexOf(nameColumn);
-        var releaseColumn =
-            titleRow.ChildNodes.First(
-                td => td.InnerText.Equals("international", StringComparison.InvariantCultureIgnoreCase));
-        if (releaseColumn is null) throw new NullReferenceException("no release column");
-        var releaseColumnIndex = titleRow.ChildNodes.IndexOf(releaseColumn);
+        if (titleRow is null) throw new NullReferenceException("No rows found");
+        var (versionColumn, nameColumn, releaseColumn) = GetIndexesFromTitleRow(titleRow);
 
         var yearRegex = new Regex("^\\d\\d\\d\\d$");
         var fullDateRegex = new Regex("^\\d\\d\\d\\d-\\d\\d-\\d\\d$");
+        var nameExpansionRegex = new Regex("&lt;.+&gt;");
         foreach (var row in leagues.Skip(1).Where(row => row.HasChildNodes))
         {
             var date = DateTime.MaxValue;
-            if (yearRegex.IsMatch(row.ChildNodes[releaseColumnIndex].InnerText))
-                date = new DateTime(int.Parse(row.ChildNodes[releaseColumnIndex].InnerText), 12, 31);
-            else if (fullDateRegex.IsMatch(row.ChildNodes[releaseColumnIndex].InnerText))
-                date = DateTime.Parse(row.ChildNodes[releaseColumnIndex].InnerText);
+            if (yearRegex.IsMatch(row.ChildNodes[releaseColumn].InnerText))
+                date = new DateTime(int.Parse(row.ChildNodes[releaseColumn].InnerText), 12, 31);
+            else if (fullDateRegex.IsMatch(row.ChildNodes[releaseColumn].InnerText))
+                date = DateTime.Parse(row.ChildNodes[releaseColumn].InnerText);
+
+            var name = nameExpansionRegex.Replace(row.ChildNodes[nameColumn].InnerText, "").Trim();
+
             var league = new League
                          {
-                             Name = row.ChildNodes[nameColumnIndex].InnerText,
+                             Name = name,
                              StartDate = date,
-                             Version = row.ChildNodes[versionColumnIndex].InnerText
+                             Version = row.ChildNodes[versionColumn].InnerText
                          };
             var dbLeague = _leagueRepository
                            .GetAll(dbLeagues => dbLeagues.Where(
@@ -72,7 +64,15 @@ public class PoEDataService : Service, IPoEDataService
                                    )
                            )
                            .FirstOrDefault();
-            if (dbLeague is not null) league.Id = dbLeague.Id;
+
+            if (dbLeague is not null)
+            {
+                league.Id = dbLeague.Id;
+                Logger.LogInformation("Updated League: {League}", league);
+                await _leagueRepository.Update(league);
+                continue;
+            }
+
             Logger.LogInformation("Saved League: {League}", league);
             await _leagueRepository.Save(league);
         }
@@ -98,5 +98,27 @@ public class PoEDataService : Service, IPoEDataService
     {
         base.Dispose();
         _client.Dispose();
+    }
+
+    private (int versionColumn, int nameColumn, int releaseColumn) GetIndexesFromTitleRow(HtmlNode titleRow)
+    {
+        var versionColumn =
+            titleRow.ChildNodes.First(
+                td => td.InnerText.Equals("version", StringComparison.InvariantCultureIgnoreCase));
+        if (versionColumn is null) throw new NullReferenceException("no version column");
+        var versionColumnIndex = titleRow.ChildNodes.IndexOf(versionColumn);
+
+        var nameColumn =
+            titleRow.ChildNodes.First(td => td.InnerText.Equals("league", StringComparison.InvariantCultureIgnoreCase));
+        if (nameColumn is null) throw new NullReferenceException("no name column");
+        var nameColumnIndex = titleRow.ChildNodes.IndexOf(nameColumn);
+
+        var releaseColumn =
+            titleRow.ChildNodes.First(
+                td => td.InnerText.Equals("international", StringComparison.InvariantCultureIgnoreCase));
+        if (releaseColumn is null) throw new NullReferenceException("no release column");
+        var releaseColumnIndex = titleRow.ChildNodes.IndexOf(releaseColumn);
+
+        return (versionColumnIndex, nameColumnIndex, releaseColumnIndex);
     }
 }
