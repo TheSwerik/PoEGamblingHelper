@@ -79,7 +79,7 @@ public class PoEDataService : Service, IPoEDataService
         var yearRegex = new Regex("^\\d\\d\\d\\d$");
         var fullDateRegex = new Regex("^\\d\\d\\d\\d-\\d\\d-\\d\\d$");
         var nameExpansionRegex = new Regex("&lt;.+&gt;");
-        foreach (var row in leagues.Skip(1).Where(row => row is not null && row.HasChildNodes))
+        foreach (var row in leagues.Skip(1).Where(row => row.HasChildNodes))
         {
             #region date
 
