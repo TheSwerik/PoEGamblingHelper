@@ -4,10 +4,16 @@ namespace Backend.Service;
 
 public class InitService : IHostedService
 {
+    private const int Second = 1000;
+    private const int Minute = 60 * Second;
+    private const int Hour = 60 * Minute;
+    private const int Day = 24 * Hour;
+
     private readonly ILogger<InitService> _logger;
     private readonly IPoEDataService _poeDataService;
 
-    private Timer? _priceDataTimer;
+    private Timer? _dailyTimer;
+    private Timer? _fiveMinuteTimer;
 
     public InitService(ILogger<InitService> logger, IPoEDataService poeDataService)
     {
@@ -22,12 +28,21 @@ public class InitService : IHostedService
         await _poeDataService.GetCurrentLeague();
         await _poeDataService.GetPriceData();
 
+        #region Daily Timer
+
+        _dailyTimer = new Timer(Day);
+        _dailyTimer.Elapsed += async (_, _) => await _poeDataService.GetCurrentLeague();
+        _dailyTimer.AutoReset = true;
+        _dailyTimer.Start();
+
+        #endregion
+
         #region 5 Minute Timer
 
-        _priceDataTimer = new Timer(5 * 60 * 1000);
-        _priceDataTimer.Elapsed += async (_, _) => await _poeDataService.GetPriceData();
-        _priceDataTimer.AutoReset = true;
-        _priceDataTimer.Start();
+        _fiveMinuteTimer = new Timer(5 * Minute);
+        _fiveMinuteTimer.Elapsed += async (_, _) => await _poeDataService.GetPriceData();
+        _fiveMinuteTimer.AutoReset = true;
+        _fiveMinuteTimer.Start();
 
         #endregion
 
@@ -36,7 +51,8 @@ public class InitService : IHostedService
 
     public Task StopAsync(CancellationToken cancellationToken)
     {
-        _priceDataTimer?.Dispose();
+        _fiveMinuteTimer?.Dispose();
+        _dailyTimer?.Dispose();
         return Task.CompletedTask;
     }
 }
