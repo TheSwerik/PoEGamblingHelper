@@ -21,8 +21,8 @@ public class PoeDataService : Service, IPoeDataService
     {
         return Task.FromResult(
             _leagueRepository
-                .GetAll(leagues => leagues.Where(league => league.StartDate >= DateTime.Now.ToUniversalTime()))
-                .OrderBy(league => league.StartDate)
+                .GetAll(leagues => leagues.Where(league => DateTime.Now.ToUniversalTime() >= league.StartDate))
+                .OrderByDescending(league => league.StartDate)
                 .First()
         );
     }
