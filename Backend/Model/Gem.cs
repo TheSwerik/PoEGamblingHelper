@@ -14,4 +14,6 @@ public class Gem : CustomIdEntity
                Name.Contains("Enhance") || Name.Contains("Empower") || Name.Contains("Enlighten") ? 3 :
                20;
     }
+
+    public override string ToString() { return $"[Id={Id}, Name={Name}, MaxLevel={MaxLevel()}]"; }
 }

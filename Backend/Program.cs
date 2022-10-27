@@ -15,13 +15,15 @@ builder.Services.AddSwaggerGen();
 
 #endregion
 
+builder.Logging.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Warning);
+
 #region Data
 
 builder.Services.AddDbContext<ApplicationDbContext>(opt => { opt.UseInMemoryDatabase("PoEGamblingHelper"); });
 // builder.Services.AddEntityFrameworkNpgsql().AddDbContext<ApplicationDbContext>(
 // opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("MyConnection"))
 // );
-builder.Services.AddScoped<IRepository<Gem>, Repository<Gem>>();
+builder.Services.AddScoped<IRepository<GemData>, Repository<GemData>>();
 builder.Services.AddScoped<IRepository<League>, Repository<League>>();
 
 #endregion

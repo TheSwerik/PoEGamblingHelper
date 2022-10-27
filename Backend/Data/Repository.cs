@@ -23,8 +23,10 @@ public class Repository<T> : IRepository<T> where T : CustomIdEntity
     }
 
     public IEnumerable<T> GetAll(Func<DbSet<T>, IEnumerable<T>> function) { return function.Invoke(_entities); }
+    public void ClearTrackedEntities() { _applicationDbContext.ChangeTracker.Clear(); }
 
     public async Task<T?> Get(Guid id) { return await _entities.FindAsync(id); }
+    public T? Get(Func<DbSet<T>, T?> function) { return function.Invoke(_entities); }
 
     public async Task<T> Save(T entity)
     {

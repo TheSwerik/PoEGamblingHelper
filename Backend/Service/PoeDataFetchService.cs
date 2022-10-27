@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using System.Web;
 using Backend.Model;
 using HtmlAgilityPack;
 
@@ -13,8 +14,9 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
     private const string PoeDbUrl = "https://poedb.tw/us/";
     private const string PoeNinjaUrl = "https://poe.ninja/api/data";
     private readonly HttpClient _client = new();
-    private readonly IRepository<Gem> _gemRepository;
+    private readonly IRepository<GemData> _gemDataRepository;
     private readonly IRepository<League> _leagueRepository;
+    private readonly IPoeDataService _poeDataService;
 
     #region Helper Methods
 
@@ -48,8 +50,9 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
     public PoeDataFetchService(ILogger<PoeDataFetchService> logger, IServiceScopeFactory factory) : base(
         logger, factory)
     {
-        _gemRepository = Scope.ServiceProvider.GetRequiredService<IRepository<Gem>>();
+        _gemDataRepository = Scope.ServiceProvider.GetRequiredService<IRepository<GemData>>();
         _leagueRepository = Scope.ServiceProvider.GetRequiredService<IRepository<League>>();
+        _poeDataService = Scope.ServiceProvider.GetRequiredService<IPoeDataService>();
     }
 
     public new void Dispose()
@@ -121,17 +124,29 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
     public async Task GetPriceData()
     {
         const string gemUrl = PoeNinjaUrl + "/itemoverview?type=SkillGem";
-        var currentLeague = _leagueRepository.GetAll()
-                                             .Where(league => league.StartDate <= DateTime.UtcNow.Date)
-                                             .OrderBy(league => league.StartDate)
-                                             .Select(league => league.Name)
-                                             .First();
-        var result = await _client.GetFromJsonAsync<PriceData>(gemUrl + $"&league={currentLeague}");
+        var currentLeague = await _poeDataService.GetCurrentLeague();
+        Console.WriteLine(gemUrl + $"&league={currentLeague.Name}");
+        var result = await _client.GetFromJsonAsync<PriceData>(gemUrl + $"&league={currentLeague.Name}");
         if (result is null) throw new NullReferenceException();
         Logger.LogInformation("Got data from {Result} gems", result.Lines.Length);
-        var trackedGems = _gemRepository.GetAll().Select(gem => gem.Id).ToArray();
-        await _gemRepository.Save(result.Lines.Where(gem => !trackedGems.Contains(gem.Id)));
-        await _gemRepository.Update(result.Lines.Where(gem => !trackedGems.Contains(gem.Id)));
+        var trackedGems = _gemDataRepository.GetAll().Select(gem => gem.Id).ToArray();
+        _gemDataRepository.ClearTrackedEntities();
+        Console.WriteLine($"Already tracking {trackedGems.Length} gems.");
+        Console.WriteLine($"Saved {result.Lines.Count(gem => !trackedGems.Contains(gem.Id))} gems.");
+        Console.WriteLine($"Updated {result.Lines.Count(gem => trackedGems.Contains(gem.Id))} gems.");
+        await _gemDataRepository.Save(result.Lines.Where(gem => !trackedGems.Contains(gem.Id)));
+        await _gemDataRepository.Update(result.Lines.Where(gem => trackedGems.Contains(gem.Id)));
+        var testGem = _gemDataRepository.Get(gems => gems.First());
+        Console.WriteLine(testGem);
+        Console.WriteLine(testGem);
+        Console.WriteLine("https://www.pathofexile.com/trade/search/Kalandra?q=" + HttpUtility.UrlPathEncode(
+                              "{\"query\":{\"filters\":{\"misc_filters\":{\"filters\":{\"gem_level\":{\"min\":16,\"max\":16},\"gem_alternate_quality\":{\"option\":\"2\"},\"quality\":{\"min\":20,\"max\":20}}}},\"type\":\"Shattering Steel\"}}"));
+        Console.WriteLine(
+            "https://www.pathofexile.com/trade/search/Kalandra?q=" + HttpUtility.UrlPathEncode(
+                // "{\"query\":{\"filters\":{\"misc_filters\":{\"filters\":{\"gem_level\":{\"min\":16,\"max\":16},\"gem_alternate_quality\":{\"option\":\"2\"},\"quality\":{\"min\":20,\"max\":20}}}},\"type\":\"Shattering Steel\"}}"
+                $"{{\"query\":{{\"filters\":{{\"misc_filters\":{{\"filters\":{{\"gem_level\":{{\"min\":{testGem.GemLevel},\"max\":{testGem.GemLevel}}},\"gem_alternate_quality\":{{\"option\":\"2\"}},\"quality\":{{\"min\":{testGem.GemQuality},\"max\":{testGem.GemQuality}}}}}}}}},\"type\":\"{testGem.Name}\"}}}}"
+            ));
+        Console.WriteLine(testGem.TradeUrl());
     }
 
     #endregion
