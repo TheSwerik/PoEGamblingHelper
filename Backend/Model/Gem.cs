@@ -10,8 +10,11 @@ public class Gem : CustomIdEntity
 
     public int MaxLevel()
     {
-        return Name.Contains("Awakened") ? 5 :
-               Name.Contains("Enhance") || Name.Contains("Empower") || Name.Contains("Enlighten") ? 3 :
+        var isAwakened = Name.Contains("Awakened");
+        var isExceptional = Name.Contains("Enhance") || Name.Contains("Empower") || Name.Contains("Enlighten");
+        return isAwakened && isExceptional ? 4 :
+               isExceptional ? 3 :
+               isAwakened ? 5 :
                20;
     }
 

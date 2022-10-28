@@ -1,4 +1,6 @@
-﻿namespace Backend.Model;
+﻿using System.Web;
+
+namespace Backend.Model;
 
 public class GemData : Gem
 {
@@ -25,7 +27,7 @@ public class GemData : Gem
         );
     }
 
-    public string TradeUrl()
+    public string TradeQuery(bool accurateLevel = false, bool accurateQuality = false)
     {
         var name = Name;
         var gemAlternateQuality = 0;
@@ -39,7 +41,41 @@ public class GemData : Gem
             gemAlternateQuality = AlternateQualities.IndexOf(firstWord) + 1;
         }
 
-        return
-            $"{{\"query\":{{\"filters\":{{\"misc_filters\":{{\"filters\":{{\"gem_level\":{{\"min\":{GemLevel},\"max\":{GemLevel}}},\"gem_alternate_quality\":{{\"option\":\"{gemAlternateQuality}\"}},\"quality\":{{\"min\":{GemQuality},\"max\":{GemQuality}}}}}}}}},\"type\":\"{name}\"}}}}";
+        var minGemLevel = accurateLevel ? GemLevel : int.MinValue;
+        var maxGemLevel = accurateLevel ? GemLevel : int.MaxValue;
+
+        var minGemQuality = accurateQuality ? GemQuality : int.MinValue;
+        var maxGemQuality = accurateQuality ? GemQuality : int.MaxValue;
+
+        // var minGemLevel = accurateLevel ? GemLevel : 0;
+        // var maxGemLevel = accurateLevel ? GemLevel : MaxLevel();
+
+        // var minGemQuality = accurateQuality ? GemQuality : 0;
+        // var maxGemQuality = accurateQuality ? GemQuality : 23;
+
+        return $@"
+            {{
+              ""query"": {{
+                ""filters"": {{
+                  ""misc_filters"": {{
+                    ""filters"": {{
+                      ""gem_level"": {{
+                        ""min"": {minGemLevel},
+                        ""max"": {maxGemLevel}
+                      }},
+                      ""gem_alternate_quality"": {{
+                        ""option"": ""{gemAlternateQuality}""
+                      }},
+                      ""quality"": {{
+                        ""min"": {minGemQuality},
+                        ""max"": {maxGemQuality}
+                      }}
+                    }}
+                  }}
+                }},
+                ""type"": ""{HttpUtility.UrlPathEncode(name)}""
+              }}
+            }}
+        ";
     }
 }

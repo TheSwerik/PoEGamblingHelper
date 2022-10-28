@@ -136,17 +136,16 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
         Console.WriteLine($"Updated {result.Lines.Count(gem => trackedGems.Contains(gem.Id))} gems.");
         await _gemDataRepository.Save(result.Lines.Where(gem => !trackedGems.Contains(gem.Id)));
         await _gemDataRepository.Update(result.Lines.Where(gem => trackedGems.Contains(gem.Id)));
-        var testGem = _gemDataRepository.Get(gems => gems.First());
-        Console.WriteLine(testGem);
-        Console.WriteLine(testGem);
+        var testGem = _gemDataRepository.Get(gems => gems.First(gem => gem.Name.StartsWith("Divergent")));
         Console.WriteLine("https://www.pathofexile.com/trade/search/Kalandra?q=" + HttpUtility.UrlPathEncode(
                               "{\"query\":{\"filters\":{\"misc_filters\":{\"filters\":{\"gem_level\":{\"min\":16,\"max\":16},\"gem_alternate_quality\":{\"option\":\"2\"},\"quality\":{\"min\":20,\"max\":20}}}},\"type\":\"Shattering Steel\"}}"));
-        Console.WriteLine(
-            "https://www.pathofexile.com/trade/search/Kalandra?q=" + HttpUtility.UrlPathEncode(
-                // "{\"query\":{\"filters\":{\"misc_filters\":{\"filters\":{\"gem_level\":{\"min\":16,\"max\":16},\"gem_alternate_quality\":{\"option\":\"2\"},\"quality\":{\"min\":20,\"max\":20}}}},\"type\":\"Shattering Steel\"}}"
-                $"{{\"query\":{{\"filters\":{{\"misc_filters\":{{\"filters\":{{\"gem_level\":{{\"min\":{testGem.GemLevel},\"max\":{testGem.GemLevel}}},\"gem_alternate_quality\":{{\"option\":\"2\"}},\"quality\":{{\"min\":{testGem.GemQuality},\"max\":{testGem.GemQuality}}}}}}}}},\"type\":\"{testGem.Name}\"}}}}"
-            ));
-        Console.WriteLine(testGem.TradeUrl());
+        Console.WriteLine(testGem.TradeQuery());
+        var regex = new Regex("\\s");
+        Console.WriteLine(regex.Replace(testGem.TradeQuery(), ""));
+        Console.WriteLine("https://www.pathofexile.com/trade/search/Kalandra?q=" +
+                          regex.Replace(testGem.TradeQuery(), ""));
+        Console.WriteLine("https://www.pathofexile.com/trade/search/Kalandra?q=" +
+                          regex.Replace(testGem.TradeQuery(true, true), ""));
     }
 
     #endregion
