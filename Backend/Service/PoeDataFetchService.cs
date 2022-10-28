@@ -1,5 +1,4 @@
 ﻿using System.Text.RegularExpressions;
-using System.Web;
 using Backend.Model;
 using HtmlAgilityPack;
 
@@ -13,6 +12,8 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
     private const string PoeWikiUrl = "https://pathofexile.fandom.com/wiki";
     private const string PoeDbUrl = "https://poedb.tw/us/";
     private const string PoeNinjaUrl = "https://poe.ninja/api/data";
+    private const string PoeTradeUrl = "https://www.pathofexile.com/trade/search/";
+    private static readonly Regex WhitespaceRegex = new("\\s");
     private readonly HttpClient _client = new();
     private readonly IRepository<GemData> _gemDataRepository;
     private readonly IRepository<League> _leagueRepository;
@@ -125,27 +126,30 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
     {
         const string gemUrl = PoeNinjaUrl + "/itemoverview?type=SkillGem";
         var currentLeague = await _poeDataService.GetCurrentLeague();
-        Console.WriteLine(gemUrl + $"&league={currentLeague.Name}");
         var result = await _client.GetFromJsonAsync<PriceData>(gemUrl + $"&league={currentLeague.Name}");
         if (result is null) throw new NullReferenceException();
         Logger.LogInformation("Got data from {Result} gems", result.Lines.Length);
+
         var trackedGems = _gemDataRepository.GetAll().Select(gem => gem.Id).ToArray();
         _gemDataRepository.ClearTrackedEntities();
-        Console.WriteLine($"Already tracking {trackedGems.Length} gems.");
-        Console.WriteLine($"Saved {result.Lines.Count(gem => !trackedGems.Contains(gem.Id))} gems.");
-        Console.WriteLine($"Updated {result.Lines.Count(gem => trackedGems.Contains(gem.Id))} gems.");
-        await _gemDataRepository.Save(result.Lines.Where(gem => !trackedGems.Contains(gem.Id)));
-        await _gemDataRepository.Update(result.Lines.Where(gem => trackedGems.Contains(gem.Id)));
-        var testGem = _gemDataRepository.Get(gems => gems.First(gem => gem.Name.StartsWith("Divergent")));
-        Console.WriteLine("https://www.pathofexile.com/trade/search/Kalandra?q=" + HttpUtility.UrlPathEncode(
-                              "{\"query\":{\"filters\":{\"misc_filters\":{\"filters\":{\"gem_level\":{\"min\":16,\"max\":16},\"gem_alternate_quality\":{\"option\":\"2\"},\"quality\":{\"min\":20,\"max\":20}}}},\"type\":\"Shattering Steel\"}}"));
-        Console.WriteLine(testGem.TradeQuery());
-        var regex = new Regex("\\s");
-        Console.WriteLine(regex.Replace(testGem.TradeQuery(), ""));
-        Console.WriteLine("https://www.pathofexile.com/trade/search/Kalandra?q=" +
-                          regex.Replace(testGem.TradeQuery(), ""));
-        Console.WriteLine("https://www.pathofexile.com/trade/search/Kalandra?q=" +
-                          regex.Replace(testGem.TradeQuery(true, true), ""));
+
+        var newGems = result.Lines.Where(gem => !trackedGems.Contains(gem.Id)).ToArray();
+        await _gemDataRepository.Save(newGems);
+        Logger.LogInformation("Added {Result} new gems", newGems.Length);
+        var updatedGems = result.Lines.Where(gem => trackedGems.Contains(gem.Id)).ToArray();
+        await _gemDataRepository.Update(updatedGems);
+        Logger.LogInformation("Updated {Result} gems", updatedGems.Length);
+    }
+
+    public async Task<string> GetPoeTradeUrl(Gem gem, bool accurateGemLevel = false, bool accurateGemQuality = false)
+    {
+        const string queryKey = "?q=";
+        var currentLeague = await _poeDataService.GetCurrentLeague();
+        Console.WriteLine(PoeTradeUrl + currentLeague.Name + queryKey + WhitespaceRegex.Replace(gem.TradeQuery(), ""));
+        Console.WriteLine(PoeTradeUrl + currentLeague.Name + queryKey +
+                          WhitespaceRegex.Replace(gem.TradeQuery(true, true), ""));
+        return PoeTradeUrl + currentLeague.Name + queryKey +
+               WhitespaceRegex.Replace(gem.TradeQuery(accurateGemLevel, accurateGemQuality), "");
     }
 
     #endregion
