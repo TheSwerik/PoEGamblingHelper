@@ -11,10 +11,6 @@ public class GemData : Gem
 
     public override string ToString()
     {
-        Console.WriteLine(
-            base.ToString()[..(base.ToString().Length - 1)] +
-            $", DetailsId={DetailsId}, GemLevel={GemLevel}, ChaosValue={ChaosValue}, ExaltedValue={ExaltedValue}, DivineValue={DivineValue}, Listings={ListingCount}, Corrupted={Corrupted}, Quality={GemQuality}]"
-        );
         return string.Concat(
             base.ToString().AsSpan(0, base.ToString().Length - 1),
             $", DetailsId={DetailsId}, GemLevel={GemLevel}, ChaosValue={ChaosValue}, ExaltedValue={ExaltedValue}, DivineValue={DivineValue}, Listings={ListingCount}, Corrupted={Corrupted}, Quality={GemQuality}]"
