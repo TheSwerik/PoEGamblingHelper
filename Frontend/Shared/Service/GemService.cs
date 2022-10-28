@@ -3,7 +3,7 @@ using PoEGamblingHelper3.Shared.Model;
 
 namespace PoEGamblingHelper3.Shared.Service;
 
-public class GemService
+public class GemService : IGemService
 {
     private readonly HttpClient _httpClient;
 
@@ -11,6 +11,9 @@ public class GemService
 
     public async Task<IEnumerable<Gem>> GetAllGems()
     {
+        var result = await _httpClient.GetAsync("data");
+        Console.WriteLine(result.Headers.Location);
+        Console.WriteLine(await result.Content.ReadAsStringAsync());
         return await _httpClient.GetFromJsonAsync<IEnumerable<Gem>>("data") ?? throw new InvalidOperationException();
     }
 }
