@@ -6,14 +6,6 @@ namespace Backend.Service;
 
 public class PoeDataFetchService : Service, IPoeDataFetchService
 {
-    //https://github.com/5k-mirrors/misc-poe-tools/blob/master/doc/poe-ninja-api.md
-    //https://www.pathofexile.com/developer/docs/reference#leagues
-    private const string PoeApiUrl = "https://api.pathofexile.com";
-    private const string PoeWikiUrl = "https://pathofexile.fandom.com/wiki";
-    private const string PoeDbUrl = "https://poedb.tw/us/";
-    private const string PoeNinjaUrl = "https://poe.ninja/api/data";
-    private const string PoeTradeUrl = "https://www.pathofexile.com/trade/search/";
-    private static readonly Regex WhitespaceRegex = new("\\s");
     private readonly HttpClient _client = new();
     private readonly IRepository<GemData> _gemDataRepository;
     private readonly IRepository<League> _leagueRepository;
@@ -69,7 +61,7 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
     public async Task GetCurrentLeague()
     {
         var web = new HtmlWeb();
-        var doc = web.Load(PoeDbUrl + "League#LeaguesList");
+        var doc = web.Load(PoeToolUrls.PoeDbUrl + "League#LeaguesList");
         if (doc is null) throw new NullReferenceException("PoeDB is down");
 
         var leaguesTable = doc.DocumentNode.SelectNodes("//table").First(n => n.HasChildNodes);
@@ -124,7 +116,7 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
 
     public async Task GetPriceData()
     {
-        const string gemUrl = PoeNinjaUrl + "/itemoverview?type=SkillGem";
+        const string gemUrl = PoeToolUrls.PoeNinjaUrl + "/itemoverview?type=SkillGem";
         var currentLeague = await _poeDataService.GetCurrentLeague();
         var result = await _client.GetFromJsonAsync<PriceData>(gemUrl + $"&league={currentLeague.Name}");
         if (result is null) throw new NullReferenceException();
@@ -139,17 +131,6 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
         var updatedGems = result.Lines.Where(gem => trackedGems.Contains(gem.Id)).ToArray();
         await _gemDataRepository.Update(updatedGems);
         Logger.LogInformation("Updated {Result} gems", updatedGems.Length);
-    }
-
-    public async Task<string> GetPoeTradeUrl(Gem gem, bool accurateGemLevel = false, bool accurateGemQuality = false)
-    {
-        const string queryKey = "?q=";
-        var currentLeague = await _poeDataService.GetCurrentLeague();
-        var query = WhitespaceRegex.Replace(gem.TradeQuery(accurateGemLevel, accurateGemQuality), "");
-        Console.WriteLine(PoeTradeUrl + currentLeague.Name + queryKey + WhitespaceRegex.Replace(gem.TradeQuery(), ""));
-        Console.WriteLine(PoeTradeUrl + currentLeague.Name + queryKey +
-                          WhitespaceRegex.Replace(gem.TradeQuery(true, true), ""));
-        return PoeTradeUrl + currentLeague.Name + queryKey + query;
     }
 
     #endregion
