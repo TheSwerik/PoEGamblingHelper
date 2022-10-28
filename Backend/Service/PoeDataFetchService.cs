@@ -145,11 +145,11 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
     {
         const string queryKey = "?q=";
         var currentLeague = await _poeDataService.GetCurrentLeague();
+        var query = WhitespaceRegex.Replace(gem.TradeQuery(accurateGemLevel, accurateGemQuality), "");
         Console.WriteLine(PoeTradeUrl + currentLeague.Name + queryKey + WhitespaceRegex.Replace(gem.TradeQuery(), ""));
         Console.WriteLine(PoeTradeUrl + currentLeague.Name + queryKey +
                           WhitespaceRegex.Replace(gem.TradeQuery(true, true), ""));
-        return PoeTradeUrl + currentLeague.Name + queryKey +
-               WhitespaceRegex.Replace(gem.TradeQuery(accurateGemLevel, accurateGemQuality), "");
+        return PoeTradeUrl + currentLeague.Name + queryKey + query;
     }
 
     #endregion
