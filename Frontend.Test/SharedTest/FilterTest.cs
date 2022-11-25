@@ -4,7 +4,7 @@ using PoEGamblingHelper3.Shared;
 
 namespace Frontend.Test.SharedTest;
 
-public class UnitTest1
+public class FilterTest
 {
     [Fact]
     public void TestLastPoeNinjaUpdateJustNow()
