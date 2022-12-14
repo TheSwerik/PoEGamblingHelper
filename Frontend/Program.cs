@@ -13,7 +13,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 const string backendUrl = "https://localhost:7166/";
 #endif
 #if RELEASE
-const string backendUrl = builder.HostEnvironment.BaseAddress+"api";
+const string backendUrl = builder.HostEnvironment.BaseAddress + "api";
 #endif
 
 builder.Services.AddScoped(_ => new HttpClient { BaseAddress = new Uri(backendUrl) });
