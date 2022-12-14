@@ -32,6 +32,7 @@ builder.Services.AddScoped<IRepository<League>, Repository<League>>();
 
 builder.Services.AddSingleton<IPoeDataFetchService, PoeDataFetchService>();
 builder.Services.AddSingleton<IPoeDataService, PoeDataService>();
+
 builder.Services.AddHostedService<InitService>();
 
 #endregion
@@ -51,6 +52,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors(corsBuilder =>
+                corsBuilder.WithOrigins(app.Configuration["AllowedOrigins"]!).AllowAnyMethod().AllowAnyHeader());
 app.UseAuthorization();
 
 app.MapControllers();
