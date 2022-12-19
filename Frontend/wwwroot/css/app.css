@@ -57,6 +57,13 @@ input[type=number] {
 
 /*region CUSTOM STYLES*/
 
+/*region Classes*/
+.pointer {
+    cursor: pointer;
+}
+
+/*endregion*/
+
 /*region Fonts*/
 @font-face {
     font-family: fontin;
@@ -79,7 +86,7 @@ input[type=number] {
 /*endregion*/
 
 /* apply theme colors */
-:root, .card, .form-control {
+:root, .card, .form-control, .blazored-typeahead__input, .blazored-typeahead__controls {
     --transparent: rgba(0, 0, 0, 0);
     --bs-font-sans-serif: fontin, 'sans-serif', Arial, 'sans-serif';
     --bs-card-cap-color: var(--bs-body-color);
@@ -94,7 +101,6 @@ input[type=number] {
 label {
     --bs-body-color: var(--bs-secondary);
     color: var(--bs-body-color);
-
 }
 
 .form-control {
@@ -141,6 +147,10 @@ label {
 .btn-outline-secondary {
     --bs-btn-border-color: var(--bs-secondary);
     --bs-btn-color: var(--bs-secondary);
+}
+
+.blazored-typeahead__input {
+    background-color: var(--bs-primary);
 }
 
 /*endregion*/
