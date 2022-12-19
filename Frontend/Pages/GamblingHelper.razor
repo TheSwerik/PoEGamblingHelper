@@ -3,12 +3,13 @@
 <PageTitle>PoE Gambling Helper</PageTitle>
 
 <div class="d-flex flex-column align-items-center w-100 h-100">
-    <h2 >Path of Exile</h2>
-    <h1 >GAMBLING HELPER</h1>
+    <h2>Path of Exile</h2>
+    <h1>GAMBLING HELPER</h1>
 
     <Filter/>
 
-    <div class="vertical-content">
+    @foreach (var gem in _gems)
+    {
         <GemStats/>
-    </div>
+    }
 </div>
