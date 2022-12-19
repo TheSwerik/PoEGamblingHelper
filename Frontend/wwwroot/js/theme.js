@@ -10,11 +10,6 @@
     element.rel = 'stylesheet';
     element.type = 'text/css';
     element.href = themePath;
-    // element.setAttribute('id', 'theme');
-    // element.setAttribute('rel', 'stylesheet');
-    // element.setAttribute('type', 'text/css');
-    // element.setAttribute('href', 'css/' + theme.toLowerCase() + '.theme.css');
-    // element.setAttribute('href', themePath);
     document.getElementsByTagName('head')[0].appendChild(element);
 
     localStorage.setItem('theme', theme);
@@ -22,7 +17,7 @@
 
 function useSavedTheme() {
     const theme = localStorage.getItem('theme');
-    if (theme !== null) useTheme(theme); else useTheme('dark');
+    useTheme(theme !== null ? theme : 'dark');
 }
 
 function CheckUrl(url) {
