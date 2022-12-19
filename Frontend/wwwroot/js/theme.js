@@ -3,13 +3,13 @@
     if (!CheckUrl(themePath)) return;
 
     const previousElement = document.getElementById('theme');
-    document.getElementsByTagName('head')[0].removeChild(previousElement);
 
     const element = document.createElement('link');
     element.id = 'theme';
     element.rel = 'stylesheet';
     element.type = 'text/css';
     element.href = themePath;
+    element.onload = () => document.getElementsByTagName('head')[0].removeChild(previousElement);
     document.getElementsByTagName('head')[0].appendChild(element);
 
     localStorage.setItem('theme', theme);
