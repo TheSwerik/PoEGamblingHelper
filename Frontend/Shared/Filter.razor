@@ -32,11 +32,6 @@
         </div>
         <button class="btn btn-secondary">CORRUPT NOW</button>
     </div>
-    <div class="d-flex flex-row mt-3 mb-3 pointer" onclick="@ToggleFilters" data-bs-toggle="collapse" data-bs-target="#collapsable" aria-expanded="false" aria-controls="collapsable">
-        <hr class="col"/>
-        <p class="col text-center">@(FiltersExpanded ? "Collapse" : "Expand") Filters</p>
-        <hr class="col"/>
-    </div>
     <div class="collapse" id="collapsable">
         <div class="d-flex flex-row">
             <div class="col input-group flex-column">
@@ -49,6 +44,11 @@
                 <label>Sorting</label>
             </div>
         </div>
+    </div>
+    <div class="d-flex flex-row mt-3 mb-3 pointer" onclick="@ToggleFilters" data-bs-toggle="collapse" data-bs-target="#collapsable" aria-expanded="false" aria-controls="collapsable">
+        <hr class="col"/>
+        <p class="col text-center">@(FiltersExpanded ? "Collapse" : "Expand") Filters</p>
+        <hr class="col"/>
     </div>
 </div>
 
