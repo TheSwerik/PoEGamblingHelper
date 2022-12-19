@@ -16,6 +16,10 @@
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.1" PrivateAssets="all"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <None Include="wwwroot/css/font/**" CopyToOutputDirectory="Always"/>
+    </ItemGroup>
+
     <!--TODO: It seems like i need this but it works without it. Maybe this will break in a Docker Container.-->
     <!--    <ItemGroup>-->
     <!--      <Content Update="wwwroot\appsettings.json">-->

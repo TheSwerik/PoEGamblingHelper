@@ -1,3 +1,13 @@
-﻿:root {
-    --bs-body-color: #a500ff;
+﻿:root, .card, .btn {
+    --bs-primary: #9f9d9d;
+    --bs-secondary: #f3b061;
+    /*--bs-success: #198754;*/
+    /*--bs-info: #0dcaf0;*/
+    /*--bs-warning: #ffc107;*/
+    /*--bs-danger: #dc3545;*/
+    /*--bs-light: #f8f9fa;*/
+    /*--bs-dark: #212529;*/
+
+    --bs-body-color: #f1eded;
+    --bs-body-bg: #1e1e1e;
 }
