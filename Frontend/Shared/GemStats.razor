@@ -1,32 +1,36 @@
-﻿<div class="card w-100">
-    <div class="card-header d-flex justify-content-between w-100">
-        <h1>GEM_NAME</h1>
-        <button class="btn btn-secondary">Exalted Orb</button>
-    </div>
-    <div class="card-body d-flex">
-        <div class="card-body d-flex flex-column h-100 justify-content-between">
-            <h5 class="card-title">Value</h5>
-            <p class="card-title">Price Raw: 3</p>
-            <p class="card-title">Value Worst Case: 0.2</p>
-            <p class="card-title">Value Middle Case: 1</p>
-            <p class="card-title">Value Best Case: 10</p>
-            <button class="btn btn-primary">+ Value</button>
-            <button class="btn btn-outline-primary">+ Value</button>
-            <button class="btn btn-secondary">1.24</button>
-            <button class="btn btn-outline-secondary">1.24</button>
-        </div>
-        <div class="card-body d-flex flex-column h-100 justify-content-between">
-            <h5 class="card-title">Profit per Try</h5>
-            <p class="card-title">Cost: 3</p>
-            <p class="card-title">Profit Worst Case: -3.8</p>
-            <p class="card-title">Profit Middle Case: -2</p>
-            <p class="card-title">Profit Best Case: 9</p>
-        </div>
-        <div class="card-body d-flex flex-column h-100 justify-content-center">
-            <p class="card-title">Average Profit per try: 1.1654413465463416546</p>
+﻿@using PoEGamblingHelper3.Shared.Model
+<div class="card" style="width: 40rem;">
+    <div class="card-body">
+        <h3 class="card-title">@Gem.Name</h3>
+        <div class="row gy-5">
+            <div class="col">
+                <h5 class="card-title">Value</h5>
+                <p class="card-text">Price Raw: 3</p>
+                <p class="card-text">Worst Case: 0.2</p>
+                <p class="card-text">Middle Case: 1</p>
+                <p class="card-text">Best Case: 10</p>
+            </div>
+            <div class="col">
+                <h5 class="card-title">Profit per Try</h5>
+                <p class="card-text">Cost: 3.5</p>
+                <p class="card-text">Worst Case: -3.3</p>
+                <p class="card-text">Middle Case: -2.5</p>
+                <p class="card-text">Best Case: 6.5</p>
+            </div>
+            <div class="col d-flex">
+                <button class="btn btn-primary align-self-end w-100">+ Value</button>
+            </div>
+            <div class="col d-flex flex-column justify-content-between">
+                <h5 class="card-title">Average Profit per Try</h5>
+                <button class="btn btn-outline-secondary align-self-end w-100">0.23</button>
+            </div>
         </div>
     </div>
 </div>
 
 @code {
+
+    [Parameter]
+    public Gem Gem { get; set; } = null!;
+
 }
