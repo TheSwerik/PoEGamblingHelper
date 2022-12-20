@@ -12,10 +12,13 @@ jobs:
     - name: Setup .NET Core SDK
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 6.0.300
+        dotnet-version: 7.0.100
+        
+    - name: Tests
+      run: dotnet test Frontend/Frontend.csproj -c Release  --nologo
         
     - name: Publish .NET Core Project
-      run: dotnet publish PoEGamblingHelper3/PoEGamblingHelper3.csproj -c Release -o release --nologo
+      run: dotnet publish Frontend/Frontend.csproj -c Release -o release --nologo
       
     - name: Change base-tag in index.html from / to BlazorGitHubPagesDemo
       run: sed -i 's/base href="\/"/base href="\/PoEGamblingHelper\/"/g' release/wwwroot/index.html
