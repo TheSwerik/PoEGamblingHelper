@@ -6,7 +6,12 @@ namespace PoEGamblingHelper3.Pages;
 
 public partial class GamblingHelper
 {
-    private IEnumerable<Gem> _gems = new[] { new Gem { Name = "Test Support" } };
+    private IEnumerable<Gem> _gems = new[]
+                                     {
+                                         new Gem { Name = "Test Support" }, new Gem { Name = "Test Support 2" },
+                                         new Gem { Name = "Test Support 3" }, new Gem { Name = "Test Support 4" }
+                                     };
+
     [Inject] private IGemService GemService { get; set; } = default!;
 
     protected override async Task OnInitializedAsync()

@@ -8,14 +8,10 @@
 
     <Filter/>
 
-    @foreach (var gem in _gems)
-    {
-        <div class="container d-flex flex-wrap p-0 justify-content-between">
-
+    <div class="container d-flex flex-wrap p-0 justify-content-between">
+        @foreach (var gem in _gems)
+        {
             <GemStats Gem="gem"/>
-            <GemStats Gem="gem"/>
-            <GemStats Gem="gem"/>
-            <GemStats Gem="gem"/>
-        </div>
-    }
+        }
+    </div>
 </div>
