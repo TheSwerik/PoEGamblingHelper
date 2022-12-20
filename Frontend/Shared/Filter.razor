@@ -2,8 +2,10 @@
 @inject HttpClient HttpClient
 
 
-<div class="w-75 d-flex flex-column">
-    <div class="d-flex flex-row">
+@* <div class="w-75 d-flex flex-column container "> *@
+<div class="container">
+    <div class="row gx-5">
+        @* <div class="row gx-5 w-100"> *@
         <div class="col input-group flex-column">
             <label>Gem to corrupt</label>
             <BlazoredTypeahead SearchMethod="@Search" @bind-Value="@FilterValues.Gem" Context="search">
@@ -15,23 +17,27 @@
                 </ResultTemplate>
             </BlazoredTypeahead>
         </div>
-        <div class="col input-group flex-column">
-            <label>Temple cost</label>
-            <input/>
-            @* <button class="btn btn-outline-danger w-25" type="button"> *@
-            @*     <img src="icons/fa-arrows-rotate.svg" class="icon" alt="refresh"/> *@
-            @* </button> *@
+        <div class="col flex-column">
+            <label for="temple-cost">Temple cost</label>
+            <div class="input-group">
+                <input type="number" class="form-control" value="0" aria-label="Temple Cost" aria-describedby="reset-1" id="temple-cost" style="text-align: right; padding-right: 1.5rem">
+                <button class="btn btn-primary btn-addon" type="button" id="reset-1">
+                    <img src="icons/arrow-rotate-right.svg" alt="" style="width: 1rem"/>
+                </button>
+            </div>
         </div>
-        <div class="col input-group flex-column">
-            <label>Chaos per Divine</label>
-            <input/>
-            @* <button class="btn btn-outline-danger w-25" type="button"> *@
-            @*     <img src="icons/fa-arrows-rotate.svg" class="icon" alt="refresh"/> *@
-            @* </button> *@
+        <div class="col flex-column">
+            <label for="chaos-per-divine">Chaos per Divine</label>
+            <div class="input-group">
+                <input type="number" class="form-control" value="0" aria-label="Chaos per Divine" aria-describedby="reset-2" id="chaos-per-divine" style="text-align: right; padding-right: 1.5rem">
+                <button class="btn btn-primary btn-addon" type="button" id="reset-2">
+                    <img src="icons/arrow-rotate-right.svg" alt="" style="width: 1rem"/>
+                </button>
+            </div>
         </div>
-        <button class="btn btn-secondary">CORRUPT NOW</button>
+        <button class="btn btn-secondary w-25">CORRUPT NOW</button>
     </div>
-    <div class="collapse" id="collapsable">
+    <div class="row collapse" id="collapsable">
         <div class="d-flex flex-row">
             <div class="col input-group flex-column">
                 <label>Price per Try</label>
@@ -44,12 +50,13 @@
             </div>
         </div>
     </div>
-    <div class="d-flex flex-row mt-3 mb-3 pointer" onclick="@ToggleFilters" data-bs-toggle="collapse" data-bs-target="#collapsable" aria-expanded="false" aria-controls="collapsable">
+    <div class="row mt-3 mb-3 pointer" onclick="@ToggleFilters" data-bs-toggle="collapse" data-bs-target="#collapsable" aria-expanded="false" aria-controls="collapsable">
         <hr class="col"/>
         <p class="col text-center">@(FiltersExpanded ? "Collapse" : "Expand") Filters</p>
         <hr class="col"/>
     </div>
 </div>
+@* </div> *@
 
 @code {
 
