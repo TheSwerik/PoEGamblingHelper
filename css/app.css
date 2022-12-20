@@ -149,8 +149,34 @@ label {
     --bs-btn-color: var(--bs-secondary);
 }
 
-.blazored-typeahead__input {
+.blazored-typeahead__input, input {
     background-color: var(--bs-primary);
+    border-radius: 10px 0 !important;
+    border: none !important;
+}
+
+.blazored-typeahead {
+    border: none !important;
+}
+
+.blazored-typeahead__controls {
+    height: 2rem !important;
+}
+
+.btn-addon {
+    border-left: solid 1px black;
+    border-radius: 10px 0 !important;
+    margin-left: -1rem !important;
+    height: 2rem;
+    padding: 0.5rem;
+}
+
+.btn-addon img {
+    margin-top: -1.75rem;
+}
+
+input {
+    height: 2rem;
 }
 
 /*endregion*/
