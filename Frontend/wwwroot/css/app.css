@@ -149,8 +149,15 @@ label {
     --bs-btn-color: var(--bs-secondary);
 }
 
-.blazored-typeahead__input {
+.blazored-typeahead__input, input {
     background-color: var(--bs-primary);
+    border-radius: 15px 0 !important;
+    border: none !important;
+    padding: 0 !important;
+}
+
+.blazored-typeahead {
+    border: none !important;
 }
 
 /*endregion*/

@@ -6,15 +6,14 @@
     <div class="d-flex flex-row">
         <div class="col input-group flex-column">
             <label>Gem to corrupt</label>
-            <input/>
-            @* <BlazoredTypeahead SearchMethod="@Search" @bind-Value="@FilterValues.Gem" Context="search"> *@
-            @*     <SelectedTemplate> *@
-            @*         @search.Name *@
-            @*     </SelectedTemplate> *@
-            @*     <ResultTemplate> *@
-            @*         @search.Name *@
-            @*     </ResultTemplate> *@
-            @* </BlazoredTypeahead> *@
+            <BlazoredTypeahead SearchMethod="@Search" @bind-Value="@FilterValues.Gem" Context="search">
+                <SelectedTemplate>
+                    @search.Name
+                </SelectedTemplate>
+                <ResultTemplate>
+                    @search.Name
+                </ResultTemplate>
+            </BlazoredTypeahead>
         </div>
         <div class="col input-group flex-column">
             <label>Temple cost</label>
