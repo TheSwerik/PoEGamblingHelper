@@ -1,0 +1,61 @@
+/* /Pages/GamblingHelper.razor.rz.scp.css */
+.vertical-content[b-zxbo172sad] {
+    width: 100%;
+    height: 100%;
+    padding: 5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+/* /Shared/Filter.razor.rz.scp.css */
+[b-wt7fomqzyl] .blazored-typeahead {
+    width: 100% !important;
+    height: fit-content;
+}
+
+.sidebar[b-wt7fomqzyl] {
+    height: 100vh;
+    width: 35vw;
+    display: flex;
+    flex-direction: column;
+    backdrop-filter: brightness(90%);
+    position: sticky;
+    top: 0;
+    padding: 2%;
+}
+
+.w-65[b-wt7fomqzyl] {
+    width: 65%;
+}
+
+.w-35[b-wt7fomqzyl] {
+    width: 35%;
+}
+
+.float-container[b-wt7fomqzyl] {
+    width: 0;
+    height: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.floating-autoload[b-wt7fomqzyl] {
+    position: relative;
+    top: -1.7vh;
+    /*left: 2.65vw;*/
+    left: 50%;
+    width: 1rem;
+    height: 1.5rem;
+    margin: 0;
+    padding: 0;
+    z-index: 99999;
+}
+
+.icon[b-wt7fomqzyl] {
+    /*background-color: red;*/
+    /*-webkit-mask: url(icons/fa-arrows-rotate.svg) no-repeat center;*/
+    /*mask: url(icons/fa-arrows-rotate.svg) no-repeat center;*/
+    filter: invert(31%) sepia(37%) saturate(6360%) hue-rotate(337deg) brightness(91%) contrast(89%);
+    width: 100%;
+    height: 100%;
+}

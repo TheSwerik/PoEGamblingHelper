@@ -1,25 +1,9 @@
-﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
-
-html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+﻿html, body {
+    font-family: fontin, sans-serif, Arial, sans-serif;
 }
 
 h1:focus {
     outline: none;
-}
-
-a, .btn-link {
-    color: #0071c1;
-}
-
-.btn-primary {
-    color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
-}
-
-.content {
-    padding-top: 1.1rem;
 }
 
 .valid.modified:not([type=checkbox]) {
@@ -28,10 +12,6 @@ a, .btn-link {
 
 .invalid {
     outline: 1px solid red;
-}
-
-.validation-message {
-    color: red;
 }
 
 #blazor-error-ui {
@@ -62,3 +42,115 @@ a, .btn-link {
 .blazor-error-boundary::after {
     content: "An error has occurred."
 }
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+/*region CUSTOM STYLES*/
+
+/*region Classes*/
+.pointer {
+    cursor: pointer;
+}
+
+/*endregion*/
+
+/*region Fonts*/
+@font-face {
+    font-family: fontin;
+    src: url(font/fontin/Fontin-Regular.ttf) format('truetype'), url(font/fontin/Fontin-Regular.otf) format('opentype');
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: fontin;
+    src: url(font/fontin/Fontin-Bold.ttf) format('truetype'), url(font/fontin/Fontin-Bold.otf) format('opentype');
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: fontin;
+    src: url(font/fontin/Fontin-Italic.ttf) format('truetype'), url(font/fontin/Fontin-Italic.otf) format('opentype');
+    font-style: italic;
+}
+
+/*endregion*/
+
+/* apply theme colors */
+:root, .card, .form-control, .blazored-typeahead__input, .blazored-typeahead__controls {
+    --transparent: rgba(0, 0, 0, 0);
+    --bs-font-sans-serif: fontin, 'sans-serif', Arial, 'sans-serif';
+    --bs-card-cap-color: var(--bs-body-color);
+    --bs-card-color: var(--bs-body-color);
+    --bs-card-bg: var(--bs-body-bg);
+    --bs-card-cap-bg: var(--transparent);
+    --bs-border-color-translucent: var(--bs-primary);
+    --bs-border-color: var(--bs-primary);
+    --bs-card-border-width: 1px;
+}
+
+label {
+    --bs-body-color: var(--bs-secondary);
+    color: var(--bs-body-color);
+}
+
+.form-control {
+    background-color: var(--bs-primary);
+    border: none;
+    border-radius: 15px 0;
+}
+
+.card h5 {
+    --bs-card-color: var(--bs-secondary);
+    color: var(--bs-card-color);
+}
+
+.card-header {
+    border-bottom: none;
+}
+
+.btn {
+    --bs-btn-hover-color: var(--bs-body-bg);
+    --bs-btn-color: var(--bs-body-bg);
+    border-radius: 15px 0;
+    border: none;
+    font-size: 1.75rem;
+    font-weight: 1000;
+}
+
+.btn-outline-primary, .btn-outline-secondary, .btn-outline-danger {
+    border: 5px solid;
+}
+
+.btn-primary {
+    --bs-btn-bg: var(--bs-primary);
+}
+
+.btn-outline-primary {
+    --bs-btn-border-color: var(--bs-primary);
+    --bs-btn-color: var(--bs-primary);
+}
+
+.btn-secondary {
+    --bs-btn-bg: var(--bs-secondary);
+}
+
+.btn-outline-secondary {
+    --bs-btn-border-color: var(--bs-secondary);
+    --bs-btn-color: var(--bs-secondary);
+}
+
+.blazored-typeahead__input {
+    background-color: var(--bs-primary);
+}
+
+/*endregion*/
