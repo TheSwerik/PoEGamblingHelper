@@ -21,7 +21,7 @@ jobs:
       run: dotnet publish Frontend/Frontend.csproj -c Release -o release --nologo
         
     - name: war
-      run: cat release/index.html
+      run: cat release/wwwroot/index.html
       
     - name: Change base-tag in index.html from / to BlazorGitHubPagesDemo
       run: sed -i 's/base href="\/"/base href="\/PoEGamblingHelper\/"/g' release/wwwroot/index.html
