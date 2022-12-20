@@ -6,7 +6,7 @@ namespace PoEGamblingHelper3.Pages;
 
 public partial class GamblingHelper
 {
-    private IEnumerable<Gem> _gems = default!;
+    private IEnumerable<Gem> _gems = Array.Empty<Gem>();
     [Inject] private IGemService GemService { get; set; } = default!;
 
     protected override async Task OnInitializedAsync()
