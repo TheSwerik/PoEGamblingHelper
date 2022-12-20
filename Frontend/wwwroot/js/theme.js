@@ -21,11 +21,13 @@ function useSavedTheme() {
 }
 
 function CheckUrl(url) {
-    let http;
-    if (window.XMLHttpRequest) http = new XMLHttpRequest(); // IE7+, Firefox, Chrome, Opera, Safari
-    else http = new ActiveXObject("Microsoft.XMLHTTP"); // IE6, IE5
+    // let http;
+    // if (window.XMLHttpRequest) http = new XMLHttpRequest(); // IE7+, Firefox, Chrome, Opera, Safari
+    // else http = new ActiveXObject("Microsoft.XMLHTTP"); // IE6, IE5
+    //
+    // http.open('HEAD', url, false);
+    // http.send();
+    // return http.status !== 404;
 
-    http.open('HEAD', url, false);
-    http.send();
-    return http.status !== 404;
+    return false;
 }
