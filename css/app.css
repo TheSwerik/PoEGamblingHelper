@@ -109,6 +109,10 @@ label {
     border-radius: 15px 0;
 }
 
+.card {
+    border-radius: 15px 0;
+}
+
 .card h5 {
     --bs-card-color: var(--bs-secondary);
     color: var(--bs-card-color);
