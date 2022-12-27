@@ -19,6 +19,7 @@ public partial class GamblingHelper : IDisposable
     private Task _getAllGems = null!;
     private bool _isUpdating;
     private DateTime _lastPoeNinjaUpdate = DateTime.MinValue;
+    private decimal TempleCost;
 
     [Inject] private IGemService GemService { get; set; } = default!;
 

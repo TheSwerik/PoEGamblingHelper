@@ -226,12 +226,11 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
         if (result is null) throw new NullReferenceException();
         Logger.LogInformation("Got data from {Result} gems", result.Lines.Length);
 
-        var trackedGemData = _gemDataRepository.GetAll().Select(gem => gem.Name.ToLowerInvariant()).ToArray();
-        var trackedGemTradeData = _gemTradeDataRepository.GetAll().Select(gem => gem.Id).ToArray();
-        _gemDataRepository.ClearTrackedEntities();
-        _gemTradeDataRepository.ClearTrackedEntities();
 
         #region GemTradeData
+
+        var trackedGemTradeData = _gemTradeDataRepository.GetAll().Select(gem => gem.Id).ToArray();
+        _gemTradeDataRepository.ClearTrackedEntities();
 
         var newPoeNinjaTradeData = result.Lines.Where(gem => !trackedGemTradeData.Contains(gem.Id)).ToArray();
         await _gemTradeDataRepository.Save(newPoeNinjaTradeData.Select(poeNinjaData => poeNinjaData.ToGemTradeData()));
@@ -244,6 +243,9 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
         #endregion
 
         #region GemData
+
+        var trackedGemData = _gemDataRepository.GetAll().Select(gem => gem.Name.ToLowerInvariant()).ToArray();
+        _gemDataRepository.ClearTrackedEntities();
 
         _gemTradeDataRepository.ClearTrackedEntities();
         var allGemTradeData = _gemTradeDataRepository.GetAll().ToArray();
