@@ -37,6 +37,12 @@ builder.Services.AddSingleton<IPoeDataService, PoeDataService>();
 
 builder.Services.AddHostedService<InitService>();
 
+builder.Services.AddOutputCache(options => options.AddBasePolicy(cacheBuilder => cacheBuilder
+                                                                     .Expire(TimeSpan.FromMinutes(
+                                                                                 PoeDataFetchService
+                                                                                     .PoeNinjaFetchMinutes))
+                                                                     .Tag("GetAllGems")));
+
 #endregion
 
 #endregion
@@ -52,12 +58,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
 app.UseHttpsRedirection();
 
 app.UseCors(corsBuilder =>
                 corsBuilder.WithOrigins(app.Configuration["AllowedOrigins"]!).AllowAnyMethod().AllowAnyHeader());
 app.UseAuthorization();
 
+app.UseOutputCache();
 app.MapControllers();
 app.Run();
 

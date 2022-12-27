@@ -7,6 +7,7 @@ namespace Backend.Service;
 
 public class PoeDataFetchService : Service, IPoeDataFetchService
 {
+    public const int PoeNinjaFetchMinutes = 5;
     private readonly HttpClient _client = new();
     private readonly IRepository<Currency, string> _currencyRepository;
     private readonly IRepository<GemData, Guid> _gemDataRepository;

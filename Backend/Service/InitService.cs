@@ -1,24 +1,22 @@
-﻿using Timer = System.Timers.Timer;
+﻿using Microsoft.AspNetCore.OutputCaching;
+using Timer = System.Timers.Timer;
 
 namespace Backend.Service;
 
 public class InitService : IHostedService
 {
-    private const int Second = 1000;
-    private const int Minute = 60 * Second;
-    private const int Hour = 60 * Minute;
-    private const int Day = 24 * Hour;
-
+    private readonly IOutputCacheStore _cache;
     private readonly ILogger<InitService> _logger;
     private readonly IPoeDataFetchService _poeDataFetchService;
 
     private Timer? _dailyTimer;
     private Timer? _fiveMinuteTimer;
 
-    public InitService(ILogger<InitService> logger, IPoeDataFetchService poeDataFetchService)
+    public InitService(ILogger<InitService> logger, IPoeDataFetchService poeDataFetchService, IOutputCacheStore cache)
     {
         _logger = logger;
         _poeDataFetchService = poeDataFetchService;
+        _cache = cache;
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
@@ -30,7 +28,7 @@ public class InitService : IHostedService
 
         #region Daily Timer
 
-        _dailyTimer = new Timer(Day);
+        _dailyTimer = new Timer(TimeSpan.FromDays(1));
         _dailyTimer.Elapsed += async (_, _) => await _poeDataFetchService.GetCurrentLeague();
         _dailyTimer.AutoReset = true;
         _dailyTimer.Start();
@@ -39,8 +37,13 @@ public class InitService : IHostedService
 
         #region 5 Minute Timer
 
-        _fiveMinuteTimer = new Timer(5 * Minute);
-        _fiveMinuteTimer.Elapsed += async (_, _) => await _poeDataFetchService.GetPriceData();
+        _fiveMinuteTimer = new Timer(TimeSpan.FromMinutes(PoeDataFetchService.PoeNinjaFetchMinutes));
+        _fiveMinuteTimer.Elapsed += async (_, _) =>
+                                    {
+                                        await _poeDataFetchService.GetPriceData();
+                                        Console.WriteLine("nocache");
+                                        await _cache.EvictByTagAsync("GetAllGems", new CancellationToken());
+                                    };
         _fiveMinuteTimer.AutoReset = true;
         _fiveMinuteTimer.Start();
 

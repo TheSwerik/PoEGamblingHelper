@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.EntityFrameworkCore;
 using Model;
 
@@ -18,6 +19,7 @@ public class GemController : ControllerBase
     }
 
     [HttpGet]
+    [OutputCache(PolicyName = "GetAllGems")]
     public ActionResult<IAsyncEnumerable<GemData>> GetAllGems()
     {
         return Ok(_gemDataRepository.GetAllAsync(dbset => dbset.Include(gemData => gemData.Gems).AsAsyncEnumerable()));
