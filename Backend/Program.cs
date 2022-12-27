@@ -23,10 +23,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(opt => { opt.UseInMemoryData
 // builder.Services.AddEntityFrameworkNpgsql().AddDbContext<ApplicationDbContext>(
 // opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("MyConnection"))
 // );
-builder.Services.AddScoped<IRepository<GemData>, Repository<GemData>>();
-builder.Services.AddScoped<IRepository<GemTradeData>, Repository<GemTradeData>>();
-builder.Services.AddScoped<IRepository<Currency>, Repository<Currency>>();
-builder.Services.AddScoped<IRepository<League>, Repository<League>>();
+builder.Services.AddScoped<IRepository<GemData, Guid>, Repository<GemData, Guid>>();
+builder.Services.AddScoped<IRepository<GemTradeData, long>, Repository<GemTradeData, long>>();
+builder.Services.AddScoped<IRepository<Currency, string>, Repository<Currency, string>>();
+builder.Services.AddScoped<IRepository<League, Guid>, Repository<League, Guid>>();
 
 #endregion
 

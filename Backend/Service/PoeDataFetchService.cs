@@ -8,10 +8,10 @@ namespace Backend.Service;
 public class PoeDataFetchService : Service, IPoeDataFetchService
 {
     private readonly HttpClient _client = new();
-    private readonly IRepository<Currency> _currencyRepository;
-    private readonly IRepository<GemData> _gemDataRepository;
-    private readonly IRepository<GemTradeData> _gemTradeDataRepository;
-    private readonly IRepository<League> _leagueRepository;
+    private readonly IRepository<Currency, string> _currencyRepository;
+    private readonly IRepository<GemData, Guid> _gemDataRepository;
+    private readonly IRepository<GemTradeData, long> _gemTradeDataRepository;
+    private readonly IRepository<League, Guid> _leagueRepository;
     private readonly IPoeDataService _poeDataService;
 
     #region Helper Methods
@@ -43,13 +43,13 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
 
     private class CurrencyPriceData
     {
-        public PoeNinjaCurrencyData[] Lines { get; set; }
+        public PoeNinjaCurrencyData[] Lines { get; } = null!;
         public override string ToString() { return string.Join(", ", Lines.AsEnumerable()); }
     }
 
     private class GemPriceData
     {
-        public PoeNinjaGemData[] Lines { get; set; }
+        public PoeNinjaGemData[] Lines { get; } = null!;
         public override string ToString() { return string.Join(", ", Lines.AsEnumerable()); }
     }
 
@@ -64,10 +64,9 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
         {
             return new Currency
                    {
-                       Id = Id,
+                       Id = DetailsId,
                        Name = Name,
                        ChaosEquivalent = ChaosEquivalent,
-                       DetailsId = DetailsId
                    };
         }
     }
@@ -109,10 +108,10 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
     public PoeDataFetchService(ILogger<PoeDataFetchService> logger, IServiceScopeFactory factory) : base(
         logger, factory)
     {
-        _gemDataRepository = Scope.ServiceProvider.GetRequiredService<IRepository<GemData>>();
-        _gemTradeDataRepository = Scope.ServiceProvider.GetRequiredService<IRepository<GemTradeData>>();
-        _currencyRepository = Scope.ServiceProvider.GetRequiredService<IRepository<Currency>>();
-        _leagueRepository = Scope.ServiceProvider.GetRequiredService<IRepository<League>>();
+        _gemDataRepository = Scope.ServiceProvider.GetRequiredService<IRepository<GemData, Guid>>();
+        _gemTradeDataRepository = Scope.ServiceProvider.GetRequiredService<IRepository<GemTradeData, long>>();
+        _currencyRepository = Scope.ServiceProvider.GetRequiredService<IRepository<Currency, string>>();
+        _leagueRepository = Scope.ServiceProvider.GetRequiredService<IRepository<League, Guid>>();
         _poeDataService = Scope.ServiceProvider.GetRequiredService<IPoeDataService>();
     }
 
@@ -187,6 +186,8 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
         var currentLeague = await _poeDataService.GetCurrentLeague();
         await GetCurrencyData(currentLeague);
         await GetGemPriceData(currentLeague);
+
+        Console.WriteLine(_currencyRepository.Get("divine-orb"));
     }
 
     public async Task GetCurrencyData(League league)
@@ -196,7 +197,7 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
         if (result is null) throw new NullReferenceException();
         Logger.LogInformation("Got data from {Result} currency items", result.Lines.Length);
 
-        var trackedCurrency = _currencyRepository.GetAll().Select(gem => gem.DetailsId).ToArray();
+        var trackedCurrency = _currencyRepository.GetAll().Select(gem => gem.Id).ToArray();
         _currencyRepository.ClearTrackedEntities();
 
 

@@ -1,6 +1,6 @@
 ﻿namespace Model;
 
-public class GemData : Entity
+public class GemData : Entity<Guid>
 {
     public string Name { get; set; } = string.Empty;
     public string Icon { get; set; } = string.Empty;

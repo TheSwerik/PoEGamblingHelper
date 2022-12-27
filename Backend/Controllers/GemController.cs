@@ -8,10 +8,10 @@ namespace Backend.Controllers;
 [Route("data")]
 public class GemController : ControllerBase
 {
-    private readonly IRepository<GemData> _gemDataRepository;
+    private readonly IRepository<GemData, Guid> _gemDataRepository;
     private readonly ILogger<GemController> _logger;
 
-    public GemController(ILogger<GemController> logger, IRepository<GemData> gemDataRepository)
+    public GemController(ILogger<GemController> logger, IRepository<GemData, Guid> gemDataRepository)
     {
         _logger = logger;
         _gemDataRepository = gemDataRepository;

@@ -8,13 +8,13 @@ namespace Backend.Controllers;
 [Route("poe")]
 public class PoeDataController : ControllerBase
 {
-    private readonly IRepository<League> _leagueRepository;
+    private readonly IRepository<League, Guid> _leagueRepository;
     private readonly ILogger<PoeDataController> _logger;
     private readonly IPoeDataService _poeDataService;
 
     public PoeDataController(
         ILogger<PoeDataController> logger,
-        IRepository<League> leagueRepository,
+        IRepository<League, Guid> leagueRepository,
         IPoeDataService poeDataService
     )
     {

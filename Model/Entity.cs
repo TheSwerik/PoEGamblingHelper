@@ -3,7 +3,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Model;
 
-public abstract class Entity : CustomIdEntity
+public abstract class Entity<T> : IEntity
 {
-    [Key] [DatabaseGenerated(DatabaseGeneratedOption.Identity)] public Guid Id { get; set; }
+    [Key] [DatabaseGenerated(DatabaseGeneratedOption.Identity)] public T Id { get; set; }
+
+    public static Type KeyType() { return typeof(T); }
 }

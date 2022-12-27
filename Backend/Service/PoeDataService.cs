@@ -6,13 +6,13 @@ namespace Backend.Service;
 public class PoeDataService : Service, IPoeDataService
 {
     private static readonly Regex WhitespaceRegex = new("\\s");
-    private readonly IRepository<League> _leagueRepository;
+    private readonly IRepository<League, Guid> _leagueRepository;
 
     #region Con- and Destruction
 
     public PoeDataService(ILogger<PoeDataService> logger, IServiceScopeFactory factory) : base(logger, factory)
     {
-        _leagueRepository = Scope.ServiceProvider.GetRequiredService<IRepository<League>>();
+        _leagueRepository = Scope.ServiceProvider.GetRequiredService<IRepository<League, Guid>>();
     }
 
     #endregion

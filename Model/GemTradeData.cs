@@ -1,12 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Web;
+﻿using System.Web;
 
 namespace Model;
 
-public class GemTradeData : CustomIdEntity
+public class GemTradeData : Entity<long>
 {
-    [Key] [DatabaseGenerated(DatabaseGeneratedOption.Identity)] public long Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public int GemLevel { get; set; }
     public int GemQuality { get; set; }

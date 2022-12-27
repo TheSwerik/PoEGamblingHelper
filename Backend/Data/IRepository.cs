@@ -3,17 +3,17 @@ using Model;
 
 namespace Backend.Data;
 
-public interface IRepository<T> where T : CustomIdEntity
+public interface IRepository<T, TKey> where T : class, IEntity //TODO fix this shit
 {
     IAsyncEnumerable<T> GetAllAsync();
     IEnumerable<T> GetAll();
-    Task<T?> Get(Guid id);
+    Task<T?> Get(TKey id);
     T? Get(Func<DbSet<T>, T?> function);
     Task<T> Save(T entity);
     Task Save(IEnumerable<T> entity);
     Task<T> Update(T entity);
     Task Update(IEnumerable<T> entity);
-    void Delete(Guid id);
+    void Delete(TKey id);
     void SaveChanges();
     IAsyncEnumerable<T> GetAllAsync(Func<DbSet<T>, IAsyncEnumerable<T>> function);
     IEnumerable<T> GetAll(Func<DbSet<T>, IEnumerable<T>> function);
