@@ -9,9 +9,9 @@
     <Filter/>
 
     <div class="container d-flex flex-wrap p-0 justify-content-between">
-        @foreach (var gem in _gems)
+        @foreach (var gems in ConnectedGems())
         {
-            <GemStats Gem="gem"/>
+            <GemStats Gem="gems"/>
         }
     </div>
 </div>

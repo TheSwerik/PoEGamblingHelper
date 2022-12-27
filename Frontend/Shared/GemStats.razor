@@ -1,28 +1,27 @@
-﻿@using PoEGamblingHelper3.Shared.Model
-<div class="card mb-5" style="width: 40rem;">
+﻿<div class="card mb-5" style="width: 40rem;">
     <div class="card-body">
-        <h3 class="card-title">@Gem.Name</h3>
+        <h3 class="card-title">@Gem.Key</h3>
         <div class="row gy-5">
             <div class="col">
                 <h5 class="card-title">Value</h5>
-                <p class="card-text">Price Raw: 3</p>
-                <p class="card-text">Worst Case: 0.2</p>
-                <p class="card-text">Middle Case: 1</p>
-                <p class="card-text">Best Case: 10</p>
+                <p class="card-text">Price Raw: @RawCost()</p>
+                <p class="card-text">Worst Case: @WorstCaseValue()</p>
+                <p class="card-text">Middle Case: @MiddleCaseValue()</p>
+                <p class="card-text">Best Case: @BestCaseValue()</p>
             </div>
             <div class="col">
                 <h5 class="card-title">Profit per Try</h5>
-                <p class="card-text">Cost: 3.5</p>
-                <p class="card-text">Worst Case: -3.3</p>
-                <p class="card-text">Middle Case: -2.5</p>
-                <p class="card-text">Best Case: 6.5</p>
+                <p class="card-text">Cost: @CostPerTry()</p>
+                <p class="card-text">Worst Case: @WorstCaseProfit()</p>
+                <p class="card-text">Middle Case: @MiddleCaseProfit()</p>
+                <p class="card-text">Best Case: @BestCaseProfit()</p>
             </div>
             <div class="col d-flex">
                 <button class="btn btn-primary align-self-end w-100">+ Value</button>
             </div>
             <div class="col d-flex flex-column justify-content-between">
                 <h5 class="card-title">Average Profit per Try</h5>
-                <button class="btn btn-outline-secondary align-self-end w-100">0.23</button>
+                <button class="btn btn-outline-secondary align-self-end w-100">@AvgProfitPerTry()</button>
             </div>
         </div>
     </div>
@@ -31,6 +30,23 @@
 @code {
 
     [Parameter]
-    public Gem Gem { get; set; } = null!;
+    public IGrouping<string, GemData> Gem { get; set; } = null!;
+
+    [Parameter]
+    public decimal TempleCost { get; set; }
+
+    protected override void OnInitialized() { Console.WriteLine(string.Join(", ", Gem.Select(gem => gem.GemLevel))); }
+
+    public decimal RawCost() { return Gem.FirstOrDefault(gem => gem.GemLevel == gem.MaxLevel() && !gem.Corrupted)?.ChaosValue ?? 0m; }
+    public decimal WorstCaseValue() { return ResultValue(Gem.First().MaxLevel() - 1); }
+    public decimal MiddleCaseValue() { return ResultValue(Gem.First().MaxLevel()); }
+    public decimal BestCaseValue() { return ResultValue(Gem.First().MaxLevel() + 1); }
+    public decimal CostPerTry() { return RawCost() + TempleCost; }
+    public decimal WorstCaseProfit() { return WorstCaseValue() - CostPerTry(); }
+    public decimal MiddleCaseProfit() { return MiddleCaseValue() - CostPerTry(); }
+    public decimal BestCaseProfit() { return BestCaseValue() - CostPerTry(); }
+    public decimal AvgProfitPerTry() { return (WorstCaseProfit() + MiddleCaseProfit() + BestCaseProfit()) / 3; }
+
+    public decimal ResultValue(int level) { return Gem.FirstOrDefault(gem => gem.GemLevel == level && gem.Corrupted)?.ChaosValue ?? 0m; }
 
 }

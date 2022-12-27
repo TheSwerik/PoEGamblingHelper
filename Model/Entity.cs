@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Backend.Model;
+namespace Model;
 
 public abstract class Entity : CustomIdEntity
 {

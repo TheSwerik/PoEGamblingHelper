@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Web;
 
-namespace Backend.Model;
+namespace Model;
 
 public class Gem : CustomIdEntity
 {

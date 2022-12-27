@@ -1,4 +1,6 @@
-﻿namespace PoEGamblingHelper3.Shared.Model;
+﻿using Model;
+
+namespace PoEGamblingHelper3.Shared.Model;
 
 public class FilterValues
 {

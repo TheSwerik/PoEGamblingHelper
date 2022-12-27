@@ -1,5 +1,5 @@
 ﻿using System.Text.RegularExpressions;
-using Backend.Model;
+using Model;
 
 namespace Backend.Service;
 

@@ -1,4 +1,4 @@
-﻿namespace Backend.Model;
+﻿namespace Model;
 
 public class GemData : Gem
 {

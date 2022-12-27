@@ -1,7 +1,7 @@
 global using Backend.Data;
-using Backend.Model;
 using Backend.Service;
 using Microsoft.EntityFrameworkCore;
+using Model;
 
 #region Builder
 
