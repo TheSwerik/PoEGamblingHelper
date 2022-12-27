@@ -7,5 +7,7 @@ public class ApplicationDbContext : DbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
     public virtual DbSet<GemData> GemData { get; init; } = null!;
+    public virtual DbSet<GemTradeData> GemTradeData { get; init; } = null!;
+    public virtual DbSet<Currency> Currency { get; init; } = null!;
     public virtual DbSet<League> Leagues { get; init; } = null!;
 }

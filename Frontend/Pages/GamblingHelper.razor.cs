@@ -8,10 +8,10 @@ public partial class GamblingHelper
 {
     private IEnumerable<GemData> _gems = new[]
                                          {
-                                             new GemData { Name = "Test Support" },
-                                             new GemData { Name = "Test Support 2" },
-                                             new GemData { Name = "Test Support 3" },
-                                             new GemData { Name = "Test Support 4" }
+                                             new GemData { Name = "Placeholder Support" },
+                                             new GemData { Name = "Placeholder Support 2" },
+                                             new GemData { Name = "Placeholder Support 3" },
+                                             new GemData { Name = "Placeholder Support 4" }
                                          };
 
     [Inject] private IGemService GemService { get; set; } = default!;
@@ -23,5 +23,4 @@ public partial class GamblingHelper
     }
 
     public async void LoadGamblingData() { Console.WriteLine("du dummer kek"); }
-    public IEnumerable<IGrouping<string, GemData>> ConnectedGems() { return _gems.GroupBy(gem => gem.Name); }
 }

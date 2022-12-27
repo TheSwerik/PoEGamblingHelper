@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Model;
 
 namespace Backend.Controllers;
@@ -7,17 +8,21 @@ namespace Backend.Controllers;
 [Route("data")]
 public class GemController : ControllerBase
 {
-    private readonly IRepository<GemData> _gemRepository;
+    private readonly IRepository<GemData> _gemDataRepository;
     private readonly ILogger<GemController> _logger;
 
-    public GemController(ILogger<GemController> logger, IRepository<GemData> gemRepository)
+    public GemController(ILogger<GemController> logger, IRepository<GemData> gemDataRepository)
     {
         _logger = logger;
-        _gemRepository = gemRepository;
+        _gemDataRepository = gemDataRepository;
     }
 
-    [HttpGet] public ActionResult<IAsyncEnumerable<GemData>> GetAllGems() { return Ok(_gemRepository.GetAll()); }
+    [HttpGet]
+    public ActionResult<IAsyncEnumerable<GemData>> GetAllGems()
+    {
+        return Ok(_gemDataRepository.GetAllAsync(dbset => dbset.Include(gemData => gemData.Gems).AsAsyncEnumerable()));
+    }
 
     [HttpPost]
-    public async Task<ActionResult<GemData>> CreateGem(GemData gem) { return Ok(await _gemRepository.Save(gem)); }
+    public async Task<ActionResult<GemData>> CreateGem(GemData gem) { return Ok(await _gemDataRepository.Save(gem)); }
 }

@@ -9,9 +9,9 @@
     <Filter/>
 
     <div class="container d-flex flex-wrap p-0 justify-content-between">
-        @foreach (var gems in ConnectedGems())
+        @foreach (var gem in _gems.OrderByDescending(gemData => gemData.AvgProfitPerTry(0)))
         {
-            <GemStats Gem="gems"/>
+            <GemStats GemData="gem" TempleCost="0"/>
         }
     </div>
 </div>

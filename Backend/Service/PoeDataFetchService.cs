@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 using HtmlAgilityPack;
 using Model;
 
@@ -7,7 +8,9 @@ namespace Backend.Service;
 public class PoeDataFetchService : Service, IPoeDataFetchService
 {
     private readonly HttpClient _client = new();
+    private readonly IRepository<Currency> _currencyRepository;
     private readonly IRepository<GemData> _gemDataRepository;
+    private readonly IRepository<GemTradeData> _gemTradeDataRepository;
     private readonly IRepository<League> _leagueRepository;
     private readonly IPoeDataService _poeDataService;
 
@@ -38,12 +41,77 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
 
     #endregion
 
+    private class CurrencyPriceData
+    {
+        public PoeNinjaCurrencyData[] Lines { get; set; }
+        public override string ToString() { return string.Join(", ", Lines.AsEnumerable()); }
+    }
+
+    private class GemPriceData
+    {
+        public PoeNinjaGemData[] Lines { get; set; }
+        public override string ToString() { return string.Join(", ", Lines.AsEnumerable()); }
+    }
+
+    public class PoeNinjaCurrencyData
+    {
+        public long Id { get; set; }
+        [JsonPropertyName("currencyTypeName")] public string Name { get; set; }
+        public decimal ChaosEquivalent { get; set; }
+        public string DetailsId { get; set; }
+
+        public Currency ToCurrencyData()
+        {
+            return new Currency
+                   {
+                       Id = Id,
+                       Name = Name,
+                       ChaosEquivalent = ChaosEquivalent,
+                       DetailsId = DetailsId
+                   };
+        }
+    }
+
+    public class PoeNinjaGemData
+    {
+        public long Id { get; set; }
+        public string Name { get; set; }
+        public string Icon { get; set; }
+        public int GemLevel { get; set; }
+        public int GemQuality { get; set; }
+        public bool Corrupted { get; set; }
+        public string DetailsId { get; set; }
+        public decimal ChaosValue { get; set; }
+        public decimal ExaltedValue { get; set; }
+        public decimal DivineValue { get; set; }
+        public int ListingCount { get; set; }
+
+        public GemTradeData ToGemTradeData()
+        {
+            return new GemTradeData
+                   {
+                       Id = Id,
+                       Name = Name,
+                       GemLevel = GemLevel,
+                       GemQuality = GemQuality,
+                       Corrupted = Corrupted,
+                       DetailsId = DetailsId,
+                       ChaosValue = ChaosValue,
+                       ExaltedValue = ExaltedValue,
+                       DivineValue = DivineValue,
+                       ListingCount = ListingCount
+                   };
+        }
+    }
+
     #region Con- and Destruction
 
     public PoeDataFetchService(ILogger<PoeDataFetchService> logger, IServiceScopeFactory factory) : base(
         logger, factory)
     {
         _gemDataRepository = Scope.ServiceProvider.GetRequiredService<IRepository<GemData>>();
+        _gemTradeDataRepository = Scope.ServiceProvider.GetRequiredService<IRepository<GemTradeData>>();
+        _currencyRepository = Scope.ServiceProvider.GetRequiredService<IRepository<Currency>>();
         _leagueRepository = Scope.ServiceProvider.GetRequiredService<IRepository<League>>();
         _poeDataService = Scope.ServiceProvider.GetRequiredService<IPoeDataService>();
     }
@@ -116,21 +184,94 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
 
     public async Task GetPriceData()
     {
-        const string gemUrl = PoeToolUrls.PoeNinjaUrl + "/itemoverview?type=SkillGem";
         var currentLeague = await _poeDataService.GetCurrentLeague();
-        var result = await _client.GetFromJsonAsync<PriceData>(gemUrl + $"&league={currentLeague.Name}");
+        await GetCurrencyData(currentLeague);
+        await GetGemPriceData(currentLeague);
+    }
+
+    public async Task GetCurrencyData(League league)
+    {
+        const string currencyUrl = PoeToolUrls.PoeNinjaUrl + "/currencyoverview?type=Currency";
+        var result = await _client.GetFromJsonAsync<CurrencyPriceData>(currencyUrl + $"&league={league.Name}");
+        if (result is null) throw new NullReferenceException();
+        Logger.LogInformation("Got data from {Result} currency items", result.Lines.Length);
+
+        var trackedCurrency = _currencyRepository.GetAll().Select(gem => gem.DetailsId).ToArray();
+        _currencyRepository.ClearTrackedEntities();
+
+
+        var newPoeNinjaCurrencyData = result.Lines.Where(gem => !trackedCurrency.Contains(gem.DetailsId)).ToArray();
+        await _currencyRepository.Save(newPoeNinjaCurrencyData.Select(poeNinjaData => poeNinjaData.ToCurrencyData()));
+        Logger.LogInformation("Added {Result} new Currency", newPoeNinjaCurrencyData.Length);
+
+        var updatedPoeNinjaCurrencyData = result.Lines.Where(gem => trackedCurrency.Contains(gem.DetailsId)).ToArray();
+        await _currencyRepository.Update(
+            updatedPoeNinjaCurrencyData.Select(poeNinjaData => poeNinjaData.ToCurrencyData()));
+        Logger.LogInformation("Updated {Result} Currency", updatedPoeNinjaCurrencyData.Length);
+    }
+
+    public async Task GetGemPriceData(League league)
+    {
+        const string gemUrl = PoeToolUrls.PoeNinjaUrl + "/itemoverview?type=SkillGem";
+        var result = await _client.GetFromJsonAsync<GemPriceData>(gemUrl + $"&league={league.Name}");
         if (result is null) throw new NullReferenceException();
         Logger.LogInformation("Got data from {Result} gems", result.Lines.Length);
 
-        var trackedGems = _gemDataRepository.GetAll().Select(gem => gem.Id).ToArray();
+        var trackedGemData = _gemDataRepository.GetAll().Select(gem => gem.Name.ToLowerInvariant()).ToArray();
+        var trackedGemTradeData = _gemTradeDataRepository.GetAll().Select(gem => gem.Id).ToArray();
         _gemDataRepository.ClearTrackedEntities();
+        _gemTradeDataRepository.ClearTrackedEntities();
 
-        var newGems = result.Lines.Where(gem => !trackedGems.Contains(gem.Id)).ToArray();
-        await _gemDataRepository.Save(newGems);
-        Logger.LogInformation("Added {Result} new gems", newGems.Length);
-        var updatedGems = result.Lines.Where(gem => trackedGems.Contains(gem.Id)).ToArray();
-        await _gemDataRepository.Update(updatedGems);
-        Logger.LogInformation("Updated {Result} gems", updatedGems.Length);
+        #region GemTradeData
+
+        var newPoeNinjaTradeData = result.Lines.Where(gem => !trackedGemTradeData.Contains(gem.Id)).ToArray();
+        await _gemTradeDataRepository.Save(newPoeNinjaTradeData.Select(poeNinjaData => poeNinjaData.ToGemTradeData()));
+        Logger.LogInformation("Added {Result} new GemTradeData", newPoeNinjaTradeData.Length);
+        var updatedPoeNinjaTradeData = result.Lines.Where(gem => trackedGemTradeData.Contains(gem.Id)).ToArray();
+        await _gemTradeDataRepository.Update(
+            updatedPoeNinjaTradeData.Select(poeNinjaData => poeNinjaData.ToGemTradeData()));
+        Logger.LogInformation("Updated {Result} GemTradeData", updatedPoeNinjaTradeData.Length);
+
+        #endregion
+
+        #region GemData
+
+        _gemTradeDataRepository.ClearTrackedEntities();
+        var allGemTradeData = _gemTradeDataRepository.GetAll().ToArray();
+        var groupedPoeNinjaData = result.Lines.GroupBy(poeNinjaGemData => poeNinjaGemData.Name).ToArray();
+        var newPoeNinjaGemData = groupedPoeNinjaData
+                                 .Where(group => !trackedGemData.Contains(group.Key.ToLowerInvariant())).ToArray();
+        await _gemDataRepository.Save(newPoeNinjaGemData.Select(group => new GemData
+                                                                         {
+                                                                             Name = group.Key,
+                                                                             Icon = group.First().Icon,
+                                                                             Gems = allGemTradeData
+                                                                                 .Where(tradeData =>
+                                                                                     tradeData.Name.Equals(
+                                                                                         group.Key,
+                                                                                         StringComparison
+                                                                                             .InvariantCultureIgnoreCase))
+                                                                                 .ToList()
+                                                                         }));
+        Logger.LogInformation("Added {Result} GemData", newPoeNinjaGemData.Length);
+        var updatedPoeNinjaGemData = groupedPoeNinjaData
+                                     .Where(group => trackedGemData.Contains(group.Key.ToLowerInvariant())).ToArray();
+        await _gemDataRepository.Update(updatedPoeNinjaGemData.Select(group => new GemData
+                                                                               {
+                                                                                   Name = group.Key,
+                                                                                   Icon = group.First().Icon,
+                                                                                   Gems = allGemTradeData
+                                                                                       .Where(tradeData =>
+                                                                                           tradeData.Name
+                                                                                               .Equals(
+                                                                                                   group.Key,
+                                                                                                   StringComparison
+                                                                                                       .InvariantCultureIgnoreCase))
+                                                                                       .ToList()
+                                                                               }));
+        Logger.LogInformation("Updated {Result} GemData", updatedPoeNinjaGemData.Length);
+
+        #endregion
     }
 
     #endregion

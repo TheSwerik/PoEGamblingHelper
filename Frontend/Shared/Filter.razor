@@ -60,19 +60,19 @@
 @code {
 
     [Parameter]
-    public IEnumerable<Gem> Gems { get; set; }
+    public IEnumerable<GemData> Gems { get; set; }
 
     public FilterValues FilterValues { get; set; } = new();
-    public Gem Gem { get; set; }
+    public GemData Gem { get; set; }
     public string SelectedInt { get; set; } = "nothing selected";
     public DateTime LastPoeNinjaUpdate { get; set; } = DateTime.Now;
     public decimal TempleCost { get; set; } = 0;
     public decimal ChaosPerDivine { get; set; } = 0;
     private bool FiltersExpanded { get; set; } = false;
 
-    private async Task<IEnumerable<Gem>> Search(string searchText)
+    private async Task<IEnumerable<GemData>> Search(string searchText)
     {
-        var response = new[] { new Gem { Name = "test-name" } };
+        var response = new[] { new GemData { Name = "test-name" } };
         return response;
     }
 

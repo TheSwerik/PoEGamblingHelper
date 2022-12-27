@@ -29,15 +29,17 @@ public class PoeDataService : Service, IPoeDataService
         );
     }
 
-    public async Task<string> GetPoeTradeUrl(Gem gem, bool accurateGemLevel = false, bool accurateGemQuality = false)
+    public async Task<string> GetPoeTradeUrl(GemData gem, GemTradeData gemTradeData, bool accurateGemLevel = false,
+                                             bool accurateGemQuality = false)
     {
         const string queryKey = "?q=";
         var currentLeague = await GetCurrentLeague();
-        var query = WhitespaceRegex.Replace(gem.TradeQuery(accurateGemLevel, accurateGemQuality), "");
+        var query = WhitespaceRegex.Replace(gemTradeData.TradeQuery(gem.Name, accurateGemLevel, accurateGemQuality),
+                                            "");
         Console.WriteLine(PoeToolUrls.PoeTradeUrl + currentLeague.Name + queryKey +
-                          WhitespaceRegex.Replace(gem.TradeQuery(), ""));
+                          WhitespaceRegex.Replace(gemTradeData.TradeQuery(gem.Name), ""));
         Console.WriteLine(PoeToolUrls.PoeTradeUrl + currentLeague.Name + queryKey +
-                          WhitespaceRegex.Replace(gem.TradeQuery(true, true), ""));
+                          WhitespaceRegex.Replace(gemTradeData.TradeQuery(gem.Name, true, true), ""));
         return PoeToolUrls.PoeTradeUrl + currentLeague.Name + queryKey + query;
     }
 

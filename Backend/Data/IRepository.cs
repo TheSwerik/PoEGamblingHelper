@@ -15,7 +15,7 @@ public interface IRepository<T> where T : CustomIdEntity
     Task Update(IEnumerable<T> entity);
     void Delete(Guid id);
     void SaveChanges();
-    IAsyncEnumerable<T> GetAll(Func<DbSet<T>, IAsyncEnumerable<T>> function);
+    IAsyncEnumerable<T> GetAllAsync(Func<DbSet<T>, IAsyncEnumerable<T>> function);
     IEnumerable<T> GetAll(Func<DbSet<T>, IEnumerable<T>> function);
     void ClearTrackedEntities();
 }

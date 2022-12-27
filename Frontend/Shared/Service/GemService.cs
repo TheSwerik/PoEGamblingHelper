@@ -13,7 +13,6 @@ public class GemService : IGemService
     {
         var result = await _httpClient.GetAsync("data");
         Console.WriteLine(result.Headers.Location);
-        Console.WriteLine(await result.Content.ReadAsStringAsync());
         return await _httpClient.GetFromJsonAsync<IEnumerable<GemData>>("data") ??
                throw new InvalidOperationException();
     }

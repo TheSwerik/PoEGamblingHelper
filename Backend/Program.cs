@@ -24,6 +24,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(opt => { opt.UseInMemoryData
 // opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("MyConnection"))
 // );
 builder.Services.AddScoped<IRepository<GemData>, Repository<GemData>>();
+builder.Services.AddScoped<IRepository<GemTradeData>, Repository<GemTradeData>>();
+builder.Services.AddScoped<IRepository<Currency>, Repository<Currency>>();
 builder.Services.AddScoped<IRepository<League>, Repository<League>>();
 
 #endregion

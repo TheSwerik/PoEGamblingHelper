@@ -17,7 +17,7 @@ public class Repository<T> : IRepository<T> where T : CustomIdEntity
     public IAsyncEnumerable<T> GetAllAsync() { return _entities.AsAsyncEnumerable(); }
     public IEnumerable<T> GetAll() { return _entities; }
 
-    public IAsyncEnumerable<T> GetAll(Func<DbSet<T>, IAsyncEnumerable<T>> function)
+    public IAsyncEnumerable<T> GetAllAsync(Func<DbSet<T>, IAsyncEnumerable<T>> function)
     {
         return function.Invoke(_entities);
     }

@@ -5,5 +5,7 @@ namespace Backend.Service;
 public interface IPoeDataService
 {
     Task<League> GetCurrentLeague();
-    Task<string> GetPoeTradeUrl(Gem gem, bool accurateGemLevel = false, bool accurateGemQuality = false);
+
+    Task<string> GetPoeTradeUrl(GemData gem, GemTradeData gemTradeData, bool accurateGemLevel = false,
+                                bool accurateGemQuality = false);
 }
