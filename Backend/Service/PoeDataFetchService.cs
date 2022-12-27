@@ -43,13 +43,15 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
 
     private class CurrencyPriceData
     {
-        public PoeNinjaCurrencyData[] Lines { get; } = null!;
+        // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Local
+        public PoeNinjaCurrencyData[] Lines { get; set; } = null!;
         public override string ToString() { return string.Join(", ", Lines.AsEnumerable()); }
     }
 
     private class GemPriceData
     {
-        public PoeNinjaGemData[] Lines { get; } = null!;
+        // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Local
+        public PoeNinjaGemData[] Lines { get; set; } = null!;
         public override string ToString() { return string.Join(", ", Lines.AsEnumerable()); }
     }
 
@@ -187,7 +189,13 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
         await GetCurrencyData(currentLeague);
         await GetGemPriceData(currentLeague);
 
-        Console.WriteLine(_currencyRepository.Get("divine-orb"));
+        var div = await _currencyRepository.Get("divine-orb");
+        var gem = await _gemTradeDataRepository.Get(7064);
+        Console.WriteLine("Divine ChaosEquivalent:\t\t\t" + div.ChaosEquivalent);
+        Console.WriteLine("Gem ChaosValue:\t\t\t\t" + gem.ChaosValue);
+        Console.WriteLine("Gem DivineValue:\t\t\t" + gem.DivineValue);
+        Console.WriteLine("Gem DivineValue*Divine.ChaosEquivalent:\t" + gem.DivineValue * div.ChaosEquivalent);
+        Console.WriteLine("Gem ChaosValue/Divine.ChaosEquivalent:\t" + gem.ChaosValue / div.ChaosEquivalent);
     }
 
     public async Task GetCurrencyData(League league)

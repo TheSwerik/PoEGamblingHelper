@@ -9,7 +9,7 @@
     <Filter/>
 
     <div class="container d-flex flex-wrap p-0 justify-content-between">
-        @foreach (var gem in _gems.OrderByDescending(gemData => gemData.AvgProfitPerTry(0)))
+        @foreach (var gem in _gems.OrderByDescending(gemData => gemData.AvgProfitPerTry(0)).Take(50))
         {
             <GemStats GemData="gem" TempleCost="0"/>
         }
