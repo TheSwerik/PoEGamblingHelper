@@ -8,6 +8,8 @@ namespace PoEGamblingHelper3.Pages;
 public partial class GamblingHelper : IDisposable
 {
     private List<Currency> _currency = new();
+
+    private decimal _divineValue;
     private FilterValues _filterValues = new();
 
     private List<GemData> _gems = new()
@@ -25,6 +27,7 @@ public partial class GamblingHelper : IDisposable
 
     [Inject] private IGemService GemService { get; set; } = default!;
     [Inject] private ITempleCostService TempleCostService { get; set; } = default!;
+    [Inject] private ICurrencyService CurrencyService { get; set; } = default!;
 
     public void Dispose() { _getAllGems.Dispose(); }
     private DateTime NextBackendUpdate() { return _lastBackendUpdate.AddMinutes(5); }
@@ -46,9 +49,10 @@ public partial class GamblingHelper : IDisposable
     public async Task LoadGamblingData()
     {
         _isUpdating = true;
-        // _currency = await GemService.GetAllGems();
+        _currency = await CurrencyService.GetAll();
+        _divineValue = _currency.Where(c => c.Name.Equals("Divine Orb")).Select(c => c.ChaosEquivalent).First();
         _templeCost = await TempleCostService.Get();
-        _gems = await GemService.GetAllGems();
+        _gems = await GemService.GetAll();
         _lastBackendUpdate = DateTime.Now;
         await InvokeAsync(StateHasChanged);
         _isUpdating = false;

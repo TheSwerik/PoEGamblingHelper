@@ -42,7 +42,7 @@ public class InitService : IHostedService
                                     {
                                         await _poeDataFetchService.GetPriceData();
                                         Console.WriteLine("nocache");
-                                        await _cache.EvictByTagAsync("GetAllGems", new CancellationToken());
+                                        await _cache.EvictByTagAsync("FetchData", new CancellationToken());
                                     };
         _fiveMinuteTimer.AutoReset = true;
         _fiveMinuteTimer.Start();

@@ -47,12 +47,7 @@ builder.Services.AddOutputCache(options =>
                                                                           .Expire(TimeSpan.FromMinutes(
                                                                               PoeDataFetchService
                                                                                   .PoeNinjaFetchMinutes))
-                                                                          .Tag("GetAllGems"));
-                                    options.AddBasePolicy(cacheBuilder => cacheBuilder
-                                                                          .Expire(TimeSpan.FromMinutes(
-                                                                              PoeDataFetchService
-                                                                                  .PoeNinjaFetchMinutes))
-                                                                          .Tag("GetTempleCost"));
+                                                                          .Tag("FetchData"));
                                 });
 
 #endregion

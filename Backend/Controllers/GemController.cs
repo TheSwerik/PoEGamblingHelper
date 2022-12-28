@@ -6,7 +6,7 @@ using Model;
 namespace Backend.Controllers;
 
 [ApiController]
-[Route("data")]
+[Route("[controller]")]
 public class GemController : ControllerBase
 {
     private readonly IRepository<GemData, Guid> _gemDataRepository;
@@ -19,8 +19,8 @@ public class GemController : ControllerBase
     }
 
     [HttpGet]
-    [OutputCache(PolicyName = "GetAllGems")]
-    public ActionResult<IAsyncEnumerable<GemData>> GetAllGems()
+    [OutputCache(PolicyName = "FetchData")]
+    public ActionResult<IAsyncEnumerable<GemData>> GetAll()
     {
         return Ok(_gemDataRepository.GetAllAsync(dbset => dbset.Include(gemData => gemData.Gems).AsAsyncEnumerable()));
     }

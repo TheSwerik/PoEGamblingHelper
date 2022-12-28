@@ -10,10 +10,8 @@ public partial class Filter : ComponentBase
     [Parameter] public EventCallback<TempleCost> TempleCostChanged { get; set; }
     [Parameter] public FilterValues FilterValues { get; set; } = null!;
     [Parameter] public EventCallback<FilterValues> FilterValuesChanged { get; set; }
-
-    [Parameter] public List<GemData> Gems { get; set; } = null!;
-
     [Parameter] public decimal ChaosPerDivine { get; set; }
+    [Parameter] public EventCallback<decimal> ChaosPerDivineChanged { get; set; }
 
     private bool FiltersExpanded { get; set; } = false;
 
@@ -22,6 +20,13 @@ public partial class Filter : ComponentBase
         if (args.Value is null || !decimal.TryParse(args.Value.ToString(), out var value)) return;
         TempleCost.ChaosValue = new[] { value };
         await TempleCostChanged.InvokeAsync(TempleCost);
+    }
+
+    private async Task UpdateChaosPerDivineChanged(ChangeEventArgs args)
+    {
+        if (args.Value is null || !decimal.TryParse(args.Value.ToString(), out var value)) return;
+        ChaosPerDivine = value;
+        await ChaosPerDivineChanged.InvokeAsync(ChaosPerDivine);
     }
 
     private async Task UpdateGemSearchText(ChangeEventArgs args)
