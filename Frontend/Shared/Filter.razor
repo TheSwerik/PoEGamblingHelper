@@ -5,7 +5,7 @@
         <div class="col  flex-column">
             <label for="gem-search">Gem to corrupt</label>
             <div class="input-group">
-                <input type="text" class="form-control" aria-label="Gem Search" aria-describedby="reset-1" id="gem-search" style="text-align: right; padding-right: 1.5rem" value="@FilterValues.Gem" @onchange="UpdateGemSearchText">
+                <input type="text" class="form-control" aria-label="Gem Search" aria-describedby="reset-1" id="gem-search" value="@FilterValues.Gem" @onchange="UpdateGemSearchText">
                 <button class="btn btn-primary btn-addon" type="button" id="reset-1" onclick="@(FilterValues.Gem = string.Empty)">
                     <img src="icons/x-mark.svg" alt="" style="width: 1rem"/>
                 </button>
@@ -14,7 +14,7 @@
         <div class="col flex-column">
             <label for="temple-cost">Temple cost</label>
             <div class="input-group">
-                <input type="number" class="form-control" aria-label="Temple Cost" aria-describedby="reset-2" id="temple-cost" style="text-align: right; padding-right: 1.5rem" value="@TempleCost.AverageChaosValue()" @onchange="UpdateTempleCost">
+                <input type="number" class="form-control" aria-label="Temple Cost" aria-describedby="reset-2" id="temple-cost" value="@TempleCost.AverageChaosValue()" @onchange="UpdateTempleCost">
                 <button class="btn btn-primary btn-addon" type="button" id="reset-2">
                     <img src="icons/arrow-rotate-right.svg" alt="" style="width: 1rem"/>
                 </button>
@@ -23,7 +23,7 @@
         <div class="col flex-column">
             <label for="chaos-per-divine">Chaos per Divine</label>
             <div class="input-group">
-                <input type="number" class="form-control" aria-label="Chaos per Divine" aria-describedby="reset-3" id="chaos-per-divine" style="text-align: right; padding-right: 1.5rem" value="@ChaosPerDivine" @onchange="UpdateChaosPerDivineChanged">
+                <input type="number" class="form-control" aria-label="Chaos per Divine" aria-describedby="reset-3" id="chaos-per-divine" value="@ChaosPerDivine" @onchange="UpdateChaosPerDivineChanged">
                 <button class="btn btn-primary btn-addon" type="button" id="reset-3">
                     <img src="icons/arrow-rotate-right.svg" alt="" style="width: 1rem"/>
                 </button>
@@ -31,10 +31,25 @@
         </div>
         <button class="btn btn-secondary w-25">CORRUPT NOW</button>
     </div>
-    <div class="row collapse" id="collapsable">
+    <div class="row collapse mt-2" id="collapsable">
         <div class="d-flex flex-row">
-            <div class="col input-group flex-column">
+            <div class="col flex-column">
                 <label>Price per Try</label>
+                <div class="card">
+                    <div class="card-body p-2">
+                        <div class="d-flex flex-row input-group">
+                            <label class="ps-3" style="width: 50%">From</label>
+                            <label>To</label>
+                        </div>
+                        <div class="d-flex flex-row input-group">
+                            <input type="number" class="form-control" aria-label="PricePerTry From" aria-describedby="reset-4" id="price-per-try-from" value="@ShowDecimal(FilterValues.PricePerTryFrom)" @onchange="UpdatePricePerTryFrom">
+                            <input type="number" class="form-control input-addon" aria-label="PricePerTry To" aria-describedby="reset-4" id="price-per-try-to" value="@ShowDecimal(FilterValues.PricePerTryTo)" @onchange="UpdatePricePerTryTo">
+                            <button class="btn btn-primary btn-addon" type="button" id="reset-4">
+                                <img src="icons/arrow-rotate-right.svg" alt="" style="width: 1rem"/>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="col input-group flex-column">
                 <label>Gem Types</label>

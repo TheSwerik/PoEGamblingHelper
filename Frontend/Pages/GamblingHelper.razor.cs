@@ -61,8 +61,11 @@ public partial class GamblingHelper : IDisposable
 
     public IEnumerable<GemData> FilterGems()
     {
+        var avgTempleCost = _templeCost.AverageChaosValue();
         return _gems
-               .Where(gemData => gemData.Name.Contains(_filterValues.Gem, StringComparison.InvariantCultureIgnoreCase))
+               .Where(gemData => gemData.Name.Contains(_filterValues.Gem, StringComparison.InvariantCultureIgnoreCase)
+                                 && gemData.CostPerTry(avgTempleCost) >= _filterValues.PricePerTryFrom
+                                 && gemData.CostPerTry(avgTempleCost) <= _filterValues.PricePerTryTo)
                .OrderByDescending(gemData => gemData.AvgProfitPerTry(0))
                .Take(50);
     }

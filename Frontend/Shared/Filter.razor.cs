@@ -13,7 +13,8 @@ public partial class Filter : ComponentBase
     [Parameter] public decimal ChaosPerDivine { get; set; }
     [Parameter] public EventCallback<decimal> ChaosPerDivineChanged { get; set; }
 
-    private bool FiltersExpanded { get; set; } = false;
+    // private bool FiltersExpanded { get; set; } = false;
+    private bool FiltersExpanded { get; set; } = true;
 
     private async Task UpdateTempleCost(ChangeEventArgs args)
     {
@@ -36,5 +37,24 @@ public partial class Filter : ComponentBase
         await FilterValuesChanged.InvokeAsync(FilterValues);
     }
 
+    private async Task UpdatePricePerTryFrom(ChangeEventArgs args)
+    {
+        if (args.Value is null || !decimal.TryParse(args.Value.ToString(), out var value)) return;
+        FilterValues.PricePerTryFrom = value;
+        await FilterValuesChanged.InvokeAsync(FilterValues);
+    }
+
+    private async Task UpdatePricePerTryTo(ChangeEventArgs args)
+    {
+        if (args.Value is null || !decimal.TryParse(args.Value.ToString(), out var value)) return;
+        FilterValues.PricePerTryTo = value;
+        await FilterValuesChanged.InvokeAsync(FilterValues);
+    }
+
     private void ToggleFilters() { FiltersExpanded = !FiltersExpanded; }
+
+    private string ShowDecimal(decimal value)
+    {
+        return value is decimal.MinValue or decimal.MaxValue ? "" : value + "";
+    }
 }

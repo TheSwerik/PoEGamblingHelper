@@ -176,12 +176,23 @@ label {
     z-index: 100 !important;
 }
 
+.input-addon {
+    border-left: solid 1px black !important;
+    border-radius: 10px 0 !important;
+    margin-left: -1rem !important;
+    height: 2rem;
+    padding: 0.5rem;
+    z-index: 95 !important;
+}
+
 .btn-addon img {
     margin-top: -1.75rem;
 }
 
 input {
     height: 2rem;
+    text-align: right;
+    padding-right: 1.5rem !important;
 }
 
 /*endregion*/
