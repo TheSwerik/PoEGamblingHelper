@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Components;
 using Model;
+using PoEGamblingHelper3.Shared;
 using PoEGamblingHelper3.Shared.Model;
 using PoEGamblingHelper3.Shared.Service;
 
@@ -67,20 +69,18 @@ public partial class GamblingHelper : IDisposable
                .Where(gemData => gemData.Name.Contains(_filterValues.Gem, StringComparison.InvariantCultureIgnoreCase)
                                  && gemData.CostPerTry(avgTempleCost) >= _filterValues.PricePerTryFrom
                                  && gemData.CostPerTry(avgTempleCost) <= _filterValues.PricePerTryTo
-                                 && ConformsToGemType(gemData, _filterValues.GemType))
-               .OrderByDescending(gemData => gemData.AvgProfitPerTry(0))
+                                 && gemData.ConformsToGemType(_filterValues.GemType)
+                                 && (!_filterValues.OnlyShowProfitable || gemData.AvgProfitPerTry(avgTempleCost) > 0))
+               .OrderBy(gemData => _filterValues.Sort switch
+                                   {
+                                       Sort.CostPerTryAsc => gemData.CostPerTry(avgTempleCost),
+                                       Sort.CostPerTryDesc => -gemData.CostPerTry(avgTempleCost),
+                                       Sort.AverageProfitPerTryAsc => gemData.AvgProfitPerTry(avgTempleCost),
+                                       Sort.AverageProfitPerTryDesc => -gemData.AvgProfitPerTry(avgTempleCost),
+                                       Sort.MaxProfitPerTryAsc => -gemData.BestCaseProfit(avgTempleCost),
+                                       Sort.MaxProfitPerTryDesc => -gemData.BestCaseProfit(avgTempleCost),
+                                       _ => throw new UnreachableException("Sort")
+                                   })
                .Take(50);
-    }
-
-    private bool ConformsToGemType(GemData gemData, GemType gemType)
-    {
-        return gemType switch
-               {
-                   GemType.Awakened => gemData.Name.StartsWith("Awakened"),
-                   GemType.Exceptional => gemData.IsExceptional(),
-                   GemType.Skill => !gemData.Name.Contains("Support"),
-                   GemType.RegularSupport => gemData.Name.Contains("Support"),
-                   _ => true
-               };
     }
 }

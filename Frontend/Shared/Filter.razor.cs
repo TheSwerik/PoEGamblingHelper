@@ -13,8 +13,7 @@ public partial class Filter : ComponentBase
     [Parameter] public decimal ChaosPerDivine { get; set; }
     [Parameter] public EventCallback<decimal> ChaosPerDivineChanged { get; set; }
 
-    // private bool FiltersExpanded { get; set; } = false;
-    private bool FiltersExpanded { get; set; } = true;
+    private bool FiltersExpanded { get; set; } = false;
 
     private async Task UpdateTempleCost(ChangeEventArgs args)
     {
@@ -66,13 +65,21 @@ public partial class Filter : ComponentBase
         await FilterValuesChanged.InvokeAsync(FilterValues);
     }
 
+    private async Task UpdateSort(ChangeEventArgs args)
+    {
+        if (args.Value is null || !Enum.TryParse<Sort>(args.Value.ToString(), out var value)) return;
+        FilterValues.Sort = value;
+        Console.WriteLine(FilterValues.Sort);
+        await FilterValuesChanged.InvokeAsync(FilterValues);
+    }
+
     private void ToggleFilters() { FiltersExpanded = !FiltersExpanded; }
 
     private string ShowDecimal(decimal value)
     {
-        Console.WriteLine(0.1.ToString()[1]);
         return value is decimal.MinValue or decimal.MaxValue ? "" : value.Round(2);
     }
 
     private GemType[] GemTypes() { return Enum.GetValues<GemType>(); }
+    private Sort[] Sorts() { return Enum.GetValues<Sort>(); }
 }

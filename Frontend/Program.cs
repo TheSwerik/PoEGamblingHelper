@@ -9,9 +9,6 @@ using PoEGamblingHelper3.Shared.Service;
 Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
 CultureInfo.DefaultThreadCurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
 
-Console.WriteLine(0.1.ToString()[1]);
-
-
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
