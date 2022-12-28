@@ -7,8 +7,7 @@
             <div class="input-group">
                 <input type="text" class="form-control" aria-label="Gem Search" aria-describedby="reset-1" id="gem-search" style="text-align: right; padding-right: 1.5rem" value="@FilterValues.Gem" @onchange="UpdateGemSearchText">
                 <button class="btn btn-primary btn-addon" type="button" id="reset-1" onclick="@(FilterValues.Gem = string.Empty)">
-                    @* <img src="icons/arrow-rotate-right.svg" alt="" style="width: 1rem"/> *@
-                    <p src="icons/arrow-rotate-right.svg" alt="" style="width: 1rem">x</p>
+                    <img src="icons/x-mark.svg" alt="" style="width: 1rem"/>
                 </button>
             </div>
         </div>
