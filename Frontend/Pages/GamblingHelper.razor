@@ -9,7 +9,7 @@
     <Filter @bind-TempleCost="_templeCost" @bind-FilterValues="_filterValues" @bind-ChaosPerDivine="_divineValue"/>
 
     <div class="container d-flex flex-wrap p-0 justify-content-between">
-        @foreach (var gem in  FilterGems())
+        @foreach (var gem in FilteredGems())
         {
             <GemStats GemData="gem" TempleCost="_templeCost"/>
         }

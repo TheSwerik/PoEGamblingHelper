@@ -9,7 +9,7 @@ public class GemData : Entity<Guid>
     public int MaxLevel()
     {
         var isAwakened = Name.Contains("Awakened");
-        var isExceptional = Name.Contains("Enhance") || Name.Contains("Empower") || Name.Contains("Enlighten");
+        var isExceptional = IsExceptional();
         return isAwakened && isExceptional ? 4 :
                isExceptional ? 3 :
                isAwakened ? 5 :
@@ -40,5 +40,10 @@ public class GemData : Entity<Guid>
     private decimal ResultValue(int level)
     {
         return Gems.Where(gem => gem.GemLevel == level && gem.Corrupted).MinBy(gem => gem.GemQuality)?.ChaosValue ?? 0m;
+    }
+
+    public bool IsExceptional()
+    {
+        return Name.Contains("Enhance") || Name.Contains("Empower") || Name.Contains("Enlighten");
     }
 }

@@ -11,8 +11,6 @@ public class GemService : IGemService
 
     public async Task<List<GemData>> GetAll()
     {
-        var result = await _httpClient.GetAsync("gem");
-        Console.WriteLine(result.Headers.Location);
         return await _httpClient.GetFromJsonAsync<List<GemData>>("gem") ??
                throw new InvalidOperationException();
     }

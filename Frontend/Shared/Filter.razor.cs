@@ -18,6 +18,7 @@ public partial class Filter : ComponentBase
 
     private async Task UpdateTempleCost(ChangeEventArgs args)
     {
+        Console.WriteLine(args.Value);
         if (args.Value is null || !decimal.TryParse(args.Value.ToString(), out var value)) return;
         TempleCost.ChaosValue = new[] { value };
         await TempleCostChanged.InvokeAsync(TempleCost);
@@ -51,10 +52,27 @@ public partial class Filter : ComponentBase
         await FilterValuesChanged.InvokeAsync(FilterValues);
     }
 
+    private async Task UpdateGemType(ChangeEventArgs args)
+    {
+        if (args.Value is null || !Enum.TryParse<GemType>(args.Value.ToString(), out var value)) return;
+        FilterValues.GemType = value;
+        await FilterValuesChanged.InvokeAsync(FilterValues);
+    }
+
+    private async Task UpdateOnlyShowProfitable(ChangeEventArgs args)
+    {
+        if (args.Value is null || !bool.TryParse(args.Value.ToString(), out var value)) return;
+        FilterValues.OnlyShowProfitable = value;
+        await FilterValuesChanged.InvokeAsync(FilterValues);
+    }
+
     private void ToggleFilters() { FiltersExpanded = !FiltersExpanded; }
 
     private string ShowDecimal(decimal value)
     {
-        return value is decimal.MinValue or decimal.MaxValue ? "" : value + "";
+        Console.WriteLine(0.1.ToString()[1]);
+        return value is decimal.MinValue or decimal.MaxValue ? "" : value.Round(2);
     }
+
+    private GemType[] GemTypes() { return Enum.GetValues<GemType>(); }
 }
