@@ -189,11 +189,39 @@ select {
     text-align: left;
 }
 
-input[type="checkbox"] {
-    background-color: var(--bs-secondary) !important;
-    border-radius: 5px !important;
-    height: 1.5rem;
-    width: 1.5rem;
+/*region checkbox*/
+[type="checkbox"] {
+    display: none;
 }
+
+[type="checkbox"] + label {
+    position: absolute;
+    cursor: pointer;
+}
+
+[type="checkbox"] + label::before {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 0;
+    border: 2px solid var(--bs-secondary);
+    background-color: var(--bs-body-bg);
+    display: block;
+    content: "";
+    float: left;
+    margin-right: 5px;
+    z-index: 5;
+    position: relative;
+    opacity: 1;
+    -webkit-transition: background-color 0.2s;
+    transition: background-color 0.2s;
+    box-shadow: inset 0 0 0 3px var(--bs-body-bg);
+}
+
+[type="checkbox"]:checked + label::before {
+    box-shadow: inset 0 0 0 3px var(--bs-body-bg);
+    background-color: var(--bs-secondary);
+}
+
+/*endregion*/
 
 /*endregion*/
