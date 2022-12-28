@@ -153,19 +153,6 @@ label {
     --bs-btn-color: var(--bs-secondary);
 }
 
-.blazored-typeahead__input, input {
-    background-color: var(--bs-primary);
-    border-radius: 10px 0 !important;
-    border: none !important;
-}
-
-.blazored-typeahead {
-    border: none !important;
-}
-
-.blazored-typeahead__controls {
-    height: 2rem !important;
-}
 
 .btn-addon {
     border-left: solid 1px black;
@@ -189,10 +176,24 @@ label {
     margin-top: -1.75rem;
 }
 
-input {
+input, select {
+    background-color: var(--bs-primary) !important;
+    border-radius: 10px 0 !important;
+    border: none !important;
     height: 2rem;
     text-align: right;
     padding-right: 1.5rem !important;
+}
+
+select {
+    text-align: left;
+}
+
+input[type="checkbox"] {
+    background-color: var(--bs-secondary) !important;
+    border-radius: 5px !important;
+    height: 1.5rem;
+    width: 1.5rem;
 }
 
 /*endregion*/
