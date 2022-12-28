@@ -5,6 +5,8 @@ using System.Text.RegularExpressions;
 using HtmlAgilityPack;
 using Model;
 
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Local
+
 namespace Backend.Service;
 
 public class PoeDataFetchService : Service, IPoeDataFetchService
@@ -49,14 +51,12 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
 
     private class CurrencyPriceData
     {
-        // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Local
         public PoeNinjaCurrencyData[] Lines { get; set; } = null!;
         public override string ToString() { return string.Join(", ", Lines.AsEnumerable()); }
     }
 
     private class GemPriceData
     {
-        // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Local
         public PoeNinjaGemData[] Lines { get; set; } = null!;
         public override string ToString() { return string.Join(", ", Lines.AsEnumerable()); }
     }
@@ -113,33 +113,34 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
 
     private class TradeResults
     {
-        public string Id { get; } = null!;
+        public string Id { get; set; } = null!;
         public int Complexity { get; set; }
-        public string[] Result { get; } = null!;
+        public string[] Result { get; set; } = null!;
         public int Total { get; set; }
     }
 
     private class TradeEntryResult
     {
-        public TradeEntry[] Result { get; } = null!;
+        public TradeEntry[] Result { get; set; } = null!;
     }
 
     private class TradeEntry
     {
         public string Id { get; set; } = null!;
-        public TradeEntryListing Listing { get; } = null!;
+
+        public TradeEntryListing Listing { get; set; } = null!;
     }
 
     private class TradeEntryListing
     {
-        public TradeEntryListingPrice Price { get; } = null!;
+        public TradeEntryListingPrice Price { get; set; } = null!;
     }
 
     private class TradeEntryListingPrice
     {
         public string Type { get; set; } = null!;
         public decimal Amount { get; set; }
-        public string Currency { get; } = null!;
+        public string Currency { get; set; } = null!;
 
         public decimal ChaosAmount(IRepository<Currency, string> currencyRepository)
         {

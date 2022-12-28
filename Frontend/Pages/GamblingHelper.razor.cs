@@ -1,20 +1,22 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Model;
+using PoEGamblingHelper3.Shared.Model;
 using PoEGamblingHelper3.Shared.Service;
 
 namespace PoEGamblingHelper3.Pages;
 
 public partial class GamblingHelper : IDisposable
 {
-    private IEnumerable<Currency> _currency = new List<Currency>();
+    private List<Currency> _currency = new();
+    private FilterValues _filterValues = new();
 
-    private IEnumerable<GemData> _gems = new[]
-                                         {
-                                             new GemData { Name = "Placeholder Support" },
-                                             new GemData { Name = "Placeholder Support 2" },
-                                             new GemData { Name = "Placeholder Support 3" },
-                                             new GemData { Name = "Placeholder Support 4" }
-                                         };
+    private List<GemData> _gems = new()
+                                  {
+                                      new GemData { Name = "Placeholder Support" },
+                                      new GemData { Name = "Placeholder Support 2" },
+                                      new GemData { Name = "Placeholder Support 3" },
+                                      new GemData { Name = "Placeholder Support 4" }
+                                  };
 
     private Task _getAllGems = null!;
     private bool _isUpdating;
@@ -51,5 +53,13 @@ public partial class GamblingHelper : IDisposable
         await InvokeAsync(StateHasChanged);
         _isUpdating = false;
         Console.WriteLine("Loaded new Data");
+    }
+
+    public IEnumerable<GemData> FilterGems()
+    {
+        return _gems
+               .Where(gemData => gemData.Name.Contains(_filterValues.Gem, StringComparison.InvariantCultureIgnoreCase))
+               .OrderByDescending(gemData => gemData.AvgProfitPerTry(0))
+               .Take(50);
     }
 }

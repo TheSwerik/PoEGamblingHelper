@@ -24,6 +24,12 @@
         <ProjectReference Include="..\Model\Model.csproj"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <Content Include="Shared\Filter.razor.cs">
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </Content>
+    </ItemGroup>
+
     <!--TODO: It seems like i need this but it works without it. Maybe this will break in a Docker Container.-->
     <!--    <ItemGroup>-->
     <!--      <Content Update="wwwroot\appsettings.json">-->

@@ -1,10 +1,8 @@
-﻿using Model;
-
-namespace PoEGamblingHelper3.Shared.Model;
+﻿namespace PoEGamblingHelper3.Shared.Model;
 
 public class FilterValues
 {
-    public GemData? Gem { get; set; }
+    public string Gem { get; set; } = string.Empty;
     public Sort? Sort { get; set; }
     public List<GemType> GemTypes { get; } = new();
     public int PricePerTryFrom { get; set; }

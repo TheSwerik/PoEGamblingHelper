@@ -1,27 +1,22 @@
-﻿@using global::Model
-@inject HttpClient HttpClient
-
-
-@* <div class="w-75 d-flex flex-column container "> *@
+﻿@* <div class="w-75 d-flex flex-column container "> *@
 <div class="container">
     <div class="row gx-5">
         @* <div class="row gx-5 w-100"> *@
-        <div class="col input-group flex-column">
-            <label>Gem to corrupt</label>
-            <BlazoredTypeahead SearchMethod="@Search" @bind-Value="@FilterValues.Gem" Context="search">
-                <SelectedTemplate>
-                    @search.Name
-                </SelectedTemplate>
-                <ResultTemplate>
-                    @search.Name
-                </ResultTemplate>
-            </BlazoredTypeahead>
+        <div class="col  flex-column">
+            <label for="gem-search">Gem to corrupt</label>
+            <div class="input-group">
+                <input type="text" class="form-control" aria-label="Gem Search" aria-describedby="reset-1" id="gem-search" style="text-align: right; padding-right: 1.5rem" value="@FilterValues.Gem" @onchange="UpdateGemSearchText">
+                <button class="btn btn-primary btn-addon" type="button" id="reset-1" onclick="@(FilterValues.Gem = string.Empty)">
+                    @* <img src="icons/arrow-rotate-right.svg" alt="" style="width: 1rem"/> *@
+                    <p src="icons/arrow-rotate-right.svg" alt="" style="width: 1rem">x</p>
+                </button>
+            </div>
         </div>
         <div class="col flex-column">
             <label for="temple-cost">Temple cost</label>
             <div class="input-group">
-                <input type="number" class="form-control" aria-label="Temple Cost" aria-describedby="reset-1" id="temple-cost" style="text-align: right; padding-right: 1.5rem" value="@TempleCost.AverageChaosValue()" @onchange="UpdateTempleCost">
-                <button class="btn btn-primary btn-addon" type="button" id="reset-1">
+                <input type="number" class="form-control" aria-label="Temple Cost" aria-describedby="reset-2" id="temple-cost" style="text-align: right; padding-right: 1.5rem" value="@TempleCost.AverageChaosValue()" @onchange="UpdateTempleCost">
+                <button class="btn btn-primary btn-addon" type="button" id="reset-2">
                     <img src="icons/arrow-rotate-right.svg" alt="" style="width: 1rem"/>
                 </button>
             </div>
@@ -29,8 +24,8 @@
         <div class="col flex-column">
             <label for="chaos-per-divine">Chaos per Divine</label>
             <div class="input-group">
-                <input type="number" class="form-control" value="150" aria-label="Chaos per Divine" aria-describedby="reset-2" id="chaos-per-divine" style="text-align: right; padding-right: 1.5rem">
-                <button class="btn btn-primary btn-addon" type="button" id="reset-2">
+                <input type="number" class="form-control" value="150" aria-label="Chaos per Divine" aria-describedby="reset-3" id="chaos-per-divine" style="text-align: right; padding-right: 1.5rem">
+                <button class="btn btn-primary btn-addon" type="button" id="reset-3">
                     <img src="icons/arrow-rotate-right.svg" alt="" style="width: 1rem"/>
                 </button>
             </div>
@@ -56,51 +51,3 @@
         <hr class="col"/>
     </div>
 </div>
-
-@code {
-
-    [Parameter]
-    public TempleCost TempleCost { get; set; }
-
-    [Parameter]
-    public EventCallback<TempleCost> TempleCostChanged { get; set; }
-
-    [Parameter]
-    public IEnumerable<GemData> Gems { get; set; }
-
-    public FilterValues FilterValues { get; set; } = new();
-    public GemData Gem { get; set; }
-    public string SelectedInt { get; set; } = "nothing selected";
-    public DateTime LastPoeNinjaUpdate { get; set; } = DateTime.Now;
-    public decimal ChaosPerDivine { get; set; } = 0;
-    private bool FiltersExpanded { get; set; } = false;
-
-    private async Task UpdateTempleCost(ChangeEventArgs args)
-    {
-        if (args.Value is null || !decimal.TryParse(args.Value.ToString(), out var value)) return;
-        TempleCost.ChaosValue = new[] { value };
-        await TempleCostChanged.InvokeAsync(TempleCost);
-    }
-
-    private async Task<IEnumerable<GemData>> Search(string searchText)
-    {
-        var response = new[] { new GemData { Name = "test-name" } };
-        return response;
-    }
-
-    private void ToggleGemType(GemType type)
-    {
-        if (FilterValues.GemTypes.Contains(type)) FilterValues.GemTypes.Remove(type);
-        else FilterValues.GemTypes.Add(type);
-    }
-
-    private string LastPoeNinjaUpdateText()
-    {
-        var now = DateTime.Now;
-        var difference = now - LastPoeNinjaUpdate;
-        return difference.Minutes < 1 ? "just now" : $"{difference.Minutes} minutes ago";
-    }
-
-    public void ToggleFilters() { FiltersExpanded = !FiltersExpanded; }
-
-}

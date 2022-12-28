@@ -6,10 +6,10 @@
     <h2>Path of Exile</h2>
     <h1>GAMBLING HELPER</h1>
 
-    <Filter @bind-TempleCost="_templeCost"/>
+    <Filter @bind-TempleCost="_templeCost" @bind-FilterValues="_filterValues"/>
 
     <div class="container d-flex flex-wrap p-0 justify-content-between">
-        @foreach (var gem in _gems.OrderByDescending(gemData => gemData.AvgProfitPerTry(0)).Take(50))
+        @foreach (var gem in  FilterGems())
         {
             <GemStats GemData="gem" TempleCost="_templeCost"/>
         }
