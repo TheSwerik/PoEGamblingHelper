@@ -5,7 +5,7 @@ using Model;
 namespace Backend.Controllers;
 
 [ApiController]
-[Route("temple")]
+[Route("[controller]")]
 public class TempleController : ControllerBase
 {
     private readonly ILogger<TempleController> _logger;
@@ -18,6 +18,6 @@ public class TempleController : ControllerBase
     }
 
     [HttpGet]
-    [OutputCache(PolicyName = "GetTempleCost")]
+    [OutputCache(PolicyName = "FetchData")]
     public ActionResult<TempleCost> Get() { return Ok(_templeCostRepository.GetAll().FirstOrDefault()); }
 }

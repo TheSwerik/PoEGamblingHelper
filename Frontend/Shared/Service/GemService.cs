@@ -9,11 +9,9 @@ public class GemService : IGemService
 
     public GemService(HttpClient httpClient) { _httpClient = httpClient; }
 
-    public async Task<IEnumerable<GemData>> GetAllGems()
+    public async Task<List<GemData>> GetAll()
     {
-        var result = await _httpClient.GetAsync("data");
-        Console.WriteLine(result.Headers.Location);
-        return await _httpClient.GetFromJsonAsync<IEnumerable<GemData>>("data") ??
+        return await _httpClient.GetFromJsonAsync<List<GemData>>("gem") ??
                throw new InvalidOperationException();
     }
 }

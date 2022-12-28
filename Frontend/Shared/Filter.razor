@@ -1,53 +1,78 @@
-﻿@using global::Model
-@inject HttpClient HttpClient
-
-
-@* <div class="w-75 d-flex flex-column container "> *@
-<div class="container">
+﻿<div class="container">
     <div class="row gx-5">
-        @* <div class="row gx-5 w-100"> *@
-        <div class="col input-group flex-column">
-            <label>Gem to corrupt</label>
-            <BlazoredTypeahead SearchMethod="@Search" @bind-Value="@FilterValues.Gem" Context="search">
-                <SelectedTemplate>
-                    @search.Name
-                </SelectedTemplate>
-                <ResultTemplate>
-                    @search.Name
-                </ResultTemplate>
-            </BlazoredTypeahead>
+        <div class="col">
+            <label for="gem-search">Gem to corrupt</label>
+            <div class="input-group">
+                <input type="text" class="form-control" aria-label="Gem Search" aria-describedby="reset-1" id="gem-search" value="@FilterValues.Gem" @onchange="UpdateGemSearchText">
+                <button class="btn btn-primary btn-addon" type="button" id="reset-1" onclick="@(FilterValues.Gem = string.Empty)">
+                    <img src="icons/x-mark.svg" alt="" style="width: 1rem"/>
+                </button>
+            </div>
         </div>
-        <div class="col flex-column">
+        <div class="col">
             <label for="temple-cost">Temple cost</label>
             <div class="input-group">
-                <input type="number" class="form-control" aria-label="Temple Cost" aria-describedby="reset-1" id="temple-cost" style="text-align: right; padding-right: 1.5rem" value="@TempleCost.AverageChaosValue()" @onchange="UpdateTempleCost">
-                <button class="btn btn-primary btn-addon" type="button" id="reset-1">
+                <input type="text" pattern="[0-9]+([.][0-9]{1,2}){0,1}?" class="form-control" aria-label="Temple Cost" aria-describedby="reset-2" id="temple-cost" value="@ShowDecimal(TempleCost.AverageChaosValue())" @onchange="UpdateTempleCost">
+                <button class="btn btn-primary btn-addon" type="button" id="reset-2">
                     <img src="icons/arrow-rotate-right.svg" alt="" style="width: 1rem"/>
                 </button>
             </div>
         </div>
-        <div class="col flex-column">
+        <div class="col">
             <label for="chaos-per-divine">Chaos per Divine</label>
             <div class="input-group">
-                <input type="number" class="form-control" value="150" aria-label="Chaos per Divine" aria-describedby="reset-2" id="chaos-per-divine" style="text-align: right; padding-right: 1.5rem">
-                <button class="btn btn-primary btn-addon" type="button" id="reset-2">
+                <input type="text" pattern="[0-9]+([.][0-9]{1,2}){0,1}?" class="form-control" aria-label="Chaos per Divine" aria-describedby="reset-3" id="chaos-per-divine" value="@ChaosPerDivine" @onchange="UpdateChaosPerDivineChanged">
+                <button class="btn btn-primary btn-addon" type="button" id="reset-3">
                     <img src="icons/arrow-rotate-right.svg" alt="" style="width: 1rem"/>
                 </button>
             </div>
         </div>
         <button class="btn btn-secondary w-25">CORRUPT NOW</button>
     </div>
-    <div class="row collapse" id="collapsable">
-        <div class="d-flex flex-row">
-            <div class="col input-group flex-column">
-                <label>Price per Try</label>
+    <div class="row collapse mt-2 gx-5" id="collapsable">
+        <div class="col">
+            <label>Cost</label>
+            <div class="card">
+                <div class="card-body p-2">
+                    <div class="d-flex flex-row input-group">
+                        <label class="ps-3 w-50" for="price-per-try-from">From</label>
+                        <label for="price-per-try-to">To</label>
+                    </div>
+                    <div class="d-flex flex-row input-group">
+                        <input type="number" class="form-control" aria-label="PricePerTry From" aria-describedby="reset-4" id="price-per-try-from" value="@ShowDecimal(FilterValues.PricePerTryFrom)" @onchange="UpdatePricePerTryFrom">
+                        <input type="number" class="form-control input-addon" aria-label="PricePerTry To" aria-describedby="reset-4" id="price-per-try-to" value="@ShowDecimal(FilterValues.PricePerTryTo)" @onchange="UpdatePricePerTryTo">
+                        <button class="btn btn-primary btn-addon" type="button" id="reset-4">
+                            <img src="icons/x-mark.svg" alt="" style="width: 1rem"/>
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div class="col input-group flex-column">
-                <label>Gem Types</label>
+        </div>
+        <div class="col input-group flex-column">
+            <div class="d-flex flex-column w-100">
+                <label for="gem-type">Gem Type</label>
+                <select class="form-select" aria-label="Gem Type" id="gem-type" value="@FilterValues.GemType" @onchange="UpdateGemType">
+                    @foreach (var gemType in GemTypes())
+                    {
+                        <option value="@gemType">@gemType</option>
+                    }
+                </select>
             </div>
-            <div class="col input-group flex-column">
-                <label>Sorting</label>
+            <div class="form-check w-100 mt-2 ps-0">
+                <input class="form-check-input" type="checkbox" id="onlyProfitable" value="@FilterValues.OnlyShowProfitable" @onchange="UpdateOnlyShowProfitable">
+                <label class="form-check-label" for="onlyProfitable">
+                    Only Profitable
+                </label>
             </div>
+        </div>
+        <div class="col input-group d-flex flex-column">
+            <label for="sorting">Sorting</label>
+            <select class="form-select w-100 h-50" aria-label="Sort" id="sorting" value="@FilterValues.Sort" @onchange="UpdateSort">
+                @foreach (var sort in Sorts())
+                {
+                    <option value="@sort">@sort.ToPrettyString()</option>
+                }
+            </select>
         </div>
     </div>
     <div class="row mt-3 mb-3 pointer" onclick="@ToggleFilters" data-bs-toggle="collapse" data-bs-target="#collapsable" aria-expanded="false" aria-controls="collapsable">
@@ -56,51 +81,3 @@
         <hr class="col"/>
     </div>
 </div>
-
-@code {
-
-    [Parameter]
-    public TempleCost TempleCost { get; set; }
-
-    [Parameter]
-    public EventCallback<TempleCost> TempleCostChanged { get; set; }
-
-    [Parameter]
-    public IEnumerable<GemData> Gems { get; set; }
-
-    public FilterValues FilterValues { get; set; } = new();
-    public GemData Gem { get; set; }
-    public string SelectedInt { get; set; } = "nothing selected";
-    public DateTime LastPoeNinjaUpdate { get; set; } = DateTime.Now;
-    public decimal ChaosPerDivine { get; set; } = 0;
-    private bool FiltersExpanded { get; set; } = false;
-
-    private async Task UpdateTempleCost(ChangeEventArgs args)
-    {
-        if (args.Value is null || !decimal.TryParse(args.Value.ToString(), out var value)) return;
-        TempleCost.ChaosValue = new[] { value };
-        await TempleCostChanged.InvokeAsync(TempleCost);
-    }
-
-    private async Task<IEnumerable<GemData>> Search(string searchText)
-    {
-        var response = new[] { new GemData { Name = "test-name" } };
-        return response;
-    }
-
-    private void ToggleGemType(GemType type)
-    {
-        if (FilterValues.GemTypes.Contains(type)) FilterValues.GemTypes.Remove(type);
-        else FilterValues.GemTypes.Add(type);
-    }
-
-    private string LastPoeNinjaUpdateText()
-    {
-        var now = DateTime.Now;
-        var difference = now - LastPoeNinjaUpdate;
-        return difference.Minutes < 1 ? "just now" : $"{difference.Minutes} minutes ago";
-    }
-
-    public void ToggleFilters() { FiltersExpanded = !FiltersExpanded; }
-
-}
