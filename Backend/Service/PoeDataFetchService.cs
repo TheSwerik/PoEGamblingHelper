@@ -1,4 +1,6 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Diagnostics;
+using System.Net.Http.Headers;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using HtmlAgilityPack;
 using Model;
@@ -14,6 +16,7 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
     private readonly IRepository<GemTradeData, long> _gemTradeDataRepository;
     private readonly IRepository<League, Guid> _leagueRepository;
     private readonly IPoeDataService _poeDataService;
+    private readonly IRepository<TempleCost, Guid> _templeCostRepository;
 
     #region Helper Methods
 
@@ -41,6 +44,8 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
     }
 
     #endregion
+
+    #region HelperClasses
 
     private class CurrencyPriceData
     {
@@ -106,6 +111,49 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
         }
     }
 
+    private class TradeResults
+    {
+        public string Id { get; } = null!;
+        public int Complexity { get; set; }
+        public string[] Result { get; } = null!;
+        public int Total { get; set; }
+    }
+
+    private class TradeEntryResult
+    {
+        public TradeEntry[] Result { get; } = null!;
+    }
+
+    private class TradeEntry
+    {
+        public string Id { get; set; } = null!;
+        public TradeEntryListing Listing { get; } = null!;
+    }
+
+    private class TradeEntryListing
+    {
+        public TradeEntryListingPrice Price { get; } = null!;
+    }
+
+    private class TradeEntryListingPrice
+    {
+        public string Type { get; set; } = null!;
+        public decimal Amount { get; set; }
+        public string Currency { get; } = null!;
+
+        public decimal ChaosAmount(IRepository<Currency, string> currencyRepository)
+        {
+            var currency = currencyRepository.GetAll()
+                                             .FirstOrDefault(c => c.Name.Equals(
+                                                                 Currency + " orb",
+                                                                 StringComparison.InvariantCultureIgnoreCase));
+            var conversionValue = currency?.ChaosEquivalent ?? 0;
+            return Amount * conversionValue;
+        }
+    }
+
+    #endregion
+
     #region Con- and Destruction
 
     public PoeDataFetchService(ILogger<PoeDataFetchService> logger, IServiceScopeFactory factory) : base(
@@ -115,7 +163,10 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
         _gemTradeDataRepository = Scope.ServiceProvider.GetRequiredService<IRepository<GemTradeData, long>>();
         _currencyRepository = Scope.ServiceProvider.GetRequiredService<IRepository<Currency, string>>();
         _leagueRepository = Scope.ServiceProvider.GetRequiredService<IRepository<League, Guid>>();
+        _templeCostRepository = Scope.ServiceProvider.GetRequiredService<IRepository<TempleCost, Guid>>();
         _poeDataService = Scope.ServiceProvider.GetRequiredService<IPoeDataService>();
+        _client.DefaultRequestHeaders.UserAgent.Add(ProductInfoHeaderValue.Parse("PoEGamblingHelper/1.0.0"));
+        _client.DefaultRequestHeaders.Accept.Add(MediaTypeWithQualityHeaderValue.Parse("application/json"));
     }
 
     public new void Dispose()
@@ -188,6 +239,7 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
     {
         var currentLeague = await _poeDataService.GetCurrentLeague();
         await GetCurrencyData(currentLeague);
+        await GetTemplePriceData(currentLeague);
         await GetGemPriceData(currentLeague);
 
         var div = await _currencyRepository.Get("divine-orb");
@@ -218,6 +270,19 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
         await _currencyRepository.Update(
             updatedPoeNinjaCurrencyData.Select(poeNinjaData => poeNinjaData.ToCurrencyData()));
         Logger.LogInformation("Updated {Result} Currency", updatedPoeNinjaCurrencyData.Length);
+
+        #region Chaos
+
+        var chaos = _currencyRepository.GetAll()
+                                       .FirstOrDefault(
+                                           currency => currency.Name.Equals("Chaos Orb",
+                                                                            StringComparison
+                                                                                .InvariantCultureIgnoreCase));
+        if (chaos is not null) return;
+        await _currencyRepository.Save(new Currency { Name = "Chaos Orb", ChaosEquivalent = 1 });
+        Logger.LogInformation("Saved Chaos Orb");
+
+        #endregion
     }
 
     public async Task GetGemPriceData(League league)
@@ -282,6 +347,57 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
                                                                                        .ToList()
                                                                                }));
         Logger.LogInformation("Updated {Result} GemData", updatedPoeNinjaGemData.Length);
+
+        #endregion
+    }
+
+    private async Task GetTemplePriceData(League league)
+    {
+        const string tradeUrl = PoeToolUrls.PoeApiUrl + "/trade";
+
+        #region GetItems
+
+        const string templeQuery =
+            """{"query":{"status":{"option":"online"},"type":"Chronicle of Atzoatl","stats":[{"type":"and","filters":[{"id":"pseudo.pseudo_temple_gem_room_3","disabled":false,"value":{"option":1}}],"disabled":false}]},"sort":{"price":"asc"}}""";
+        var request = new HttpRequestMessage(HttpMethod.Post, $"{tradeUrl}/search/{league.Name}");
+
+        Logger.LogDebug("Fetching Temples...");
+
+        request.Content = new StringContent(templeQuery, MediaTypeHeaderValue.Parse("application/json"));
+        var result = await _client.SendAsync(request);
+        var temples = await result.Content.ReadFromJsonAsync<TradeResults>();
+        if (temples is null) throw new UnreachableException("temples is null");
+
+        Logger.LogDebug("Found {ResultLength} Temples", temples.Result.Length);
+
+        #endregion
+
+        #region FetchItems
+
+        var takeAmount = Math.Min(10, temples.Result.Length);
+        var skipAmount = takeAmount == temples.Result.Length ? 0 : 2;
+        var itemQuery = string.Join(",", temples.Result.Skip(skipAmount).Take(takeAmount));
+
+        Logger.LogDebug("Skipping {SkipAmount} and fetching {TakeAmount} Temples...", skipAmount, takeAmount);
+
+        request = new HttpRequestMessage(HttpMethod.Get, $"{tradeUrl}/fetch/{itemQuery}?query={temples.Id}");
+        request.Content = new StringContent(templeQuery, MediaTypeHeaderValue.Parse("application/json"));
+        result = await _client.SendAsync(request);
+        var priceResults = await result.Content.ReadFromJsonAsync<TradeEntryResult>();
+        if (priceResults is null) throw new UnreachableException("priceResults is null");
+
+        Logger.LogDebug("Found {ResultLength} TemplePrices", priceResults.Result.Length);
+        var templeCost = new TempleCost
+                         {
+                             ChaosValue = priceResults.Result
+                                                      .Select(priceResult =>
+                                                                  priceResult.Listing.Price.ChaosAmount(
+                                                                      _currencyRepository))
+                                                      .ToArray()
+                         };
+        foreach (var id in _templeCostRepository.GetAll().Select(temple => temple.Id)) _templeCostRepository.Delete(id);
+        await _templeCostRepository.Save(templeCost);
+        Logger.LogInformation("Saved {PriceLength} TemplePrices", templeCost.ChaosValue.Length);
 
         #endregion
     }

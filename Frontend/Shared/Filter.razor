@@ -20,7 +20,7 @@
         <div class="col flex-column">
             <label for="temple-cost">Temple cost</label>
             <div class="input-group">
-                <input type="number" class="form-control" aria-label="Temple Cost" aria-describedby="reset-1" id="temple-cost" style="text-align: right; padding-right: 1.5rem" value="@TempleCost" @onchange="UpdateTempleCost">
+                <input type="number" class="form-control" aria-label="Temple Cost" aria-describedby="reset-1" id="temple-cost" style="text-align: right; padding-right: 1.5rem" value="@TempleCost.AverageChaosValue()" @onchange="UpdateTempleCost">
                 <button class="btn btn-primary btn-addon" type="button" id="reset-1">
                     <img src="icons/arrow-rotate-right.svg" alt="" style="width: 1rem"/>
                 </button>
@@ -60,10 +60,10 @@
 @code {
 
     [Parameter]
-    public decimal TempleCost { get; set; }
+    public TempleCost TempleCost { get; set; }
 
     [Parameter]
-    public EventCallback<decimal> TempleCostChanged { get; set; }
+    public EventCallback<TempleCost> TempleCostChanged { get; set; }
 
     [Parameter]
     public IEnumerable<GemData> Gems { get; set; }
@@ -78,7 +78,7 @@
     private async Task UpdateTempleCost(ChangeEventArgs args)
     {
         if (args.Value is null || !decimal.TryParse(args.Value.ToString(), out var value)) return;
-        TempleCost = value;
+        TempleCost.ChaosValue = new[] { value };
         await TempleCostChanged.InvokeAsync(TempleCost);
     }
 
