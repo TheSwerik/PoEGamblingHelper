@@ -43,7 +43,7 @@
                         <input type="number" class="form-control" aria-label="PricePerTry From" aria-describedby="reset-4" id="price-per-try-from" value="@ShowDecimal(FilterValues.PricePerTryFrom)" @onchange="UpdatePricePerTryFrom">
                         <input type="number" class="form-control input-addon" aria-label="PricePerTry To" aria-describedby="reset-4" id="price-per-try-to" value="@ShowDecimal(FilterValues.PricePerTryTo)" @onchange="UpdatePricePerTryTo">
                         <button class="btn btn-primary btn-addon" type="button" id="reset-4">
-                            <img src="icons/arrow-rotate-right.svg" alt="" style="width: 1rem"/>
+                            <img src="icons/x-mark.svg" alt="" style="width: 1rem"/>
                         </button>
                     </div>
                 </div>
@@ -68,7 +68,7 @@
         </div>
         <div class="col input-group d-flex flex-column">
             <label for="sorting">Sorting</label>
-            <select class="form-select w-100 h-50" aria-label="Sort" id="sorting" value="@FilterValues.Sort.ToPrettyString()" @onchange="UpdateSort">
+            <select class="form-select w-100 h-50" aria-label="Sort" id="sorting" value="@FilterValues.Sort" @onchange="UpdateSort">
                 @foreach (var sort in Sorts())
                 {
                     <option value="@sort">@sort.ToPrettyString()</option>

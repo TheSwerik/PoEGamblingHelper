@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Model;
+﻿using Model;
 using PoEGamblingHelper3.Shared.Model;
 
 namespace PoEGamblingHelper3.Shared;
@@ -18,7 +17,7 @@ public static class ExtensionMethods
                    Sort.AverageProfitPerTryDesc => "Average profit per try Descending",
                    Sort.MaxProfitPerTryAsc => "Maximum profit per try Ascending",
                    Sort.MaxProfitPerTryDesc => "Maximum profit per try Descending",
-                   _ => throw new UnreachableException("Sort")
+                   _ => "This is impossible"
                };
     }
 

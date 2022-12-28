@@ -181,6 +181,7 @@ input, select {
     border-radius: 10px 0 !important;
     border: none !important;
     height: 2rem;
+    max-height: 2rem;
     text-align: right;
     padding-right: 1.5rem !important;
 }
