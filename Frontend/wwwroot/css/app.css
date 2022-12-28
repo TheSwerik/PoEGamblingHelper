@@ -173,6 +173,7 @@ label {
     margin-left: -1rem !important;
     height: 2rem;
     padding: 0.5rem;
+    z-index: 100 !important;
 }
 
 .btn-addon img {
