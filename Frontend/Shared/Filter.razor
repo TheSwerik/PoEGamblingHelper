@@ -12,8 +12,8 @@
         <div class="col">
             <label for="temple-cost">Temple cost</label>
             <div class="input-group">
-                <input type="text" pattern="[0-9]+([.][0-9]{1,2}){0,1}?" class="form-control" aria-label="Temple Cost" aria-describedby="reset-2" id="temple-cost" value="@ShowDecimal(TempleCost.AverageChaosValue())" @onchange="UpdateTempleCost">
-                <button class="btn btn-primary btn-addon" type="button" id="reset-2">
+                <input type="text" pattern="[0-9]+([.][0-9]{1,2}){0,1}?" class="form-control" aria-label="Temple Cost" aria-describedby="reset-2" id="temple-cost" value="@TempleCostString()" @onchange="UpdateTempleCost">
+                <button class="btn btn-primary btn-addon" type="button" id="reset-2" onclick="@ResetTempleCost">
                     <img src="icons/arrow-rotate-right.svg" alt="" style="width: 1rem"/>
                 </button>
             </div>
@@ -21,8 +21,8 @@
         <div class="col">
             <label for="chaos-per-divine">Chaos per Divine</label>
             <div class="input-group">
-                <input type="text" pattern="[0-9]+([.][0-9]{1,2}){0,1}?" class="form-control" aria-label="Chaos per Divine" aria-describedby="reset-3" id="chaos-per-divine" value="@ChaosPerDivine" @onchange="UpdateChaosPerDivineChanged">
-                <button class="btn btn-primary btn-addon" type="button" id="reset-3">
+                <input type="text" pattern="[0-9]+([.][0-9]{1,2}){0,1}?" class="form-control" aria-label="Chaos per Divine" aria-describedby="reset-3" id="chaos-per-divine" value="@DivineValueString()" @onchange="UpdateChaosPerDivineChanged">
+                <button class="btn btn-primary btn-addon" type="button" id="reset-3" onclick="@ResetDivineValue">
                     <img src="icons/arrow-rotate-right.svg" alt="" style="width: 1rem"/>
                 </button>
             </div>

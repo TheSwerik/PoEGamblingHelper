@@ -8,28 +8,25 @@ namespace PoEGamblingHelper3.Shared;
 public partial class Filter : ComponentBase
 {
     [Parameter] public TempleCost TempleCost { get; set; } = null!;
-    [Parameter] public EventCallback<TempleCost> TempleCostChanged { get; set; }
+    [Parameter] public decimal DivineValue { get; set; }
     [Parameter] public FilterValues FilterValues { get; set; } = null!;
     [Parameter] public EventCallback<FilterValues> FilterValuesChanged { get; set; }
-    [Parameter] public decimal ChaosPerDivine { get; set; }
-    [Parameter] public EventCallback<decimal> ChaosPerDivineChanged { get; set; }
     [Inject] private ILocalStorageService LocalStorage { get; set; } = default!;
 
     private bool FiltersExpanded { get; set; } = false;
 
     private async Task UpdateTempleCost(ChangeEventArgs args)
     {
-        Console.WriteLine(args.Value);
         if (args.Value is null || !decimal.TryParse(args.Value.ToString(), out var value)) return;
-        TempleCost.ChaosValue = new[] { value };
-        await TempleCostChanged.InvokeAsync(TempleCost);
+        FilterValues.TempleCost = value;
+        await SaveFilterValues();
     }
 
     private async Task UpdateChaosPerDivineChanged(ChangeEventArgs args)
     {
         if (args.Value is null || !decimal.TryParse(args.Value.ToString(), out var value)) return;
-        ChaosPerDivine = value;
-        await ChaosPerDivineChanged.InvokeAsync(ChaosPerDivine);
+        FilterValues.DivineValue = value;
+        await SaveFilterValues();
     }
 
     private async Task UpdateGemSearchText(ChangeEventArgs args)
@@ -71,7 +68,18 @@ public partial class Filter : ComponentBase
     {
         if (args.Value is null || !Enum.TryParse<Sort>(args.Value.ToString(), out var value)) return;
         FilterValues.Sort = value;
-        Console.WriteLine(FilterValues.Sort);
+        await SaveFilterValues();
+    }
+
+    private async void ResetTempleCost()
+    {
+        FilterValues.TempleCost = null;
+        await SaveFilterValues();
+    }
+
+    private async void ResetDivineValue()
+    {
+        FilterValues.DivineValue = null;
         await SaveFilterValues();
     }
 
@@ -91,7 +99,14 @@ public partial class Filter : ComponentBase
     private async Task SaveFilterValues()
     {
         await FilterValuesChanged.InvokeAsync(FilterValues);
-        await LocalStorage.SetItemAsync("filter", FilterValues);
+        await LocalStorage.SetItemAsync("Filter", FilterValues);
+    }
+
+    private string TempleCostString() { return ShowDecimal(FilterValues.TempleCost ?? TempleCost.AverageChaosValue()); }
+
+    private string DivineValueString()
+    {
+        return ShowDecimal(FilterValues.DivineValue ?? TempleCost.AverageChaosValue());
     }
 
     private void ToggleFilters() { FiltersExpanded = !FiltersExpanded; }

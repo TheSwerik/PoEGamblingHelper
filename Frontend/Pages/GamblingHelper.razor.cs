@@ -24,7 +24,6 @@ public partial class GamblingHelper : IDisposable
 
     private bool _isUpdating;
     private DateTime _lastBackendUpdate = DateTime.MinValue;
-
     private Task _loadGamblingDataTask = null!;
     private TempleCost _templeCost = new() { ChaosValue = new[] { 0m } };
     [Inject] private IGemService GemService { get; set; } = default!;
@@ -38,7 +37,7 @@ public partial class GamblingHelper : IDisposable
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        var filterValues = await LocalStorage.GetItemAsync<FilterValues>("filter");
+        var filterValues = await LocalStorage.GetItemAsync<FilterValues>("Filter");
         if (filterValues is not null) _filterValues = filterValues;
         _loadGamblingDataTask = Task.Run(async () =>
                                          {
@@ -68,7 +67,7 @@ public partial class GamblingHelper : IDisposable
 
     public IEnumerable<GemData> FilteredGems()
     {
-        var avgTempleCost = _templeCost.AverageChaosValue();
+        var avgTempleCost = _filterValues.TempleCost ?? _templeCost.AverageChaosValue();
         return _gems
                .Where(gemData => gemData.Name.Contains(_filterValues.Gem, StringComparison.InvariantCultureIgnoreCase)
                                  && gemData.CostPerTry(avgTempleCost) >= _filterValues.PricePerTryFrom
