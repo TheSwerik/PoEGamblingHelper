@@ -10,11 +10,12 @@
   "linkerEnabled": true,
   "resources": {
     "assembly": {
+      "Blazored.LocalStorage.dll": "sha256-eXVgTw72kEn74FZgDQbLtvAmXbiZDSj5gzUnxVmwowQ=",
       "Blazored.SessionStorage.dll": "sha256-XkZNIC6OGMeHZDbBGnhfc9yXdLIvGa8LlKDd4ZPWkS8=",
       "Blazored.Toast.dll": "sha256-6cGnZ9WDP6hzM+ZRdvG+94hYjOke+bTjbJ5Xyawsp0M=",
       "Blazored.Typeahead.dll": "sha256-0cq+AP7JH6JLYVm2dkmhZ4IIP65fMqy\/jFQ5mtrpkJY=",
-      "Frontend.dll": "sha256-J9Yz96xWRu2B8zHiGpTciA4Ub7\/8ThfD4XROa7RCp5o=",
-      "Microsoft.AspNetCore.Components.dll": "sha256-OxYY3JhfQ259ZESZj2mBQI5z2s7Zc8dCJU7xyt6mUxI=",
+      "Frontend.dll": "sha256-v9BQv5ICZwshsU90A1wYf0YOzPmK9pASU2HZ\/952OoE=",
+      "Microsoft.AspNetCore.Components.dll": "sha256-gkMaWHWks90DKA4GnfvWqVfxiwcs8+dF+SugStWSMMA=",
       "Microsoft.AspNetCore.Components.Forms.dll": "sha256-4FvjJHILyvbiEq0bT3KjWKPgw3ybJ3e3dTPFQEKx+qQ=",
       "Microsoft.AspNetCore.Components.Web.dll": "sha256-JwmHKsGLSqsFOOZjCjYJ+\/JQIJTrtrMIehVaZHRTqbU=",
       "Microsoft.AspNetCore.Components.WebAssembly.dll": "sha256-lItoNtKAx0Y\/e5j4NTIeo5nl0i2XWrTqzW3VuhUDNnc=",
