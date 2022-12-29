@@ -73,6 +73,19 @@ public partial class Filter : ComponentBase
         await FilterValuesChanged.InvokeAsync(FilterValues);
     }
 
+    private async void ResetGemSearch()
+    {
+        FilterValues.Gem = string.Empty;
+        await FilterValuesChanged.InvokeAsync(FilterValues);
+    }
+
+    private async void ResetCostFilter()
+    {
+        FilterValues.PricePerTryFrom = decimal.MinValue;
+        FilterValues.PricePerTryTo = decimal.MaxValue;
+        await FilterValuesChanged.InvokeAsync(FilterValues);
+    }
+
     private void ToggleFilters() { FiltersExpanded = !FiltersExpanded; }
 
     private string ShowDecimal(decimal value)

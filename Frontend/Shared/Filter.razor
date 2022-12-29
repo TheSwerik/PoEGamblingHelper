@@ -4,7 +4,7 @@
             <label for="gem-search">Gem to corrupt</label>
             <div class="input-group">
                 <input type="text" class="form-control" aria-label="Gem Search" aria-describedby="reset-1" id="gem-search" value="@FilterValues.Gem" @onchange="UpdateGemSearchText">
-                <button class="btn btn-primary btn-addon" type="button" id="reset-1" onclick="@(FilterValues.Gem = string.Empty)">
+                <button class="btn btn-primary btn-addon" type="button" id="reset-1" onclick="@ResetGemSearch">
                     <img src="icons/x-mark.svg" alt="" style="width: 1rem"/>
                 </button>
             </div>
@@ -41,7 +41,7 @@
                     <div class="d-flex flex-row input-group">
                         <input type="number" class="form-control" aria-label="PricePerTry From" aria-describedby="reset-4" id="price-per-try-from" value="@ShowDecimal(FilterValues.PricePerTryFrom)" @onchange="UpdatePricePerTryFrom">
                         <input type="number" class="form-control input-addon" aria-label="PricePerTry To" aria-describedby="reset-4" id="price-per-try-to" value="@ShowDecimal(FilterValues.PricePerTryTo)" @onchange="UpdatePricePerTryTo">
-                        <button class="btn btn-primary btn-addon" type="button" id="reset-4">
+                        <button class="btn btn-primary btn-addon" type="button" id="reset-4" onclick="@ResetCostFilter">
                             <img src="icons/x-mark.svg" alt="" style="width: 1rem"/>
                         </button>
                     </div>
