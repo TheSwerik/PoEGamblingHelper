@@ -122,6 +122,7 @@ label {
     border-bottom: none;
 }
 
+/*region button*/
 .btn {
     --bs-btn-hover-color: var(--bs-body-bg);
     --bs-btn-color: var(--bs-body-bg);
@@ -200,16 +201,19 @@ label {
     z-index: 100 !important;
 }
 
+.btn-addon img {
+    margin-top: -1.75rem;
+}
+
+/*endregion*/
+
+/*region input*/
 .input-addon {
     border-left: solid 1px black !important;
     border-radius: 10px 0 !important;
     margin-left: -1rem !important;
     padding: 0.5rem;
     z-index: 95 !important;
-}
-
-.btn-addon img {
-    margin-top: -1.75rem;
 }
 
 input, select {
@@ -233,6 +237,8 @@ select:hover, select:focus, select:active {
 select {
     text-align: left;
 }
+
+/*endregion*/
 
 /*region checkbox*/
 [type="checkbox"] {
