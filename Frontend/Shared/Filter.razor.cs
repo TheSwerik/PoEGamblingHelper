@@ -104,10 +104,7 @@ public partial class Filter : ComponentBase
 
     private string TempleCostString() { return ShowDecimal(FilterValues.TempleCost ?? TempleCost.AverageChaosValue()); }
 
-    private string DivineValueString()
-    {
-        return ShowDecimal(FilterValues.DivineValue ?? TempleCost.AverageChaosValue());
-    }
+    private string DivineValueString() { return ShowDecimal(FilterValues.DivineValue ?? DivineValue); }
 
     private void ToggleFilters() { FiltersExpanded = !FiltersExpanded; }
 
