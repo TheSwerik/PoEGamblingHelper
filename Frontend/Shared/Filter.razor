@@ -4,7 +4,7 @@
             <label for="gem-search">Gem to corrupt</label>
             <div class="input-group">
                 <input type="text" class="form-control" aria-label="Gem Search" aria-describedby="reset-1" id="gem-search" value="@FilterValues.Gem" @onchange="UpdateGemSearchText">
-                <button class="btn btn-primary btn-addon" type="button" id="reset-1" onclick="@(FilterValues.Gem = string.Empty)">
+                <button class="btn btn-primary btn-addon" type="button" id="reset-1" onclick="@ResetGemSearch">
                     <img src="icons/x-mark.svg" alt="" style="width: 1rem"/>
                 </button>
             </div>
@@ -12,8 +12,8 @@
         <div class="col">
             <label for="temple-cost">Temple cost</label>
             <div class="input-group">
-                <input type="text" pattern="[0-9]+([.][0-9]{1,2}){0,1}?" class="form-control" aria-label="Temple Cost" aria-describedby="reset-2" id="temple-cost" value="@ShowDecimal(TempleCost.AverageChaosValue())" @onchange="UpdateTempleCost">
-                <button class="btn btn-primary btn-addon" type="button" id="reset-2">
+                <input type="text" pattern="[0-9]+([.][0-9]{1,2}){0,1}?" class="form-control" aria-label="Temple Cost" aria-describedby="reset-2" id="temple-cost" value="@TempleCostString()" @onchange="UpdateTempleCost">
+                <button class="btn btn-primary btn-addon" type="button" id="reset-2" onclick="@ResetTempleCost">
                     <img src="icons/arrow-rotate-right.svg" alt="" style="width: 1rem"/>
                 </button>
             </div>
@@ -21,8 +21,8 @@
         <div class="col">
             <label for="chaos-per-divine">Chaos per Divine</label>
             <div class="input-group">
-                <input type="text" pattern="[0-9]+([.][0-9]{1,2}){0,1}?" class="form-control" aria-label="Chaos per Divine" aria-describedby="reset-3" id="chaos-per-divine" value="@ChaosPerDivine" @onchange="UpdateChaosPerDivineChanged">
-                <button class="btn btn-primary btn-addon" type="button" id="reset-3">
+                <input type="text" pattern="[0-9]+([.][0-9]{1,2}){0,1}?" class="form-control" aria-label="Chaos per Divine" aria-describedby="reset-3" id="chaos-per-divine" value="@DivineValueString()" @onchange="UpdateChaosPerDivineChanged">
+                <button class="btn btn-primary btn-addon" type="button" id="reset-3" onclick="@ResetDivineValue">
                     <img src="icons/arrow-rotate-right.svg" alt="" style="width: 1rem"/>
                 </button>
             </div>
@@ -41,7 +41,7 @@
                     <div class="d-flex flex-row input-group">
                         <input type="number" class="form-control" aria-label="PricePerTry From" aria-describedby="reset-4" id="price-per-try-from" value="@ShowDecimal(FilterValues.PricePerTryFrom)" @onchange="UpdatePricePerTryFrom">
                         <input type="number" class="form-control input-addon" aria-label="PricePerTry To" aria-describedby="reset-4" id="price-per-try-to" value="@ShowDecimal(FilterValues.PricePerTryTo)" @onchange="UpdatePricePerTryTo">
-                        <button class="btn btn-primary btn-addon" type="button" id="reset-4">
+                        <button class="btn btn-primary btn-addon" type="button" id="reset-4" onclick="@ResetCostFilter">
                             <img src="icons/x-mark.svg" alt="" style="width: 1rem"/>
                         </button>
                     </div>
@@ -54,7 +54,7 @@
                 <select class="form-select" aria-label="Gem Type" id="gem-type" value="@FilterValues.GemType" @onchange="UpdateGemType">
                     @foreach (var gemType in GemTypes())
                     {
-                        <option value="@gemType">@gemType</option>
+                        <option value="@gemType">@gemType.ToPrettyString()</option>
                     }
                 </select>
             </div>

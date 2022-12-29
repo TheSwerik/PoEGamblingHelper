@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
 using Model;
 using PoEGamblingHelper3.Shared;
@@ -23,12 +24,12 @@ public partial class GamblingHelper : IDisposable
 
     private bool _isUpdating;
     private DateTime _lastBackendUpdate = DateTime.MinValue;
-
     private Task _loadGamblingDataTask = null!;
     private TempleCost _templeCost = new() { ChaosValue = new[] { 0m } };
     [Inject] private IGemService GemService { get; set; } = default!;
     [Inject] private ITempleCostService TempleCostService { get; set; } = default!;
     [Inject] private ICurrencyService CurrencyService { get; set; } = default!;
+    [Inject] private ILocalStorageService LocalStorage { get; set; } = default!;
 
     public void Dispose() { _loadGamblingDataTask.Dispose(); }
     private DateTime NextBackendUpdate() { return _lastBackendUpdate.AddMinutes(5); }
@@ -36,6 +37,8 @@ public partial class GamblingHelper : IDisposable
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+        var filterValues = await LocalStorage.GetItemAsync<FilterValues>("Filter");
+        if (filterValues is not null) _filterValues = filterValues;
         _loadGamblingDataTask = Task.Run(async () =>
                                          {
                                              while (true)
@@ -64,7 +67,7 @@ public partial class GamblingHelper : IDisposable
 
     public IEnumerable<GemData> FilteredGems()
     {
-        var avgTempleCost = _templeCost.AverageChaosValue();
+        var avgTempleCost = _filterValues.TempleCost ?? _templeCost.AverageChaosValue();
         return _gems
                .Where(gemData => gemData.Name.Contains(_filterValues.Gem, StringComparison.InvariantCultureIgnoreCase)
                                  && gemData.CostPerTry(avgTempleCost) >= _filterValues.PricePerTryFrom

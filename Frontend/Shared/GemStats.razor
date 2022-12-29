@@ -5,24 +5,24 @@
         <div class="row gy-5">
             <div class="col">
                 <h5 class="card-title">Value</h5>
-                <p class="card-text">Price Raw: @RoundTo2Places(GemData.RawCost())</p>
-                <p class="card-text">Worst Case: @RoundTo2Places(GemData.WorstCaseValue())</p>
-                <p class="card-text">Middle Case: @RoundTo2Places(GemData.MiddleCaseValue())</p>
-                <p class="card-text">Best Case: @RoundTo2Places(GemData.BestCaseValue())</p>
+                <p class="card-text">Price Raw: @GemData.RawCost().Round(2)</p>
+                <p class="card-text">Worst Case: @GemData.WorstCaseValue().Round(2)</p>
+                <p class="card-text">Middle Case: @GemData.MiddleCaseValue().Round(2)</p>
+                <p class="card-text">Best Case: @GemData.BestCaseValue().Round(2)</p>
             </div>
             <div class="col">
                 <h5 class="card-title">Profit per Try</h5>
-                <p class="card-text">Cost: @RoundTo2Places(GemData.CostPerTry(TempleCost.AverageChaosValue()))</p>
-                <p class="card-text">Worst Case: @RoundTo2Places(GemData.WorstCaseProfit(TempleCost.AverageChaosValue()))</p>
-                <p class="card-text">Middle Case: @RoundTo2Places(GemData.MiddleCaseProfit(TempleCost.AverageChaosValue()))</p>
-                <p class="card-text">Best Case: @RoundTo2Places(GemData.BestCaseProfit(TempleCost.AverageChaosValue()))</p>
+                <p class="card-text">Cost: @GemData.CostPerTry(FilterTempleCost()).Round(2)</p>
+                <p class="card-text">Worst Case: @GemData.WorstCaseProfit(FilterTempleCost()).Round(2)</p>
+                <p class="card-text">Middle Case: @GemData.MiddleCaseProfit(FilterTempleCost()).Round(2)</p>
+                <p class="card-text">Best Case: @GemData.BestCaseProfit(FilterTempleCost()).Round(2)</p>
             </div>
             <div class="col d-flex">
                 <button class="btn btn-primary align-self-end w-100">+ Value</button>
             </div>
             <div class="col d-flex flex-column justify-content-between">
                 <h5 class="card-title">Average Profit per Try</h5>
-                <button class="btn btn-outline-secondary align-self-end w-100">@RoundTo2Places(GemData.AvgProfitPerTry(TempleCost.AverageChaosValue()))</button>
+                <button class="btn btn-outline-secondary align-self-end w-100">@GemData.AvgProfitPerTry(FilterTempleCost()).Round(2)</button>
             </div>
         </div>
     </div>
@@ -34,8 +34,10 @@
     public GemData GemData { get; set; } = null!;
 
     [Parameter]
-    public TempleCost TempleCost { get; set; }
+    public TempleCost TempleCost { get; set; } = null!;
 
-    public string RoundTo2Places(decimal value) { return string.Format("{0:N2}", value); }
+    [Parameter]
+    public FilterValues FilterValues { get; set; } = null!;
 
+    private decimal FilterTempleCost() { return FilterValues.TempleCost ?? TempleCost.AverageChaosValue(); }
 }
