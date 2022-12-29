@@ -1,4 +1,5 @@
 using System.Globalization;
+using Blazored.LocalStorage;
 using Blazored.SessionStorage;
 using Blazored.Toast;
 using Microsoft.AspNetCore.Components.Web;
@@ -19,5 +20,6 @@ builder.Services.AddScoped<ITempleCostService>(sp => new TempleCostService(sp.Ge
 builder.Services.AddScoped<ICurrencyService>(sp => new CurrencyService(sp.GetService<HttpClient>()!));
 builder.Services.AddBlazoredToast();
 builder.Services.AddBlazoredSessionStorage();
+builder.Services.AddBlazoredLocalStorage();
 
 await builder.Build().RunAsync();

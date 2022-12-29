@@ -1,4 +1,5 @@
-﻿using Model;
+﻿using System.Diagnostics;
+using Model;
 using PoEGamblingHelper3.Shared.Model;
 
 namespace PoEGamblingHelper3.Shared;
@@ -17,7 +18,20 @@ public static class ExtensionMethods
                    Sort.AverageProfitPerTryDesc => "Average profit per try Descending",
                    Sort.MaxProfitPerTryAsc => "Maximum profit per try Ascending",
                    Sort.MaxProfitPerTryDesc => "Maximum profit per try Descending",
-                   _ => "This is impossible"
+                   _ => throw new UnreachableException(nameof(GemType))
+               };
+    }
+
+    public static string ToPrettyString(this GemType gemType)
+    {
+        return gemType switch
+               {
+                   GemType.All => "All Gems",
+                   GemType.Awakened => "Awakened Support Gem",
+                   GemType.Exceptional => "Exceptional Support Gem",
+                   GemType.Skill => "Skill Gem",
+                   GemType.RegularSupport => "Regular Support Gem",
+                   _ => throw new UnreachableException(nameof(GemType))
                };
     }
 

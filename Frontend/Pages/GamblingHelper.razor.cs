@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
 using Model;
 using PoEGamblingHelper3.Shared;
@@ -29,6 +30,7 @@ public partial class GamblingHelper : IDisposable
     [Inject] private IGemService GemService { get; set; } = default!;
     [Inject] private ITempleCostService TempleCostService { get; set; } = default!;
     [Inject] private ICurrencyService CurrencyService { get; set; } = default!;
+    [Inject] private ILocalStorageService LocalStorage { get; set; } = default!;
 
     public void Dispose() { _loadGamblingDataTask.Dispose(); }
     private DateTime NextBackendUpdate() { return _lastBackendUpdate.AddMinutes(5); }
@@ -36,6 +38,8 @@ public partial class GamblingHelper : IDisposable
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+        var filterValues = await LocalStorage.GetItemAsync<FilterValues>("filter");
+        if (filterValues is not null) _filterValues = filterValues;
         _loadGamblingDataTask = Task.Run(async () =>
                                          {
                                              while (true)

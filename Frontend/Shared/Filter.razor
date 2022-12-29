@@ -54,7 +54,7 @@
                 <select class="form-select" aria-label="Gem Type" id="gem-type" value="@FilterValues.GemType" @onchange="UpdateGemType">
                     @foreach (var gemType in GemTypes())
                     {
-                        <option value="@gemType">@gemType</option>
+                        <option value="@gemType">@gemType.ToPrettyString()</option>
                     }
                 </select>
             </div>
