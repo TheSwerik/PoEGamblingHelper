@@ -130,14 +130,18 @@ label {
     border: none;
     font-size: 1.75rem;
     font-weight: 1000;
-    -webkit-transition: filter 0.5s, filter 0.5s;
-    transition: filter 0.5s, filter 0.5s;
+    -webkit-transition: filter 0.3s, filter 0.3s;
+    transition: filter 0.3s, filter 0.3s;
 }
 
 .btn:hover, .btn:focus, .btn:active {
     background-color: var(--bs-btn-bg) !important;
     filter: brightness(80%) !important;
     box-shadow: none !important;
+}
+
+.btn:focus {
+    filter: brightness(100%) !important;
 }
 
 .btn:active {
@@ -151,6 +155,10 @@ label {
     color: var(--bs-btn-color) !important;
     filter: brightness(60%) !important;
     box-shadow: none;
+}
+
+.btn-outline-primary:focus, .btn-outline-secondary:focus, .btn-outline-danger:focus {
+    filter: brightness(100%) !important;
 }
 
 .btn-outline-primary:active, .btn-outline-secondary:active, .btn-outline-danger:active {
