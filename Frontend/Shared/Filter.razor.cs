@@ -11,6 +11,7 @@ public partial class Filter : ComponentBase
     [Parameter] public decimal DivineValue { get; set; }
     [Parameter] public FilterValues FilterValues { get; set; } = null!;
     [Parameter] public EventCallback<FilterValues> FilterValuesChanged { get; set; }
+    [Parameter] public League CurrentLeague { get; set; }
     [Inject] private ILocalStorageService LocalStorage { get; set; } = default!;
 
     private bool FiltersExpanded { get; set; } = false;
@@ -115,4 +116,6 @@ public partial class Filter : ComponentBase
 
     private GemType[] GemTypes() { return Enum.GetValues<GemType>(); }
     private Sort[] Sorts() { return Enum.GetValues<Sort>(); }
+
+    private string TempleTradeUrl() { return TempleCost.TradeUrl(CurrentLeague); }
 }

@@ -104,8 +104,9 @@ a {
     --bs-link-hover-color: var(--bs-body-color);
 }
 
-a:hover {
+a:hover, a label:hover {
     filter: brightness(80%);
+    cursor: pointer;
 }
 
 label {
