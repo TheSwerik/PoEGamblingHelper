@@ -1,8 +1,9 @@
-﻿using System.Web;
+﻿using System.Text.RegularExpressions;
+using System.Web;
 
 namespace Model;
 
-public class GemTradeData : Entity<long>
+public partial class GemTradeData : Entity<long>
 {
     public string Name { get; set; } = string.Empty;
     public int GemLevel { get; set; }
@@ -14,55 +15,61 @@ public class GemTradeData : Entity<long>
     public decimal DivineValue { get; set; }
     public int ListingCount { get; set; }
 
-    public string TradeQuery(string name, bool accurateLevel = false, bool accurateQuality = false)
+    public string TradeUrl(League currentLeague, bool accurateLevel = true, bool accurateQuality = false)
     {
-        var gemAlternateQuality = 0;
+        const string poeTradeUrl = "https://www.pathofexile.com/trade/search";
+        const string queryKey = "?q=";
+        return $"{poeTradeUrl}/{currentLeague.Name}{queryKey}{TradeQuery(accurateLevel, accurateQuality)}";
+    }
 
-        Console.WriteLine(name);
-        var firstWord = name.Split(" ")[0];
+    public string TradeQuery(bool accurateLevel = true, bool accurateQuality = false)
+    {
+        var gemAlternateQuality = -1;
+
+        var firstWord = Name.Split(" ")[0];
 
         if (Enum.TryParse(firstWord, true, out AlternateQuality quality))
         {
-            name = name[(firstWord.Length + 1)..];
-            Console.WriteLine(name);
+            Name = Name[(firstWord.Length + 1)..];
             gemAlternateQuality = (int)quality + 1;
         }
 
+        var corruptedText = $@"""corrupted"": {Corrupted.ToString().ToLower()}";
+
         var minGemLevel = accurateLevel ? GemLevel : int.MinValue;
         var maxGemLevel = accurateLevel ? GemLevel : int.MaxValue;
+        var levelText = !accurateLevel
+                            ? string.Empty
+                            : $@",""gem_level"": {{""min"": {minGemLevel},""max"": {maxGemLevel}}}";
 
         var minGemQuality = accurateQuality ? GemQuality : int.MinValue;
         var maxGemQuality = accurateQuality ? GemQuality : int.MaxValue;
+        var qualityText = !accurateQuality
+                              ? string.Empty
+                              : $@",""quality"": {{""min"": {minGemQuality},""max"": {maxGemQuality}}}";
 
-        // var minGemLevel = accurateLevel ? GemLevel : 0;
-        // var maxGemLevel = accurateLevel ? GemLevel : MaxLevel();
+        var gemAlternateQualityText = gemAlternateQuality < 0
+                                          ? string.Empty
+                                          : $@",""gem_alternate_quality"": {{""option"": ""{gemAlternateQuality}""}},";
 
-        // var minGemQuality = accurateQuality ? GemQuality : 0;
-        // var maxGemQuality = accurateQuality ? GemQuality : 23;
-
-        return $@"
+        return MyRegex().Replace($@"
             {{
               ""query"": {{
                 ""filters"": {{
                   ""misc_filters"": {{
                     ""filters"": {{
-                      ""gem_level"": {{
-                        ""min"": {minGemLevel},
-                        ""max"": {maxGemLevel}
-                      }},
-                      ""gem_alternate_quality"": {{
-                        ""option"": ""{gemAlternateQuality}""
-                      }},
-                      ""quality"": {{
-                        ""min"": {minGemQuality},
-                        ""max"": {maxGemQuality}
-                      }}
+                      {corruptedText}
+                      {levelText}
+                      {gemAlternateQualityText}
+                      {qualityText}
                     }}
                   }}
                 }},
-                ""type"": ""{HttpUtility.UrlPathEncode(name)}""
+                ""type"": ""{HttpUtility.UrlPathEncode(Name)}""
               }}
             }}
-        ";
+        ", "$1");
     }
+
+    [GeneratedRegex("(\"(?:[^\"\\\\]|\\\\.)*\")|\\s+")] private static partial Regex MyRegex();
 }

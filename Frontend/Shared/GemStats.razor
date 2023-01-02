@@ -5,17 +5,17 @@
         <div class="row gy-5">
             <div class="col">
                 <h5 class="card-title">Value</h5>
-                <p class="card-text">Price Raw: @GemData.RawCost().Round(2)</p>
-                <p class="card-text">Worst Case: @GemData.WorstCaseValue().Round(2)</p>
-                <p class="card-text">Middle Case: @GemData.MiddleCaseValue().Round(2)</p>
-                <p class="card-text">Best Case: @GemData.BestCaseValue().Round(2)</p>
+                <a href="@TradeUrl(GemData.RawGem())" class="card-text">Price Raw: @GemData.RawCost().Round(2)</a>
+                <a href="@TradeUrl(GemData.ResultGem(ResultCase.Worst))" class="card-text">Worst Case: @GemData.Value(ResultCase.Worst).Round(2)</a>
+                <a href="@TradeUrl(GemData.ResultGem(ResultCase.Middle))" class="card-text">Middle Case: @GemData.Value(ResultCase.Middle).Round(2)</a>
+                <a href="@TradeUrl(GemData.ResultGem(ResultCase.Best))" class="card-text">Best Case: @GemData.Value(ResultCase.Best).Round(2)</a>
             </div>
             <div class="col">
                 <h5 class="card-title">Profit per Try</h5>
                 <p class="card-text">Cost: @GemData.CostPerTry(FilterTempleCost()).Round(2)</p>
-                <p class="card-text">Worst Case: @GemData.WorstCaseProfit(FilterTempleCost()).Round(2)</p>
-                <p class="card-text">Middle Case: @GemData.MiddleCaseProfit(FilterTempleCost()).Round(2)</p>
-                <p class="card-text">Best Case: @GemData.BestCaseProfit(FilterTempleCost()).Round(2)</p>
+                <p class="card-text">Worst Case: @GemData.Profit(FilterTempleCost(), ResultCase.Worst).Round(2)</p>
+                <p class="card-text">Middle Case: @GemData.Profit(FilterTempleCost(), ResultCase.Middle).Round(2)</p>
+                <p class="card-text">Best Case: @GemData.Profit(FilterTempleCost(), ResultCase.Best).Round(2)</p>
             </div>
             <div class="col d-flex">
                 <button class="btn btn-primary align-self-end w-100">+ Value</button>
@@ -39,5 +39,10 @@
     [Parameter]
     public FilterValues FilterValues { get; set; } = null!;
 
+    [Parameter]
+    public League CurrentLeague { get; set; } = null!;
+
     private decimal FilterTempleCost() { return FilterValues.TempleCost ?? TempleCost.AverageChaosValue(); }
+
+    private string TradeUrl(GemTradeData? gemTradeData) { return gemTradeData is null ? "#" : gemTradeData.TradeUrl(CurrentLeague); }
 }

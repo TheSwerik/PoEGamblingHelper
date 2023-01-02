@@ -11,6 +11,7 @@ namespace PoEGamblingHelper3.Pages;
 public partial class GamblingHelper : IDisposable
 {
     private List<Currency> _currency = new();
+    private League _currentLeague = new();
     private decimal _divineValue;
     private FilterValues _filterValues = new();
 
@@ -30,6 +31,7 @@ public partial class GamblingHelper : IDisposable
     [Inject] private ITempleCostService TempleCostService { get; set; } = default!;
     [Inject] private ICurrencyService CurrencyService { get; set; } = default!;
     [Inject] private ILocalStorageService LocalStorage { get; set; } = default!;
+    [Inject] private ILeagueService LeagueService { get; set; } = default!;
 
     public void Dispose() { _loadGamblingDataTask.Dispose(); }
     private DateTime NextBackendUpdate() { return _lastBackendUpdate.AddMinutes(5); }
@@ -57,6 +59,7 @@ public partial class GamblingHelper : IDisposable
         _currency = await CurrencyService.GetAll();
         _divineValue = _currency.Where(c => c.Name.Equals("Divine Orb")).Select(c => c.ChaosEquivalent).First();
         _templeCost = await TempleCostService.Get();
+        _currentLeague = await LeagueService.GetCurrent();
         _gems = await GemService.GetAll();
         _lastBackendUpdate = DateTime.Now;
 
@@ -80,8 +83,8 @@ public partial class GamblingHelper : IDisposable
                                        Sort.CostPerTryDesc => -gemData.CostPerTry(avgTempleCost),
                                        Sort.AverageProfitPerTryAsc => gemData.AvgProfitPerTry(avgTempleCost),
                                        Sort.AverageProfitPerTryDesc => -gemData.AvgProfitPerTry(avgTempleCost),
-                                       Sort.MaxProfitPerTryAsc => -gemData.BestCaseProfit(avgTempleCost),
-                                       Sort.MaxProfitPerTryDesc => -gemData.BestCaseProfit(avgTempleCost),
+                                       Sort.MaxProfitPerTryAsc => -gemData.Profit(avgTempleCost, ResultCase.Best),
+                                       Sort.MaxProfitPerTryDesc => -gemData.Profit(avgTempleCost, ResultCase.Best),
                                        _ => throw new UnreachableException("Sort")
                                    })
                .Take(50);

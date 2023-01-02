@@ -238,7 +238,7 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
 
     public async Task GetPriceData()
     {
-        var currentLeague = await _poeDataService.GetCurrentLeague();
+        var currentLeague = _poeDataService.GetCurrentLeague();
         await GetCurrencyData(currentLeague);
         await GetTemplePriceData(currentLeague);
         await GetGemPriceData(currentLeague);
