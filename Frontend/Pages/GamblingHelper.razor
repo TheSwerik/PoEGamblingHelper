@@ -11,7 +11,7 @@
     <div class="container d-flex flex-wrap p-0 justify-content-between">
         @foreach (var gem in FilteredGems())
         {
-            <GemStats GemData="gem" TempleCost="_templeCost" FilterValues="_filterValues"/>
+            <GemStats GemData="gem" TempleCost="_templeCost" FilterValues="_filterValues" CurrentLeague="_currentLeague"/>
         }
     </div>
 </div>

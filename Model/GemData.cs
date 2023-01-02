@@ -24,17 +24,20 @@ public class GemData : Entity<Guid>
                    ?.ChaosValue ?? 0m;
     }
 
-    public decimal WorstCaseValue() { return ResultValue(MaxLevel() - 1); }
-    public decimal MiddleCaseValue() { return ResultValue(MaxLevel()); }
-    public decimal BestCaseValue() { return ResultValue(MaxLevel() + 1); }
+    public decimal Value(ResultCase resultCase) { return ResultValue(MaxLevel() + resultCase.LevelModifier()); }
     public decimal CostPerTry(decimal templeCost) { return RawCost() + templeCost; }
-    public decimal WorstCaseProfit(decimal templeCost) { return WorstCaseValue() - CostPerTry(templeCost); }
-    public decimal MiddleCaseProfit(decimal templeCost) { return MiddleCaseValue() - CostPerTry(templeCost); }
-    public decimal BestCaseProfit(decimal templeCost) { return BestCaseValue() - CostPerTry(templeCost); }
+
+    public decimal Profit(decimal templeCost, ResultCase resultCase)
+    {
+        return Value(resultCase) - CostPerTry(templeCost);
+    }
 
     public decimal AvgProfitPerTry(decimal templeCost)
     {
-        return (WorstCaseProfit(templeCost) + MiddleCaseProfit(templeCost) + BestCaseProfit(templeCost)) / 3;
+        return (Profit(templeCost, ResultCase.Worst)
+                + Profit(templeCost, ResultCase.Middle)
+                + Profit(templeCost, ResultCase.Best))
+               / 3;
     }
 
     private decimal ResultValue(int level)
@@ -45,5 +48,15 @@ public class GemData : Entity<Guid>
     public bool IsExceptional()
     {
         return Name.Contains("Enhance") || Name.Contains("Empower") || Name.Contains("Enlighten");
+    }
+
+    public GemTradeData? ResultGem(ResultCase resultCase)
+    {
+        return Gems.Where(gem => gem.GemLevel == MaxLevel() + resultCase.LevelModifier()).MinBy(gem => gem.ChaosValue);
+    }
+
+    public GemTradeData? RawGem()
+    {
+        return Gems.Where(gem => gem.GemLevel == MaxLevel() && !gem.Corrupted).MinBy(gem => gem.ChaosValue);
     }
 }

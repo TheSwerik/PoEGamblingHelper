@@ -1,19 +1,20 @@
 using Backend.Service;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 using Model;
 
 namespace Backend.Controllers;
 
 [ApiController]
-[Route("poe")]
-public class PoeDataController : ControllerBase
+[Route("league")]
+public class LeagueController : ControllerBase
 {
     private readonly IRepository<League, Guid> _leagueRepository;
-    private readonly ILogger<PoeDataController> _logger;
+    private readonly ILogger<LeagueController> _logger;
     private readonly IPoeDataService _poeDataService;
 
-    public PoeDataController(
-        ILogger<PoeDataController> logger,
+    public LeagueController(
+        ILogger<LeagueController> logger,
         IRepository<League, Guid> leagueRepository,
         IPoeDataService poeDataService
     )
@@ -23,11 +24,10 @@ public class PoeDataController : ControllerBase
         _poeDataService = poeDataService;
     }
 
-    [HttpGet]
-    [Route("league")]
-    public ActionResult<IAsyncEnumerable<League>> GetAllLeagues() { return Ok(_leagueRepository.GetAll()); }
+    [HttpGet] public ActionResult<IAsyncEnumerable<League>> GetAllLeagues() { return Ok(_leagueRepository.GetAll()); }
 
     [HttpGet]
-    [Route("league/current")]
+    [Route("current")]
+    [OutputCache(PolicyName = "FetchData")]
     public ActionResult<League> GetCurrentLeague() { return Ok(_poeDataService.GetCurrentLeague()); }
 }

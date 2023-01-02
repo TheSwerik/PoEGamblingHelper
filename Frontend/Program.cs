@@ -18,6 +18,7 @@ builder.Services.AddScoped(_ => new HttpClient { BaseAddress = new Uri(builder.C
 builder.Services.AddScoped<IGemService>(sp => new GemService(sp.GetService<HttpClient>()!));
 builder.Services.AddScoped<ITempleCostService>(sp => new TempleCostService(sp.GetService<HttpClient>()!));
 builder.Services.AddScoped<ICurrencyService>(sp => new CurrencyService(sp.GetService<HttpClient>()!));
+builder.Services.AddScoped<ILeagueService>(sp => new LeagueService(sp.GetService<HttpClient>()!));
 builder.Services.AddBlazoredToast();
 builder.Services.AddBlazoredSessionStorage();
 builder.Services.AddBlazoredLocalStorage();
