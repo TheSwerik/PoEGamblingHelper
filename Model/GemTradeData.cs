@@ -52,7 +52,7 @@ public partial class GemTradeData : Entity<long>
                                           ? string.Empty
                                           : $@",""gem_alternate_quality"": {{""option"": ""{gemAlternateQuality}""}},";
 
-        return MyRegex().Replace($@"
+        return JsonMinifyRegex().Replace($@"
             {{
               ""query"": {{
                 ""filters"": {{
@@ -71,5 +71,5 @@ public partial class GemTradeData : Entity<long>
         ", "$1");
     }
 
-    [GeneratedRegex("(\"(?:[^\"\\\\]|\\\\.)*\")|\\s+")] private static partial Regex MyRegex();
+    [GeneratedRegex("(\"(?:[^\"\\\\]|\\\\.)*\")|\\s+")] private static partial Regex JsonMinifyRegex();
 }
