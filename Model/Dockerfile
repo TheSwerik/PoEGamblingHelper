@@ -1,5 +1,4 @@
 ﻿# syntax=docker/dockerfile:1.4.3
-ARG MODEL_TAG=latest
 
 FROM alpine:3.17.0 as file-loader
 WORKDIR /data
@@ -8,12 +7,8 @@ RUN chmod -R 555 /scripts
 
 #########################################################################
 
-FROM registry.swerik.dev/poegamblinghelper/model:$MODEL_TAG as model
-RUN echo "This is build with Shared-Lib ${MODEL_TAG}"
-
 FROM file-loader as base-files
-COPY --from=model /build/publish ./packages
-COPY Backend.csproj .
+COPY Model.csproj .
 RUN /scripts/clean-files-for-caching.sh .
 
 #########################################################################
@@ -32,22 +27,6 @@ RUN dotnet restore
 
 #########################################################################
 
-FROM dependencyfetcher as tester
-WORKDIR /build
-COPY --from=source-files /data .
-RUN dotnet test
-
-#########################################################################
-
-FROM dependencyfetcher as builder
+FROM dependencyfetcher as final
 COPY --from=source-files /data .
 RUN dotnet publish -c Release -o /build/publish
-
-#########################################################################
-#########################################################################
-
-FROM mcr.microsoft.com/dotnet/aspnet:7.0-alpine AS base
-WORKDIR /app
-EXPOSE 80
-COPY --from=builder /build/publish .
-ENTRYPOINT ["dotnet", "Backend.dll"]
