@@ -252,6 +252,14 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
         await GetCurrencyData(currentLeague);
         await GetTemplePriceData(currentLeague);
         await GetGemPriceData(currentLeague);
+
+        var div = await _currencyRepository.Get("divine-orb");
+        var gem = await _gemTradeDataRepository.Get(7064);
+        Console.WriteLine("Divine ChaosEquivalent:\t\t\t" + div.ChaosEquivalent);
+        Console.WriteLine("Gem ChaosValue:\t\t\t\t" + gem.ChaosValue);
+        Console.WriteLine("Gem DivineValue:\t\t\t" + gem.DivineValue);
+        Console.WriteLine("Gem DivineValue*Divine.ChaosEquivalent:\t" + gem.DivineValue * div.ChaosEquivalent);
+        Console.WriteLine("Gem ChaosValue/Divine.ChaosEquivalent:\t" + gem.ChaosValue / div.ChaosEquivalent);
     }
 
     public async Task GetCurrencyData(League league)
