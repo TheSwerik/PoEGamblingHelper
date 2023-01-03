@@ -9,6 +9,7 @@ RUN chmod -R 555 /scripts
 #########################################################################
 
 FROM registry.swerik.dev/poegamblinghelper/model:$MODEL_TAG as model
+ARG MODEL_TAG
 RUN echo "This is build with Shared-Lib ${MODEL_TAG}"
 
 FROM file-loader as base-files
