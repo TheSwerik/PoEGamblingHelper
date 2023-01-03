@@ -1,4 +1,5 @@
 ﻿# syntax=docker/dockerfile:1.4.3
+ARG MODEL_TAG=latest
 
 FROM alpine:3.17.0 as file-loader
 WORKDIR /data
