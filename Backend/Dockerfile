@@ -46,7 +46,7 @@ RUN dotnet publish -c Release -o /build/publish
 #########################################################################
 #########################################################################
 
-FROM mcr.microsoft.com/dotnet/aspnet:7.0-alpine AS base
+FROM mcr.microsoft.com/dotnet/aspnet:7.0-alpine AS final
 WORKDIR /app
 EXPOSE 80
 COPY --from=builder /build/publish .
