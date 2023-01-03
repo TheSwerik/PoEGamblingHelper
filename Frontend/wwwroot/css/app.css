@@ -57,8 +57,16 @@ input[type=number] {
 
 /*region CUSTOM STYLES*/
 
+.container {
+    max-width: 93rem;
+}
+
 a {
     text-decoration: none;
+}
+
+p {
+    margin: 0;
 }
 
 /*region Classes*/

@@ -6,7 +6,7 @@
     <h2>Path of Exile</h2>
     <h1>GAMBLING HELPER</h1>
 
-    <Filter TempleCost="_templeCost" DivineValue="_divineValue" @bind-FilterValues="_filterValues" CurrentLeague="_currentLeague"/>
+    <Filter TempleCost="_templeCost" @bind-FilterValues="_filterValues" CurrentLeague="_currentLeague" Currency="_currency"/>
 
     <div class="container d-flex flex-wrap p-0 justify-content-between">
         @foreach (var gem in FilteredGems())
