@@ -31,12 +31,31 @@
         </div>
         <div class="col">
             <label for="currency">Currency</label>
-            <select class="form-select" aria-label="Currency" id="currency" value="@(FilterValues.Currency?.Id ?? "divine-orb")" @onchange="UpdateCurrency">
-                @foreach (var currency in GetAllowedFilterCurrencies())
-                {
-                    <option value="@currency.Id">@currency.Name</option>
-                }
-            </select>
+            <div class="dropdown w-100">
+                <button class="btn btn-primary dropdown-toggle w-100 d-flex justify-content-between align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="currency">
+                    @if (FilterValues.Currency is not null)
+                    {
+                        <p class="ms-0">
+                            <img src="@FilterValues.Currency.Icon" alt="Currency-Icon"/>
+                            @FilterValues.Currency.Name
+                        </p>
+                    }
+                    else
+                    {
+                        <p>Nothing selected</p>
+                    }
+                </button>
+                <ul class="dropdown-menu">
+                    @foreach (var currency in GetAllowedFilterCurrencies())
+                    {
+                        <li>
+                            <a class="dropdown-item" href="#" @onclick="() => UpdateCurrency(currency.Id)">
+                                <img src="@currency.Icon" alt="Currency-Icon"/> @currency.Name
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
         </div>
     </div>
     <div class="row collapse mt-2 gx-5" id="collapsable">

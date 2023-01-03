@@ -52,6 +52,7 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
     private class CurrencyPriceData
     {
         public PoeNinjaCurrencyData[] Lines { get; set; } = null!;
+        public PoeNinjaCurrencyDetails[] CurrencyDetails { get; set; } = null!;
         public override string ToString() { return string.Join(", ", Lines.AsEnumerable()); }
     }
 
@@ -67,16 +68,26 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
         [JsonPropertyName("currencyTypeName")] public string Name { get; set; }
         public decimal ChaosEquivalent { get; set; }
         public string DetailsId { get; set; }
+        public string? Icon { get; set; }
 
         public Currency ToCurrencyData()
         {
+            Console.WriteLine(Icon);
             return new Currency
                    {
                        Id = DetailsId,
                        Name = Name,
                        ChaosEquivalent = ChaosEquivalent,
+                       Icon = Icon
                    };
         }
+    }
+
+    public class PoeNinjaCurrencyDetails
+    {
+        public long Id { get; set; }
+        public string Name { get; set; }
+        public string? Icon { get; set; }
     }
 
     public class PoeNinjaGemData
@@ -251,6 +262,16 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
         if (result is null) throw new NullReferenceException();
         Logger.LogInformation("Got data from {Result} currency items", result.Lines.Length);
 
+        foreach (var poeNinjaCurrencyData in result.Lines)
+        {
+            var details =
+                result.CurrencyDetails.FirstOrDefault(
+                    details => poeNinjaCurrencyData.Name.EqualsIgnoreCase(details.Name));
+            if (details is not null) poeNinjaCurrencyData.Icon = details.Icon;
+            Console.WriteLine(poeNinjaCurrencyData.Icon);
+        }
+
+
         var trackedCurrency = _currencyRepository.GetAll().Select(gem => gem.Id).ToArray();
         _currencyRepository.ClearTrackedEntities();
 
@@ -272,7 +293,14 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
                                                                             StringComparison
                                                                                 .InvariantCultureIgnoreCase));
         if (chaos is not null) return;
-        await _currencyRepository.Save(new Currency { Name = "Chaos Orb", ChaosEquivalent = 1 });
+        await _currencyRepository.Save(new Currency
+                                       {
+                                           Name = "Chaos Orb",
+                                           ChaosEquivalent = 1,
+                                           Icon =
+                                               "https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyRerollRare.png",
+                                           Id = "chaos-orb"
+                                       });
         Logger.LogInformation("Saved Chaos Orb");
 
         #endregion

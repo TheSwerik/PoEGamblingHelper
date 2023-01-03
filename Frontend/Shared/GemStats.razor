@@ -1,7 +1,9 @@
 ﻿@using global::Model
 <div class="card mb-5" style="width: 45rem;">
     <div class="card-body">
-        <h3 class="card-title">@GemData.Name</h3>
+        <h3 class="card-title">
+            <img src="@GemData.Icon" alt="Gem-Icon" class="icon"/>@GemData.Name
+        </h3>
         <div class="row gy-5">
             <div class="col">
                 <h5 class="card-title">Value</h5>
