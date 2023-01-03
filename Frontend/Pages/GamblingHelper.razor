@@ -2,7 +2,7 @@
 
 <PageTitle>PoE Gambling Helper</PageTitle>
 
-<div class="d-flex flex-column align-items-center w-100 h-100">
+<div class="d-flex flex-column align-items-center w-100 h-100 mt-5">
     <h2>Path of Exile</h2>
     <h1>GAMBLING HELPER</h1>
 
@@ -13,5 +13,9 @@
         {
             <GemStats GemData="gem" TempleCost="_templeCost" FilterValues="_filterValues" CurrentLeague="_currentLeague"/>
         }
+    </div>
+
+    <div class="footer">
+        <p class="ms-3 mb-2 mt-2">last update from poe.ninja: @(_lastBackendUpdate < DateTime.Now.AddMinutes(-1) ? $"{_lastBackendUpdate.Subtract(DateTime.Now).TotalMinutes} ago" : "just now")</p>
     </div>
 </div>
