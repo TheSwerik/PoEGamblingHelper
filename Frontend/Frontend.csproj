@@ -20,9 +20,14 @@
     <ItemGroup>
         <None Include="wwwroot/css/font/**" CopyToOutputDirectory="Always"/>
     </ItemGroup>
-
-    <ItemGroup>
+    
+    <ItemGroup Condition="'$(Configuration)' == 'Debug'">
         <ProjectReference Include="..\Model\Model.csproj"/>
+    </ItemGroup>
+    <ItemGroup Condition="'$(Configuration)' == 'Release'">
+        <Reference Include="packages\Model">
+            <HintPath>packages\Model.dll</HintPath>
+        </Reference>
     </ItemGroup>
 
     <ItemGroup>

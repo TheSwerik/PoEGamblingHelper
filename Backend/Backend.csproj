@@ -21,8 +21,13 @@
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
     </ItemGroup>
 
-    <ItemGroup>
+    <ItemGroup Condition="'$(Configuration)' == 'Debug'">
         <ProjectReference Include="..\Model\Model.csproj"/>
+    </ItemGroup>
+    <ItemGroup Condition="'$(Configuration)' == 'Release'">
+        <Reference Include="packages\Model">
+            <HintPath>packages\Model.dll</HintPath>
+        </Reference>
     </ItemGroup>
 
 </Project>

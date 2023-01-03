@@ -45,8 +45,13 @@ public partial class GamblingHelper : IDisposable
                                              while (true)
                                              {
                                                  while (_isUpdating || NextBackendUpdate() > DateTime.Now)
+                                                 {
+                                                     await InvokeAsync(StateHasChanged);
                                                      await Task.Delay(1000);
+                                                 }
+
                                                  await LoadGamblingData();
+                                                 await InvokeAsync(StateHasChanged);
                                              }
                                          });
     }
