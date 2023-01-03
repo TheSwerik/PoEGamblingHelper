@@ -7,7 +7,6 @@ platform:
 trigger:
   event:
     - push
-    - pull_request
 steps:
   - name: build model lib
     image: plugins/docker
@@ -88,7 +87,7 @@ platform:
   arch: arm64
 trigger:
   branch:
-    - 10-deployment
+    - release
 steps:
   - name: build model lib
     image: plugins/docker
@@ -175,7 +174,7 @@ platform:
   arch: arm64
 trigger:
   branch:
-    - 10-deployment
+    - release
 server:
   host: erikpi
   user:
