@@ -24,7 +24,7 @@
             <label for="chaos-per-currency">@CurrencyName()</label>
             <div class="input-group">
                 <input type="text" pattern="[0-9]+([.][0-9]{1,2}){0,1}?" class="form-control" aria-label="Chaos per Currency" aria-describedby="reset-3" id="chaos-per-currency" value="@CurrencyValueString()" @onchange="UpdateCurrencyValueChanged" disabled="@IsChaosSelected">
-                <button class="btn btn-primary btn-addon" type="button" id="reset-3" onclick="@ResetCurrencyValue">
+                <button class="btn btn-primary btn-addon" type="button" id="reset-3" onclick="@ResetCurrencyValue" disabled="@IsChaosSelected">
                     <img src="icons/arrow-rotate-right.svg" alt="" style="width: 1rem"/>
                 </button>
             </div>
