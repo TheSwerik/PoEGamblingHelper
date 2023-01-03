@@ -242,7 +242,7 @@ label {
     z-index: 95 !important;
 }
 
-input, select, .dropdown-toggle {
+input, .dropdown-toggle {
     background-color: var(--bs-primary) !important;
     border-radius: 10px 0 !important;
     border: none !important;
@@ -273,17 +273,11 @@ input, select, .dropdown-toggle {
 
 input:hover, input:focus, input:active,
 .dropdown-toggle:hover, .dropdown-toggle:focus, .dropdown-toggle:active,
-.dropdown-item:hover, .dropdown-item:focus, .dropdown-item:active,
-option:hover, option:focus, option:active, option:checked,
-select:hover, select:focus, select:active {
+.dropdown-item:hover, .dropdown-item:focus, .dropdown-item:active {
     color: var(--bs-btn-color) !important;
     background-color: var(--bs-primary) !important;
     filter: brightness(90%) !important;
     box-shadow: none !important;
-}
-
-select {
-    text-align: left;
 }
 
 /*endregion*/
