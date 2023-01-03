@@ -6,7 +6,11 @@ namespace PoEGamblingHelper3.Shared;
 
 public static class ExtensionMethods
 {
-    public static string Round(this decimal value, int places) { return string.Format($"{{0:N{places}}}", value); }
+    public static string Round(this decimal value, int places)
+    {
+        var placeCharacters = new string('#', places);
+        return string.Format($"{{0:0.{placeCharacters}}}", value);
+    }
 
     public static string ToPrettyString(this Sort sort)
     {

@@ -12,7 +12,6 @@ public partial class GamblingHelper : IDisposable
 {
     private List<Currency> _currency = new();
     private League _currentLeague = new();
-    private decimal _divineValue;
     private FilterValues _filterValues = new();
 
     private List<GemData> _gems = new()
@@ -57,7 +56,9 @@ public partial class GamblingHelper : IDisposable
         _isUpdating = true;
 
         _currency = await CurrencyService.GetAll();
-        _divineValue = _currency.Where(c => c.Name.Equals("Divine Orb")).Select(c => c.ChaosEquivalent).First();
+        _filterValues.Currency = _filterValues.Currency is null
+                                     ? _currency.First(c => c.Name.Equals("Divine Orb"))
+                                     : _currency.First(c => c.Id.Equals(_filterValues.Currency.Id));
         _templeCost = await TempleCostService.Get();
         _currentLeague = await LeagueService.GetCurrent();
         _gems = await GemService.GetAll();

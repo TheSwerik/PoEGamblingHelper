@@ -7,14 +7,61 @@ namespace PoEGamblingHelper3.Shared;
 
 public partial class Filter : ComponentBase
 {
+    private readonly string[] _allowedFilterCurrencies =
+        { "mirror of kalandra", "mirror shard", "chaos orb", "divine orb" };
+
     [Parameter] public TempleCost TempleCost { get; set; } = null!;
-    [Parameter] public decimal DivineValue { get; set; }
     [Parameter] public FilterValues FilterValues { get; set; } = null!;
     [Parameter] public EventCallback<FilterValues> FilterValuesChanged { get; set; }
-    [Parameter] public League CurrentLeague { get; set; }
+    [Parameter] public League CurrentLeague { get; set; } = null!;
+    [Parameter] public List<Currency> Currency { get; set; } = new();
     [Inject] private ILocalStorageService LocalStorage { get; set; } = default!;
 
     private bool FiltersExpanded { get; set; } = false;
+
+    private bool IsChaosSelected =>
+        FilterValues.Currency is not null && FilterValues.Currency.Name.EqualsIgnoreCase("chaos orb");
+
+    private async Task SaveFilterValues()
+    {
+        await FilterValuesChanged.InvokeAsync(FilterValues);
+        await LocalStorage.SetItemAsync("Filter", FilterValues);
+    }
+
+    private string TempleCostString()
+    {
+        var currencyChaosValue = FilterValues.Currency?.ChaosEquivalent ?? 1;
+        var templeCost = FilterValues.TempleCost ?? TempleCost.AverageChaosValue();
+        return ShowDecimal(templeCost / currencyChaosValue);
+    }
+
+    private string CurrencyValueString() { return ShowDecimal(FilterValues.CurrencyValue); }
+
+    private void ToggleFilters() { FiltersExpanded = !FiltersExpanded; }
+
+    private string ShowDecimal(decimal value)
+    {
+        return value is decimal.MinValue or decimal.MaxValue ? "" : value.Round(2);
+    }
+
+    private GemType[] GemTypes() { return Enum.GetValues<GemType>(); }
+    private Sort[] Sorts() { return Enum.GetValues<Sort>(); }
+
+    private string TempleTradeUrl() { return TempleCost.TradeUrl(CurrentLeague); }
+
+    private IEnumerable<Currency> GetAllowedFilterCurrencies()
+    {
+        return Currency.Where(currency => _allowedFilterCurrencies.Contains(currency.Name.ToLowerInvariant()))
+                       .OrderBy(currency => currency.ChaosEquivalent);
+    }
+
+    private string CurrencyName()
+    {
+        if (FilterValues.Currency is null || IsChaosSelected) return "";
+        return $"Chaos per {FilterValues.Currency.Name}";
+    }
+
+    #region Update Callback
 
     private async Task UpdateTempleCost(ChangeEventArgs args)
     {
@@ -23,10 +70,10 @@ public partial class Filter : ComponentBase
         await SaveFilterValues();
     }
 
-    private async Task UpdateChaosPerDivineChanged(ChangeEventArgs args)
+    private async Task UpdateCurrencyValueChanged(ChangeEventArgs args)
     {
         if (args.Value is null || !decimal.TryParse(args.Value.ToString(), out var value)) return;
-        FilterValues.DivineValue = value;
+        FilterValues.CurrencyValue = value;
         await SaveFilterValues();
     }
 
@@ -58,6 +105,16 @@ public partial class Filter : ComponentBase
         await SaveFilterValues();
     }
 
+    private async Task UpdateCurrency(ChangeEventArgs args)
+    {
+        if (args.Value is null) return;
+        var currency = Currency.FirstOrDefault(currency => currency.Id.Equals(args.Value));
+        if (currency is null) return;
+        FilterValues.Currency = currency;
+        FilterValues.CurrencyValue = currency.ChaosEquivalent;
+        await SaveFilterValues();
+    }
+
     private async Task UpdateOnlyShowProfitable(ChangeEventArgs args)
     {
         if (args.Value is null || !bool.TryParse(args.Value.ToString(), out var value)) return;
@@ -72,15 +129,19 @@ public partial class Filter : ComponentBase
         await SaveFilterValues();
     }
 
+    #endregion
+
+    #region Reset Inputs
+
     private async void ResetTempleCost()
     {
         FilterValues.TempleCost = null;
         await SaveFilterValues();
     }
 
-    private async void ResetDivineValue()
+    private async void ResetCurrencyValue()
     {
-        FilterValues.DivineValue = null;
+        FilterValues.CurrencyValue = FilterValues.Currency?.ChaosEquivalent ?? 1;
         await SaveFilterValues();
     }
 
@@ -97,25 +158,5 @@ public partial class Filter : ComponentBase
         await SaveFilterValues();
     }
 
-    private async Task SaveFilterValues()
-    {
-        await FilterValuesChanged.InvokeAsync(FilterValues);
-        await LocalStorage.SetItemAsync("Filter", FilterValues);
-    }
-
-    private string TempleCostString() { return ShowDecimal(FilterValues.TempleCost ?? TempleCost.AverageChaosValue()); }
-
-    private string DivineValueString() { return ShowDecimal(FilterValues.DivineValue ?? DivineValue); }
-
-    private void ToggleFilters() { FiltersExpanded = !FiltersExpanded; }
-
-    private string ShowDecimal(decimal value)
-    {
-        return value is decimal.MinValue or decimal.MaxValue ? "" : value.Round(2);
-    }
-
-    private GemType[] GemTypes() { return Enum.GetValues<GemType>(); }
-    private Sort[] Sorts() { return Enum.GetValues<Sort>(); }
-
-    private string TempleTradeUrl() { return TempleCost.TradeUrl(CurrentLeague); }
+    #endregion
 }

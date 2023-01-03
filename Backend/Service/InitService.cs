@@ -41,7 +41,7 @@ public class InitService : IHostedService
         _fiveMinuteTimer.Elapsed += async (_, _) =>
                                     {
                                         await _poeDataFetchService.GetPriceData();
-                                        Console.WriteLine("nocache");
+                                        _logger.LogDebug("Cache cleared");
                                         await _cache.EvictByTagAsync("FetchData", new CancellationToken());
                                     };
         _fiveMinuteTimer.AutoReset = true;

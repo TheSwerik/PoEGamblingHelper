@@ -1,28 +1,36 @@
 ﻿@using global::Model
-<div class="card mb-5" style="width: 40rem;">
+<div class="card mb-5" style="width: 45rem;">
     <div class="card-body">
         <h3 class="card-title">@GemData.Name</h3>
         <div class="row gy-5">
             <div class="col">
                 <h5 class="card-title">Value</h5>
-                <a href="@TradeUrl(GemData.RawGem())" class="card-text">Price Raw: @GemData.RawCost().Round(2)</a>
-                <a href="@TradeUrl(GemData.ResultGem(ResultCase.Worst))" class="card-text">Worst Case: @GemData.Value(ResultCase.Worst).Round(2)</a>
-                <a href="@TradeUrl(GemData.ResultGem(ResultCase.Middle))" class="card-text">Middle Case: @GemData.Value(ResultCase.Middle).Round(2)</a>
-                <a href="@TradeUrl(GemData.ResultGem(ResultCase.Best))" class="card-text">Best Case: @GemData.Value(ResultCase.Best).Round(2)</a>
+                <p class="card-text">
+                    <a href="@TradeUrl(GemData.RawGem())" target="_blank" rel="noopener noreferrer">Price Raw: @CurrencyValue(GemData.RawCost())</a>
+                </p>
+                <p class="card-text">
+                    <a href="@TradeUrl(GemData.ResultGem(ResultCase.Worst))" target="_blank" rel="noopener noreferrer">Worst Case: @CurrencyValue(GemData.Value(ResultCase.Worst))</a>
+                </p>
+                <p class="card-text">
+                    <a href="@TradeUrl(GemData.ResultGem(ResultCase.Middle))" target="_blank" rel="noopener noreferrer">Middle Case: @CurrencyValue(GemData.Value(ResultCase.Middle))</a>
+                </p>
+                <p class="card-text">
+                    <a href="@TradeUrl(GemData.ResultGem(ResultCase.Best))" target="_blank" rel="noopener noreferrer">Best Case: @CurrencyValue(GemData.Value(ResultCase.Best))</a>
+                </p>
             </div>
             <div class="col">
                 <h5 class="card-title">Profit per Try</h5>
-                <p class="card-text">Cost: @GemData.CostPerTry(FilterTempleCost()).Round(2)</p>
-                <p class="card-text">Worst Case: @GemData.Profit(FilterTempleCost(), ResultCase.Worst).Round(2)</p>
-                <p class="card-text">Middle Case: @GemData.Profit(FilterTempleCost(), ResultCase.Middle).Round(2)</p>
-                <p class="card-text">Best Case: @GemData.Profit(FilterTempleCost(), ResultCase.Best).Round(2)</p>
+                <p class="card-text">Cost: @CurrencyValue(GemData.CostPerTry(FilterTempleCost()))</p>
+                <p class="card-text">Worst Case: @CurrencyValue(GemData.Profit(FilterTempleCost(), ResultCase.Worst))</p>
+                <p class="card-text">Middle Case: @CurrencyValue(GemData.Profit(FilterTempleCost(), ResultCase.Middle))</p>
+                <p class="card-text">Best Case: @CurrencyValue(GemData.Profit(FilterTempleCost(), ResultCase.Best))</p>
             </div>
             <div class="col d-flex">
                 <button class="btn btn-primary align-self-end w-100">+ Value</button>
             </div>
             <div class="col d-flex flex-column justify-content-between">
                 <h5 class="card-title">Average Profit per Try</h5>
-                <button class="btn btn-outline-secondary align-self-end w-100">@GemData.AvgProfitPerTry(FilterTempleCost()).Round(2)</button>
+                <button class="btn btn-outline-secondary align-self-end w-100">@CurrencyValue(GemData.AvgProfitPerTry(FilterTempleCost()))</button>
             </div>
         </div>
     </div>
@@ -45,4 +53,11 @@
     private decimal FilterTempleCost() { return FilterValues.TempleCost ?? TempleCost.AverageChaosValue(); }
 
     private string TradeUrl(GemTradeData? gemTradeData) { return gemTradeData is null ? "#" : gemTradeData.TradeUrl(CurrentLeague); }
+
+    private string CurrencyValue(decimal chaosValue)
+    {
+        var currencyChaosValue = FilterValues.CurrencyValue;
+        return (chaosValue / currencyChaosValue).Round(2);
+    }
+
 }

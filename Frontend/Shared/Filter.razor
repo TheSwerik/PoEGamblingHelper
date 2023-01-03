@@ -10,7 +10,7 @@
             </div>
         </div>
         <div class="col">
-            <a href="@TempleTradeUrl()">
+            <a href="@TempleTradeUrl()" target="_blank" rel="noopener noreferrer">
                 <label for="temple-cost">Temple cost</label>
             </a>
             <div class="input-group">
@@ -21,15 +21,23 @@
             </div>
         </div>
         <div class="col">
-            <label for="chaos-per-divine">Chaos per Divine</label>
+            <label for="chaos-per-currency">@CurrencyName()</label>
             <div class="input-group">
-                <input type="text" pattern="[0-9]+([.][0-9]{1,2}){0,1}?" class="form-control" aria-label="Chaos per Divine" aria-describedby="reset-3" id="chaos-per-divine" value="@DivineValueString()" @onchange="UpdateChaosPerDivineChanged">
-                <button class="btn btn-primary btn-addon" type="button" id="reset-3" onclick="@ResetDivineValue">
+                <input type="text" pattern="[0-9]+([.][0-9]{1,2}){0,1}?" class="form-control" aria-label="Chaos per Currency" aria-describedby="reset-3" id="chaos-per-currency" value="@CurrencyValueString()" @onchange="UpdateCurrencyValueChanged" disabled="@IsChaosSelected">
+                <button class="btn btn-primary btn-addon" type="button" id="reset-3" onclick="@ResetCurrencyValue" disabled="@IsChaosSelected">
                     <img src="icons/arrow-rotate-right.svg" alt="" style="width: 1rem"/>
                 </button>
             </div>
         </div>
-        <button class="btn btn-secondary w-25">CORRUPT NOW</button>
+        <div class="col">
+            <label for="currency">Currency</label>
+            <select class="form-select" aria-label="Currency" id="currency" value="@(FilterValues.Currency?.Id ?? "divine-orb")" @onchange="UpdateCurrency">
+                @foreach (var currency in GetAllowedFilterCurrencies())
+                {
+                    <option value="@currency.Id">@currency.Name</option>
+                }
+            </select>
+        </div>
     </div>
     <div class="row collapse mt-2 gx-5" id="collapsable">
         <div class="col">
