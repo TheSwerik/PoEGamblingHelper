@@ -88,7 +88,7 @@ platform:
   arch: arm64
 trigger:
   branch:
-    - release
+    - 10-deployment
 steps:
   - name: build model lib
     image: plugins/docker
@@ -175,7 +175,7 @@ platform:
   arch: arm64
 trigger:
   branch:
-    - release
+    - 10-deployment
 server:
   host: erikpi
   user:
