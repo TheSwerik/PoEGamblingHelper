@@ -19,6 +19,9 @@ public partial class Filter : ComponentBase
 
     private bool FiltersExpanded { get; set; } = false;
 
+    private bool IsChaosSelected =>
+        FilterValues.Currency is not null && FilterValues.Currency.Name.EqualsIgnoreCase("chaos orb");
+
     private async Task SaveFilterValues()
     {
         await FilterValuesChanged.InvokeAsync(FilterValues);
@@ -54,13 +57,8 @@ public partial class Filter : ComponentBase
 
     private string CurrencyName()
     {
-        if (FilterValues.Currency is null || IsChaosSelected()) return "";
+        if (FilterValues.Currency is null || IsChaosSelected) return "";
         return $"Chaos per {FilterValues.Currency.Name}";
-    }
-
-    private bool IsChaosSelected()
-    {
-        return FilterValues.Currency is not null && FilterValues.Currency.Name.EqualsIgnoreCase("chaos orb");
     }
 
     #region Update Callback
