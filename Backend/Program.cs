@@ -4,7 +4,9 @@ using Backend.Service;
 using Microsoft.EntityFrameworkCore;
 using Model;
 
+#if DEBUG
 Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
+#endif
 
 #region Builder
 
