@@ -80,12 +80,21 @@
         <div class="col input-group flex-column">
             <div class="d-flex flex-column w-100">
                 <label for="gem-type">Gem Type</label>
-                <select class="form-select" aria-label="Gem Type" id="gem-type" value="@FilterValues.GemType" @onchange="UpdateGemType">
-                    @foreach (var gemType in GemTypes())
-                    {
-                        <option value="@gemType">@gemType.ToPrettyString()</option>
-                    }
-                </select>
+                <div class="dropdown w-100">
+                    <button class="btn btn-primary dropdown-toggle w-100 d-flex justify-content-between align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="gem-type">
+                        @FilterValues.GemType.ToPrettyString()
+                    </button>
+                    <ul class="dropdown-menu">
+                        @foreach (var gemType in GemTypes())
+                        {
+                            <li>
+                                <a class="dropdown-item" href="#" @onclick="() => UpdateGemType(gemType)">
+                                    @gemType.ToPrettyString()
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
             </div>
             <div class="form-check w-100 mt-2 ps-0">
                 <input class="form-check-input" type="checkbox" id="onlyProfitable" value="@FilterValues.OnlyShowProfitable" @onchange="UpdateOnlyShowProfitable">
@@ -96,12 +105,21 @@
         </div>
         <div class="col input-group d-flex flex-column">
             <label for="sorting">Sorting</label>
-            <select class="form-select w-100 h-50" aria-label="Sort" id="sorting" value="@FilterValues.Sort" @onchange="UpdateSort">
-                @foreach (var sort in Sorts())
-                {
-                    <option value="@sort">@sort.ToPrettyString()</option>
-                }
-            </select>
+            <div class="dropdown w-100">
+                <button class="btn btn-primary dropdown-toggle w-100 d-flex justify-content-between align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="sorting">
+                    @FilterValues.Sort.ToPrettyString()
+                </button>
+                <ul class="dropdown-menu">
+                    @foreach (var sort in Sorts())
+                    {
+                        <li>
+                            <a class="dropdown-item" href="#" @onclick="() => UpdateSort(sort)">
+                                @sort.ToPrettyString()
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
         </div>
     </div>
     <div class="row mt-3 mb-3 pointer" onclick="@ToggleFilters" data-bs-toggle="collapse" data-bs-target="#collapsable" aria-expanded="false" aria-controls="collapsable">

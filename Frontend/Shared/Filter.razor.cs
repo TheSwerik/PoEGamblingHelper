@@ -98,10 +98,9 @@ public partial class Filter : ComponentBase
         await SaveFilterValues();
     }
 
-    private async Task UpdateGemType(ChangeEventArgs args)
+    private async Task UpdateGemType(GemType gemType)
     {
-        if (args.Value is null || !Enum.TryParse<GemType>(args.Value.ToString(), out var value)) return;
-        FilterValues.GemType = value;
+        FilterValues.GemType = gemType;
         await SaveFilterValues();
     }
 
@@ -121,10 +120,9 @@ public partial class Filter : ComponentBase
         await SaveFilterValues();
     }
 
-    private async Task UpdateSort(ChangeEventArgs args)
+    private async Task UpdateSort(Sort sort)
     {
-        if (args.Value is null || !Enum.TryParse<Sort>(args.Value.ToString(), out var value)) return;
-        FilterValues.Sort = value;
+        FilterValues.Sort = sort;
         await SaveFilterValues();
     }
 
