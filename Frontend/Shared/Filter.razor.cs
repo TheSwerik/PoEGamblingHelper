@@ -8,7 +8,7 @@ namespace PoEGamblingHelper3.Shared;
 public partial class Filter : ComponentBase
 {
     private readonly string[] _allowedFilterCurrencies =
-        { "mirror of kalandra", "mirror shard", "chaos orb", "divine orb" };
+        { "mirror-of-kalandra", "mirror-shard", "chaos-orb", "divine-orb" };
 
     [Parameter] public TempleCost TempleCost { get; set; } = null!;
     [Parameter] public FilterValues FilterValues { get; set; } = null!;
@@ -51,7 +51,7 @@ public partial class Filter : ComponentBase
 
     private IEnumerable<Currency> GetAllowedFilterCurrencies()
     {
-        return Currency.Where(currency => _allowedFilterCurrencies.Contains(currency.Name.ToLowerInvariant()))
+        return Currency.Where(currency => _allowedFilterCurrencies.Contains(currency.Id))
                        .OrderBy(currency => currency.ChaosEquivalent);
     }
 
@@ -105,10 +105,9 @@ public partial class Filter : ComponentBase
         await SaveFilterValues();
     }
 
-    private async Task UpdateCurrency(ChangeEventArgs args)
+    private async Task UpdateCurrency(string id)
     {
-        if (args.Value is null) return;
-        var currency = Currency.FirstOrDefault(currency => currency.Id.Equals(args.Value));
+        var currency = Currency.FirstOrDefault(currency => currency.Id.Equals(id));
         if (currency is null) return;
         FilterValues.Currency = currency;
         FilterValues.CurrencyValue = currency.ChaosEquivalent;

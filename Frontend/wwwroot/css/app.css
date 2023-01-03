@@ -57,6 +57,12 @@ input[type=number] {
 
 /*region CUSTOM STYLES*/
 
+.icon {
+    width: 3rem;
+    height: 3rem;
+    margin-right: 1rem;
+}
+
 .container {
     max-width: 93rem;
 }
@@ -155,6 +161,7 @@ label {
 }
 
 .btn:hover, .btn:focus, .btn:active {
+    color: var(--bs-btn-color) !important;
     background-color: var(--bs-btn-bg) !important;
     filter: brightness(80%) !important;
     box-shadow: none !important;
@@ -235,7 +242,7 @@ label {
     z-index: 95 !important;
 }
 
-input, select {
+input, select, .dropdown-toggle {
     background-color: var(--bs-primary) !important;
     border-radius: 10px 0 !important;
     border: none !important;
@@ -245,9 +252,31 @@ input, select {
     padding-right: 1.5rem !important;
 }
 
+.dropdown-toggle {
+    font-size: 1rem;
+    font-weight: normal;
+}
+
+.dropdown-toggle img, .dropdown-item img {
+    height: 1.75rem;
+}
+
+.dropdown-menu, .dropdown-menu li, .dropdown-item {
+    width: 100%;
+    background-color: var(--bs-primary) !important;
+    border: none !important;
+    height: 2.2rem;
+    max-height: 2.2rem;
+    font-size: 1rem;
+    font-weight: normal;
+}
+
 input:hover, input:focus, input:active,
+.dropdown-toggle:hover, .dropdown-toggle:focus, .dropdown-toggle:active,
+.dropdown-item:hover, .dropdown-item:focus, .dropdown-item:active,
 option:hover, option:focus, option:active, option:checked,
 select:hover, select:focus, select:active {
+    color: var(--bs-btn-color) !important;
     background-color: var(--bs-primary) !important;
     filter: brightness(90%) !important;
     box-shadow: none !important;
