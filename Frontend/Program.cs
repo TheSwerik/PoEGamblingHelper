@@ -14,7 +14,11 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-builder.Services.AddScoped(_ => new HttpClient { BaseAddress = new Uri(builder.Configuration["BackendUrl"]!) });
+builder.Services.AddScoped(_ => new HttpClient
+                                {
+                                    BaseAddress = new Uri(builder.Configuration["BackendUrl"] ??
+                                                          builder.HostEnvironment.BaseAddress + "/api/")
+                                });
 builder.Services.AddScoped<IGemService>(sp => new GemService(sp.GetService<HttpClient>()!));
 builder.Services.AddScoped<ITempleCostService>(sp => new TempleCostService(sp.GetService<HttpClient>()!));
 builder.Services.AddScoped<ICurrencyService>(sp => new CurrencyService(sp.GetService<HttpClient>()!));
