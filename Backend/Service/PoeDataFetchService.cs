@@ -72,7 +72,6 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
 
         public Currency ToCurrencyData()
         {
-            Console.WriteLine(Icon);
             return new Currency
                    {
                        Id = DetailsId,
@@ -268,7 +267,6 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
                 result.CurrencyDetails.FirstOrDefault(
                     details => poeNinjaCurrencyData.Name.EqualsIgnoreCase(details.Name));
             if (details is not null) poeNinjaCurrencyData.Icon = details.Icon;
-            Console.WriteLine(poeNinjaCurrencyData.Icon);
         }
 
 
