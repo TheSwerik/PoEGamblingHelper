@@ -329,40 +329,44 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
 
         #region GemData
 
-        var trackedGemData = _gemDataRepository.GetAll().Select(gem => gem.Name.ToLowerInvariant()).ToArray();
+        var trackedGemData = _gemDataRepository.GetAll().ToArray();
+        var trackedGemDataNames = trackedGemData.Select(gem => gem.Name.ToLowerInvariant().Trim()).ToArray();
         _gemDataRepository.ClearTrackedEntities();
 
         _gemTradeDataRepository.ClearTrackedEntities();
         var allGemTradeData = _gemTradeDataRepository.GetAll().ToArray();
         var groupedPoeNinjaData = result.Lines.GroupBy(poeNinjaGemData => poeNinjaGemData.Name).ToArray();
         var newPoeNinjaGemData = groupedPoeNinjaData
-                                 .Where(group => !trackedGemData.Contains(group.Key.ToLowerInvariant())).ToArray();
+                                 .Where(group => !trackedGemDataNames.Contains(group.Key.ToLowerInvariant().Trim()))
+                                 .ToArray();
         await _gemDataRepository.Save(newPoeNinjaGemData.Select(group => new GemData
                                                                          {
                                                                              Name = group.Key,
                                                                              Icon = group.First().Icon,
                                                                              Gems = allGemTradeData
                                                                                  .Where(tradeData =>
-                                                                                     tradeData.Name.Equals(
-                                                                                         group.Key,
-                                                                                         StringComparison
-                                                                                             .InvariantCultureIgnoreCase))
+                                                                                     tradeData.Name
+                                                                                         .EqualsIgnoreCase(
+                                                                                             group.Key))
                                                                                  .ToList()
                                                                          }));
         Logger.LogInformation("Added {Result} GemData", newPoeNinjaGemData.Length);
         var updatedPoeNinjaGemData = groupedPoeNinjaData
-                                     .Where(group => trackedGemData.Contains(group.Key.ToLowerInvariant())).ToArray();
+                                     .Where(group => trackedGemDataNames.Contains(group.Key.ToLowerInvariant().Trim()))
+                                     .ToArray();
         await _gemDataRepository.Update(updatedPoeNinjaGemData.Select(group => new GemData
                                                                                {
+                                                                                   Id = trackedGemData
+                                                                                       .First(gem => gem.Name
+                                                                                           .EqualsIgnoreCase(
+                                                                                               group.Key)).Id,
                                                                                    Name = group.Key,
                                                                                    Icon = group.First().Icon,
                                                                                    Gems = allGemTradeData
                                                                                        .Where(tradeData =>
                                                                                            tradeData.Name
-                                                                                               .Equals(
-                                                                                                   group.Key,
-                                                                                                   StringComparison
-                                                                                                       .InvariantCultureIgnoreCase))
+                                                                                               .EqualsIgnoreCase(
+                                                                                                   group.Key))
                                                                                        .ToList()
                                                                                }));
         Logger.LogInformation("Updated {Result} GemData", updatedPoeNinjaGemData.Length);
