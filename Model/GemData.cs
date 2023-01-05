@@ -35,9 +35,9 @@ public class GemData : Entity<Guid>
     public decimal AvgProfitPerTry(decimal templeCost)
     {
         return (Profit(templeCost, ResultCase.Worst)
-                + Profit(templeCost, ResultCase.Middle)
+                + 2 * Profit(templeCost, ResultCase.Middle)
                 + Profit(templeCost, ResultCase.Best))
-               / 3;
+               / 4;
     }
 
     private decimal ResultValue(int level)
