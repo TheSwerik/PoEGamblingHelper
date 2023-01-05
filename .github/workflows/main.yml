@@ -18,7 +18,7 @@ jobs:
       run: dotnet test Frontend/Frontend.csproj -c Release  --nologo
         
     - name: Publish .NET Core Project
-      run: dotnet publish Frontend/Frontend.csproj -c Release -o release --nologo
+      run: dotnet publish Frontend/Frontend.csproj -c Debug -o release --nologo
 
     - name: Add .nojekyll file
       run: touch release/wwwroot/.nojekyll
