@@ -1,6 +1,6 @@
-﻿namespace Backend.Model;
+﻿namespace Model;
 
-public class League : Entity
+public class League : Entity<Guid>
 {
     public string Name { get; set; }
     public DateTime StartDate { get; set; }

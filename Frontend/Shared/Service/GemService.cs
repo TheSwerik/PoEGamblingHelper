@@ -1,5 +1,5 @@
 ﻿using System.Net.Http.Json;
-using PoEGamblingHelper3.Shared.Model;
+using Model;
 
 namespace PoEGamblingHelper3.Shared.Service;
 
@@ -9,11 +9,9 @@ public class GemService : IGemService
 
     public GemService(HttpClient httpClient) { _httpClient = httpClient; }
 
-    public async Task<IEnumerable<Gem>> GetAllGems()
+    public async Task<List<GemData>> GetAll()
     {
-        var result = await _httpClient.GetAsync("data");
-        Console.WriteLine(result.Headers.Location);
-        Console.WriteLine(await result.Content.ReadAsStringAsync());
-        return await _httpClient.GetFromJsonAsync<IEnumerable<Gem>>("data") ?? throw new InvalidOperationException();
+        return await _httpClient.GetFromJsonAsync<List<GemData>>("gem") ??
+               throw new InvalidOperationException();
     }
 }

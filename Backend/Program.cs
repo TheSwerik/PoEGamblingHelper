@@ -1,7 +1,12 @@
 global using Backend.Data;
-using Backend.Model;
+using System.Globalization;
 using Backend.Service;
 using Microsoft.EntityFrameworkCore;
+using Model;
+
+#if DEBUG
+Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
+#endif
 
 #region Builder
 
@@ -23,8 +28,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(opt => { opt.UseInMemoryData
 // builder.Services.AddEntityFrameworkNpgsql().AddDbContext<ApplicationDbContext>(
 // opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("MyConnection"))
 // );
-builder.Services.AddScoped<IRepository<GemData>, Repository<GemData>>();
-builder.Services.AddScoped<IRepository<League>, Repository<League>>();
+builder.Services.AddScoped<IRepository<GemData, Guid>, Repository<GemData, Guid>>();
+builder.Services.AddScoped<IRepository<GemTradeData, long>, Repository<GemTradeData, long>>();
+builder.Services.AddScoped<IRepository<Currency, string>, Repository<Currency, string>>();
+builder.Services.AddScoped<IRepository<League, Guid>, Repository<League, Guid>>();
+builder.Services.AddScoped<IRepository<TempleCost, Guid>, Repository<TempleCost, Guid>>();
 
 #endregion
 
@@ -34,6 +42,15 @@ builder.Services.AddSingleton<IPoeDataFetchService, PoeDataFetchService>();
 builder.Services.AddSingleton<IPoeDataService, PoeDataService>();
 
 builder.Services.AddHostedService<InitService>();
+
+builder.Services.AddOutputCache(options =>
+                                {
+                                    options.AddBasePolicy(cacheBuilder => cacheBuilder
+                                                                          .Expire(TimeSpan.FromMinutes(
+                                                                              PoeDataFetchService
+                                                                                  .PoeNinjaFetchMinutes))
+                                                                          .Tag("FetchData"));
+                                });
 
 #endregion
 
@@ -50,12 +67,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
 app.UseHttpsRedirection();
 
 app.UseCors(corsBuilder =>
                 corsBuilder.WithOrigins(app.Configuration["AllowedOrigins"]!).AllowAnyMethod().AllowAnyHeader());
 app.UseAuthorization();
 
+app.UseOutputCache();
 app.MapControllers();
 app.Run();
 

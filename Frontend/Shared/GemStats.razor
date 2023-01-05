@@ -1,32 +1,65 @@
-﻿<div class="card w-100">
-    <div class="card-header d-flex justify-content-between w-100">
-        <h1>GEM_NAME</h1>
-        <button class="btn btn-secondary">Exalted Orb</button>
-    </div>
-    <div class="card-body d-flex">
-        <div class="card-body d-flex flex-column h-100 justify-content-between">
-            <h5 class="card-title">Value</h5>
-            <p class="card-title">Price Raw: 3</p>
-            <p class="card-title">Value Worst Case: 0.2</p>
-            <p class="card-title">Value Middle Case: 1</p>
-            <p class="card-title">Value Best Case: 10</p>
-            <button class="btn btn-primary">+ Value</button>
-            <button class="btn btn-outline-primary">+ Value</button>
-            <button class="btn btn-secondary">1.24</button>
-            <button class="btn btn-outline-secondary">1.24</button>
-        </div>
-        <div class="card-body d-flex flex-column h-100 justify-content-between">
-            <h5 class="card-title">Profit per Try</h5>
-            <p class="card-title">Cost: 3</p>
-            <p class="card-title">Profit Worst Case: -3.8</p>
-            <p class="card-title">Profit Middle Case: -2</p>
-            <p class="card-title">Profit Best Case: 9</p>
-        </div>
-        <div class="card-body d-flex flex-column h-100 justify-content-center">
-            <p class="card-title">Average Profit per try: 1.1654413465463416546</p>
+﻿@using global::Model
+<div class="card mb-5" style="width: 45rem;">
+    <div class="card-body">
+        <h3 class="card-title">
+            <img src="@GemData.Icon" alt="Gem-Icon" class="icon"/>@GemData.Name
+        </h3>
+        <div class="row gy-5">
+            <div class="col">
+                <h5 class="card-title">Value</h5>
+                <p class="card-text">
+                    <a href="@TradeUrl(GemData.RawGem())" target="_blank" rel="noopener noreferrer">Price Raw: @CurrencyValue(GemData.RawCost())</a>
+                </p>
+                <p class="card-text">
+                    <a href="@TradeUrl(GemData.ResultGem(ResultCase.Worst))" target="_blank" rel="noopener noreferrer">Worst Case: @CurrencyValue(GemData.Value(ResultCase.Worst))</a>
+                </p>
+                <p class="card-text">
+                    <a href="@TradeUrl(GemData.ResultGem(ResultCase.Middle))" target="_blank" rel="noopener noreferrer">Middle Case: @CurrencyValue(GemData.Value(ResultCase.Middle))</a>
+                </p>
+                <p class="card-text">
+                    <a href="@TradeUrl(GemData.ResultGem(ResultCase.Best))" target="_blank" rel="noopener noreferrer">Best Case: @CurrencyValue(GemData.Value(ResultCase.Best))</a>
+                </p>
+            </div>
+            <div class="col">
+                <h5 class="card-title">Profit per Try</h5>
+                <p class="card-text">Cost: @CurrencyValue(GemData.CostPerTry(FilterTempleCost()))</p>
+                <p class="card-text">Worst Case: @CurrencyValue(GemData.Profit(FilterTempleCost(), ResultCase.Worst))</p>
+                <p class="card-text">Middle Case: @CurrencyValue(GemData.Profit(FilterTempleCost(), ResultCase.Middle))</p>
+                <p class="card-text">Best Case: @CurrencyValue(GemData.Profit(FilterTempleCost(), ResultCase.Best))</p>
+            </div>
+            <div class="col d-flex">
+                <button class="btn btn-primary align-self-end w-100">+ Value</button>
+            </div>
+            <div class="col d-flex flex-column justify-content-between">
+                <h5 class="card-title">Average Profit per Try</h5>
+                <button class="btn btn-outline-secondary align-self-end w-100">@CurrencyValue(GemData.AvgProfitPerTry(FilterTempleCost()))</button>
+            </div>
         </div>
     </div>
 </div>
 
 @code {
+
+    [Parameter]
+    public GemData GemData { get; set; } = null!;
+
+    [Parameter]
+    public TempleCost TempleCost { get; set; } = null!;
+
+    [Parameter]
+    public FilterValues FilterValues { get; set; } = null!;
+
+    [Parameter]
+    public League CurrentLeague { get; set; } = null!;
+
+    private decimal FilterTempleCost() { return FilterValues.TempleCost ?? TempleCost.AverageChaosValue(); }
+
+    private string TradeUrl(GemTradeData? gemTradeData) { return gemTradeData is null ? "#" : gemTradeData.TradeUrl(CurrentLeague); }
+
+    private string CurrencyValue(decimal chaosValue)
+    {
+        var currencyChaosValue = FilterValues.CurrencyValue;
+        return (chaosValue / currencyChaosValue).Round(2);
+    }
+
 }

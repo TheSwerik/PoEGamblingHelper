@@ -1,15 +1,17 @@
-﻿using Backend.Model;
+﻿using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using Model;
 
 namespace Backend.Data;
 
-public class Repository<T> : IRepository<T> where T : CustomIdEntity
+public class Repository<T, TKey> : IRepository<T, TKey> where T : class, IEntity
 {
     private readonly ApplicationDbContext _applicationDbContext;
     private readonly DbSet<T> _entities;
 
     public Repository(ApplicationDbContext applicationDbContext)
     {
+        if (typeof(TKey) != T.KeyType()) throw new UnreachableException("TKey does not match KeyType of T.");
         _applicationDbContext = applicationDbContext;
         _entities = _applicationDbContext.Set<T>();
     }
@@ -17,7 +19,7 @@ public class Repository<T> : IRepository<T> where T : CustomIdEntity
     public IAsyncEnumerable<T> GetAllAsync() { return _entities.AsAsyncEnumerable(); }
     public IEnumerable<T> GetAll() { return _entities; }
 
-    public IAsyncEnumerable<T> GetAll(Func<DbSet<T>, IAsyncEnumerable<T>> function)
+    public IAsyncEnumerable<T> GetAllAsync(Func<DbSet<T>, IAsyncEnumerable<T>> function)
     {
         return function.Invoke(_entities);
     }
@@ -25,7 +27,7 @@ public class Repository<T> : IRepository<T> where T : CustomIdEntity
     public IEnumerable<T> GetAll(Func<DbSet<T>, IEnumerable<T>> function) { return function.Invoke(_entities); }
     public void ClearTrackedEntities() { _applicationDbContext.ChangeTracker.Clear(); }
 
-    public async Task<T?> Get(Guid id) { return await _entities.FindAsync(id); }
+    public async Task<T?> Get(TKey id) { return await _entities.FindAsync(id); }
     public T? Get(Func<DbSet<T>, T?> function) { return function.Invoke(_entities); }
 
     public async Task<T> Save(T entity)
@@ -54,7 +56,7 @@ public class Repository<T> : IRepository<T> where T : CustomIdEntity
         await _applicationDbContext.SaveChangesAsync();
     }
 
-    public async void Delete(Guid id)
+    public async void Delete(TKey id)
     {
         var entity = await _entities.FindAsync(id);
         if (entity == null) return; // idempotency

@@ -1,23 +1,27 @@
-using Backend.Model;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
+using Microsoft.EntityFrameworkCore;
+using Model;
 
 namespace Backend.Controllers;
 
 [ApiController]
-[Route("data")]
+[Route("[controller]")]
 public class GemController : ControllerBase
 {
-    private readonly IRepository<GemData> _gemRepository;
+    private readonly IRepository<GemData, Guid> _gemDataRepository;
     private readonly ILogger<GemController> _logger;
 
-    public GemController(ILogger<GemController> logger, IRepository<GemData> gemRepository)
+    public GemController(ILogger<GemController> logger, IRepository<GemData, Guid> gemDataRepository)
     {
         _logger = logger;
-        _gemRepository = gemRepository;
+        _gemDataRepository = gemDataRepository;
     }
 
-    [HttpGet] public ActionResult<IAsyncEnumerable<GemData>> GetAllGems() { return Ok(_gemRepository.GetAll()); }
-
-    [HttpPost]
-    public async Task<ActionResult<GemData>> CreateGem(GemData gem) { return Ok(await _gemRepository.Save(gem)); }
+    [HttpGet]
+    [OutputCache(PolicyName = "FetchData")]
+    public ActionResult<IAsyncEnumerable<GemData>> GetAll()
+    {
+        return Ok(_gemDataRepository.GetAllAsync(dbset => dbset.Include(gemData => gemData.Gems).AsAsyncEnumerable()));
+    }
 }
