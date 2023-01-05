@@ -30,18 +30,23 @@ public partial class Filter : ComponentBase
 
     private string TempleCostString()
     {
-        var currencyChaosValue = FilterValues.Currency?.ChaosEquivalent ?? 1;
+        var currencyChaosValue = FilterValues.CurrencyValue ?? FilterValues.Currency?.ChaosEquivalent ?? 1;
         var templeCost = FilterValues.TempleCost ?? TempleCost.AverageChaosValue();
         return ShowDecimal(templeCost / currencyChaosValue);
     }
 
-    private string CurrencyValueString() { return ShowDecimal(FilterValues.CurrencyValue); }
+    private string CurrencyValueString()
+    {
+        return FilterValues.CurrencyValue is null && FilterValues.Currency is not null
+                   ? ShowDecimal(FilterValues.Currency.ChaosEquivalent)
+                   : ShowDecimal(FilterValues.CurrencyValue);
+    }
 
     private void ToggleFilters() { FiltersExpanded = !FiltersExpanded; }
 
-    private string ShowDecimal(decimal value)
+    private string ShowDecimal(decimal? value)
     {
-        return value is decimal.MinValue or decimal.MaxValue ? "" : value.Round(2);
+        return value is null or decimal.MinValue or decimal.MaxValue ? "" : value.Round(2);
     }
 
     private GemType[] GemTypes() { return Enum.GetValues<GemType>(); }
@@ -66,7 +71,8 @@ public partial class Filter : ComponentBase
     private async Task UpdateTempleCost(ChangeEventArgs args)
     {
         if (args.Value is null || !decimal.TryParse(args.Value.ToString(), out var value)) return;
-        FilterValues.TempleCost = value;
+        var currencyChaosValue = FilterValues.Currency?.ChaosEquivalent ?? 1;
+        FilterValues.TempleCost = value * currencyChaosValue;
         await SaveFilterValues();
     }
 
@@ -109,7 +115,7 @@ public partial class Filter : ComponentBase
         var currency = Currency.FirstOrDefault(currency => currency.Id.Equals(id));
         if (currency is null) return;
         FilterValues.Currency = currency;
-        FilterValues.CurrencyValue = currency.ChaosEquivalent;
+        FilterValues.CurrencyValue = null;
         await SaveFilterValues();
     }
 
@@ -138,7 +144,7 @@ public partial class Filter : ComponentBase
 
     private async void ResetCurrencyValue()
     {
-        FilterValues.CurrencyValue = FilterValues.Currency?.ChaosEquivalent ?? 1;
+        FilterValues.CurrencyValue = null;
         await SaveFilterValues();
     }
 
@@ -150,8 +156,8 @@ public partial class Filter : ComponentBase
 
     private async void ResetCostFilter()
     {
-        FilterValues.PricePerTryFrom = decimal.MinValue;
-        FilterValues.PricePerTryTo = decimal.MaxValue;
+        FilterValues.PricePerTryFrom = null;
+        FilterValues.PricePerTryTo = null;
         await SaveFilterValues();
     }
 

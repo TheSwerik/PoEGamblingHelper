@@ -20,8 +20,8 @@ public class GemData : Entity<Guid>
 
     public decimal RawCost()
     {
-        return Gems.Where(gem => gem.GemLevel == MaxLevel() && !gem.Corrupted).MinBy(gem => gem.GemQuality)
-                   ?.ChaosValue ?? 0m;
+        return Gems.Where(gem => gem.GemLevel == MaxLevel() && !gem.Corrupted)
+                   .MinBy(gem => gem.GemQuality)?.ChaosValue ?? 0m;
     }
 
     public decimal Value(ResultCase resultCase) { return ResultValue(MaxLevel() + resultCase.LevelModifier()); }

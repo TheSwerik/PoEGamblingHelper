@@ -58,7 +58,7 @@
 
     private string CurrencyValue(decimal chaosValue)
     {
-        var currencyChaosValue = FilterValues.CurrencyValue;
+        var currencyChaosValue = FilterValues.CurrencyValue ?? FilterValues.Currency?.ChaosEquivalent ?? 1;
         return (chaosValue / currencyChaosValue).Round(2);
     }
 

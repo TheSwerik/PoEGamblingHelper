@@ -63,7 +63,8 @@ public partial class GamblingHelper : IDisposable
         _currency = await CurrencyService.GetAll();
         _filterValues.Currency = _filterValues.Currency is null
                                      ? _currency.First(c => c.Name.Equals("Divine Orb"))
-                                     : _currency.First(c => c.Id.Equals(_filterValues.Currency.Id));
+                                     : _currency.FirstOrDefault(c => c.Id.Equals(_filterValues.Currency.Id));
+        _filterValues.Currency ??= _currency.First(c => c.Name.Equals("Divine Orb"));
         _templeCost = await TempleCostService.Get();
         _currentLeague = await LeagueService.GetCurrent();
         _gems = await GemService.GetAll();
@@ -76,21 +77,23 @@ public partial class GamblingHelper : IDisposable
 
     public IEnumerable<GemData> FilteredGems()
     {
-        var avgTempleCost = _filterValues.TempleCost ?? _templeCost.AverageChaosValue();
+        var templeCost = _filterValues.TempleCost ?? _templeCost.AverageChaosValue();
         return _gems
                .Where(gemData => gemData.Name.Contains(_filterValues.Gem, StringComparison.InvariantCultureIgnoreCase)
-                                 && gemData.CostPerTry(avgTempleCost) >= _filterValues.PricePerTryFrom
-                                 && gemData.CostPerTry(avgTempleCost) <= _filterValues.PricePerTryTo
+                                 && (_filterValues.PricePerTryFrom is null
+                                     || gemData.CostPerTry(templeCost) >= _filterValues.PricePerTryFrom)
+                                 && (_filterValues.PricePerTryTo is null
+                                     || gemData.CostPerTry(templeCost) <= _filterValues.PricePerTryTo)
                                  && gemData.ConformsToGemType(_filterValues.GemType)
-                                 && (!_filterValues.OnlyShowProfitable || gemData.AvgProfitPerTry(avgTempleCost) > 0))
+                                 && (!_filterValues.OnlyShowProfitable || gemData.AvgProfitPerTry(templeCost) > 0))
                .OrderBy(gemData => _filterValues.Sort switch
                                    {
-                                       Sort.CostPerTryAsc => gemData.CostPerTry(avgTempleCost),
-                                       Sort.CostPerTryDesc => -gemData.CostPerTry(avgTempleCost),
-                                       Sort.AverageProfitPerTryAsc => gemData.AvgProfitPerTry(avgTempleCost),
-                                       Sort.AverageProfitPerTryDesc => -gemData.AvgProfitPerTry(avgTempleCost),
-                                       Sort.MaxProfitPerTryAsc => -gemData.Profit(avgTempleCost, ResultCase.Best),
-                                       Sort.MaxProfitPerTryDesc => -gemData.Profit(avgTempleCost, ResultCase.Best),
+                                       Sort.CostPerTryAsc => gemData.CostPerTry(templeCost),
+                                       Sort.CostPerTryDesc => -gemData.CostPerTry(templeCost),
+                                       Sort.AverageProfitPerTryAsc => gemData.AvgProfitPerTry(templeCost),
+                                       Sort.AverageProfitPerTryDesc => -gemData.AvgProfitPerTry(templeCost),
+                                       Sort.MaxProfitPerTryAsc => -gemData.Profit(templeCost, ResultCase.Best),
+                                       Sort.MaxProfitPerTryDesc => -gemData.Profit(templeCost, ResultCase.Best),
                                        _ => throw new UnreachableException("Sort")
                                    })
                .Take(50);

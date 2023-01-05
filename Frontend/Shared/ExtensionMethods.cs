@@ -12,6 +12,12 @@ public static class ExtensionMethods
         return string.Format($"{{0:0.{placeCharacters}}}", value);
     }
 
+    public static string Round(this decimal? value, int places)
+    {
+        var placeCharacters = new string('#', places);
+        return string.Format($"{{0:0.{placeCharacters}}}", value);
+    }
+
     public static string ToPrettyString(this Sort sort)
     {
         return sort switch
