@@ -1,6 +1,7 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
 using Model;
+using Model.QueryParameters;
 using PoEGamblingHelper3.Shared.Model;
 
 namespace PoEGamblingHelper3.Shared;
@@ -24,8 +25,8 @@ public partial class Filter : ComponentBase
 
     private async Task SaveFilterValues()
     {
-        await FilterValuesChanged.InvokeAsync(FilterValues);
-        await LocalStorage.SetItemAsync("Filter", FilterValues);
+        await FilterValuesChanged.InvokeAsync(FilterValues); //TODO create new backendQuery on change
+        await LocalStorage.SetItemAsync("GemDataQuery", FilterValues);
     }
 
     private string TempleCostString()

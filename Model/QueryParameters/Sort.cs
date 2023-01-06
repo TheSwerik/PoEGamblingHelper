@@ -1,4 +1,4 @@
-﻿namespace PoEGamblingHelper3.Shared.Model;
+﻿namespace Model.QueryParameters;
 
 public enum Sort
 {

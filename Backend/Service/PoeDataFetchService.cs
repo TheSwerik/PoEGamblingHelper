@@ -14,7 +14,7 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
     public const int PoeNinjaFetchMinutes = 5;
     private readonly HttpClient _client = new();
     private readonly IRepository<Currency, string> _currencyRepository;
-    private readonly IRepository<GemData, Guid> _gemDataRepository;
+    private readonly IGemDataRepository _gemDataRepository;
     private readonly IRepository<GemTradeData, long> _gemTradeDataRepository;
     private readonly IRepository<League, Guid> _leagueRepository;
     private readonly IPoeDataService _poeDataService;
@@ -170,7 +170,7 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
     public PoeDataFetchService(ILogger<PoeDataFetchService> logger, IServiceScopeFactory factory) : base(
         logger, factory)
     {
-        _gemDataRepository = Scope.ServiceProvider.GetRequiredService<IRepository<GemData, Guid>>();
+        _gemDataRepository = Scope.ServiceProvider.GetRequiredService<IGemDataRepository>();
         _gemTradeDataRepository = Scope.ServiceProvider.GetRequiredService<IRepository<GemTradeData, long>>();
         _currencyRepository = Scope.ServiceProvider.GetRequiredService<IRepository<Currency, string>>();
         _leagueRepository = Scope.ServiceProvider.GetRequiredService<IRepository<League, Guid>>();

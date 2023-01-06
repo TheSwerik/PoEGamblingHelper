@@ -1,4 +1,5 @@
 ﻿using Model;
+using Model.QueryParameters;
 
 namespace PoEGamblingHelper3.Shared.Model;
 
@@ -13,4 +14,17 @@ public class FilterValues
     public decimal? CurrencyValue { get; set; } = null;
     public decimal? TempleCost { get; set; } = null;
     public Currency? Currency { get; set; } = null;
+
+    public GemDataQuery ToQuery()
+    {
+        return new GemDataQuery
+               {
+                   SearchText = Gem,
+                   Sort = Sort,
+                   GemType = GemType,
+                   OnlyShowProfitable = OnlyShowProfitable,
+                   PricePerTryFrom = PricePerTryFrom,
+                   PricePerTryTo = PricePerTryTo
+               };
+    }
 }

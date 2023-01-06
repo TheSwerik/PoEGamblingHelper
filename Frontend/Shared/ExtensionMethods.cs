@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
-using Model;
-using PoEGamblingHelper3.Shared.Model;
+using Model.QueryParameters;
 
 namespace PoEGamblingHelper3.Shared;
 
@@ -42,18 +41,6 @@ public static class ExtensionMethods
                    GemType.Skill => "Skill Gem",
                    GemType.RegularSupport => "Regular Support Gem",
                    _ => throw new UnreachableException(nameof(GemType))
-               };
-    }
-
-    public static bool ConformsToGemType(this GemData gemData, GemType gemType)
-    {
-        return gemType switch
-               {
-                   GemType.Awakened => gemData.Name.StartsWith("Awakened"),
-                   GemType.Exceptional => gemData.IsExceptional(),
-                   GemType.Skill => !gemData.Name.Contains("Support"),
-                   GemType.RegularSupport => gemData.Name.Contains("Support"),
-                   _ => true
                };
     }
 }

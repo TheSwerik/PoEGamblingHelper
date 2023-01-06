@@ -9,7 +9,7 @@
     <Filter TempleCost="_templeCost" @bind-FilterValues="_filterValues" CurrentLeague="_currentLeague" Currency="_currency"/>
 
     <div class="container d-flex flex-wrap p-0 justify-content-between">
-        @foreach (var gem in FilteredGems())
+        @foreach (var gem in _gems)
         {
             <GemStats GemData="gem" TempleCost="_templeCost" FilterValues="_filterValues" CurrentLeague="_currentLeague"/>
         }

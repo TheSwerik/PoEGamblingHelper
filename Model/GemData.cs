@@ -1,4 +1,6 @@
-﻿namespace Model;
+﻿using Model.QueryParameters;
+
+namespace Model;
 
 public class GemData : Entity<Guid>
 {
@@ -25,18 +27,18 @@ public class GemData : Entity<Guid>
     }
 
     public decimal Value(ResultCase resultCase) { return ResultValue(MaxLevel() + resultCase.LevelModifier()); }
-    public decimal CostPerTry(decimal templeCost) { return RawCost() + templeCost; }
+    public decimal CostPerTry(decimal templeCost = 0) { return RawCost() + templeCost; }
 
-    public decimal Profit(decimal templeCost, ResultCase resultCase)
+    public decimal Profit(ResultCase resultCase, decimal templeCost = 0)
     {
         return Value(resultCase) - CostPerTry(templeCost);
     }
 
-    public decimal AvgProfitPerTry(decimal templeCost)
+    public decimal AvgProfitPerTry(decimal templeCost = 0)
     {
-        return (Profit(templeCost, ResultCase.Worst)
-                + 2 * Profit(templeCost, ResultCase.Middle)
-                + Profit(templeCost, ResultCase.Best))
+        return (Profit(ResultCase.Worst, templeCost)
+                + 2 * Profit(ResultCase.Middle, templeCost)
+                + Profit(ResultCase.Best, templeCost))
                / 4;
     }
 
@@ -47,6 +49,7 @@ public class GemData : Entity<Guid>
 
     public bool IsExceptional()
     {
+        // Console.WriteLine(Name + " "+ Name.Contains("Enhance"));
         return Name.Contains("Enhance") || Name.Contains("Empower") || Name.Contains("Enlighten");
     }
 
@@ -58,5 +61,17 @@ public class GemData : Entity<Guid>
     public GemTradeData? RawGem()
     {
         return Gems.Where(gem => gem.GemLevel == MaxLevel() && !gem.Corrupted).MinBy(gem => gem.ChaosValue);
+    }
+
+    public bool ConformsToGemType(GemType gemType)
+    {
+        return gemType switch
+               {
+                   GemType.Awakened => Name.StartsWith("Awakened"),
+                   GemType.Exceptional => IsExceptional(),
+                   GemType.Skill => !Name.Contains("Support"),
+                   GemType.RegularSupport => Name.Contains("Support"),
+                   _ => true
+               };
     }
 }

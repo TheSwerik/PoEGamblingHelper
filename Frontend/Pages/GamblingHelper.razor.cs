@@ -1,8 +1,7 @@
-﻿using System.Diagnostics;
-using Blazored.LocalStorage;
+﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
 using Model;
-using PoEGamblingHelper3.Shared;
+using Model.QueryParameters;
 using PoEGamblingHelper3.Shared.Model;
 using PoEGamblingHelper3.Shared.Service;
 
@@ -38,7 +37,7 @@ public partial class GamblingHelper : IDisposable
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        var filterValues = await LocalStorage.GetItemAsync<FilterValues>("Filter");
+        var filterValues = await LocalStorage.GetItemAsync<FilterValues>("GemDataQuery");
         if (filterValues is not null) _filterValues = filterValues;
         _loadGamblingDataTask = Task.Run(async () =>
                                          {
@@ -67,35 +66,11 @@ public partial class GamblingHelper : IDisposable
         _filterValues.Currency ??= _currency.First(c => c.Name.Equals("Divine Orb"));
         _templeCost = await TempleCostService.Get();
         _currentLeague = await LeagueService.GetCurrent();
-        _gems = await GemService.GetAll(new Page { PageSize = 20 });
+        _gems = await GemService.GetAll(new Page { PageSize = 20 }, _filterValues.ToQuery());
         _lastBackendUpdate = DateTime.Now;
 
         await InvokeAsync(StateHasChanged);
         _isUpdating = false;
         Console.WriteLine("Loaded new Data");
-    }
-
-    public IEnumerable<GemData> FilteredGems()
-    {
-        var templeCost = _filterValues.TempleCost ?? _templeCost.AverageChaosValue();
-        return _gems
-               .Where(gemData => gemData.Name.Contains(_filterValues.Gem, StringComparison.InvariantCultureIgnoreCase)
-                                 && (_filterValues.PricePerTryFrom is null
-                                     || gemData.CostPerTry(templeCost) >= _filterValues.PricePerTryFrom)
-                                 && (_filterValues.PricePerTryTo is null
-                                     || gemData.CostPerTry(templeCost) <= _filterValues.PricePerTryTo)
-                                 && gemData.ConformsToGemType(_filterValues.GemType)
-                                 && (!_filterValues.OnlyShowProfitable || gemData.AvgProfitPerTry(templeCost) > 0))
-               .OrderBy(gemData => _filterValues.Sort switch
-                                   {
-                                       Sort.CostPerTryAsc => gemData.CostPerTry(templeCost),
-                                       Sort.CostPerTryDesc => -gemData.CostPerTry(templeCost),
-                                       Sort.AverageProfitPerTryAsc => gemData.AvgProfitPerTry(templeCost),
-                                       Sort.AverageProfitPerTryDesc => -gemData.AvgProfitPerTry(templeCost),
-                                       Sort.MaxProfitPerTryAsc => -gemData.Profit(templeCost, ResultCase.Best),
-                                       Sort.MaxProfitPerTryDesc => -gemData.Profit(templeCost, ResultCase.Best),
-                                       _ => throw new UnreachableException("Sort")
-                                   })
-               .Take(50);
     }
 }
