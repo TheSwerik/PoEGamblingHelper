@@ -15,7 +15,8 @@ public interface IRepository<T, TKey> where T : class, IEntity //TODO fix this s
     Task Update(IEnumerable<T> entity);
     void Delete(TKey id);
     void SaveChanges();
-    IAsyncEnumerable<T> GetAllAsync(Func<DbSet<T>, IAsyncEnumerable<T>> function);
+    IAsyncEnumerable<T> GetAllAsync(Func<DbSet<T>, IQueryable<T>> function);
+    IAsyncEnumerable<T> GetAllAsync(Page? page, Func<DbSet<T>, IQueryable<T>> function);
     IEnumerable<T> GetAll(Func<DbSet<T>, IEnumerable<T>> function);
     void ClearTrackedEntities();
 }

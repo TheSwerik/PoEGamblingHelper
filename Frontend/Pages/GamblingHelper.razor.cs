@@ -67,7 +67,7 @@ public partial class GamblingHelper : IDisposable
         _filterValues.Currency ??= _currency.First(c => c.Name.Equals("Divine Orb"));
         _templeCost = await TempleCostService.Get();
         _currentLeague = await LeagueService.GetCurrent();
-        _gems = await GemService.GetAll();
+        _gems = await GemService.GetAll(new Page { PageSize = 20 });
         _lastBackendUpdate = DateTime.Now;
 
         await InvokeAsync(StateHasChanged);

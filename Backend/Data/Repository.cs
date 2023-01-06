@@ -19,9 +19,17 @@ public class Repository<T, TKey> : IRepository<T, TKey> where T : class, IEntity
     public IAsyncEnumerable<T> GetAllAsync() { return _entities.AsAsyncEnumerable(); }
     public IEnumerable<T> GetAll() { return _entities; }
 
-    public IAsyncEnumerable<T> GetAllAsync(Func<DbSet<T>, IAsyncEnumerable<T>> function)
+    public IAsyncEnumerable<T> GetAllAsync(Func<DbSet<T>, IQueryable<T>> function)
     {
-        return function.Invoke(_entities);
+        return function.Invoke(_entities).AsAsyncEnumerable();
+    }
+
+    public IAsyncEnumerable<T> GetAllAsync(Page? page, Func<DbSet<T>, IQueryable<T>> function)
+    {
+        if (page is null) return GetAllAsync(function);
+        var pageSize = page.PageSize ?? 0;
+        var takeSize = page.PageSize ?? int.MaxValue;
+        return function.Invoke(_entities).Skip(pageSize * page.PageNumber).Take(takeSize).AsAsyncEnumerable();
     }
 
     public IEnumerable<T> GetAll(Func<DbSet<T>, IEnumerable<T>> function) { return function.Invoke(_entities); }

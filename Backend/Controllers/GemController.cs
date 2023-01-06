@@ -20,8 +20,8 @@ public class GemController : ControllerBase
 
     [HttpGet]
     [OutputCache(PolicyName = "FetchData")]
-    public ActionResult<IAsyncEnumerable<GemData>> GetAll()
+    public ActionResult<IAsyncEnumerable<GemData>> GetAll([FromQuery] Page? page)
     {
-        return Ok(_gemDataRepository.GetAllAsync(dbset => dbset.Include(gemData => gemData.Gems).AsAsyncEnumerable()));
+        return Ok(_gemDataRepository.GetAllAsync(page, dbset => dbset.Include(gemData => gemData.Gems)));
     }
 }
