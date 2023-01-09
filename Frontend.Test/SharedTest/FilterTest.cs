@@ -29,7 +29,7 @@ public class FilterTest
     {
         #region Setup
 
-        // var filter = new Filter { LastPoeNinjaUpdate = DateTime.Now.AddMinutes(-5) };
+        // var filter = new GemDataQuery { LastPoeNinjaUpdate = DateTime.Now.AddMinutes(-5) };
 
         // var prop = filter.GetType().GetField("LastPoeNinjaUpdate", BindingFlags.NonPublic | BindingFlags.Instance);
         // if (prop is null) throw new Exception("Property not found.");

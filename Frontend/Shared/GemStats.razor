@@ -23,9 +23,9 @@
             <div class="col">
                 <h5 class="card-title">Profit per Try</h5>
                 <p class="card-text">Cost: @CurrencyValue(GemData.CostPerTry(FilterTempleCost()))</p>
-                <p class="card-text">Worst Case: @CurrencyValue(GemData.Profit(FilterTempleCost(), ResultCase.Worst))</p>
-                <p class="card-text">Middle Case: @CurrencyValue(GemData.Profit(FilterTempleCost(), ResultCase.Middle))</p>
-                <p class="card-text">Best Case: @CurrencyValue(GemData.Profit(FilterTempleCost(), ResultCase.Best))</p>
+                <p class="card-text">Worst Case: @CurrencyValue(GemData.Profit(ResultCase.Worst, FilterTempleCost()))</p>
+                <p class="card-text">Middle Case: @CurrencyValue(GemData.Profit(ResultCase.Middle, FilterTempleCost()))</p>
+                <p class="card-text">Best Case: @CurrencyValue(GemData.Profit(ResultCase.Best, FilterTempleCost()))</p>
             </div>
             <div class="col d-flex">
                 <button class="btn btn-primary align-self-end w-100">+ Value</button>

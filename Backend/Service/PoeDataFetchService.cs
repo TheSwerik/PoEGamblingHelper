@@ -14,7 +14,7 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
     public const int PoeNinjaFetchMinutes = 5;
     private readonly HttpClient _client = new();
     private readonly IRepository<Currency, string> _currencyRepository;
-    private readonly IRepository<GemData, Guid> _gemDataRepository;
+    private readonly IGemDataRepository _gemDataRepository;
     private readonly IRepository<GemTradeData, long> _gemTradeDataRepository;
     private readonly IRepository<League, Guid> _leagueRepository;
     private readonly IPoeDataService _poeDataService;
@@ -170,7 +170,7 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
     public PoeDataFetchService(ILogger<PoeDataFetchService> logger, IServiceScopeFactory factory) : base(
         logger, factory)
     {
-        _gemDataRepository = Scope.ServiceProvider.GetRequiredService<IRepository<GemData, Guid>>();
+        _gemDataRepository = Scope.ServiceProvider.GetRequiredService<IGemDataRepository>();
         _gemTradeDataRepository = Scope.ServiceProvider.GetRequiredService<IRepository<GemTradeData, long>>();
         _currencyRepository = Scope.ServiceProvider.GetRequiredService<IRepository<Currency, string>>();
         _leagueRepository = Scope.ServiceProvider.GetRequiredService<IRepository<League, Guid>>();
@@ -254,7 +254,9 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
         await GetGemPriceData(currentLeague);
     }
 
-    public async Task GetCurrencyData(League league)
+    #region GetPriceData
+
+    private async Task GetCurrencyData(League league)
     {
         const string currencyUrl = PoeToolUrls.PoeNinjaUrl + "/currencyoverview?type=Currency";
         var result = await _client.GetFromJsonAsync<CurrencyPriceData>(currencyUrl + $"&league={league.Name}");
@@ -304,7 +306,7 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
         #endregion
     }
 
-    public async Task GetGemPriceData(League league)
+    private async Task GetGemPriceData(League league)
     {
         const string gemUrl = PoeToolUrls.PoeNinjaUrl + "/itemoverview?type=SkillGem";
         var result = await _client.GetFromJsonAsync<GemPriceData>(gemUrl + $"&league={league.Name}");
@@ -418,12 +420,17 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
                                                                       _currencyRepository))
                                                       .ToArray()
                          };
-        foreach (var id in _templeCostRepository.GetAll().Select(temple => temple.Id)) _templeCostRepository.Delete(id);
+
+        var existingTemples = _templeCostRepository.GetAll().Select(temple => temple.Id).ToArray();
+        _templeCostRepository.ClearTrackedEntities();
+        foreach (var id in existingTemples) await _templeCostRepository.Delete(id);
         await _templeCostRepository.Save(templeCost);
         Logger.LogInformation("Saved {PriceLength} TemplePrices", templeCost.ChaosValue.Length);
 
         #endregion
     }
+
+    #endregion
 
     #endregion
 }

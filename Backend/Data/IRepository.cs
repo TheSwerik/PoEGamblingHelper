@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Model;
+using Model.QueryParameters;
 
 namespace Backend.Data;
 
@@ -13,9 +14,11 @@ public interface IRepository<T, TKey> where T : class, IEntity //TODO fix this s
     Task Save(IEnumerable<T> entity);
     Task<T> Update(T entity);
     Task Update(IEnumerable<T> entity);
-    void Delete(TKey id);
+    Task Delete(TKey id);
     void SaveChanges();
-    IAsyncEnumerable<T> GetAllAsync(Func<DbSet<T>, IAsyncEnumerable<T>> function);
     IEnumerable<T> GetAll(Func<DbSet<T>, IEnumerable<T>> function);
+    IEnumerable<T> GetAll(Page? page, Func<DbSet<T>, IEnumerable<T>> function);
+    IAsyncEnumerable<T> GetAllAsync(Func<DbSet<T>, IQueryable<T>> function);
+    IAsyncEnumerable<T> GetAllAsync(Page? page, Func<DbSet<T>, IQueryable<T>> function);
     void ClearTrackedEntities();
 }

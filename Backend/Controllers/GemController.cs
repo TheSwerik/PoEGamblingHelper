@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
-using Microsoft.EntityFrameworkCore;
 using Model;
+using Model.QueryParameters;
 
 namespace Backend.Controllers;
 
@@ -9,10 +9,10 @@ namespace Backend.Controllers;
 [Route("[controller]")]
 public class GemController : ControllerBase
 {
-    private readonly IRepository<GemData, Guid> _gemDataRepository;
+    private readonly IGemDataRepository _gemDataRepository;
     private readonly ILogger<GemController> _logger;
 
-    public GemController(ILogger<GemController> logger, IRepository<GemData, Guid> gemDataRepository)
+    public GemController(ILogger<GemController> logger, IGemDataRepository gemDataRepository)
     {
         _logger = logger;
         _gemDataRepository = gemDataRepository;
@@ -20,8 +20,8 @@ public class GemController : ControllerBase
 
     [HttpGet]
     [OutputCache(PolicyName = "FetchData")]
-    public ActionResult<IAsyncEnumerable<GemData>> GetAll()
+    public ActionResult<IEnumerable<GemData>> GetAll([FromQuery] GemDataQuery? query, [FromQuery] Page? page)
     {
-        return Ok(_gemDataRepository.GetAllAsync(dbset => dbset.Include(gemData => gemData.Gems).AsAsyncEnumerable()));
+        return Ok(_gemDataRepository.GetAll(query, page));
     }
 }

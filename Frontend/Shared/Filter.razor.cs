@@ -1,6 +1,7 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
 using Model;
+using Model.QueryParameters;
 using PoEGamblingHelper3.Shared.Model;
 
 namespace PoEGamblingHelper3.Shared;
@@ -12,7 +13,7 @@ public partial class Filter : ComponentBase
 
     [Parameter] public TempleCost TempleCost { get; set; } = null!;
     [Parameter] public FilterValues FilterValues { get; set; } = null!;
-    [Parameter] public EventCallback<FilterValues> FilterValuesChanged { get; set; }
+    [Parameter] public EventCallback<FilterValues> OnFilterValuesChanged { get; set; }
     [Parameter] public League CurrentLeague { get; set; } = null!;
     [Parameter] public List<Currency> Currency { get; set; } = new();
     [Inject] private ILocalStorageService LocalStorage { get; set; } = default!;
@@ -24,8 +25,8 @@ public partial class Filter : ComponentBase
 
     private async Task SaveFilterValues()
     {
-        await FilterValuesChanged.InvokeAsync(FilterValues);
-        await LocalStorage.SetItemAsync("Filter", FilterValues);
+        await OnFilterValuesChanged.InvokeAsync(FilterValues);
+        await LocalStorage.SetItemAsync("GemDataQuery", FilterValues);
     }
 
     private string TempleCostString()

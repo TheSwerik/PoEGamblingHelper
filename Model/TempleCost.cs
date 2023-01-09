@@ -4,7 +4,7 @@ namespace Model;
 
 public partial class TempleCost : Entity<Guid>
 {
-    public DateTime TimeStamp { get; set; } = DateTime.Now;
+    public DateTime TimeStamp { get; set; } = DateTime.Now.ToUniversalTime();
     public decimal[] ChaosValue { get; set; }
     public decimal AverageChaosValue() { return ChaosValue.Average(); }
 
