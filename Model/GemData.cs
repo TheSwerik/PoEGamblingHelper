@@ -49,7 +49,6 @@ public class GemData : Entity<Guid>
 
     public bool IsExceptional()
     {
-        // Console.WriteLine(Name + " "+ Name.Contains("Enhance"));
         return Name.Contains("Enhance") || Name.Contains("Empower") || Name.Contains("Enlighten");
     }
 
