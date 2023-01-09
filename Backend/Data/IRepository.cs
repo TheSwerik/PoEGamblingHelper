@@ -14,7 +14,7 @@ public interface IRepository<T, TKey> where T : class, IEntity //TODO fix this s
     Task Save(IEnumerable<T> entity);
     Task<T> Update(T entity);
     Task Update(IEnumerable<T> entity);
-    void Delete(TKey id);
+    Task Delete(TKey id);
     void SaveChanges();
     IEnumerable<T> GetAll(Func<DbSet<T>, IEnumerable<T>> function);
     IEnumerable<T> GetAll(Page? page, Func<DbSet<T>, IEnumerable<T>> function);

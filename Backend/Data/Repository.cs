@@ -74,7 +74,7 @@ public class Repository<T, TKey> : IRepository<T, TKey> where T : class, IEntity
         await _applicationDbContext.SaveChangesAsync();
     }
 
-    public async void Delete(TKey id)
+    public async Task Delete(TKey id)
     {
         var entity = await Entities.FindAsync(id);
         if (entity == null) return; // idempotency
