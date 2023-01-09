@@ -73,4 +73,10 @@ public partial class GamblingHelper : IDisposable
         _isUpdating = false;
         Console.WriteLine("Loaded new Data");
     }
+
+    private async void OnFilterValuesChanged(FilterValues filterValues)
+    {
+        _filterValues = filterValues;
+        await LoadGamblingData();
+    }
 }

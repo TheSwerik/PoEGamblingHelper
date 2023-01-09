@@ -13,7 +13,7 @@ public partial class Filter : ComponentBase
 
     [Parameter] public TempleCost TempleCost { get; set; } = null!;
     [Parameter] public FilterValues FilterValues { get; set; } = null!;
-    [Parameter] public EventCallback<FilterValues> FilterValuesChanged { get; set; }
+    [Parameter] public EventCallback<FilterValues> OnFilterValuesChanged { get; set; }
     [Parameter] public League CurrentLeague { get; set; } = null!;
     [Parameter] public List<Currency> Currency { get; set; } = new();
     [Inject] private ILocalStorageService LocalStorage { get; set; } = default!;
@@ -25,7 +25,7 @@ public partial class Filter : ComponentBase
 
     private async Task SaveFilterValues()
     {
-        await FilterValuesChanged.InvokeAsync(FilterValues); //TODO create new backendQuery on change
+        await OnFilterValuesChanged.InvokeAsync(FilterValues);
         await LocalStorage.SetItemAsync("GemDataQuery", FilterValues);
     }
 
