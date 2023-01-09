@@ -1,6 +1,4 @@
-﻿using Model.QueryParameters;
-
-namespace Model;
+﻿namespace Model;
 
 public class GemData : Entity<Guid>
 {
@@ -60,17 +58,5 @@ public class GemData : Entity<Guid>
     public GemTradeData? RawGem()
     {
         return Gems.Where(gem => gem.GemLevel == MaxLevel() && !gem.Corrupted).MinBy(gem => gem.ChaosValue);
-    }
-
-    public bool ConformsToGemType(GemType gemType)
-    {
-        return gemType switch
-               {
-                   GemType.Awakened => Name.StartsWith("Awakened"),
-                   GemType.Exceptional => IsExceptional(),
-                   GemType.Skill => !Name.Contains("Support"),
-                   GemType.RegularSupport => Name.Contains("Support"),
-                   _ => true
-               };
     }
 }
