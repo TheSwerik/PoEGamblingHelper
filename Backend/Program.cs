@@ -24,6 +24,11 @@ builder.Logging.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogL
 
 #region Data
 
+Console.WriteLine("Hier: " + string.Join("\t", args));
+Console.WriteLine("Hier: " + builder.Configuration["TEST"]);
+// builder.Services.AddEntityFrameworkNpgsql().AddDbContext<ApplicationDbContext>(
+// opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("DBConnection") +builder.Configuration["POSTGRES_PASSWORD"] )
+// );
 #if DEBUG
 builder.Services.AddDbContext<ApplicationDbContext>(opt => { opt.UseInMemoryDatabase("PoEGamblingHelper"); });
 #elif RELEASE

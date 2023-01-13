@@ -10,6 +10,7 @@ services:
       - default
     environment:
       DOTNET_SYSTEM_GLOBALIZATION_INVARIANT: true
+      TEST: hehehehehehe
     deploy:
       mode: replicated
       replicas: 1
