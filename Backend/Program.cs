@@ -24,10 +24,13 @@ builder.Logging.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogL
 
 #region Data
 
+#if DEBUG
 builder.Services.AddDbContext<ApplicationDbContext>(opt => { opt.UseInMemoryDatabase("PoEGamblingHelper"); });
-// builder.Services.AddEntityFrameworkNpgsql().AddDbContext<ApplicationDbContext>(
-// opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("DBConnection"))
-// );
+#elif RELEASE
+builder.Services.AddEntityFrameworkNpgsql().AddDbContext<ApplicationDbContext>(
+    opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("DBConnection"))
+);
+#endif
 builder.Services.AddScoped<IGemDataRepository, GemDataRepository>();
 builder.Services.AddScoped<IRepository<GemTradeData, long>, Repository<GemTradeData, long>>();
 builder.Services.AddScoped<IRepository<Currency, string>, Repository<Currency, string>>();

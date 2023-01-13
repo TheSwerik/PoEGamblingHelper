@@ -87,7 +87,7 @@ platform:
   arch: arm64
 trigger:
   branch:
-    - release
+    - 19-database
 steps:
   - name: build model lib
     image: plugins/docker
@@ -174,7 +174,7 @@ platform:
   arch: arm64
 trigger:
   branch:
-    - release
+    - 19-database
 server:
   host: erikpi
   user:

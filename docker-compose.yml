@@ -4,10 +4,40 @@ services:
   backend:
     container_name: poegamblinghelper-backend
     image: registry.swerik.dev/poegamblinghelper/backend
+    depends_on:
+      - database
     networks:
       - default
     environment:
       DOTNET_SYSTEM_GLOBALIZATION_INVARIANT: true
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 3
+        window: 5m
+      resources:
+        limits:
+          cpus: '1'
+          memory: '2000M'
+        reservations:
+          cpus: '0.1'
+          memory: '400M'
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '10M'
+        max-file: '10'
+  database:
+    container_name: poegamblinghelper-database
+    image: postgres:15
+    networks:
+      - default
+    environment:
+      POSTGRES_PASSWORD:
+        from_secret: POSTGRES_PASSWORD
     deploy:
       mode: replicated
       replicas: 1
