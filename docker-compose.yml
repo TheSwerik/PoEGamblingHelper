@@ -37,8 +37,7 @@ services:
     networks:
       - default
     environment:
-      POSTGRES_PASSWORD:
-        from_secret: POSTGRES_PASSWORD
+      POSTGRES_PASSWORD: 1
     deploy:
       mode: replicated
       replicas: 1
