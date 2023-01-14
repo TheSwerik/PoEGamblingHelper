@@ -184,9 +184,9 @@ server:
 steps:
   - name: docker login & Deploy
     commands:
+      - echo $POSTGRES_PASSWORD
       - docker --config /home/drone/.docker login localhost:5000 -u $USERNAME -p $PASSWORD
       - docker --config /home/drone/.docker compose up -d --pull always
-      - echo $POSTGRES_PASSWORD
     environment:
       USERNAME:
         from_secret: REGISTRY_USERNAME
