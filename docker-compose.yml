@@ -10,8 +10,7 @@ services:
       - default
     environment:
       DOTNET_SYSTEM_GLOBALIZATION_INVARIANT: true
-      POSTGRES_PASSWORD:
-        from_secret: POSTGRES_PASSWORD
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
     deploy:
       mode: replicated
       replicas: 1
@@ -40,7 +39,7 @@ services:
     networks:
       - default
     environment:
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
     deploy:
       mode: replicated
       replicas: 1
