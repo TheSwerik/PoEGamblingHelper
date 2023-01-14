@@ -24,11 +24,13 @@ builder.Logging.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogL
 
 #region Data
 
+Console.WriteLine(builder.Configuration.GetConnectionString("DBConnection") +
+                  $"Password={builder.Configuration["POSTGRES_PASSWORD"]};");
 #if DEBUG
 builder.Services.AddDbContext<ApplicationDbContext>(opt => { opt.UseInMemoryDatabase("PoEGamblingHelper"); });
 #elif RELEASE
 builder.Services.AddEntityFrameworkNpgsql().AddDbContext<ApplicationDbContext>(
-    opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("DBConnection") + "Password=" + builder.Configuration["POSTGRES_PASSWORD"])
+    opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("DBConnection") + $"Password={builder.Configuration["POSTGRES_PASSWORD"]};")
 );
 #endif
 builder.Services.AddScoped<IGemDataRepository, GemDataRepository>();
