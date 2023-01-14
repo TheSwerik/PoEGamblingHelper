@@ -35,6 +35,8 @@ services:
   database:
     container_name: poegamblinghelper-database
     image: postgres:15
+    volumes:
+      - /etc/databases/poegamblinghelper:/var/lib/postgresql
     networks:
       - default
     environment:

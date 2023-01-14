@@ -28,7 +28,7 @@ builder.Logging.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogL
 builder.Services.AddDbContext<ApplicationDbContext>(opt => { opt.UseInMemoryDatabase("PoEGamblingHelper"); });
 #elif RELEASE
 builder.Services.AddEntityFrameworkNpgsql().AddDbContext<ApplicationDbContext>(
-    opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("DBConnection") + builder.Configuration["POSTGRES_PASSWORD"])
+    opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("DBConnection") + "Password=" + builder.Configuration["POSTGRES_PASSWORD"])
 );
 #endif
 builder.Services.AddScoped<IGemDataRepository, GemDataRepository>();
