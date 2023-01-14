@@ -129,6 +129,8 @@ steps:
       build_args:
         - BUILDKIT_INLINE_CACHE=1
     environment:
+      POSTGRES_PASSWORD:
+        from_secret: POSTGRES_PASSWORD
       DOCKER_BUILDKIT: 1
     depends_on:
       - build model lib
