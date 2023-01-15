@@ -38,8 +38,6 @@ services:
       - /etc/databases/poegamblinghelper:/var/lib/postgresql
     networks:
       - default
-    ports:
-      - 5432:5432
     environment:
       POSTGRES_PASSWORD: $POSTGRES_PASSWORD
     deploy:
