@@ -82,11 +82,13 @@ app.MapControllers();
 
 #region Migration
 
+#if RELEASE
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     if (context.Database.GetPendingMigrations().Any()) context.Database.Migrate();
 }
+#endif
 
 #endregion
 
