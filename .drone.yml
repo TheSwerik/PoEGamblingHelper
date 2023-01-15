@@ -191,3 +191,5 @@ steps:
         from_secret: REGISTRY_USERNAME
       PASSWORD:
         from_secret: REGISTRY_PASSWORD
+      POSTGRES_PASSWORD:
+        from_secret: POSTGRES_PASSWORD
