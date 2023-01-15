@@ -87,7 +87,7 @@ platform:
   arch: arm64
 trigger:
   branch:
-    - release
+    - 33-test-if-docker-build-without-cache-is-faster
 steps:
   - name: build model lib
     image: plugins/docker
@@ -174,7 +174,7 @@ platform:
   arch: arm64
 trigger:
   branch:
-    - release
+    - 33-test-if-docker-build-without-cache-is-faster
 server:
   host: erikpi
   user:
