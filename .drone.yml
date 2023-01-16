@@ -75,7 +75,7 @@ steps:
       - build model lib
 
   - name: parallelism
-    image: scratch
+    image: alpine
     commands:
       - echo finished
     depends_on:
