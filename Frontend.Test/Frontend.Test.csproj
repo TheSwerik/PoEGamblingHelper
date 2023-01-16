@@ -26,4 +26,8 @@
         <ProjectReference Include="..\Frontend\Frontend.csproj"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <Folder Include="SharedTest"/>
+    </ItemGroup>
+
 </Project>
