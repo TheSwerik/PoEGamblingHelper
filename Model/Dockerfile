@@ -3,7 +3,6 @@
 FROM mcr.microsoft.com/dotnet/sdk:7.0 as builder
 WORKDIR /build
 COPY . .
-RUN dotnet restore
 RUN dotnet publish -c Release -o /build/publish
 
 FROM scratch as final
