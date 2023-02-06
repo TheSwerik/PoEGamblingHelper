@@ -196,7 +196,8 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
         var doc = web.Load(PoeToolUrls.PoeDbUrl + "League#LeaguesList");
         if (doc is null) throw new NullReferenceException("PoeDB is down");
 
-        var leaguesTable = doc.DocumentNode.SelectNodes("//table")
+        var leaguesTable = doc.DocumentNode
+                              .SelectNodes("//table")
                               .First(n => n.HasChildNodes && n.InnerHtml.Contains("Weeks"));
         if (leaguesTable is null) throw new NullReferenceException("No tables found");
 
@@ -313,7 +314,6 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
         var result = await _client.GetFromJsonAsync<GemPriceData>(gemUrl + $"&league={league.Name}");
         if (result is null) throw new NullReferenceException();
         Logger.LogInformation("Got data from {Result} gems", result.Lines.Length);
-
 
         #region GemTradeData
 
