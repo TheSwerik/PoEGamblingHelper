@@ -17,9 +17,12 @@ public partial class GemDataRepository : Repository<GemData, Guid>, IGemDataRepo
         var takeSize = page.PageSize ?? int.MaxValue;
         query.PricePerTryFrom ??= decimal.MinValue;
         query.PricePerTryTo ??= decimal.MaxValue;
-
         var allFoundGems = Entities
                            .Where(gemData => EF.Functions.Like(gemData.Name.ToLower(), $"%{query.SearchText}%")
+                                             && (query.ShowAlternateQuality
+                                                 || !(EF.Functions.Like(gemData.Name.ToLower(), "anomalous%")
+                                                      || EF.Functions.Like(gemData.Name.ToLower(), "divergent%")
+                                                      || EF.Functions.Like(gemData.Name.ToLower(), "phantasmal%")))
                                              && ((query.GemType == GemType.Awakened &&
                                                   gemData.Name.StartsWith("Awakened"))
                                                  || (query.GemType == GemType.Exceptional &&
