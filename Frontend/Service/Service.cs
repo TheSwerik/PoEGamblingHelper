@@ -1,6 +1,7 @@
 using System.Net.Http.Json;
 using Blazored.Toast.Services;
 using PoEGamblingHelper3.Service.Util;
+using Shared.Exception;
 
 namespace PoEGamblingHelper3.Service;
 
@@ -37,7 +38,7 @@ public abstract class Service
             if (response.IsSuccessStatusCode) return await response.Content.ReadFromJsonAsync<T>();
 
             var exceptionBody = await response.Content.GetExceptionBody();
-            ToastService.ShowError($"Error: {exceptionBody.Id.ToString()}");
+            ToastService.ShowError($"Error: {exceptionBody.Id.ToIdString()}");
             return default;
         }
         catch (HttpRequestException)

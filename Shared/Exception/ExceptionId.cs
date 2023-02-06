@@ -4,7 +4,7 @@ namespace Shared.Exception;
 
 public static class ExceptionIdExtensions
 {
-    public static string ToString(this ExceptionId exceptionId)
+    public static string ToIdString(this ExceptionId exceptionId)
     {
         return exceptionId switch
                {
