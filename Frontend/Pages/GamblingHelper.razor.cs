@@ -13,6 +13,7 @@ public partial class GamblingHelper : IDisposable
     private List<Currency> _currency = new();
     private League _currentLeague = new();
     private FilterValues _filterValues = new();
+    private bool _firstLoad = true;
     private bool _isUpdating;
     private DateTime _lastBackendUpdate = DateTime.MinValue;
     private Task _loadGamblingDataTask = null!;
@@ -49,37 +50,48 @@ public partial class GamblingHelper : IDisposable
 
     public async Task LoadGamblingData()
     {
-        _isUpdating = true;
-        await InvokeAsync(StateHasChanged);
-
-        var currency = await CurrencyService.GetAll();
-        if (currency is not null) _currency = currency;
-
-        _filterValues.Currency = _filterValues.Currency is null
-                                     ? _currency.First(c => c.Name.Equals("Divine Orb"))
-                                     : _currency.FirstOrDefault(c => c.Id.Equals(_filterValues.Currency.Id));
-        _filterValues.Currency ??= _currency.First(c => c.Name.Equals("Divine Orb"));
-
-
-        var templeCost = await TempleCostService.Get();
-        if (templeCost is not null) _templeCost = templeCost;
-
-        var league = await LeagueService.GetCurrent();
-        if (league is not null) _currentLeague = league;
-
-        var gemPage = _currentGemPage;
-        _isOnLastPage = false;
-        _gems.Clear();
-        for (var i = 0; i <= gemPage; i++)
+        try
         {
-            _currentGemPage = i;
-            await UpdateGems();
+            _isUpdating = true;
+            _firstLoad = false;
+            await InvokeAsync(StateHasChanged);
+
+            var currency = await CurrencyService.GetAll();
+            if (currency is not null) _currency = currency;
+
+            _filterValues.Currency = _filterValues.Currency is null
+                                         ? _currency.First(c => c.Name.Equals("Divine Orb"))
+                                         : _currency.FirstOrDefault(c => c.Id.Equals(_filterValues.Currency.Id));
+            _filterValues.Currency ??= _currency.First(c => c.Name.Equals("Divine Orb"));
+
+
+            var templeCost = await TempleCostService.Get();
+            if (templeCost is not null) _templeCost = templeCost;
+
+            var league = await LeagueService.GetCurrent();
+            if (league is not null) _currentLeague = league;
+
+            var gemPage = _currentGemPage;
+            _isOnLastPage = false;
+            _gems.Clear();
+            for (var i = 0; i <= gemPage; i++)
+            {
+                _currentGemPage = i;
+                await UpdateGems();
+            }
         }
+        catch (HttpRequestException)
+        {
+            _isOnLastPage = true;
+        }
+        finally
+        {
+            _lastBackendUpdate = DateTime.Now;
 
-        _lastBackendUpdate = DateTime.Now;
-
-        _isUpdating = false;
-        await InvokeAsync(StateHasChanged);
+            _isUpdating = false;
+            Console.WriteLine(_isUpdating);
+            await InvokeAsync(StateHasChanged);
+        }
     }
 
     private async void OnFilterValuesChanged(FilterValues filterValues)
