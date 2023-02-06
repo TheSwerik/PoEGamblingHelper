@@ -5,5 +5,5 @@ namespace Backend.Data;
 
 public interface IGemDataRepository : IRepository<GemData, Guid>
 {
-    IEnumerable<GemData> GetAll(GemDataQuery? query, Page? page);
+    Page<GemData> GetAll(GemDataQuery? query, PageRequest page);
 }
