@@ -316,4 +316,26 @@ input:hover, input:focus, input:active,
 
 /*endregion*/
 
+/*region Scrollbar*/
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--bs-primary);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--bs-primary-darker);
+}
+
+/*endregion*/
+
 /*endregion*/
