@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.OutputCaching;
+﻿using Backend.Exceptions;
+using Microsoft.AspNetCore.OutputCaching;
 using Timer = System.Timers.Timer;
 
 namespace Backend.Service;
@@ -23,13 +24,31 @@ public class InitService : IHostedService
     {
         _logger.LogInformation("Start initialization...");
 
-        await _poeDataFetchService.GetCurrentLeague();
+        try
+        {
+            await _poeDataFetchService.GetCurrentLeague();
+        }
+        catch (PoeGamblingHelperException e)
+        {
+            _logger.LogError("{Exception}", e);
+        }
+
         await _poeDataFetchService.GetPriceData();
 
         #region Daily Timer
 
         _dailyTimer = new Timer(TimeSpan.FromDays(1));
-        _dailyTimer.Elapsed += async (_, _) => await _poeDataFetchService.GetCurrentLeague();
+        _dailyTimer.Elapsed += async (_, _) =>
+                               {
+                                   try
+                                   {
+                                       await _poeDataFetchService.GetCurrentLeague();
+                                   }
+                                   catch (PoeGamblingHelperException e)
+                                   {
+                                       _logger.LogError("{Exception}", e);
+                                   }
+                               };
         _dailyTimer.AutoReset = true;
         _dailyTimer.Start();
 

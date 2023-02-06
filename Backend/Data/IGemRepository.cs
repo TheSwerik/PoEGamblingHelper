@@ -1,5 +1,5 @@
-﻿using Model;
-using Model.QueryParameters;
+﻿using Shared.Entity;
+using Shared.QueryParameters;
 
 namespace Backend.Data;
 

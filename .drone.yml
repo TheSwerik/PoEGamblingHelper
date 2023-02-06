@@ -25,13 +25,13 @@ trigger:
   branch:
     - release
 steps:
-  - name: build model lib
+  - name: build shared lib
     image: plugins/docker
     settings:
-      dockerfile: Model/Dockerfile
-      context: Model
+      dockerfile: Shared/Dockerfile
+      context: Shared
       registry: registry.swerik.dev
-      repo: registry.swerik.dev/poegamblinghelper/model
+      repo: registry.swerik.dev/poegamblinghelper/shared
       tags: latest
       username:
         from_secret: REGISTRY_USERNAME
@@ -55,7 +55,7 @@ steps:
     environment:
       DOCKER_BUILDKIT: 1
     depends_on:
-      - build model lib
+      - build shared lib
 
   - name: build frontend
     image: plugins/docker
@@ -72,7 +72,7 @@ steps:
     environment:
       DOCKER_BUILDKIT: 1
     depends_on:
-      - build model lib
+      - build shared lib
 
   - name: parallelism
     image: alpine

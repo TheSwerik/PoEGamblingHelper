@@ -11,22 +11,22 @@
 
     <ItemGroup>
         <PackageReference Include="HtmlAgilityPack" Version="1.11.46"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.1">
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.2">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.1"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.1"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.2"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.2"/>
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.1"/>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0"/>
     </ItemGroup>
 
     <ItemGroup Condition="'$(Configuration)' == 'Debug'">
-        <ProjectReference Include="..\Model\Model.csproj"/>
+        <ProjectReference Include="..\Shared\Shared.csproj"/>
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)' == 'Release'">
-        <Reference Include="packages\Model">
-            <HintPath>packages\Model.dll</HintPath>
+        <Reference Include="packages\Shared">
+            <HintPath>packages\Shared.dll</HintPath>
         </Reference>
     </ItemGroup>
 
