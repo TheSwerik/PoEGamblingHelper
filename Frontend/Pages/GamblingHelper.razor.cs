@@ -89,7 +89,6 @@ public partial class GamblingHelper : IDisposable
             _lastBackendUpdate = DateTime.Now;
 
             _isUpdating = false;
-            Console.WriteLine(_isUpdating);
             await InvokeAsync(StateHasChanged);
         }
     }
