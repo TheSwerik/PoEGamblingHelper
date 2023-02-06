@@ -1,9 +1,10 @@
-﻿using System.Diagnostics;
-using System.Net.Http.Headers;
+﻿using System.Net.Http.Headers;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
+using Backend.Exceptions;
 using HtmlAgilityPack;
-using Model;
+using Shared.Entity;
+using Shared.Util;
 
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Local
 
@@ -27,19 +28,19 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
         var versionColumn = titleRow.ChildNodes.First(
             td => td.InnerText.Equals("version", StringComparison.InvariantCultureIgnoreCase)
         );
-        if (versionColumn is null) throw new NullReferenceException("no version column");
+        if (versionColumn is null) throw new PoeDbCannotParseException("no version column");
         var versionColumnIndex = titleRow.ChildNodes.IndexOf(versionColumn);
 
         var nameColumn = titleRow.ChildNodes.First(
             td => td.InnerText.Equals("league", StringComparison.InvariantCultureIgnoreCase)
         );
-        if (nameColumn is null) throw new NullReferenceException("no name column");
+        if (nameColumn is null) throw new PoeDbCannotParseException("no name column");
         var nameColumnIndex = titleRow.ChildNodes.IndexOf(nameColumn);
 
         var releaseColumn = titleRow.ChildNodes.First(
             td => td.InnerText.Equals("international", StringComparison.InvariantCultureIgnoreCase)
         );
-        if (releaseColumn is null) throw new NullReferenceException("no release column");
+        if (releaseColumn is null) throw new PoeDbCannotParseException("no release column");
         var releaseColumnIndex = titleRow.ChildNodes.IndexOf(releaseColumn);
 
         return (versionColumnIndex, nameColumnIndex, releaseColumnIndex);
@@ -194,15 +195,15 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
     {
         var web = new HtmlWeb();
         var doc = web.Load(PoeToolUrls.PoeDbUrl + "League#LeaguesList");
-        if (doc is null) throw new NullReferenceException("PoeDB is down");
+        if (doc is null) throw new PoeDbDownException();
 
         var leaguesTable = doc.DocumentNode
                               .SelectNodes("//table")
                               .First(n => n.HasChildNodes && n.InnerHtml.Contains("Weeks"));
-        if (leaguesTable is null) throw new NullReferenceException("No tables found");
+        if (leaguesTable is null) throw new PoeDbCannotParseException("No tables found");
 
         var leagues = leaguesTable.SelectNodes(".//tr").Where(n => n.HasChildNodes).ToArray();
-        if (leagues.Length == 0) throw new NullReferenceException("No rows found");
+        if (leagues.Length == 0) throw new PoeDbCannotParseException("No rows found");
         var titleRow = leagues[0];
 
         var (versionColumn, nameColumn, releaseColumn) = GetIndexesFromTitleRow(titleRow);
@@ -262,7 +263,7 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
     {
         const string currencyUrl = PoeToolUrls.PoeNinjaUrl + "/currencyoverview?type=Currency";
         var result = await _client.GetFromJsonAsync<CurrencyPriceData>(currencyUrl + $"&league={league.Name}");
-        if (result is null) throw new NullReferenceException();
+        if (result is null) throw new PoeNinjaDownException();
         Logger.LogInformation("Got data from {Result} currency items", result.Lines.Length);
 
         foreach (var poeNinjaCurrencyData in result.Lines)
@@ -312,7 +313,7 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
     {
         const string gemUrl = PoeToolUrls.PoeNinjaUrl + "/itemoverview?type=SkillGem";
         var result = await _client.GetFromJsonAsync<GemPriceData>(gemUrl + $"&league={league.Name}");
-        if (result is null) throw new NullReferenceException();
+        if (result is null) throw new PoeNinjaDownException();
         Logger.LogInformation("Got data from {Result} gems", result.Lines.Length);
 
         #region GemTradeData
@@ -391,8 +392,9 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
 
         request.Content = new StringContent(templeQuery, MediaTypeHeaderValue.Parse("application/json"));
         var result = await _client.SendAsync(request);
+        if (!result.IsSuccessStatusCode) throw new PoeTradeDownException();
         var temples = await result.Content.ReadFromJsonAsync<TradeResults>();
-        if (temples is null) throw new UnreachableException("temples is null");
+        if (temples is null) throw new PoeTradeDownException();
 
         Logger.LogDebug("Found {ResultLength} Temples", temples.Result.Length);
 
@@ -410,7 +412,7 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
         request.Content = new StringContent(templeQuery, MediaTypeHeaderValue.Parse("application/json"));
         result = await _client.SendAsync(request);
         var priceResults = await result.Content.ReadFromJsonAsync<TradeEntryResult>();
-        if (priceResults is null) throw new UnreachableException("priceResults is null");
+        if (priceResults is null) throw new PoeTradeDownException();
 
         Logger.LogDebug("Found {ResultLength} TemplePrices", priceResults.Result.Length);
         var templeCost = new TempleCost

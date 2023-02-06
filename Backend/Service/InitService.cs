@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.OutputCaching;
+﻿using Backend.Exceptions;
+using Microsoft.AspNetCore.OutputCaching;
 using Timer = System.Timers.Timer;
 
 namespace Backend.Service;
@@ -23,8 +24,14 @@ public class InitService : IHostedService
     {
         _logger.LogInformation("Start initialization...");
 
-        await _poeDataFetchService.GetCurrentLeague();
-        await _poeDataFetchService.GetPriceData();
+        try
+        {
+            await _poeDataFetchService.GetCurrentLeague();
+            await _poeDataFetchService.GetPriceData();
+        }
+        catch (PoeGamblingHelperException)
+        {
+        }
 
         #region Daily Timer
 
