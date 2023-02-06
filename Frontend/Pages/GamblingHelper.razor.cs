@@ -24,7 +24,7 @@ public partial class GamblingHelper : IDisposable
     [Inject] private ILeagueService LeagueService { get; set; } = default!;
 
     public void Dispose() { _loadGamblingDataTask.Dispose(); }
-    private DateTime NextBackendUpdate() { return _lastBackendUpdate.AddMinutes(5); }
+    private DateTime NextBackendUpdate() { return _lastBackendUpdate.AddMinutes(1); }
 
     protected override async Task OnInitializedAsync()
     {
@@ -50,6 +50,7 @@ public partial class GamblingHelper : IDisposable
     public async Task LoadGamblingData()
     {
         _isUpdating = true;
+        await InvokeAsync(StateHasChanged);
 
         _currency = await CurrencyService.GetAll();
         _filterValues.Currency = _filterValues.Currency is null
@@ -58,17 +59,30 @@ public partial class GamblingHelper : IDisposable
         _filterValues.Currency ??= _currency.First(c => c.Name.Equals("Divine Orb"));
         _templeCost = await TempleCostService.Get();
         _currentLeague = await LeagueService.GetCurrent();
-        await UpdateGems();
+
+        var gemPage = _currentGemPage;
+        var isOnLastPage = _isOnLastPage;
+        _gems.Clear();
+        for (var i = 0; i <= gemPage; i++)
+        {
+            _currentGemPage = i;
+            await UpdateGems();
+        }
+
+        _currentGemPage = gemPage;
+        _isOnLastPage = isOnLastPage;
+
         _lastBackendUpdate = DateTime.Now;
 
-        await InvokeAsync(StateHasChanged);
         _isUpdating = false;
-        Console.WriteLine("Loaded new Data");
+        await InvokeAsync(StateHasChanged);
     }
 
     private async void OnFilterValuesChanged(FilterValues filterValues)
     {
         _filterValues = filterValues;
+        _currentGemPage = 0;
+        _isOnLastPage = false;
         await LoadGamblingData();
     }
 
