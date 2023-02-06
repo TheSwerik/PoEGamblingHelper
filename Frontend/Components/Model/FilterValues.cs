@@ -1,7 +1,7 @@
-﻿using Model;
-using Model.QueryParameters;
+﻿using Shared.Entity;
+using Shared.QueryParameters;
 
-namespace PoEGamblingHelper3.Shared.Model;
+namespace PoEGamblingHelper3.Components.Model;
 
 public class FilterValues
 {

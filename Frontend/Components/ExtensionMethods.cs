@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
-using Model.QueryParameters;
+using Shared.QueryParameters;
 
-namespace PoEGamblingHelper3.Shared;
+namespace PoEGamblingHelper3.Components;
 
 public static class ExtensionMethods
 {

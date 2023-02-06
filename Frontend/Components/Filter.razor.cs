@@ -1,10 +1,11 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
-using Model;
-using Model.QueryParameters;
-using PoEGamblingHelper3.Shared.Model;
+using PoEGamblingHelper3.Components.Model;
+using Shared.Entity;
+using Shared.QueryParameters;
+using Shared.Util;
 
-namespace PoEGamblingHelper3.Shared;
+namespace PoEGamblingHelper3.Components;
 
 public partial class Filter : ComponentBase
 {
