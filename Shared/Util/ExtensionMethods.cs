@@ -1,4 +1,6 @@
-﻿namespace Model;
+﻿using Shared.Entity;
+
+namespace Shared.Util;
 
 public static class ExtensionMethods
 {

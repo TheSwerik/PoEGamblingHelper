@@ -1,10 +1,10 @@
-﻿namespace Model;
+﻿namespace Shared.Entity;
 
 public class League : Entity<Guid>
 {
-    public string Name { get; set; }
+    public string Name { get; set; } = null!;
     public DateTime StartDate { get; set; }
-    public string Version { get; set; }
+    public string Version { get; set; } = null!;
 
     public override string ToString()
     {

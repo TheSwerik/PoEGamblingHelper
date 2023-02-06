@@ -1,4 +1,6 @@
-﻿namespace Model;
+﻿using Shared.Util;
+
+namespace Shared.Entity;
 
 public class GemData : Entity<Guid>
 {

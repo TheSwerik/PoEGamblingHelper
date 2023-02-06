@@ -1,9 +1,9 @@
-﻿namespace Model.QueryParameters;
+﻿namespace Shared.QueryParameters;
 
 public class PageRequest
 {
     private int? _pageSize;
-    public int PageNumber { get; set; } = 0;
+    public int PageNumber { get; set; }
 
     public int? PageSize
     {

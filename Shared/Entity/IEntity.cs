@@ -1,4 +1,4 @@
-﻿namespace Model;
+﻿namespace Shared.Entity;
 
 public interface IEntity
 {

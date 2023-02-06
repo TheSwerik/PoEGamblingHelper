@@ -1,7 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using System.Web;
 
-namespace Model;
+namespace Shared.Entity;
 
 public partial class GemTradeData : Entity<long>
 {
@@ -9,7 +9,7 @@ public partial class GemTradeData : Entity<long>
     public int GemLevel { get; set; }
     public int GemQuality { get; set; }
     public bool Corrupted { get; set; }
-    public string DetailsId { get; set; }
+    public string DetailsId { get; set; } = null!;
     public decimal ChaosValue { get; set; }
     public decimal ExaltedValue { get; set; }
     public decimal DivineValue { get; set; }

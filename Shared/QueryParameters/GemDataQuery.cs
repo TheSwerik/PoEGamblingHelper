@@ -1,4 +1,4 @@
-﻿namespace Model.QueryParameters;
+﻿namespace Shared.QueryParameters;
 
 public class GemDataQuery
 {

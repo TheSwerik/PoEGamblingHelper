@@ -1,4 +1,4 @@
-﻿namespace Model;
+﻿namespace Shared.Entity;
 
 public class Currency : Entity<string>
 {

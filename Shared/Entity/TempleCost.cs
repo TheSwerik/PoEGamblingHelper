@@ -1,11 +1,11 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace Model;
+namespace Shared.Entity;
 
 public partial class TempleCost : Entity<Guid>
 {
     public DateTime TimeStamp { get; set; } = DateTime.Now.ToUniversalTime();
-    public decimal[] ChaosValue { get; set; }
+    public decimal[] ChaosValue { get; set; } = Array.Empty<decimal>();
     public decimal AverageChaosValue() { return ChaosValue.Average(); }
 
     public static string TradeUrl(League currentLeague)
