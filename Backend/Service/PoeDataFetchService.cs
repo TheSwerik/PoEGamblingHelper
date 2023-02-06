@@ -197,9 +197,9 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
         var doc = web.Load(PoeToolUrls.PoeDbUrl + "League#LeaguesList");
         if (doc is null) throw new PoeDbDownException();
 
-        var leaguesTable = doc.DocumentNode
-                              .SelectNodes("//table")
-                              .First(n => n.HasChildNodes && n.InnerHtml.Contains("Weeks"));
+        var tables = doc.DocumentNode.SelectNodes("//table");
+        if (tables is null) throw new PoeDbCannotParseException("No tables found");
+        var leaguesTable = tables.FirstOrDefault(n => n.HasChildNodes && n.InnerHtml.Contains("Weeks"));
         if (leaguesTable is null) throw new PoeDbCannotParseException("No tables found");
 
         var leagues = leaguesTable.SelectNodes(".//tr").Where(n => n.HasChildNodes).ToArray();
@@ -252,9 +252,33 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
     public async Task GetPriceData()
     {
         var currentLeague = _poeDataService.GetCurrentLeague();
-        await GetCurrencyData(currentLeague);
-        await GetTemplePriceData(currentLeague);
-        await GetGemPriceData(currentLeague);
+        if (currentLeague is null) return;
+        try
+        {
+            await GetCurrencyData(currentLeague);
+        }
+        catch (PoeGamblingHelperException e)
+        {
+            Logger.LogError("{Exception}", e);
+        }
+
+        try
+        {
+            await GetTemplePriceData(currentLeague);
+        }
+        catch (PoeGamblingHelperException e)
+        {
+            Logger.LogError("{Exception}", e);
+        }
+
+        try
+        {
+            await GetGemPriceData(currentLeague);
+        }
+        catch (PoeGamblingHelperException e)
+        {
+            Logger.LogError("{Exception}", e);
+        }
     }
 
     #region GetPriceData
@@ -262,7 +286,9 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
     private async Task GetCurrencyData(League league)
     {
         const string currencyUrl = PoeToolUrls.PoeNinjaUrl + "/currencyoverview?type=Currency";
-        var result = await _client.GetFromJsonAsync<CurrencyPriceData>(currencyUrl + $"&league={league.Name}");
+        var response = await _client.GetAsync(currencyUrl + $"&league={league.Name}");
+        if (!response.IsSuccessStatusCode) throw new PoeNinjaDownException();
+        var result = await response.Content.ReadFromJsonAsync<CurrencyPriceData>();
         if (result is null) throw new PoeNinjaDownException();
         Logger.LogInformation("Got data from {Result} currency items", result.Lines.Length);
 
@@ -312,7 +338,9 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
     private async Task GetGemPriceData(League league)
     {
         const string gemUrl = PoeToolUrls.PoeNinjaUrl + "/itemoverview?type=SkillGem";
-        var result = await _client.GetFromJsonAsync<GemPriceData>(gemUrl + $"&league={league.Name}");
+        var response = await _client.GetAsync(gemUrl + $"&league={league.Name}");
+        if (!response.IsSuccessStatusCode) throw new PoeNinjaDownException();
+        var result = await response.Content.ReadFromJsonAsync<GemPriceData>();
         if (result is null) throw new PoeNinjaDownException();
         Logger.LogInformation("Got data from {Result} gems", result.Lines.Length);
 

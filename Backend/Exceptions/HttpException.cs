@@ -4,10 +4,7 @@ namespace Backend.Exceptions;
 
 public abstract class HttpException : PoeGamblingHelperException
 {
-    //PoeGamblingHelper 
-    //Schüsselvawaltung
-    //YouTubeDownloader
-    protected HttpException(int statusCode, PoeGamblingHelperExceptionBody? body)
+    protected HttpException(string message, int statusCode, PoeGamblingHelperExceptionBody? body) : base(message)
     {
         (StatusCode, Body) = (statusCode, body);
     }

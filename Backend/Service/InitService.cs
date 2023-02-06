@@ -27,16 +27,28 @@ public class InitService : IHostedService
         try
         {
             await _poeDataFetchService.GetCurrentLeague();
-            await _poeDataFetchService.GetPriceData();
         }
-        catch (PoeGamblingHelperException)
+        catch (PoeGamblingHelperException e)
         {
+            _logger.LogError("{Exception}", e);
         }
+
+        await _poeDataFetchService.GetPriceData();
 
         #region Daily Timer
 
         _dailyTimer = new Timer(TimeSpan.FromDays(1));
-        _dailyTimer.Elapsed += async (_, _) => await _poeDataFetchService.GetCurrentLeague();
+        _dailyTimer.Elapsed += async (_, _) =>
+                               {
+                                   try
+                                   {
+                                       await _poeDataFetchService.GetCurrentLeague();
+                                   }
+                                   catch (PoeGamblingHelperException e)
+                                   {
+                                       _logger.LogError("{Exception}", e);
+                                   }
+                               };
         _dailyTimer.AutoReset = true;
         _dailyTimer.Start();
 

@@ -57,7 +57,8 @@ public partial class GamblingHelper : IDisposable
             await InvokeAsync(StateHasChanged);
 
             var currency = await CurrencyService.GetAll();
-            if (currency is not null) _currency = currency;
+            if (currency is null || currency.Count == 0) return;
+            _currency = currency;
 
             _filterValues.Currency = _filterValues.Currency is null
                                          ? _currency.First(c => c.Name.Equals("Divine Orb"))

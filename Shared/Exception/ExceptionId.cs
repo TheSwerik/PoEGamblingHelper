@@ -7,12 +7,14 @@ public static class ExceptionIdExtensions
     public static string ToIdString(this ExceptionId exceptionId)
     {
         return exceptionId switch
-               {
-                   ExceptionId.PoeTradeUnreachable => "dQw4w9WgXcQ",
-                   ExceptionId.PoeDbUnreachable => "wpV-gGA4PSk",
-                   ExceptionId.PoeDbCannotParse => "2spaHQDSaY8",
-                   ExceptionId.PoeNinjaUnreachable => "o-YBDTqX_ZU",
+               { //wpV-gGA4PSk
+                   ExceptionId.PoeTradeUnreachable => "YouShouldNeverSeeThis1",
+                   ExceptionId.PoeDbUnreachable => "wpV-YouShouldNeverSeeThis2",
+                   ExceptionId.PoeDbCannotParse => "YouShouldNeverSeeThis3",
+                   ExceptionId.PoeNinjaUnreachable => "YouShouldNeverSeeThis4",
                    ExceptionId.CannotParseBackendException => "JT6kfgIkpjI",
+                   ExceptionId.NoLeagueData => "o-YBDTqX_ZU",
+                   ExceptionId.NoTempleData => "2spaHQDSaY8",
                    _ => throw new UnreachableException()
                };
     }
@@ -24,5 +26,7 @@ public enum ExceptionId
     PoeDbUnreachable,
     PoeDbCannotParse,
     PoeNinjaUnreachable,
-    CannotParseBackendException
+    CannotParseBackendException,
+    NoLeagueData,
+    NoTempleData
 }

@@ -4,5 +4,5 @@ namespace Backend.Service;
 
 public interface IPoeDataService
 {
-    League GetCurrentLeague();
+    League? GetCurrentLeague();
 }

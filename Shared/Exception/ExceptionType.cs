@@ -2,5 +2,6 @@
 
 public enum ExceptionType
 {
-    InternalError
+    InternalError,
+    NotFound
 }

@@ -17,12 +17,11 @@ public class PoeDataService : Service, IPoeDataService
 
     #region public methods
 
-    public League GetCurrentLeague()
+    public League? GetCurrentLeague()
     {
         return _leagueRepository
                .GetAll(leagues => leagues.Where(league => DateTime.Now.ToUniversalTime() >= league.StartDate))
-               .OrderByDescending(league => league.StartDate)
-               .First();
+               .MaxBy(league => league.StartDate);
     }
 
     #endregion

@@ -44,7 +44,7 @@ public abstract class Service
         catch (HttpRequestException)
         {
             ToastService.ShowError("Cannot connect to Server.");
-            throw;
+            return default;
         }
     }
 }

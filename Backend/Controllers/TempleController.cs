@@ -1,3 +1,4 @@
+using Backend.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
 using Shared.Entity;
@@ -19,5 +20,8 @@ public class TempleController : ControllerBase
 
     [HttpGet]
     [OutputCache(PolicyName = "FetchData")]
-    public ActionResult<TempleCost> Get() { return Ok(_templeCostRepository.GetAll().FirstOrDefault()); }
+    public ActionResult<TempleCost> Get()
+    {
+        return Ok(_templeCostRepository.GetAll().FirstOrDefault() ?? throw new NoTempleDataException());
+    }
 }
