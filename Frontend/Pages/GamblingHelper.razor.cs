@@ -61,16 +61,13 @@ public partial class GamblingHelper : IDisposable
         _currentLeague = await LeagueService.GetCurrent();
 
         var gemPage = _currentGemPage;
-        var isOnLastPage = _isOnLastPage;
+        _isOnLastPage = false;
         _gems.Clear();
         for (var i = 0; i <= gemPage; i++)
         {
             _currentGemPage = i;
             await UpdateGems();
         }
-
-        _currentGemPage = gemPage;
-        _isOnLastPage = isOnLastPage;
 
         _lastBackendUpdate = DateTime.Now;
 
