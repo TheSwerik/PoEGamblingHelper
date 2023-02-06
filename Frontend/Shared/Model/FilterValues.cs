@@ -11,6 +11,7 @@ public class FilterValues
     public decimal? PricePerTryFrom { get; set; } = null;
     public decimal? PricePerTryTo { get; set; } = null;
     public bool OnlyShowProfitable { get; set; } = false;
+    public bool ShowAlternateQuality { get; set; } = false;
     public decimal? CurrencyValue { get; set; } = null;
     public decimal? TempleCost { get; set; } = null;
     public Currency? Currency { get; set; } = null;
@@ -22,6 +23,7 @@ public class FilterValues
                    SearchText = Gem,
                    Sort = Sort,
                    GemType = GemType,
+                   ShowAlternateQuality = ShowAlternateQuality,
                    OnlyShowProfitable = OnlyShowProfitable,
                    PricePerTryFrom = PricePerTryFrom,
                    PricePerTryTo = PricePerTryTo
