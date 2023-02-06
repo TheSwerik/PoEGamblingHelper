@@ -147,6 +147,10 @@ label {
     border-bottom: none;
 }
 
+.blazored-toast {
+    background: var(--bs-primary) !important;
+}
+
 /*region button*/
 .btn {
     --bs-btn-hover-color: var(--bs-body-bg);

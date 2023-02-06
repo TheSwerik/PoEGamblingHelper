@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
-using Model;
+using Shared.Entity;
 
 namespace Backend.Data;
 
