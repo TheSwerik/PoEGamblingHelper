@@ -79,4 +79,13 @@ public partial class GamblingHelper : IDisposable
         _filterValues = filterValues;
         await LoadGamblingData();
     }
+
+    private string LastUpdateText()
+    {
+        return _lastBackendUpdate == DateTime.MinValue
+                   ? "Never"
+                   : _lastBackendUpdate < DateTime.Now.AddMinutes(-1)
+                       ? $"{(int)DateTime.Now.Subtract(_lastBackendUpdate).TotalMinutes} Minutes ago"
+                       : "Just now";
+    }
 }

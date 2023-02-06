@@ -16,6 +16,7 @@
     </div>
 
     <div class="footer">
-        <p class="ms-3 mb-2 mt-2">last update from poe.ninja: @(_lastBackendUpdate < DateTime.Now.AddMinutes(-1) ? $"{(int)DateTime.Now.Subtract(_lastBackendUpdate).TotalMinutes} Minutes ago" : "just now")</p>
+        <p class="ms-3 mb-2 mt-2">last update: @LastUpdateText()</p>
+        <p class="me-3 mb-2 mt-2">Powered by <a href="https://poe.ninja/">poe.ninja</a></p>
     </div>
 </div>
