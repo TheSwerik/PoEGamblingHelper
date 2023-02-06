@@ -12,7 +12,7 @@ public static class ExceptionIdExtensions
                    ExceptionId.PoeDbUnreachable => "wpV-gGA4PSk",
                    ExceptionId.PoeDbCannotParse => "2spaHQDSaY8",
                    ExceptionId.PoeNinjaUnreachable => "o-YBDTqX_ZU",
-                   ExceptionId.CannotParseBackendException => "o-YBDTqX_ZU", //TODO
+                   ExceptionId.CannotParseBackendException => "JT6kfgIkpjI",
                    _ => throw new UnreachableException()
                };
     }
