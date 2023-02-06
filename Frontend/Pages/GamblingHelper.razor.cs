@@ -9,18 +9,10 @@ namespace PoEGamblingHelper3.Pages;
 
 public partial class GamblingHelper : IDisposable
 {
+    private readonly List<GemData> _gems = new();
     private List<Currency> _currency = new();
     private League _currentLeague = new();
     private FilterValues _filterValues = new();
-
-    private List<GemData> _gems = new()
-                                  {
-                                      new GemData { Name = "Placeholder Support" },
-                                      new GemData { Name = "Placeholder Support 2" },
-                                      new GemData { Name = "Placeholder Support 3" },
-                                      new GemData { Name = "Placeholder Support 4" }
-                                  };
-
     private bool _isUpdating;
     private DateTime _lastBackendUpdate = DateTime.MinValue;
     private Task _loadGamblingDataTask = null!;
@@ -58,6 +50,7 @@ public partial class GamblingHelper : IDisposable
     public async Task LoadGamblingData()
     {
         _isUpdating = true;
+        await InvokeAsync(StateHasChanged);
 
         _currency = await CurrencyService.GetAll();
         _filterValues.Currency = _filterValues.Currency is null
@@ -66,17 +59,30 @@ public partial class GamblingHelper : IDisposable
         _filterValues.Currency ??= _currency.First(c => c.Name.Equals("Divine Orb"));
         _templeCost = await TempleCostService.Get();
         _currentLeague = await LeagueService.GetCurrent();
-        _gems = await GemService.GetAll(new Page { PageSize = 20 }, _filterValues.ToQuery());
+
+        var gemPage = _currentGemPage;
+        var isOnLastPage = _isOnLastPage;
+        _gems.Clear();
+        for (var i = 0; i <= gemPage; i++)
+        {
+            _currentGemPage = i;
+            await UpdateGems();
+        }
+
+        _currentGemPage = gemPage;
+        _isOnLastPage = isOnLastPage;
+
         _lastBackendUpdate = DateTime.Now;
 
-        await InvokeAsync(StateHasChanged);
         _isUpdating = false;
-        Console.WriteLine("Loaded new Data");
+        await InvokeAsync(StateHasChanged);
     }
 
     private async void OnFilterValuesChanged(FilterValues filterValues)
     {
         _filterValues = filterValues;
+        _currentGemPage = 0;
+        _isOnLastPage = false;
         await LoadGamblingData();
     }
 
@@ -88,4 +94,31 @@ public partial class GamblingHelper : IDisposable
                        ? $"{(int)DateTime.Now.Subtract(_lastBackendUpdate).TotalMinutes} Minutes ago"
                        : "Just now";
     }
+
+    private async Task UpdateGems()
+    {
+        if (_isOnLastPage) return;
+        var gemPage = await GemService.GetAll(new PageRequest { PageSize = 20, PageNumber = _currentGemPage },
+                                              _filterValues.ToQuery());
+        _gems.AddRange(gemPage.Content);
+        _currentGemPage = gemPage.CurrentPage;
+        _isOnLastPage = gemPage.LastPage;
+    }
+
+    #region OnScrollToBottom
+
+    private readonly List<int> _positionsY = new();
+    private int _currentGemPage;
+    private bool _isOnLastPage;
+
+    private async void OnScrollToBottom(object? sender, int positionY)
+    {
+        if (_positionsY.Contains(positionY)) return;
+        _positionsY.Add(positionY);
+        _currentGemPage++;
+        await UpdateGems();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    #endregion
 }

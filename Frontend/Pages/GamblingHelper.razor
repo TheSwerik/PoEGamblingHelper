@@ -16,12 +16,19 @@
     }
     else
     {
+        <InfiniteScrolling OnScrollToBottom="OnScrollToBottom"></InfiniteScrolling>
         <div class="container d-flex flex-wrap p-0 justify-content-between">
             @foreach (var gem in _gems)
             {
                 <GemStats GemData="gem" TempleCost="_templeCost" FilterValues="_filterValues" CurrentLeague="_currentLeague"/>
             }
         </div>
+        @if (!_isOnLastPage)
+        {
+            <div class="spinner-border mb-5" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        }
     }
 
     <div class="footer">

@@ -4,7 +4,9 @@ using Blazored.SessionStorage;
 using Blazored.Toast;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.JSInterop;
 using PoEGamblingHelper3;
+using PoEGamblingHelper3.Shared;
 using PoEGamblingHelper3.Shared.Service;
 
 Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
@@ -23,6 +25,7 @@ builder.Services.AddScoped<IGemService>(sp => new GemService(sp.GetService<HttpC
 builder.Services.AddScoped<ITempleCostService>(sp => new TempleCostService(sp.GetService<HttpClient>()!));
 builder.Services.AddScoped<ICurrencyService>(sp => new CurrencyService(sp.GetService<HttpClient>()!));
 builder.Services.AddScoped<ILeagueService>(sp => new LeagueService(sp.GetService<HttpClient>()!));
+builder.Services.AddScoped<IScrollInfoService>(sp => new ScrollInfoService(sp.GetService<IJSRuntime>()!));
 builder.Services.AddBlazoredToast();
 builder.Services.AddBlazoredSessionStorage();
 builder.Services.AddBlazoredLocalStorage();
