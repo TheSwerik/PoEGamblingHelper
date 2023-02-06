@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
-using Model;
+using Shared.Entity;
 
 namespace Backend.Controllers;
 
