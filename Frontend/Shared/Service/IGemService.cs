@@ -5,5 +5,5 @@ namespace PoEGamblingHelper3.Shared.Service;
 
 public interface IGemService
 {
-    public Task<List<GemData>> GetAll(Page? page, GemDataQuery? query);
+    public Task<Page<GemData>> GetAll(PageRequest? page, GemDataQuery? query);
 }

@@ -1,0 +1,14 @@
+﻿@using PoEGamblingHelper3.Shared.Service
+@implements IDisposable
+
+@code {
+
+    [Inject]
+    private IScrollInfoService ScrollInfoService { get; set; } = default!;
+
+    [Parameter]
+    public EventHandler<int> OnScrollToBottom { get; set; } = null!;
+
+    protected override void OnInitialized() { ScrollInfoService.OnScrollToBottom += OnScrollToBottom; }
+    public void Dispose() { ScrollInfoService.OnScrollToBottom -= OnScrollToBottom; }
+}

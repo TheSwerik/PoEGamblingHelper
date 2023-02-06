@@ -20,8 +20,8 @@ public class GemController : ControllerBase
 
     [HttpGet]
     [OutputCache(PolicyName = "FetchData")]
-    public ActionResult<IEnumerable<GemData>> GetAll([FromQuery] GemDataQuery? query, [FromQuery] Page? page)
+    public Page<GemData> GetAll([FromQuery] GemDataQuery? query, [FromQuery] PageRequest page)
     {
-        return Ok(_gemDataRepository.GetAll(query, page));
+        return _gemDataRepository.GetAll(query, page);
     }
 }
