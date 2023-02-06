@@ -196,7 +196,8 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
         var doc = web.Load(PoeToolUrls.PoeDbUrl + "League#LeaguesList");
         if (doc is null) throw new NullReferenceException("PoeDB is down");
 
-        var leaguesTable = doc.DocumentNode.SelectNodes("//table").First(n => n.HasChildNodes);
+        var leaguesTable = doc.DocumentNode.SelectNodes("//table")
+                              .First(n => n.HasChildNodes && n.InnerHtml.Contains("Weeks"));
         if (leaguesTable is null) throw new NullReferenceException("No tables found");
 
         var leagues = leaguesTable.SelectNodes(".//tr").Where(n => n.HasChildNodes).ToArray();
