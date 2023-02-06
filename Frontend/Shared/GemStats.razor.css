@@ -1,0 +1,7 @@
+﻿#avg-profit {
+    cursor: initial;
+}
+
+#avg-profit:hover {
+    filter: none !important;
+}
