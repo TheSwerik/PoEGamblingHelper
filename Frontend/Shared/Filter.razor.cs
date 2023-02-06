@@ -120,6 +120,13 @@ public partial class Filter : ComponentBase
         await SaveFilterValues();
     }
 
+    private async Task UpdateShowAlternateQuality(ChangeEventArgs args)
+    {
+        if (args.Value is null || !bool.TryParse(args.Value.ToString(), out var value)) return;
+        FilterValues.ShowAlternateQuality = value;
+        await SaveFilterValues();
+    }
+
     private async Task UpdateOnlyShowProfitable(ChangeEventArgs args)
     {
         if (args.Value is null || !bool.TryParse(args.Value.ToString(), out var value)) return;
