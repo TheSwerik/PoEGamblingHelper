@@ -5,7 +5,7 @@ using Blazored.Toast;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using PoEGamblingHelper3;
-using PoEGamblingHelper3.Components.Service;
+using PoEGamblingHelper3.Service;
 
 Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
 CultureInfo.DefaultThreadCurrentCulture = CultureInfo.CreateSpecificCulture("en-US");

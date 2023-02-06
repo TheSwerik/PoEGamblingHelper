@@ -1,4 +1,4 @@
-﻿namespace PoEGamblingHelper3.Shared.Service;
+﻿namespace PoEGamblingHelper3.Service;
 
 public interface IScrollInfoService
 {

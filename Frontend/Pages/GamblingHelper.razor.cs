@@ -1,9 +1,9 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
-using Model;
-using Model.QueryParameters;
-using PoEGamblingHelper3.Shared.Model;
-using PoEGamblingHelper3.Shared.Service;
+using PoEGamblingHelper3.Components.Model;
+using PoEGamblingHelper3.Service;
+using Shared.Entity;
+using Shared.QueryParameters;
 
 namespace PoEGamblingHelper3.Pages;
 
@@ -52,13 +52,20 @@ public partial class GamblingHelper : IDisposable
         _isUpdating = true;
         await InvokeAsync(StateHasChanged);
 
-        _currency = await CurrencyService.GetAll();
+        var currency = await CurrencyService.GetAll();
+        if (currency is not null) _currency = currency;
+
         _filterValues.Currency = _filterValues.Currency is null
                                      ? _currency.First(c => c.Name.Equals("Divine Orb"))
                                      : _currency.FirstOrDefault(c => c.Id.Equals(_filterValues.Currency.Id));
         _filterValues.Currency ??= _currency.First(c => c.Name.Equals("Divine Orb"));
-        _templeCost = await TempleCostService.Get();
-        _currentLeague = await LeagueService.GetCurrent();
+
+
+        var templeCost = await TempleCostService.Get();
+        if (templeCost is not null) _templeCost = templeCost;
+
+        var league = await LeagueService.GetCurrent();
+        if (league is not null) _currentLeague = league;
 
         var gemPage = _currentGemPage;
         _isOnLastPage = false;
@@ -92,14 +99,16 @@ public partial class GamblingHelper : IDisposable
                        : "Just now";
     }
 
-    private async Task UpdateGems()
+    private async Task<bool> UpdateGems()
     {
-        if (_isOnLastPage) return;
+        if (_isOnLastPage) return false;
         var gemPage = await GemService.GetAll(new PageRequest { PageSize = 20, PageNumber = _currentGemPage },
                                               _filterValues.ToQuery());
+        if (gemPage is null) return false;
         _gems.AddRange(gemPage.Content);
         _currentGemPage = gemPage.CurrentPage;
         _isOnLastPage = gemPage.LastPage;
+        return true;
     }
 
     #region OnScrollToBottom
@@ -113,7 +122,12 @@ public partial class GamblingHelper : IDisposable
         if (_positionsY.Contains(positionY)) return;
         _positionsY.Add(positionY);
         _currentGemPage++;
-        await UpdateGems();
+        if (!await UpdateGems())
+        {
+            _positionsY.Remove(positionY);
+            _currentGemPage--;
+        }
+
         await InvokeAsync(StateHasChanged);
     }
 

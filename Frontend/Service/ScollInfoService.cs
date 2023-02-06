@@ -1,7 +1,6 @@
 ﻿using Microsoft.JSInterop;
-using PoEGamblingHelper3.Shared.Service;
 
-namespace PoEGamblingHelper3.Shared;
+namespace PoEGamblingHelper3.Service;
 
 public class ScrollInfoService : IScrollInfoService, IDisposable
 {
