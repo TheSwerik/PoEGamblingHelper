@@ -24,7 +24,7 @@ public partial class GamblingHelper : IDisposable
     [Inject] private ILeagueService LeagueService { get; set; } = default!;
 
     public void Dispose() { _loadGamblingDataTask.Dispose(); }
-    private DateTime NextBackendUpdate() { return _lastBackendUpdate.AddMinutes(1); }
+    private DateTime NextBackendUpdate() { return _lastBackendUpdate.AddMinutes(5); }
 
     protected override async Task OnInitializedAsync()
     {
