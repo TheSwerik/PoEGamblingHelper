@@ -3,6 +3,8 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+release
+
 # User-specific files
 *.rsuser
 *.suo
@@ -347,3 +349,5 @@ healthchecksdb
 MigrationBackup/
 
 **/.idea/
+
+# test commit
