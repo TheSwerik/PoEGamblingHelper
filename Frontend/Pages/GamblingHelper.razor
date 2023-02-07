@@ -8,9 +8,9 @@
 
     <Filter TempleCost="_templeCost" FilterValues="_filterValues" OnFilterValuesChanged="OnFilterValuesChanged" CurrentLeague="_currentLeague" Currency="_currency"/>
 
-    @if (_isUpdating)
+    @if (_isUpdating || _firstLoad)
     {
-        <div class="spinner-border" role="status">
+        <div class="spinner-border mt-3" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
     }

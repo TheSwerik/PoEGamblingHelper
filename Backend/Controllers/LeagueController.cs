@@ -1,7 +1,8 @@
+using Backend.Exceptions;
 using Backend.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
-using Model;
+using Shared.Entity;
 
 namespace Backend.Controllers;
 
@@ -29,5 +30,8 @@ public class LeagueController : ControllerBase
     [HttpGet]
     [Route("current")]
     [OutputCache(PolicyName = "FetchData")]
-    public ActionResult<League> GetCurrentLeague() { return Ok(_poeDataService.GetCurrentLeague()); }
+    public ActionResult<League> GetCurrentLeague()
+    {
+        return Ok(_poeDataService.GetCurrentLeague() ?? throw new NoLeagueDataException());
+    }
 }

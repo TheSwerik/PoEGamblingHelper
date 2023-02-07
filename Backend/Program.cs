@@ -1,8 +1,9 @@
 global using Backend.Data;
 using System.Globalization;
+using Backend.Exceptions;
 using Backend.Service;
 using Microsoft.EntityFrameworkCore;
-using Model;
+using Shared.Entity;
 
 #if DEBUG
 Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
@@ -14,7 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 #region Web
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options => { options.Filters.Add<HttpResponseExceptionFilter>(); });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
