@@ -19,7 +19,7 @@ public class GemDataQuery
             $"{start}sort={Sort}&gemType={GemType}&onlyShowProfitable={OnlyShowProfitable}{searchText}{pricePerTryFrom}{pricePerTryTo}";
     }
 
-    public string ToQueryString(Page? page)
+    public string ToQueryString(PageRequest? page)
     {
         return page is null
                    ? ToQueryString()

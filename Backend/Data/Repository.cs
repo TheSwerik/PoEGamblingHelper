@@ -25,7 +25,7 @@ public class Repository<T, TKey> : IRepository<T, TKey> where T : class, IEntity
         return function.Invoke(Entities).AsAsyncEnumerable();
     }
 
-    public IAsyncEnumerable<T> GetAllAsync(Page? page, Func<DbSet<T>, IQueryable<T>> function)
+    public IAsyncEnumerable<T> GetAllAsync(PageRequest? page, Func<DbSet<T>, IQueryable<T>> function)
     {
         if (page is null) return GetAllAsync(function);
         var pageSize = page.PageSize ?? 0;
@@ -35,12 +35,26 @@ public class Repository<T, TKey> : IRepository<T, TKey> where T : class, IEntity
 
     public IEnumerable<T> GetAll(Func<DbSet<T>, IEnumerable<T>> function) { return function.Invoke(Entities); }
 
-    public IEnumerable<T> GetAll(Page? page, Func<DbSet<T>, IEnumerable<T>> function)
+    public Page<T> GetAll(PageRequest? page, Func<DbSet<T>, IEnumerable<T>> function)
     {
-        if (page is null) return GetAll(function);
+        if (page is null)
+            return new Page<T>
+                   {
+                       Content = GetAll(function),
+                       CurrentPage = 0,
+                       LastPage = true
+                   };
         var pageSize = page.PageSize ?? 0;
+        var skipSize = pageSize * page.PageNumber;
         var takeSize = page.PageSize ?? int.MaxValue;
-        return function.Invoke(Entities).Skip(pageSize * page.PageNumber).Take(takeSize);
+
+        var allContent = function.Invoke(Entities).ToArray();
+        return new Page<T>
+               {
+                   Content = allContent.Skip(skipSize).Take(takeSize),
+                   LastPage = skipSize + takeSize >= allContent.Length,
+                   CurrentPage = page.PageNumber
+               };
     }
 
     public void ClearTrackedEntities() { _applicationDbContext.ChangeTracker.Clear(); }
