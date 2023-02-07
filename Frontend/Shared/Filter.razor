@@ -123,8 +123,10 @@
         </div>
     </div>
     <div class="row mt-3 mb-3 pointer" onclick="@ToggleFilters" data-bs-toggle="collapse" data-bs-target="#collapsable" aria-expanded="false" aria-controls="collapsable">
-        <hr class="col"/>
+        <hr class="col align-self-center m-0"/>
+        <div class="angles angles-@(FiltersExpanded ? "up" : "down")"></div>
         <p class="col text-center">@(FiltersExpanded ? "Collapse" : "Expand") Querys</p>
-        <hr class="col"/>
+        <div class="angles angles-@(FiltersExpanded ? "up" : "down")"></div>
+        <hr class="col align-self-center m-0"/>
     </div>
 </div>

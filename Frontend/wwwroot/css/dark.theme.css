@@ -1,5 +1,6 @@
 ﻿:root, .card, .btn {
     --bs-primary: #9f9d9d !important;
+    --bs-primary-darker: #807e7e !important;
     --bs-secondary: #f3b061 !important;
     /*--bs-success: #198754;*/
     /*--bs-info: #0dcaf0;*/

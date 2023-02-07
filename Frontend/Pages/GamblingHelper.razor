@@ -2,20 +2,30 @@
 
 <PageTitle>PoE Gambling Helper</PageTitle>
 
-<div class="d-flex flex-column align-items-center w-100 h-100 mt-5">
-    <h2>Path of Exile</h2>
-    <h1>GAMBLING HELPER</h1>
+<div class="d-flex flex-column align-items-center w-100 h-100 pt-5">
+    <h2 class="mt-3">Path of Exile</h2>
+    <h1 class="mb-5">GAMBLING HELPER</h1>
 
     <Filter TempleCost="_templeCost" FilterValues="_filterValues" OnFilterValuesChanged="OnFilterValuesChanged" CurrentLeague="_currentLeague" Currency="_currency"/>
 
-    <div class="container d-flex flex-wrap p-0 justify-content-between">
-        @foreach (var gem in _gems)
-        {
-            <GemStats GemData="gem" TempleCost="_templeCost" FilterValues="_filterValues" CurrentLeague="_currentLeague"/>
-        }
-    </div>
+    @if (_isUpdating)
+    {
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    }
+    else
+    {
+        <div class="container d-flex flex-wrap p-0 justify-content-between">
+            @foreach (var gem in _gems)
+            {
+                <GemStats GemData="gem" TempleCost="_templeCost" FilterValues="_filterValues" CurrentLeague="_currentLeague"/>
+            }
+        </div>
+    }
 
     <div class="footer">
-        <p class="ms-3 mb-2 mt-2">last update from poe.ninja: @(_lastBackendUpdate < DateTime.Now.AddMinutes(-1) ? $"{(int)DateTime.Now.Subtract(_lastBackendUpdate).TotalMinutes} Minutes ago" : "just now")</p>
+        <p class="ms-3 mb-2 mt-2">last update: @LastUpdateText()</p>
+        <p class="me-3 mb-2 mt-2">Powered by <a href="https://poe.ninja/">poe.ninja</a></p>
     </div>
 </div>
