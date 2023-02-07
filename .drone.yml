@@ -1,0 +1,193 @@
+﻿kind: pipeline
+type: docker
+name: build
+platform:
+  os: linux
+  arch: arm64
+trigger:
+  event:
+    - push
+steps:
+  - name: build model lib
+    image: plugins/docker
+    settings:
+      dockerfile: Model/Dockerfile
+      context: Model
+      registry: registry.swerik.dev
+      repo: registry.swerik.dev/poegamblinghelper/model
+      cache_from:
+        - registry.swerik.dev/poegamblinghelper/model:dev
+        - registry.swerik.dev/poegamblinghelper/model:latest
+      tags: dev
+      target: final
+      username:
+        from_secret: REGISTRY_USERNAME
+      password:
+        from_secret: REGISTRY_PASSWORD
+      build_args:
+        - BUILDKIT_INLINE_CACHE=1
+    environment:
+      DOCKER_BUILDKIT: 1
+
+  - name: build backend
+    image: plugins/docker
+    settings:
+      dockerfile: Backend/Dockerfile
+      context: Backend
+      registry: registry.swerik.dev
+      repo: registry.swerik.dev/poegamblinghelper/backend
+      cache_from:
+        - registry.swerik.dev/poegamblinghelper/backend:builder
+        - registry.swerik.dev/poegamblinghelper/backend:latest
+      tags: builder
+      target: tester
+      username:
+        from_secret: REGISTRY_USERNAME
+      password:
+        from_secret: REGISTRY_PASSWORD
+      build_args:
+        - BUILDKIT_INLINE_CACHE=1
+        - MODEL_TAG=dev
+    depends_on:
+      - build model lib
+    environment:
+      DOCKER_BUILDKIT: 1
+
+  - name: build frontend
+    image: plugins/docker
+    settings:
+      dockerfile: Frontend/Dockerfile
+      context: Frontend
+      registry: registry.swerik.dev
+      repo: registry.swerik.dev/poegamblinghelper/frontend
+      cache_from:
+        - registry.swerik.dev/poegamblinghelper/frontend:builder
+        - registry.swerik.dev/poegamblinghelper/frontend:latest
+      tags: builder
+      target: tester
+      username:
+        from_secret: REGISTRY_USERNAME
+      password:
+        from_secret: REGISTRY_PASSWORD
+      build_args:
+        - BUILDKIT_INLINE_CACHE=1
+        - MODEL_TAG=dev
+    depends_on:
+      - build model lib
+    environment:
+      DOCKER_BUILDKIT: 1
+---
+kind: pipeline
+type: docker
+name: build Deploy Images
+depends_on:
+  - build
+platform:
+  os: linux
+  arch: arm64
+trigger:
+  branch:
+    - release
+steps:
+  - name: build model lib
+    image: plugins/docker
+    settings:
+      dockerfile: Model/Dockerfile
+      context: Model
+      registry: registry.swerik.dev
+      repo: registry.swerik.dev/poegamblinghelper/model
+      cache_from:
+        - registry.swerik.dev/poegamblinghelper/model:dev
+        - registry.swerik.dev/poegamblinghelper/model:latest
+      tags: latest
+      target: final
+      username:
+        from_secret: REGISTRY_USERNAME
+      password:
+        from_secret: REGISTRY_PASSWORD
+      build_args:
+        - BUILDKIT_INLINE_CACHE=1
+    environment:
+      DOCKER_BUILDKIT: 1
+
+  - name: build backend
+    image: plugins/docker
+    settings:
+      dockerfile: Backend/Dockerfile
+      context: Backend
+      registry: registry.swerik.dev
+      repo: registry.swerik.dev/poegamblinghelper/backend
+      cache_from:
+        - registry.swerik.dev/poegamblinghelper/backend:latest
+        - registry.swerik.dev/poegamblinghelper/backend:builder
+      tags: latest
+      target: final
+      username:
+        from_secret: REGISTRY_USERNAME
+      password:
+        from_secret: REGISTRY_PASSWORD
+      build_args:
+        - BUILDKIT_INLINE_CACHE=1
+    environment:
+      DOCKER_BUILDKIT: 1
+    depends_on:
+      - build model lib
+
+  - name: build frontend
+    image: plugins/docker
+    settings:
+      dockerfile: Frontend/Dockerfile
+      context: Frontend
+      registry: registry.swerik.dev
+      repo: registry.swerik.dev/poegamblinghelper/frontend
+      cache_from:
+        - registry.swerik.dev/poegamblinghelper/frontend:latest
+        - registry.swerik.dev/poegamblinghelper/frontend:builder
+      tags: latest
+      target: final
+      username:
+        from_secret: REGISTRY_USERNAME
+      password:
+        from_secret: REGISTRY_PASSWORD
+      build_args:
+        - BUILDKIT_INLINE_CACHE=1
+    environment:
+      DOCKER_BUILDKIT: 1
+    depends_on:
+      - build model lib
+
+  - name: parallelism
+    image: alpine
+    commands:
+      - echo finished
+    depends_on:
+      - build backend
+      - build frontend
+---
+kind: pipeline
+type: ssh
+name: Deploy
+depends_on:
+  - build Deploy Images
+platform:
+  os: linux
+  arch: arm64
+trigger:
+  branch:
+    - release
+server:
+  host: erikpi
+  user:
+    from_secret: SSH_USERNAME
+  password:
+    from_secret: SSH_PASSWORD
+steps:
+  - name: docker login & Deploy
+    commands:
+      - docker --config /home/drone/.docker login localhost:5000 -u $USERNAME -p $PASSWORD
+      - docker --config /home/drone/.docker compose up -d --pull always
+    environment:
+      USERNAME:
+        from_secret: REGISTRY_USERNAME
+      PASSWORD:
+        from_secret: REGISTRY_PASSWORD
