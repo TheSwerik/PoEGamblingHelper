@@ -1,5 +1,7 @@
 global using Backend.Data;
 using System.Globalization;
+using System.Net;
+using System.Threading.RateLimiting;
 using Backend.Exceptions;
 using Backend.Service;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +17,46 @@ var builder = WebApplication.CreateBuilder(args);
 
 #region Web
 
+builder.Services
+       .AddRateLimiter(limiterOptions =>
+                       {
+                           limiterOptions.OnRejected =
+                               (context, _) =>
+                               {
+                                   if (context.Lease.TryGetMetadata(MetadataName.RetryAfter, out var retryAfter))
+                                       context.HttpContext.Response.Headers.RetryAfter =
+                                           ((int)retryAfter.TotalSeconds).ToString(NumberFormatInfo.InvariantInfo);
+
+                                   context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
+                                   context.HttpContext.RequestServices
+                                          .GetService<ILoggerFactory>()?
+                                          .CreateLogger("Microsoft.AspNetCore.RateLimitingMiddleware")
+                                          .LogWarning("OnRejected: {GetUserEndPoint}",
+                                                      GetUserEndPoint(context.HttpContext));
+                                   return new ValueTask();
+                               };
+
+                           limiterOptions.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, IPAddress>(
+                               context =>
+                               {
+                                   var remoteIpAddress = context.Connection.RemoteIpAddress;
+                                   if (IPAddress.IsLoopback(remoteIpAddress!))
+                                       return RateLimitPartition.GetNoLimiter(IPAddress.Loopback);
+
+                                   return RateLimitPartition.GetTokenBucketLimiter(remoteIpAddress!,
+                                       _ => new TokenBucketRateLimiterOptions
+                                            {
+                                                TokenLimit = int.Parse(builder.Configuration["RateLimit:TokenLimit"]!),
+                                                ReplenishmentPeriod =
+                                                    TimeSpan.FromSeconds(
+                                                        int.Parse(builder.Configuration[
+                                                                      "RateLimit:ReplenishmentPeriodSeconds"]!)),
+                                                TokensPerPeriod =
+                                                    int.Parse(builder.Configuration["RateLimit:TokensPerPeriod"]!),
+                                                AutoReplenishment = true
+                                            });
+                               });
+                       });
 builder.Services.AddControllers(options => { options.Filters.Add<HttpResponseExceptionFilter>(); });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -78,6 +120,7 @@ app.UseCors(corsBuilder =>
                 corsBuilder.WithOrigins(app.Configuration["AllowedOrigins"]!).AllowAnyMethod().AllowAnyHeader());
 app.UseAuthorization();
 
+app.UseRateLimiter();
 app.UseOutputCache();
 app.MapControllers();
 
@@ -94,5 +137,17 @@ using (var scope = app.Services.CreateScope())
 #endregion
 
 app.Run();
+
+#endregion
+
+#region Helper Methods
+
+static string GetUserEndPoint(HttpContext context)
+{
+    return $"User {context.User.Identity?.Name ?? "Anonymous"} endpoint:{context.Request.Path}"
+           + $" {context.Connection.RemoteIpAddress}";
+}
+
+static string GetTicks() { return (DateTime.Now.Ticks & 0x11111).ToString("00000"); }
 
 #endregion
