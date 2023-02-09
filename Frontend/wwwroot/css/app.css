@@ -278,7 +278,7 @@ input, .dropdown-toggle {
 input:hover, input:focus, input:active,
 .dropdown-toggle:hover, .dropdown-toggle:focus, .dropdown-toggle:active,
 .dropdown-item:hover, .dropdown-item:focus, .dropdown-item:active {
-    color: var(--bs-btn-color) !important;
+    /*color: var(--bs-btn-color) !important;*/
     background-color: var(--bs-primary) !important;
     filter: brightness(90%) !important;
     box-shadow: none !important;

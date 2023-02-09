@@ -1,66 +1,94 @@
 ﻿@using Shared.Entity
-@using PoEGamblingHelper3.Components.Model
 <div class="card mb-5" style="width: 45rem;">
     <div class="card-body">
-        <h3 class="card-title">
-            <img src="@GemData.Icon" alt="Gem-Icon" class="icon"/>@GemData.Name
-        </h3>
+        <div class="w-100 d-flex justify-content-between">
+            <h3 class="card-title">
+                <img src="@GemData.Icon" alt="Gem-Icon" class="icon"/>@GemData.Name
+            </h3>
+            <div class="d-flex w-25 justify-content-end">
+                @if (_isEditing)
+                {
+                    <button class="edit-button" @onclick="ResetValues">
+                        <div class="edit-icon reset-icon"></div>
+                    </button>
+                }
+                <button class="edit-button" @onclick="() => _isEditing = !_isEditing">
+                    <div class="edit-icon @(_isEditing ? "check-mark-icon" : "pen-icon")"></div>
+                </button>
+            </div>
+        </div>
         <div class="row gy-5">
             <div class="col">
                 <h5 class="card-title">Value</h5>
                 <p class="card-text">
-                    <a href="@TradeUrl(GemData.RawGem())" target="_blank" rel="noopener noreferrer">Price Raw: @CurrencyValue(GemData.RawCost())</a>
+                    @if (_isEditing)
+                    {
+                        <div class="d-flex justify-content-between align-items-center">
+                            Price Raw:
+                            <input type="text" pattern="[0-9]+([.][0-9]{1,2}){0,1}?" style="width: 40%; height: 100%" value="@GetCurrencyString(_values.RawValue)" @onchange="UpdateRawValue"/>
+                        </div>
+                    }
+                    else
+                    {
+                        <a href="@TradeUrl(GemData.RawGem())" target="_blank" rel="noopener noreferrer">Price Raw: @(_values.RawValue.Round(2) ?? CurrencyValue(GemData.RawCost()))</a>
+                    }
                 </p>
                 <p class="card-text">
-                    <a href="@TradeUrl(GemData.ResultGem(ResultCase.Worst))" target="_blank" rel="noopener noreferrer">Worst Case: @CurrencyValue(GemData.Value(ResultCase.Worst))</a>
+                    @if (_isEditing)
+                    {
+                        <div class="d-flex justify-content-between align-items-center">
+                            Worst Case:
+                            <input style="width: 40%; height: 100%" type="text" pattern="[0-9]+([.][0-9]{1,2}){0,1}?" value="@GetCurrencyString(_values.WorstCaseValue)" @onchange="UpdateWorstCaseValue"/>
+                        </div>
+                    }
+                    else
+                    {
+                        <a href="@TradeUrl(GemData.ResultGem(ResultCase.Worst))" target="_blank" rel="noopener noreferrer">Worst Case: @(_values.WorstCaseValue.Round(2) ?? CurrencyValue(GemData.Value(ResultCase.Worst)))</a>
+                    }
                 </p>
                 <p class="card-text">
-                    <a href="@TradeUrl(GemData.ResultGem(ResultCase.Middle))" target="_blank" rel="noopener noreferrer">Middle Case: @CurrencyValue(GemData.Value(ResultCase.Middle))</a>
+                    @if (_isEditing)
+                    {
+                        <div class="d-flex justify-content-between align-items-center">
+                            Middle Case:
+                            <input style="width: 40%; height: 100%" type="text" pattern="[0-9]+([.][0-9]{1,2}){0,1}?" value="@GetCurrencyString(_values.MiddleCaseValue)" @onchange="UpdateMiddleCaseValue"/>
+                        </div>
+                    }
+                    else
+                    {
+                        <a href="@TradeUrl(GemData.ResultGem(ResultCase.Middle))" target="_blank" rel="noopener noreferrer">Middle Case: @(_values.MiddleCaseValue.Round(2) ?? CurrencyValue(GemData.Value(ResultCase.Middle)))</a>
+                    }
                 </p>
                 <p class="card-text">
-                    <a href="@TradeUrl(GemData.ResultGem(ResultCase.Best))" target="_blank" rel="noopener noreferrer">Best Case: @CurrencyValue(GemData.Value(ResultCase.Best))</a>
+                    @if (_isEditing)
+                    {
+                        <div class="d-flex justify-content-between align-items-center">
+                            Best Case:
+                            <input style="width: 40%; height: 100%" type="text" pattern="[0-9]+([.][0-9]{1,2}){0,1}?" value="@GetCurrencyString(_values.BestCaseValue)" @onchange="UpdateBestCaseValue"/>
+                        </div>
+                    }
+                    else
+                    {
+                        <a href="@TradeUrl(GemData.ResultGem(ResultCase.Best))" target="_blank" rel="noopener noreferrer">Best Case: @(_values.BestCaseValue.Round(2) ?? CurrencyValue(GemData.Value(ResultCase.Best)))</a>
+                    }
                 </p>
             </div>
             <div class="col">
                 <h5 class="card-title">Profit per Try</h5>
-                <p class="card-text">Cost: @CurrencyValue(GemData.CostPerTry(FilterTempleCost()))</p>
-                <p class="card-text">Worst Case: @CurrencyValue(GemData.Profit(ResultCase.Worst, FilterTempleCost()))</p>
-                <p class="card-text">Middle Case: @CurrencyValue(GemData.Profit(ResultCase.Middle, FilterTempleCost()))</p>
-                <p class="card-text">Best Case: @CurrencyValue(GemData.Profit(ResultCase.Best, FilterTempleCost()))</p>
+                <p class="card-text">Cost: @CurrencyValue(GemData.CostPerTry(_values.RawValue, FilterTempleCost()))</p>
+                <p class="card-text">Worst Case: @CurrencyValue(_values.WorstCaseValue is null ? GemData.Profit(ResultCase.Worst, _values.RawValue, FilterTempleCost()) : GemData.Profit((decimal)_values.WorstCaseValue, _values.RawValue, FilterTempleCost()))</p>
+                <p class="card-text">Middle Case: @CurrencyValue(_values.MiddleCaseValue is null ? GemData.Profit(ResultCase.Middle, _values.RawValue, FilterTempleCost()) : GemData.Profit((decimal)_values.MiddleCaseValue, _values.RawValue, FilterTempleCost()))</p>
+                <p class="card-text">Best Case: @CurrencyValue(_values.BestCaseValue is null ? GemData.Profit(ResultCase.Best, _values.RawValue, FilterTempleCost()) : GemData.Profit((decimal)_values.BestCaseValue, _values.RawValue, FilterTempleCost()))</p>
             </div>
             <div class="col d-flex">
                 <button class="btn btn-primary align-self-end w-100">+ Value</button>
             </div>
             <div class="col d-flex flex-column justify-content-between">
                 <h5 class="card-title">Average Profit per Try</h5>
-                <button class="btn btn-outline-secondary align-self-end w-100" id="avg-profit">@CurrencyValue(GemData.AvgProfitPerTry(FilterTempleCost()))</button>
+                <button class="btn btn-outline-secondary align-self-end w-100" id="avg-profit">
+                    @CurrencyValue(GemData.AvgProfitPerTry(_values.RawValue, _values.WorstCaseValue, _values.MiddleCaseValue, _values.BestCaseValue, FilterTempleCost()))
+                </button>
             </div>
         </div>
     </div>
 </div>
-
-@code {
-
-    [Parameter]
-    public GemData GemData { get; set; } = null!;
-
-    [Parameter]
-    public TempleCost TempleCost { get; set; } = null!;
-
-    [Parameter]
-    public FilterValues FilterValues { get; set; } = null!;
-
-    [Parameter]
-    public League CurrentLeague { get; set; } = null!;
-
-    private decimal FilterTempleCost() { return FilterValues.TempleCost ?? TempleCost.AverageChaosValue(); }
-
-    private string TradeUrl(GemTradeData? gemTradeData) { return gemTradeData is null ? "#" : gemTradeData.TradeUrl(CurrentLeague); }
-
-    private string CurrencyValue(decimal chaosValue)
-    {
-        var currencyChaosValue = FilterValues.CurrencyValue ?? FilterValues.Currency?.ChaosEquivalent ?? 1;
-        return (chaosValue / currencyChaosValue).Round(2);
-    }
-
-}
