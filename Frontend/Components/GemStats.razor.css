@@ -17,6 +17,18 @@
     background-color: var(--bs-secondary);
     width: 1.5rem;
     height: 1.5rem;
+}
+
+.pen-icon {
     -webkit-mask: url(icons/edit.svg) no-repeat center;
     mask: url(icons/edit.svg) no-repeat center;
+}
+
+.check-mark-icon {
+    -webkit-mask: url(icons/check-mark.svg) no-repeat center;
+    mask: url(icons/check-mark.svg) no-repeat center;
+}
+
+input {
+    padding-right: 8px !important;
 }

@@ -27,19 +27,34 @@ public class GemData : Entity<Guid>
     }
 
     public decimal Value(ResultCase resultCase) { return ResultValue(MaxLevel() + resultCase.LevelModifier()); }
-    public decimal CostPerTry(decimal templeCost = 0) { return RawCost() + templeCost; }
+    public decimal CostPerTry(decimal? rawCost, decimal templeCost = 0) { return (rawCost ?? RawCost()) + templeCost; }
 
-    public decimal Profit(ResultCase resultCase, decimal templeCost = 0)
+    public decimal Profit(decimal value, decimal? rawCost = null, decimal templeCost = 0)
     {
-        return Value(resultCase) - CostPerTry(templeCost);
+        return value - CostPerTry(rawCost, templeCost);
     }
 
-    public decimal AvgProfitPerTry(decimal templeCost = 0)
+    public decimal Profit(ResultCase resultCase, decimal? rawCost = null, decimal templeCost = 0)
     {
-        return (Profit(ResultCase.Worst, templeCost)
-                + 2 * Profit(ResultCase.Middle, templeCost)
-                + Profit(ResultCase.Best, templeCost))
-               / 4;
+        return Profit(Value(resultCase), rawCost, templeCost);
+    }
+
+    public decimal AvgProfitPerTry(decimal? rawCost = null,
+                                   decimal? worstCaseValue = null,
+                                   decimal? middleCaseValue = null,
+                                   decimal? bestCaseValue = null,
+                                   decimal templeCost = 0)
+    {
+        var worstCaseProfit = worstCaseValue is null
+                                  ? Profit(ResultCase.Worst, rawCost, templeCost)
+                                  : Profit((decimal)worstCaseValue, rawCost, templeCost);
+        var middleCaseProfit = middleCaseValue is null
+                                   ? Profit(ResultCase.Worst, rawCost, templeCost)
+                                   : Profit((decimal)middleCaseValue, rawCost, templeCost);
+        var bestCaseProfit = bestCaseValue is null
+                                 ? Profit(ResultCase.Worst, rawCost, templeCost)
+                                 : Profit((decimal)bestCaseValue, rawCost, templeCost);
+        return (worstCaseProfit + 2 * middleCaseProfit + bestCaseProfit) / 4;
     }
 
     private decimal ResultValue(int level)
