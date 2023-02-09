@@ -17,31 +17,30 @@ var builder = WebApplication.CreateBuilder(args);
 
 #region Web
 
-builder.Services
-       .AddRateLimiter(limiterOptions =>
-                       {
-                           limiterOptions.OnRejected =
-                               (context, _) =>
-                               {
-                                   if (context.Lease.TryGetMetadata(MetadataName.RetryAfter, out var retryAfter))
-                                       context.HttpContext.Response.Headers.RetryAfter =
-                                           ((int)retryAfter.TotalSeconds).ToString(NumberFormatInfo.InvariantInfo);
+builder.Services.AddRateLimiter(
+    limiterOptions =>
+    {
+        limiterOptions.OnRejected =
+            (context, _) =>
+            {
+                if (context.Lease.TryGetMetadata(MetadataName.RetryAfter, out var retryAfter))
+                    context.HttpContext.Response.Headers.RetryAfter =
+                        ((int)retryAfter.TotalSeconds).ToString(NumberFormatInfo.InvariantInfo);
 
-                                   context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
-                                   context.HttpContext.RequestServices
-                                          .GetService<ILoggerFactory>()?
-                                          .CreateLogger("Microsoft.AspNetCore.RateLimitingMiddleware")
-                                          .LogWarning("OnRejected: {GetUserEndPoint}",
-                                                      GetUserEndPoint(context.HttpContext));
-                                   return new ValueTask();
-                               };
+                context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
+                context.HttpContext
+                       .RequestServices
+                       .GetService<ILoggerFactory>()?
+                       .CreateLogger("Microsoft.AspNetCore.RateLimitingMiddleware")
+                       .LogWarning("OnRejected: {GetUserEndPoint}", GetUserEndPoint(context.HttpContext));
+                return new ValueTask();
+            };
 
-                           limiterOptions.GlobalLimiter = PartitionedRateLimiter.CreateChained(
-                               PartitionedRateLimiter.Create<HttpContext, string>(_ => GetGlobalRateLimiter(builder)),
-                               PartitionedRateLimiter.Create<HttpContext, IPAddress>(
-                                   context => GetIpAddressRateLimiter(builder, context)
-                               ));
-                       });
+        limiterOptions.GlobalLimiter = PartitionedRateLimiter.CreateChained(
+            PartitionedRateLimiter.Create<HttpContext, string>(_ => GetGlobalRateLimiter(builder)),
+            PartitionedRateLimiter.Create<HttpContext, IPAddress>(context => GetIpAddressRateLimiter(builder, context))
+        );
+    });
 builder.Services.AddControllers(options => { options.Filters.Add<HttpResponseExceptionFilter>(); });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
