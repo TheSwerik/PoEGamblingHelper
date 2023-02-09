@@ -30,7 +30,7 @@
                     }
                     else
                     {
-                        <a href="@TradeUrl(GemData.RawGem())" target="_blank" rel="noopener noreferrer">Price Raw: @CurrencyValue(_values.RawValue ?? GemData.RawCost())</a>
+                        <a href="@TradeUrl(GemData.RawGem())" target="_blank" rel="noopener noreferrer">Price Raw: @(_values.RawValue.Round(2) ?? CurrencyValue(GemData.RawCost()))</a>
                     }
                 </p>
                 <p class="card-text">
@@ -43,7 +43,7 @@
                     }
                     else
                     {
-                        <a href="@TradeUrl(GemData.ResultGem(ResultCase.Worst))" target="_blank" rel="noopener noreferrer">Worst Case: @CurrencyValue(_values.WorstCaseValue ?? GemData.Value(ResultCase.Worst))</a>
+                        <a href="@TradeUrl(GemData.ResultGem(ResultCase.Worst))" target="_blank" rel="noopener noreferrer">Worst Case: @(_values.WorstCaseValue.Round(2) ?? CurrencyValue(GemData.Value(ResultCase.Worst)))</a>
                     }
                 </p>
                 <p class="card-text">
@@ -56,7 +56,7 @@
                     }
                     else
                     {
-                        <a href="@TradeUrl(GemData.ResultGem(ResultCase.Middle))" target="_blank" rel="noopener noreferrer">Middle Case: @CurrencyValue(_values.MiddleCaseValue ?? GemData.Value(ResultCase.Middle))</a>
+                        <a href="@TradeUrl(GemData.ResultGem(ResultCase.Middle))" target="_blank" rel="noopener noreferrer">Middle Case: @(_values.MiddleCaseValue.Round(2) ?? CurrencyValue(GemData.Value(ResultCase.Middle)))</a>
                     }
                 </p>
                 <p class="card-text">
@@ -69,7 +69,7 @@
                     }
                     else
                     {
-                        <a href="@TradeUrl(GemData.ResultGem(ResultCase.Best))" target="_blank" rel="noopener noreferrer">Best Case: @CurrencyValue(_values.BestCaseValue ?? GemData.Value(ResultCase.Best))</a>
+                        <a href="@TradeUrl(GemData.ResultGem(ResultCase.Best))" target="_blank" rel="noopener noreferrer">Best Case: @(_values.BestCaseValue.Round(2) ?? CurrencyValue(GemData.Value(ResultCase.Best)))</a>
                     }
                 </p>
             </div>

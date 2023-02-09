@@ -41,8 +41,7 @@ public partial class GemStats
         }
 
         if (!decimal.TryParse(args.Value.ToString(), out var value)) return;
-        var currencyChaosValue = FilterValues.Currency?.ChaosEquivalent ?? 1;
-        _values.RawValue = value * currencyChaosValue;
+        _values.RawValue = value;
         await SaveValues();
     }
 
@@ -56,8 +55,7 @@ public partial class GemStats
         }
 
         if (!decimal.TryParse(args.Value.ToString(), out var value)) return;
-        var currencyChaosValue = FilterValues.Currency?.ChaosEquivalent ?? 1;
-        _values.WorstCaseValue = value * currencyChaosValue;
+        _values.WorstCaseValue = value;
         await SaveValues();
     }
 
@@ -71,8 +69,7 @@ public partial class GemStats
         }
 
         if (!decimal.TryParse(args.Value.ToString(), out var value)) return;
-        var currencyChaosValue = FilterValues.Currency?.ChaosEquivalent ?? 1;
-        _values.MiddleCaseValue = value * currencyChaosValue;
+        _values.MiddleCaseValue = value;
         await SaveValues();
     }
 
@@ -86,8 +83,7 @@ public partial class GemStats
         }
 
         if (!decimal.TryParse(args.Value.ToString(), out var value)) return;
-        var currencyChaosValue = FilterValues.Currency?.ChaosEquivalent ?? 1;
-        _values.BestCaseValue = value * currencyChaosValue;
+        _values.BestCaseValue = value;
         await SaveValues();
     }
 
@@ -106,7 +102,7 @@ public partial class GemStats
         _values = values ?? new Values();
     }
 
-    private string GetCurrencyString(decimal? value) { return value is null ? "" : CurrencyValue((decimal)value); }
+    private string GetCurrencyString(decimal? value) { return value is null ? "" : value.Round(2)!; }
 
     private class Values
     {
