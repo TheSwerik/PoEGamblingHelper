@@ -95,6 +95,7 @@ public partial class GemStats
     {
         _values = new Values();
         await LocalStorage.RemoveItemAsync(GemData.Id.ToString());
+        _isEditing = false;
     }
 
     private async Task SaveValues() { await LocalStorage.SetItemAsync(GemData.Id.ToString(), _values); }
