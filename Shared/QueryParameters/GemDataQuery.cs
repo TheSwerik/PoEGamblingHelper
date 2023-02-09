@@ -7,6 +7,7 @@ public class GemDataQuery
     public GemType GemType { get; set; } = GemType.All;
     public bool OnlyShowProfitable { get; set; } = false;
     public bool ShowAlternateQuality { get; set; } = false;
+    public bool ShowVaal { get; set; } = false;
     public decimal? PricePerTryFrom { get; set; } = null;
     public decimal? PricePerTryTo { get; set; } = null;
 
@@ -17,7 +18,7 @@ public class GemDataQuery
         var pricePerTryFrom = PricePerTryFrom is null ? "" : $"&pricePerTryFrom={PricePerTryFrom}";
         var pricePerTryTo = PricePerTryTo is null ? "" : $"&pricePerTryTo={PricePerTryTo}";
         return
-            $"{start}sort={Sort}&gemType={GemType}&showAlternateQuality={ShowAlternateQuality}&onlyShowProfitable={OnlyShowProfitable}{searchText}{pricePerTryFrom}{pricePerTryTo}";
+            $"{start}sort={Sort}&gemType={GemType}&showAlternateQuality={ShowAlternateQuality}&onlyShowProfitable={OnlyShowProfitable}&showVaal={ShowVaal}{searchText}{pricePerTryFrom}{pricePerTryTo}";
     }
 
     public string ToQueryString(PageRequest? page)

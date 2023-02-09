@@ -23,6 +23,7 @@ public partial class GemDataRepository : Repository<GemData, Guid>, IGemDataRepo
                                                  || !(EF.Functions.Like(gemData.Name.ToLower(), "anomalous%")
                                                       || EF.Functions.Like(gemData.Name.ToLower(), "divergent%")
                                                       || EF.Functions.Like(gemData.Name.ToLower(), "phantasmal%")))
+                                             && (query.ShowVaal || !EF.Functions.Like(gemData.Name.ToLower(), "vaal%"))
                                              && ((query.GemType == GemType.Awakened &&
                                                   gemData.Name.StartsWith("Awakened"))
                                                  || (query.GemType == GemType.Exceptional &&
