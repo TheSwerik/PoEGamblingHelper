@@ -29,6 +29,11 @@
     mask: url(icons/check-mark.svg) no-repeat center;
 }
 
+.reset-icon {
+    -webkit-mask: url(icons/arrow-rotate-right.svg) no-repeat center;
+    mask: url(icons/arrow-rotate-right.svg) no-repeat center;
+}
+
 input {
     padding-right: 8px !important;
 }
