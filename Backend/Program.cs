@@ -36,26 +36,11 @@ builder.Services
                                    return new ValueTask();
                                };
 
-                           limiterOptions.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, IPAddress>(
-                               context =>
-                               {
-                                   var remoteIpAddress = context.Connection.RemoteIpAddress;
-                                   if (IPAddress.IsLoopback(remoteIpAddress!))
-                                       return RateLimitPartition.GetNoLimiter(IPAddress.Loopback);
-
-                                   return RateLimitPartition.GetTokenBucketLimiter(remoteIpAddress!,
-                                       _ => new TokenBucketRateLimiterOptions
-                                            {
-                                                TokenLimit = int.Parse(builder.Configuration["RateLimit:TokenLimit"]!),
-                                                ReplenishmentPeriod =
-                                                    TimeSpan.FromSeconds(
-                                                        int.Parse(builder.Configuration[
-                                                                      "RateLimit:ReplenishmentPeriodSeconds"]!)),
-                                                TokensPerPeriod =
-                                                    int.Parse(builder.Configuration["RateLimit:TokensPerPeriod"]!),
-                                                AutoReplenishment = true
-                                            });
-                               });
+                           limiterOptions.GlobalLimiter = PartitionedRateLimiter.CreateChained(
+                               PartitionedRateLimiter.Create<HttpContext, string>(_ => GetGlobalRateLimiter(builder)),
+                               PartitionedRateLimiter.Create<HttpContext, IPAddress>(
+                                   context => GetIpAddressRateLimiter(builder, context)
+                               ));
                        });
 builder.Services.AddControllers(options => { options.Filters.Add<HttpResponseExceptionFilter>(); });
 builder.Services.AddEndpointsApiExplorer();
@@ -149,5 +134,42 @@ static string GetUserEndPoint(HttpContext context)
 }
 
 static string GetTicks() { return (DateTime.Now.Ticks & 0x11111).ToString("00000"); }
+
+static RateLimitPartition<string> GetGlobalRateLimiter(WebApplicationBuilder builder)
+{
+    var tokenLimit = int.Parse(builder.Configuration["RateLimit:Global:TokenLimit"]!);
+    var replenishmentPeriod =
+        TimeSpan.FromSeconds(int.Parse(builder.Configuration["RateLimit:Global:ReplenishmentPeriodSeconds"]!));
+    var tokensPerPeriod = int.Parse(builder.Configuration["RateLimit:Global:TokensPerPeriod"]!);
+    var options = new TokenBucketRateLimiterOptions
+                  {
+                      TokenLimit = tokenLimit,
+                      ReplenishmentPeriod = replenishmentPeriod,
+                      TokensPerPeriod = tokensPerPeriod,
+                      AutoReplenishment = true
+                  };
+
+    return RateLimitPartition.GetTokenBucketLimiter("Global", _ => options);
+}
+
+static RateLimitPartition<IPAddress> GetIpAddressRateLimiter(WebApplicationBuilder builder, HttpContext context)
+{
+    var remoteIpAddress = context.Connection.RemoteIpAddress;
+    if (IPAddress.IsLoopback(remoteIpAddress!)) return RateLimitPartition.GetNoLimiter(IPAddress.Loopback);
+
+    var tokenLimit = int.Parse(builder.Configuration["RateLimit:IpAddress:TokenLimit"]!);
+    var replenishmentPeriod =
+        TimeSpan.FromSeconds(int.Parse(builder.Configuration["RateLimit:IpAddress:ReplenishmentPeriodSeconds"]!));
+    var tokensPerPeriod = int.Parse(builder.Configuration["RateLimit:IpAddress:TokensPerPeriod"]!);
+    var options = new TokenBucketRateLimiterOptions
+                  {
+                      TokenLimit = tokenLimit,
+                      ReplenishmentPeriod = replenishmentPeriod,
+                      TokensPerPeriod = tokensPerPeriod,
+                      AutoReplenishment = true
+                  };
+
+    return RateLimitPartition.GetTokenBucketLimiter(remoteIpAddress!, _ => options);
+}
 
 #endregion
