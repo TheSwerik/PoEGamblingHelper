@@ -76,6 +76,38 @@
 #avg-profit:hover[b-s63onf2r6d] {
     filter: none !important;
 }
+
+.edit-button[b-s63onf2r6d] {
+    background: none;
+    border: none;
+    display: flex;
+    height: 1.5rem;
+}
+
+.edit-icon[b-s63onf2r6d] {
+    background-color: var(--bs-secondary);
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.pen-icon[b-s63onf2r6d] {
+    -webkit-mask: url(icons/edit.svg) no-repeat center;
+    mask: url(icons/edit.svg) no-repeat center;
+}
+
+.check-mark-icon[b-s63onf2r6d] {
+    -webkit-mask: url(icons/check-mark.svg) no-repeat center;
+    mask: url(icons/check-mark.svg) no-repeat center;
+}
+
+.reset-icon[b-s63onf2r6d] {
+    -webkit-mask: url(icons/arrow-rotate-right.svg) no-repeat center;
+    mask: url(icons/arrow-rotate-right.svg) no-repeat center;
+}
+
+input[b-s63onf2r6d] {
+    padding-right: 8px !important;
+}
 /* /Pages/GamblingHelper.razor.rz.scp.css */
 .vertical-content[b-zxbo172sad] {
     width: 100%;
