@@ -1,5 +1,7 @@
 global using Backend.Data;
 using System.Globalization;
+using System.Net;
+using System.Threading.RateLimiting;
 using Backend.Exceptions;
 using Backend.Service;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +17,30 @@ var builder = WebApplication.CreateBuilder(args);
 
 #region Web
 
+builder.Services.AddRateLimiter(
+    limiterOptions =>
+    {
+        limiterOptions.OnRejected =
+            (context, _) =>
+            {
+                if (context.Lease.TryGetMetadata(MetadataName.RetryAfter, out var retryAfter))
+                    context.HttpContext.Response.Headers.RetryAfter =
+                        ((int)retryAfter.TotalSeconds).ToString(NumberFormatInfo.InvariantInfo);
+
+                context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
+                context.HttpContext
+                       .RequestServices
+                       .GetService<ILoggerFactory>()?
+                       .CreateLogger("Microsoft.AspNetCore.RateLimitingMiddleware")
+                       .LogWarning("OnRejected: {GetUserEndPoint}", GetUserEndPoint(context.HttpContext));
+                return new ValueTask();
+            };
+
+        limiterOptions.GlobalLimiter = PartitionedRateLimiter.CreateChained(
+            PartitionedRateLimiter.Create<HttpContext, string>(_ => GetGlobalRateLimiter(builder)),
+            PartitionedRateLimiter.Create<HttpContext, IPAddress>(context => GetIpAddressRateLimiter(builder, context))
+        );
+    });
 builder.Services.AddControllers(options => { options.Filters.Add<HttpResponseExceptionFilter>(); });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -78,6 +104,7 @@ app.UseCors(corsBuilder =>
                 corsBuilder.WithOrigins(app.Configuration["AllowedOrigins"]!).AllowAnyMethod().AllowAnyHeader());
 app.UseAuthorization();
 
+app.UseRateLimiter();
 app.UseOutputCache();
 app.MapControllers();
 
@@ -94,5 +121,52 @@ using (var scope = app.Services.CreateScope())
 #endregion
 
 app.Run();
+
+#endregion
+
+#region Helper Methods
+
+static string GetUserEndPoint(HttpContext context)
+{
+    return $"User {context.User.Identity?.Name ?? "Anonymous"} endpoint:{context.Request.Path}"
+           + $" {context.Connection.RemoteIpAddress}";
+}
+
+static RateLimitPartition<string> GetGlobalRateLimiter(WebApplicationBuilder builder)
+{
+    var tokenLimit = int.Parse(builder.Configuration["RateLimit:Global:TokenLimit"]!);
+    var replenishmentPeriod =
+        TimeSpan.FromSeconds(int.Parse(builder.Configuration["RateLimit:Global:ReplenishmentPeriodSeconds"]!));
+    var tokensPerPeriod = int.Parse(builder.Configuration["RateLimit:Global:TokensPerPeriod"]!);
+    var options = new TokenBucketRateLimiterOptions
+                  {
+                      TokenLimit = tokenLimit,
+                      ReplenishmentPeriod = replenishmentPeriod,
+                      TokensPerPeriod = tokensPerPeriod,
+                      AutoReplenishment = true
+                  };
+
+    return RateLimitPartition.GetTokenBucketLimiter("Global", _ => options);
+}
+
+static RateLimitPartition<IPAddress> GetIpAddressRateLimiter(WebApplicationBuilder builder, HttpContext context)
+{
+    var remoteIpAddress = context.Connection.RemoteIpAddress;
+    if (IPAddress.IsLoopback(remoteIpAddress!)) return RateLimitPartition.GetNoLimiter(IPAddress.Loopback);
+
+    var tokenLimit = int.Parse(builder.Configuration["RateLimit:IpAddress:TokenLimit"]!);
+    var replenishmentPeriod =
+        TimeSpan.FromSeconds(int.Parse(builder.Configuration["RateLimit:IpAddress:ReplenishmentPeriodSeconds"]!));
+    var tokensPerPeriod = int.Parse(builder.Configuration["RateLimit:IpAddress:TokensPerPeriod"]!);
+    var options = new TokenBucketRateLimiterOptions
+                  {
+                      TokenLimit = tokenLimit,
+                      ReplenishmentPeriod = replenishmentPeriod,
+                      TokensPerPeriod = tokensPerPeriod,
+                      AutoReplenishment = true
+                  };
+
+    return RateLimitPartition.GetTokenBucketLimiter(remoteIpAddress!, _ => options);
+}
 
 #endregion
