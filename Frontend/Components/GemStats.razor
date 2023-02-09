@@ -2,23 +2,28 @@
 @using PoEGamblingHelper3.Components.Model
 <div class="card mb-5" style="width: 45rem;">
     <div class="card-body">
-        <h3 class="card-title">
-            <img src="@GemData.Icon" alt="Gem-Icon" class="icon"/>@GemData.Name
-        </h3>
+        <div class="w-100 d-flex justify-content-between">
+            <h3 class="card-title">
+                <img src="@GemData.Icon" alt="Gem-Icon" class="icon"/>@GemData.Name
+            </h3>
+            <button class="edit-button">
+                <div class="edit-icon"></div>
+            </button>
+        </div>
         <div class="row gy-5">
             <div class="col">
                 <h5 class="card-title">Value</h5>
                 <p class="card-text">
-                    <a href="@TradeUrl(GemData.RawGem())" target="_blank" rel="noopener noreferrer">Price Raw: @CurrencyValue(GemData.RawCost())</a>
+                    <a href="@TradeUrl(GemData.RawGem())" target="_blank" rel="noopener noreferrer">Price Raw: @CurrencyValue(RawValue ?? GemData.RawCost())</a>
                 </p>
                 <p class="card-text">
-                    <a href="@TradeUrl(GemData.ResultGem(ResultCase.Worst))" target="_blank" rel="noopener noreferrer">Worst Case: @CurrencyValue(GemData.Value(ResultCase.Worst))</a>
+                    <a href="@TradeUrl(GemData.ResultGem(ResultCase.Worst))" target="_blank" rel="noopener noreferrer">Worst Case: @CurrencyValue(WorstCaseValue ?? GemData.Value(ResultCase.Worst))</a>
                 </p>
                 <p class="card-text">
-                    <a href="@TradeUrl(GemData.ResultGem(ResultCase.Middle))" target="_blank" rel="noopener noreferrer">Middle Case: @CurrencyValue(GemData.Value(ResultCase.Middle))</a>
+                    <a href="@TradeUrl(GemData.ResultGem(ResultCase.Middle))" target="_blank" rel="noopener noreferrer">Middle Case: @CurrencyValue(MiddleCaseValue ?? GemData.Value(ResultCase.Middle))</a>
                 </p>
                 <p class="card-text">
-                    <a href="@TradeUrl(GemData.ResultGem(ResultCase.Best))" target="_blank" rel="noopener noreferrer">Best Case: @CurrencyValue(GemData.Value(ResultCase.Best))</a>
+                    <a href="@TradeUrl(GemData.ResultGem(ResultCase.Best))" target="_blank" rel="noopener noreferrer">Best Case: @CurrencyValue(BestCaseValue ?? GemData.Value(ResultCase.Best))</a>
                 </p>
             </div>
             <div class="col">
@@ -52,6 +57,11 @@
 
     [Parameter]
     public League CurrentLeague { get; set; } = null!;
+
+    private decimal? RawValue = null;
+    private decimal? WorstCaseValue = null;
+    private decimal? MiddleCaseValue = null;
+    private decimal? BestCaseValue = null;
 
     private decimal FilterTempleCost() { return FilterValues.TempleCost ?? TempleCost.AverageChaosValue(); }
 

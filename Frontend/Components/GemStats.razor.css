@@ -5,3 +5,18 @@
 #avg-profit:hover {
     filter: none !important;
 }
+
+.edit-button {
+    background: none;
+    border: none;
+    display: flex;
+    height: 1.5rem;
+}
+
+.edit-icon {
+    background-color: var(--bs-secondary);
+    width: 1.5rem;
+    height: 1.5rem;
+    -webkit-mask: url(icons/edit.svg) no-repeat center;
+    mask: url(icons/edit.svg) no-repeat center;
+}
