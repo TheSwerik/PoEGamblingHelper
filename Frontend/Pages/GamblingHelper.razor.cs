@@ -1,5 +1,6 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using PoEGamblingHelper3.Components.Model;
 using PoEGamblingHelper3.Service;
 using Shared.Entity;
@@ -23,6 +24,8 @@ public partial class GamblingHelper : IDisposable
     [Inject] private ICurrencyService CurrencyService { get; set; } = default!;
     [Inject] private ILocalStorageService LocalStorage { get; set; } = default!;
     [Inject] private ILeagueService LeagueService { get; set; } = default!;
+
+    [Inject] private IJSRuntime JsRuntime { get; set; } = null!;
 
     public void Dispose() { _loadGamblingDataTask.Dispose(); }
     private DateTime NextBackendUpdate() { return _lastBackendUpdate.AddMinutes(5); }
@@ -91,6 +94,7 @@ public partial class GamblingHelper : IDisposable
 
             _isUpdating = false;
             await InvokeAsync(StateHasChanged);
+            await JsRuntime.InvokeVoidAsync("addTooltips");
         }
     }
 

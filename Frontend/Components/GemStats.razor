@@ -81,7 +81,9 @@
                 <p class="card-text">Best Case: @CurrencyValue(_values.BestCaseValue is null ? GemData.Profit(ResultCase.Best, _values.RawValue, FilterTempleCost()) : GemData.Profit((decimal)_values.BestCaseValue, _values.RawValue, FilterTempleCost()))</p>
             </div>
             <div class="col d-flex">
-                <button class="btn btn-primary align-self-end w-100">+ Value</button>
+                <div class="d-block align-self-end w-100" data-bs-toggle="tooltip" data-bs-title="This feature is not implemented yet">
+                    <button class="btn btn-primary w-100" disabled>+ Value</button>
+                </div>
             </div>
             <div class="col d-flex flex-column justify-content-between">
                 <h5 class="card-title">Average Profit per Try</h5>
