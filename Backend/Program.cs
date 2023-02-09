@@ -132,8 +132,6 @@ static string GetUserEndPoint(HttpContext context)
            + $" {context.Connection.RemoteIpAddress}";
 }
 
-static string GetTicks() { return (DateTime.Now.Ticks & 0x11111).ToString("00000"); }
-
 static RateLimitPartition<string> GetGlobalRateLimiter(WebApplicationBuilder builder)
 {
     var tokenLimit = int.Parse(builder.Configuration["RateLimit:Global:TokenLimit"]!);
