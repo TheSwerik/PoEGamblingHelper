@@ -5,8 +5,8 @@ platform:
   os: linux
   arch: arm64
 trigger:
-  event:
-    - push
+  branch:
+    - release
 steps:
   - name: run tests
     image: mcr.microsoft.com/dotnet/sdk:7.0
