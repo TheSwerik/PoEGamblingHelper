@@ -1,6 +1,6 @@
 ﻿# Path of Exile Gambling Helper
 
-A Web-Tool for Calculating if gambles in Path of Exile are profitable or not.
+A Web-Tool for Calculating if gambles in Path of Exile are profitable or not: https://poegamblinghelper.swerik.dev
 
 ## How to use
 
