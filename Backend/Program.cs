@@ -68,8 +68,8 @@ builder.Services.AddScoped<IRepository<TempleCost, Guid>, Repository<TempleCost,
 
 #region Service
 
-builder.Services.AddSingleton<IPoeDataFetchService, PoeDataFetchService>();
-builder.Services.AddSingleton<IPoeDataService, PoeDataService>();
+builder.Services.AddScoped<IPoeDataFetchService, PoeDataFetchService>();
+builder.Services.AddScoped<IPoeDataService, PoeDataService>();
 
 builder.Services.AddHostedService<InitService>();
 
