@@ -9,19 +9,17 @@ namespace Backend.Controllers;
 [Route("[controller]")]
 public class TempleController : ControllerBase
 {
-    private readonly ILogger<TempleController> _logger;
     private readonly IRepository<TempleCost, Guid> _templeCostRepository;
 
-    public TempleController(ILogger<TempleController> logger, IRepository<TempleCost, Guid> templeCostRepository)
+    public TempleController(IRepository<TempleCost, Guid> templeCostRepository)
     {
-        _logger = logger;
         _templeCostRepository = templeCostRepository;
     }
 
     [HttpGet]
     [OutputCache(PolicyName = "FetchData")]
-    public ActionResult<TempleCost> Get()
+    public TempleCost Get()
     {
-        return Ok(_templeCostRepository.GetAll().FirstOrDefault() ?? throw new NoTempleDataException());
+        return _templeCostRepository.GetAll().FirstOrDefault() ?? throw new NoTempleDataException();
     }
 }
