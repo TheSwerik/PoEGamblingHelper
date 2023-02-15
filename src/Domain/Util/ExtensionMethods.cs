@@ -1,6 +1,6 @@
-﻿using Shared.Entity;
+﻿using Domain.Entity.Gem;
 
-namespace Shared.Util;
+namespace Domain;
 
 public static class ExtensionMethods
 {
