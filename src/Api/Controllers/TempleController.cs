@@ -1,4 +1,4 @@
-using Application.Service;
+using Application.Services;
 using Domain.Entity;
 using Domain.Exception;
 using Microsoft.AspNetCore.Mvc;
@@ -8,11 +8,17 @@ namespace Api.Controllers;
 
 public class TempleController : ApiControllerBase
 {
-    private readonly ITempleService _templeService;
+    private readonly IApplicationDbContext _applicationDbContext;
 
-    public TempleController(ITempleService templeService) { _templeService = templeService; }
+    public TempleController(IApplicationDbContext applicationDbContext)
+    {
+        _applicationDbContext = applicationDbContext;
+    }
 
     [HttpGet]
     [OutputCache(PolicyName = "FetchData")]
-    public TempleCost Get() { return _templeService.GetCurrent() ?? throw new NoTempleDataException(); }
+    public TempleCost Get()
+    {
+        return _applicationDbContext.TempleCost.FirstOrDefault() ?? throw new NoTempleDataException();
+    }
 }

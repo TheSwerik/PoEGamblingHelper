@@ -1,4 +1,4 @@
-using Application.Service;
+using Application.Services;
 using Domain.Entity.Gem;
 using Domain.QueryParameters;
 using Microsoft.AspNetCore.Mvc;

@@ -1,7 +1,7 @@
 ﻿using Domain.Entity.Gem;
 using Domain.QueryParameters;
 
-namespace Application.Service;
+namespace Application.Services;
 
 public interface IGemService
 {
