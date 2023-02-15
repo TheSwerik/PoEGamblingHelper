@@ -14,8 +14,8 @@ public class GemController : ApiControllerBase
 
     [HttpGet]
     [OutputCache(PolicyName = "FetchData")]
-    public Page<GemData> GetAll([FromQuery] GemDataQuery? query, [FromQuery] PageRequest page)
+    public async Task<Page<GemData>> GetAll([FromQuery] GemDataQuery? query, [FromQuery] PageRequest page)
     {
-        return _gemService.GetAll(query, page);
+        return await _gemService.GetAll(query, page);
     }
 }
