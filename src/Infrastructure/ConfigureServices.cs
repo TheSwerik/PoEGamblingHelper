@@ -30,9 +30,6 @@ public static class ConfigureServices
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
         services.AddTransient<IGemService, GemService>();
         services.AddTransient<ILeagueService, LeagueService>();
-
-        //TODO:
-        // builder.Services.AddScoped<IPoeDataFetchService, PoeDataFetchService>();
-        // builder.Services.AddHostedService<InitService>();
+        services.AddTransient<IDataFetchService, DataFetchService>();
     }
 }

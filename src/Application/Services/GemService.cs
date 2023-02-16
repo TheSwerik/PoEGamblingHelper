@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Services;
 
-//TODO thoroughly test this
 public partial class GemService : IGemService
 {
     private readonly IApplicationDbContext _applicationDbContext;

@@ -15,4 +15,7 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.3"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <FrameworkReference Include="Microsoft.AspNetCore.App"/>
+    </ItemGroup>
 </Project>

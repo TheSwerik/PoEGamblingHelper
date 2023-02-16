@@ -6,7 +6,7 @@ public static class ConfigureCache
                                               IConfiguration configuration)
     {
         var expiration = TimeSpan.FromMinutes(configuration.GetValue<int>("FetchMinutes"));
-        var tag = configuration["CacheTag"] ?? throw new Exception("CacheTag is missing");
+        var tag = configuration.GetValue<string>("CacheTag");
         return services.AddOutputCache(options =>
                                        {
                                            options.AddBasePolicy(

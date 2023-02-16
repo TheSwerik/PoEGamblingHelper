@@ -1,7 +1,9 @@
 using System.Globalization;
 using Api;
 using Api.Filters;
+using Application.Services;
 using Infrastructure;
+using Microsoft.AspNetCore.OutputCaching;
 
 #if DEBUG
 Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
@@ -17,6 +19,15 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddCache(builder.Configuration);
+builder.Services.AddHostedService<InitService>(
+    opt => new InitService(
+        opt.GetRequiredService<ILogger<InitService>>(),
+        opt.GetRequiredService<IDataFetchService>(),
+        opt.GetRequiredService<IOutputCacheStore>(),
+        TimeSpan.FromMinutes(builder.Configuration.GetValue<int>("FetchInterval")),
+        builder.Configuration.GetValue<string>("CacheTag")!
+    )
+);
 
 var app = builder.Build();
 
