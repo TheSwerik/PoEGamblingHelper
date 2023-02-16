@@ -39,23 +39,11 @@ public partial class DataFetchService : IDataFetchService
         );
     }
 
-    public Task FetchCurrencyData()
-    {
-        Console.WriteLine("NOT IMPLEMENTED");
-        return Task.CompletedTask;
-    }
+    public async Task FetchCurrencyData() { Console.WriteLine("NOT IMPLEMENTED"); }
 
-    public Task FetchTemplePriceData()
-    {
-        Console.WriteLine("NOT IMPLEMENTED");
-        return Task.CompletedTask;
-    }
+    public async Task FetchTemplePriceData() { Console.WriteLine("NOT IMPLEMENTED"); }
 
-    public Task FetchGemPriceData()
-    {
-        Console.WriteLine("NOT IMPLEMENTED");
-        return Task.CompletedTask;
-    }
+    public async Task FetchGemPriceData() { Console.WriteLine("NOT IMPLEMENTED"); }
 
     #region Helper Methods
 
