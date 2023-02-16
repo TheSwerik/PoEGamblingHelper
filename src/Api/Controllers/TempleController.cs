@@ -19,6 +19,7 @@ public class TempleController : ApiControllerBase
     [OutputCache(PolicyName = "FetchData")]
     public TempleCost Get()
     {
-        return _applicationDbContext.TempleCost.FirstOrDefault() ?? throw new NoTempleDataException();
+        return _applicationDbContext.TempleCost.OrderByDescending(cost => cost.TimeStamp).FirstOrDefault()
+               ?? throw new NoTempleDataException();
     }
 }

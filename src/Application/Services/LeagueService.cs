@@ -10,7 +10,8 @@ public class LeagueService : ILeagueService
         var utcNow = DateTime.Now.ToUniversalTime();
         return applicationDbContext.League
                                    .Where(league => utcNow >= league.StartDate)
-                                   .MaxBy(league => league.StartDate)
+                                   .OrderByDescending(league => league.StartDate)
+                                   .FirstOrDefault()
                ?? throw new NoLeagueDataException();
     }
 }
