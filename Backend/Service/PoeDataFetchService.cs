@@ -4,7 +4,6 @@ using System.Text.RegularExpressions;
 using Backend.Exceptions;
 using HtmlAgilityPack;
 using Shared.Entity;
-using Shared.Util;
 
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Local
 
@@ -296,7 +295,8 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
         {
             var details =
                 result.CurrencyDetails.FirstOrDefault(
-                    details => poeNinjaCurrencyData.Name.EqualsIgnoreCase(details.Name));
+                    details => poeNinjaCurrencyData.Name.Equals(details.Name,
+                                                                StringComparison.InvariantCultureIgnoreCase));
             if (details is not null) poeNinjaCurrencyData.Icon = details.Icon;
         }
 
@@ -378,8 +378,10 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
                                                                              Gems = allGemTradeData
                                                                                  .Where(tradeData =>
                                                                                      tradeData.Name
-                                                                                         .EqualsIgnoreCase(
-                                                                                             group.Key))
+                                                                                         .Equals(
+                                                                                             group.Key,
+                                                                                             StringComparison
+                                                                                                 .InvariantCultureIgnoreCase))
                                                                                  .ToList()
                                                                          }));
         Logger.LogInformation("Added {Result} GemData", newPoeNinjaGemData.Length);
@@ -390,15 +392,20 @@ public class PoeDataFetchService : Service, IPoeDataFetchService
                                                                                {
                                                                                    Id = trackedGemData
                                                                                        .First(gem => gem.Name
-                                                                                           .EqualsIgnoreCase(
-                                                                                               group.Key)).Id,
+                                                                                           .Equals(
+                                                                                               group.Key,
+                                                                                               StringComparison
+                                                                                                   .InvariantCultureIgnoreCase))
+                                                                                       .Id,
                                                                                    Name = group.Key,
                                                                                    Icon = group.First().Icon,
                                                                                    Gems = allGemTradeData
                                                                                        .Where(tradeData =>
                                                                                            tradeData.Name
-                                                                                               .EqualsIgnoreCase(
-                                                                                                   group.Key))
+                                                                                               .Equals(
+                                                                                                   group.Key,
+                                                                                                   StringComparison
+                                                                                                       .InvariantCultureIgnoreCase))
                                                                                        .ToList()
                                                                                }));
         Logger.LogInformation("Updated {Result} GemData", updatedPoeNinjaGemData.Length);

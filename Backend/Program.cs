@@ -51,13 +51,14 @@ builder.Logging.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogL
 
 #region Data
 
-#if DEBUG
-builder.Services.AddDbContext<ApplicationDbContext>(opt => { opt.UseInMemoryDatabase("PoEGamblingHelper"); });
-#elif RELEASE
+// #if DEBUG
+// builder.Services.AddDbContext<ApplicationDbContext>(opt => { opt.UseInMemoryDatabase("PoEGamblingHelper"); });
+// #elif RELEASE
 builder.Services.AddEntityFrameworkNpgsql().AddDbContext<ApplicationDbContext>(
-    opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("DBConnection") + $"Password={builder.Configuration["POSTGRES_PASSWORD"]};")
+    opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("DBConnection") +
+                         $"Password={builder.Configuration["POSTGRES_PASSWORD"]};")
 );
-#endif
+// #endif
 builder.Services.AddScoped<IGemDataRepository, GemDataRepository>();
 builder.Services.AddScoped<IRepository<GemTradeData, long>, Repository<GemTradeData, long>>();
 builder.Services.AddScoped<IRepository<Currency, string>, Repository<Currency, string>>();
@@ -68,8 +69,8 @@ builder.Services.AddScoped<IRepository<TempleCost, Guid>, Repository<TempleCost,
 
 #region Service
 
-builder.Services.AddScoped<IPoeDataFetchService, PoeDataFetchService>();
-builder.Services.AddScoped<IPoeDataService, PoeDataService>();
+builder.Services.AddTransient<IPoeDataFetchService, PoeDataFetchService>();
+builder.Services.AddTransient<IPoeDataService, PoeDataService>();
 
 builder.Services.AddHostedService<InitService>();
 

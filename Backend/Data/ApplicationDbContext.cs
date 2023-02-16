@@ -10,7 +10,7 @@ public class ApplicationDbContext : DbContext
     public virtual DbSet<GemData> GemData { get; init; } = null!;
     public virtual DbSet<GemTradeData> GemTradeData { get; init; } = null!;
     public virtual DbSet<Currency> Currency { get; init; } = null!;
-    public virtual DbSet<League> Leagues { get; init; } = null!;
+    public virtual DbSet<League> League { get; init; } = null!;
     public virtual DbSet<TempleCost> TempleCost { get; init; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

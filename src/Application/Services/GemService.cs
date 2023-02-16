@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Services;
 
+//TODO thoroughly test this
 public partial class GemService : IGemService
 {
     private readonly IApplicationDbContext _applicationDbContext;
@@ -53,7 +54,7 @@ public partial class GemService : IGemService
         query.PricePerTryTo ??= decimal.MinValue;
 
         return _applicationDbContext.GemData
-                                    .Where(gemData => PreFilterGemData(gemData, query))
+                                    .FromSqlRaw(PreFilterGemDataQuery(query))
                                     .Include(gemData => gemData.Gems)
                                     .AsEnumerable()
                                     .Where(gemData => PostFilterGemData(gemData, query))
@@ -61,30 +62,39 @@ public partial class GemService : IGemService
                                     .ToArray();
     }
 
-    private static bool PreFilterGemData(GemData gemData, GemDataQuery query)
+    private static string PreFilterGemDataQuery(GemDataQuery query)
     {
-        var isAlternateQuality = EF.Functions.Like(gemData.Name.ToLower(), "anomalous%")
-                                 || EF.Functions.Like(gemData.Name.ToLower(), "divergent%")
-                                 || EF.Functions.Like(gemData.Name.ToLower(), "phantasmal%");
-        var isVaal = EF.Functions.Like(gemData.Name.ToLower(), "vaal%");
-        var isExceptional = EF.Functions.Like(gemData.Name.ToLower(), "%enhance%")
-                            || EF.Functions.Like(gemData.Name.ToLower(), "%empower%")
-                            || EF.Functions.Like(gemData.Name.ToLower(), "%enlighten%");
-        var isSupport = EF.Functions.Like(gemData.Name.ToLower(), "%support");
+        const string isAlternateQuality = """
+               (LOWER("Name") LIKE 'anomalous%'
+               OR LOWER("Name") LIKE 'divergent%'
+               OR LOWER("Name") LIKE 'phantasmal%')
+        """;
+        const string isVaal = """LOWER("Name") LIKE 'vaal%' """;
+
+        const string isExceptional = """
+                (LOWER("Name") LIKE '%enhance%'
+                OR LOWER("Name") LIKE '%empower%'
+                OR LOWER("Name") LIKE '%enlighten%')
+        """;
+        const string isAwakened = """LOWER("Name") LIKE 'awakened%' """;
+        const string isSupport = """LOWER("Name") LIKE '%support' """;
         var isGemTypeMatching = query.GemType switch
                                 {
-                                    GemType.All => true,
+                                    GemType.All => true.ToString(),
                                     GemType.Exceptional => isExceptional,
-                                    GemType.Awakened => EF.Functions.Like(gemData.Name.ToLower(), "awakened%"),
+                                    GemType.Awakened => isAwakened,
                                     GemType.RegularSupport => isSupport,
-                                    GemType.Skill => !isSupport,
+                                    GemType.Skill => $"NOT {isSupport}",
                                     _ => throw new UnreachableException()
                                 };
 
-        return EF.Functions.Like(gemData.Name.ToLower(), $"%{query.SearchText}%")
-               && (query.ShowAlternateQuality || !isAlternateQuality)
-               && (query.ShowVaal || !isVaal)
-               && isGemTypeMatching;
+        return $"""
+            SELECT * FROM "GemData"
+                WHERE LOWER("Name") LIKE '%{query.SearchText}%'
+                  AND {query.ShowAlternateQuality} OR NOT {isAlternateQuality}
+                  AND {query.ShowVaal} OR NOT {isVaal}
+                  AND {isGemTypeMatching}
+        """;
     }
 
     private static bool PostFilterGemData(GemData gemData, GemDataQuery query)

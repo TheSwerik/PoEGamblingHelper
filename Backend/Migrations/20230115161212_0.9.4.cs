@@ -40,7 +40,7 @@ namespace Backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Leagues",
+                name: "League",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -109,7 +109,7 @@ namespace Backend.Migrations
                 name: "GemTradeData");
 
             migrationBuilder.DropTable(
-                name: "Leagues");
+                name: "League");
 
             migrationBuilder.DropTable(
                 name: "TempleCost");
