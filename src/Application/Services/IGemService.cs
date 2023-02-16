@@ -5,5 +5,5 @@ namespace Application.Services;
 
 public interface IGemService
 {
-    async Task<Page<GemData>> GetAll(GemDataQuery? query, PageRequest page);
+    Task<Page<GemData>> GetAll(GemDataQuery? query, PageRequest page);
 }

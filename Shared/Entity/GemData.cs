@@ -1,6 +1,4 @@
-﻿using Shared.Util;
-
-namespace Shared.Entity;
+﻿namespace Shared.Entity;
 
 public class GemData : Entity<Guid>
 {
@@ -26,7 +24,8 @@ public class GemData : Entity<Guid>
                    .MinBy(gem => gem.GemQuality)?.ChaosValue ?? 0m;
     }
 
-    public decimal Value(ResultCase resultCase) { return ResultValue(MaxLevel() + resultCase.LevelModifier()); }
+    // public decimal Value(ResultCase resultCase) { return ResultValue(MaxLevel() + resultCase.LevelModifier()); }
+    public decimal Value(ResultCase resultCase) { return ResultValue(MaxLevel() + 123); }
     public decimal CostPerTry(decimal? rawCost, decimal templeCost = 0) { return (rawCost ?? RawCost()) + templeCost; }
 
     public decimal Profit(decimal value, decimal? rawCost = null, decimal templeCost = 0)
@@ -69,7 +68,8 @@ public class GemData : Entity<Guid>
 
     public GemTradeData? ResultGem(ResultCase resultCase)
     {
-        return Gems.Where(gem => gem.GemLevel == MaxLevel() + resultCase.LevelModifier() && gem.Corrupted)
+        // return Gems.Where(gem => gem.GemLevel == MaxLevel() + resultCase.LevelModifier()).MinBy(gem => gem.ChaosValue);
+        return Gems.Where(gem => gem.GemLevel == MaxLevel() + 123)
                    .MinBy(gem => gem.ChaosValue);
     }
 
