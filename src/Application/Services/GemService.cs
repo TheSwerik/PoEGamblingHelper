@@ -51,7 +51,7 @@ public partial class GemService : IGemService
     {
         query.SearchText = SqlSanitizeRegex().Replace(query.SearchText, "").ToLowerInvariant();
         query.PricePerTryFrom ??= decimal.MinValue;
-        query.PricePerTryTo ??= decimal.MinValue;
+        query.PricePerTryTo ??= decimal.MaxValue;
 
         return _applicationDbContext.GemData
                                     .FromSqlRaw(PreFilterGemDataQuery(query))
