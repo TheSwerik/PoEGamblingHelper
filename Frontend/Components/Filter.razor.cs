@@ -32,24 +32,25 @@ public partial class Filter : ComponentBase
 
     private string TempleCostString()
     {
-        var currencyChaosValue = FilterValues.CurrencyValue ?? FilterValues.Currency?.ChaosEquivalent ?? 1;
         var templeCost = FilterValues.TempleCost ?? TempleCost.AverageChaosValue();
-        return ShowDecimal(templeCost / currencyChaosValue);
+        return CurrencyValue(templeCost);
     }
 
     private string CurrencyValueString()
     {
         return FilterValues.CurrencyValue is null && FilterValues.Currency is not null
-                   ? ShowDecimal(FilterValues.Currency.ChaosEquivalent)
-                   : ShowDecimal(FilterValues.CurrencyValue);
+                   ? ToStringOrBlank(FilterValues.Currency.ChaosEquivalent)
+                   : ToStringOrBlank(FilterValues.CurrencyValue);
     }
 
     private void ToggleFilters() { FiltersExpanded = !FiltersExpanded; }
 
-    private string ShowDecimal(decimal? value)
+    private string ToStringOrBlank(decimal? value)
     {
-        return value is null or decimal.MinValue or decimal.MaxValue ? "" : value.Round(2);
+        return value is null or decimal.MinValue or decimal.MaxValue ? "" : value.Round(2)!;
     }
+
+    private string CurrencyValue(decimal? value) { return ToStringOrBlank(value / ConversionRatio()); }
 
     private GemType[] GemTypes() { return Enum.GetValues<GemType>(); }
     private Sort[] Sorts() { return Enum.GetValues<Sort>(); }
@@ -68,13 +69,17 @@ public partial class Filter : ComponentBase
         return $"Chaos per {FilterValues.Currency.Name}";
     }
 
+    private decimal ConversionRatio()
+    {
+        return FilterValues.CurrencyValue ?? FilterValues.Currency?.ChaosEquivalent ?? 1;
+    }
+
     #region Update Callback
 
     private async Task UpdateTempleCost(ChangeEventArgs args)
     {
         if (args.Value is null || !decimal.TryParse(args.Value.ToString(), out var value)) return;
-        var currencyChaosValue = FilterValues.Currency?.ChaosEquivalent ?? 1;
-        FilterValues.TempleCost = value * currencyChaosValue;
+        FilterValues.TempleCost = value * ConversionRatio();
         await SaveFilterValues();
     }
 
@@ -95,14 +100,14 @@ public partial class Filter : ComponentBase
     private async Task UpdatePricePerTryFrom(ChangeEventArgs args)
     {
         if (args.Value is null || !decimal.TryParse(args.Value.ToString(), out var value)) return;
-        FilterValues.PricePerTryFrom = value;
+        FilterValues.PricePerTryFrom = value * ConversionRatio();
         await SaveFilterValues();
     }
 
     private async Task UpdatePricePerTryTo(ChangeEventArgs args)
     {
         if (args.Value is null || !decimal.TryParse(args.Value.ToString(), out var value)) return;
-        FilterValues.PricePerTryTo = value;
+        FilterValues.PricePerTryTo = value * ConversionRatio();
         await SaveFilterValues();
     }
 
