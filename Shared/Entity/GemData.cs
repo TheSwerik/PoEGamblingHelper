@@ -69,7 +69,8 @@ public class GemData : Entity<Guid>
 
     public GemTradeData? ResultGem(ResultCase resultCase)
     {
-        return Gems.Where(gem => gem.GemLevel == MaxLevel() + resultCase.LevelModifier()).MinBy(gem => gem.ChaosValue);
+        return Gems.Where(gem => gem.GemLevel == MaxLevel() + resultCase.LevelModifier() && gem.Corrupted)
+                   .MinBy(gem => gem.ChaosValue);
     }
 
     public GemTradeData? RawGem()

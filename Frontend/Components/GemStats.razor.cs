@@ -1,4 +1,5 @@
-﻿using Blazored.LocalStorage;
+﻿using System.Diagnostics;
+using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
 using PoEGamblingHelper3.Components.Model;
 using Shared.Entity;
@@ -20,15 +21,47 @@ public partial class GemStats
 
     private decimal FilterTempleCost() { return FilterValues.TempleCost ?? TempleCost.AverageChaosValue(); }
 
-    private string TradeUrl(GemTradeData? gemTradeData)
+    private string TradeUrl(GemData gemData, ResultCase? resultCase = null)
     {
-        return gemTradeData is null ? "#" : gemTradeData.TradeUrl(CurrentLeague);
+        if (resultCase is null) // raw gem
+        {
+            var rawUrlGem = new GemTradeData
+                            {
+                                Name = gemData.Name,
+                                Corrupted = false,
+                                GemLevel = gemData.MaxLevel(),
+                                GemQuality = 0
+                            };
+            return rawUrlGem.TradeUrl(CurrentLeague);
+        }
+
+        var resultGem = GemData.ResultGem(resultCase.Value);
+        if (resultGem is not null) return resultGem.TradeUrl(CurrentLeague);
+
+        var levelModifier = resultCase switch
+                            {
+                                ResultCase.Worst => -1,
+                                ResultCase.Middle => 0,
+                                ResultCase.Best => 1,
+                                _ => throw new UnreachableException()
+                            };
+        var urlGem = new GemTradeData
+                     {
+                         Name = gemData.Name,
+                         Corrupted = true,
+                         GemLevel = gemData.MaxLevel() + levelModifier,
+                         GemQuality = 0
+                     };
+        return urlGem.TradeUrl(CurrentLeague);
     }
 
-    private string CurrencyValue(decimal chaosValue)
+    private string CurrencyValue(decimal chaosValue) { return (chaosValue / CurrencyValue()).Round(2); }
+
+    private decimal CurrencyValue()
     {
-        var currencyChaosValue = FilterValues.CurrencyValue ?? FilterValues.Currency?.ChaosEquivalent ?? 1;
-        return (chaosValue / currencyChaosValue).Round(2);
+        return FilterValues.CurrencyValue
+               ?? FilterValues.Currency?.ChaosEquivalent
+               ?? 1;
     }
 
     private async Task UpdateRawValue(ChangeEventArgs args)
@@ -41,7 +74,7 @@ public partial class GemStats
         }
 
         if (!decimal.TryParse(args.Value.ToString(), out var value)) return;
-        _values.RawValue = value;
+        _values.RawValue = value * CurrencyValue();
         await SaveValues();
     }
 
@@ -55,7 +88,7 @@ public partial class GemStats
         }
 
         if (!decimal.TryParse(args.Value.ToString(), out var value)) return;
-        _values.WorstCaseValue = value;
+        _values.WorstCaseValue = value * CurrencyValue();
         await SaveValues();
     }
 
@@ -69,7 +102,7 @@ public partial class GemStats
         }
 
         if (!decimal.TryParse(args.Value.ToString(), out var value)) return;
-        _values.MiddleCaseValue = value;
+        _values.MiddleCaseValue = value * CurrencyValue();
         await SaveValues();
     }
 
@@ -83,7 +116,7 @@ public partial class GemStats
         }
 
         if (!decimal.TryParse(args.Value.ToString(), out var value)) return;
-        _values.BestCaseValue = value;
+        _values.BestCaseValue = value * CurrencyValue();
         await SaveValues();
     }
 
@@ -102,7 +135,7 @@ public partial class GemStats
         _values = values ?? new Values();
     }
 
-    private string GetCurrencyString(decimal? value) { return value is null ? "" : value.Round(2)!; }
+    private string GetCurrencyString(decimal? value) { return value is null ? "" : CurrencyValue(value.Value); }
 
     private class Values
     {
