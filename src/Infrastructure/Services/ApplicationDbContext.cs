@@ -11,10 +11,10 @@ namespace Infrastructure.Services;
 public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
-    public virtual DbSet<Currency> Currency { get; init; } = null!;
-    public virtual DbSet<League> League { get; init; } = null!;
-    public virtual DbSet<TempleCost> TempleCost { get; init; } = null!;
-    public virtual DbSet<GemData> GemData { get; init; } = null!;
+    public virtual DbSet<Currency> Currency => Set<Currency>();
+    public virtual DbSet<League> League => Set<League>();
+    public virtual DbSet<TempleCost> TempleCost => Set<TempleCost>();
+    public virtual DbSet<GemData> GemData => Set<GemData>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
