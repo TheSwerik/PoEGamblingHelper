@@ -8,18 +8,19 @@ namespace Api.Controllers;
 
 public class TempleController : ApiControllerBase
 {
-    private readonly IApplicationDbContext _applicationDbContext;
+    private readonly IApplicationDbContextFactory _applicationDbContextFactory;
 
-    public TempleController(IApplicationDbContext applicationDbContext)
+    public TempleController(IApplicationDbContextFactory applicationDbContextFactory)
     {
-        _applicationDbContext = applicationDbContext;
+        _applicationDbContextFactory = applicationDbContextFactory;
     }
 
     [HttpGet]
     [OutputCache(PolicyName = "FetchData")]
     public TempleCost Get()
     {
-        return _applicationDbContext.TempleCost.OrderByDescending(cost => cost.TimeStamp).FirstOrDefault()
+        using var applicationDbContext = _applicationDbContextFactory.CreateDbContext();
+        return applicationDbContext.TempleCost.OrderByDescending(cost => cost.TimeStamp).FirstOrDefault()
                ?? throw new NoTempleDataException();
     }
 }

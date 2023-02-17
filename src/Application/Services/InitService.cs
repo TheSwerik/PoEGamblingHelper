@@ -1,4 +1,5 @@
-﻿using Domain.Exception.Abstract;
+﻿using Domain.Entity;
+using Domain.Exception.Abstract;
 using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -8,10 +9,12 @@ namespace Application.Services;
 
 public class InitService : IHostedService
 {
+    private readonly IApplicationDbContextFactory _applicationDbContextFactory;
     private readonly IOutputCacheStore _cache;
     private readonly string _cacheTag;
     private readonly IDataFetchService _dataFetchService;
     private readonly TimeSpan _fetchInterval;
+    private readonly ILeagueService _leagueService;
     private readonly ILogger<InitService> _logger;
     private Timer? _fetchLeagueTimer;
     private Timer? _fetchPriceDataTimer;
@@ -20,13 +23,17 @@ public class InitService : IHostedService
                        IDataFetchService dataFetchService,
                        IOutputCacheStore cache,
                        TimeSpan fetchInterval,
-                       string cacheTag)
+                       string cacheTag,
+                       IApplicationDbContextFactory applicationDbContextFactory,
+                       ILeagueService leagueService)
     {
         _logger = logger;
         _dataFetchService = dataFetchService;
         _cache = cache;
         _fetchInterval = fetchInterval;
         _cacheTag = cacheTag;
+        _leagueService = leagueService;
+        _applicationDbContextFactory = applicationDbContextFactory;
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
@@ -74,9 +81,16 @@ public class InitService : IHostedService
 
     private async Task FetchPriceData()
     {
-        await _dataFetchService.FetchCurrencyData();
-        await _dataFetchService.FetchTemplePriceData();
-        await _dataFetchService.FetchGemPriceData();
+        League league;
+        using (var context = _applicationDbContextFactory.CreateDbContext())
+        {
+            league = _leagueService.GetCurrentLeague(context.League);
+        }
+
+        await _dataFetchService.FetchCurrencyData(league);
+        await _dataFetchService.FetchTemplePriceData(league);
+        await _dataFetchService.FetchGemPriceData(league);
+
         await _cache.EvictByTagAsync(_cacheTag, new CancellationToken());
         _logger.LogDebug("Cache cleared");
     }

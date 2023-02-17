@@ -13,7 +13,8 @@ public static class ConfigureServices
     {
         if (configuration.GetValue<bool>("UseInMemoryDatabase"))
         {
-            services.AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase("PoEGamblingHelper"));
+            services.AddDbContextFactory<ApplicationDbContext>(
+                options => options.UseInMemoryDatabase("PoEGamblingHelper"));
         }
         else
         {
@@ -21,13 +22,18 @@ public static class ConfigureServices
                                    + $"Password={configuration["POSTGRES_PASSWORD"]};";
             var assemblyName = typeof(ApplicationDbContext).Assembly.FullName;
             services.AddEntityFrameworkNpgsql()
-                    .AddDbContext<ApplicationDbContext>(opt => opt.UseNpgsql(
-                                                            connectionString,
-                                                            builder => builder.MigrationsAssembly(assemblyName)
-                                                        ));
+                    .AddDbContextFactory<ApplicationDbContext>(opt => opt.UseNpgsql(
+                                                                   connectionString,
+                                                                   builder => builder.MigrationsAssembly(assemblyName)
+                                                               ));
         }
 
-        services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
+        // services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
+        services.AddSingleton<IApplicationDbContextFactory>(
+            provider => new ApplicationDbContextFactory(
+                provider.GetRequiredService<IDbContextFactory<ApplicationDbContext>>()
+            )
+        );
         services.AddTransient<IGemService, GemService>();
         services.AddTransient<ILeagueService, LeagueService>();
         services.AddTransient<IDataFetchService, DataFetchService>();

@@ -1,9 +1,11 @@
-﻿namespace Application.Services;
+﻿using Domain.Entity;
+
+namespace Application.Services;
 
 public interface IDataFetchService
 {
     Task FetchCurrentLeague();
-    Task FetchCurrencyData();
-    Task FetchTemplePriceData();
-    Task FetchGemPriceData();
+    Task FetchCurrencyData(League league);
+    Task FetchTemplePriceData(League league);
+    Task FetchGemPriceData(League league);
 }

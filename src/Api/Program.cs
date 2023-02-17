@@ -25,7 +25,9 @@ builder.Services.AddHostedService<InitService>(
         opt.GetRequiredService<IDataFetchService>(),
         opt.GetRequiredService<IOutputCacheStore>(),
         TimeSpan.FromMinutes(builder.Configuration.GetValue<int>("FetchInterval")),
-        builder.Configuration.GetValue<string>("CacheTag")!
+        builder.Configuration.GetValue<string>("CacheTag")!,
+        opt.GetRequiredService<IApplicationDbContextFactory>(),
+        opt.GetRequiredService<ILeagueService>()
     )
 );
 

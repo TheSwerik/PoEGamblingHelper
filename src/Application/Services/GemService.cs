@@ -8,9 +8,12 @@ namespace Application.Services;
 
 public partial class GemService : IGemService
 {
-    private readonly IApplicationDbContext _applicationDbContext;
+    private readonly IApplicationDbContextFactory _applicationDbContextFactory;
 
-    public GemService(IApplicationDbContext applicationDbContext) { _applicationDbContext = applicationDbContext; }
+    public GemService(IApplicationDbContextFactory applicationDbContextFactory)
+    {
+        _applicationDbContextFactory = applicationDbContextFactory;
+    }
 
     public async Task<Page<GemData>> GetAll(GemDataQuery? query, PageRequest page)
     {
@@ -30,17 +33,18 @@ public partial class GemService : IGemService
 
     private async Task<Page<GemData>> GetAll(PageRequest? page)
     {
+        using var applicationDbContext = _applicationDbContextFactory.CreateDbContext();
         if (page is null)
-            return new Page<GemData> { Content = _applicationDbContext.GemData, CurrentPage = 0, LastPage = true };
+            return new Page<GemData> { Content = applicationDbContext.GemData, CurrentPage = 0, LastPage = true };
 
         var pageSize = page.PageSize ?? 0;
         var skipSize = pageSize * page.PageNumber;
         var takeSize = page.PageSize ?? int.MaxValue;
 
-        var allContentLength = await _applicationDbContext.GemData.CountAsync();
+        var allContentLength = await applicationDbContext.GemData.CountAsync();
         return new Page<GemData>
                {
-                   Content = _applicationDbContext.GemData.Skip(skipSize).Take(takeSize),
+                   Content = applicationDbContext.GemData.Skip(skipSize).Take(takeSize),
                    LastPage = skipSize + takeSize >= allContentLength,
                    CurrentPage = page.PageNumber
                };
@@ -52,13 +56,14 @@ public partial class GemService : IGemService
         query.PricePerTryFrom ??= decimal.MinValue;
         query.PricePerTryTo ??= decimal.MaxValue;
 
-        return _applicationDbContext.GemData
-                                    .FromSqlRaw(PreFilterGemDataQuery(query))
-                                    .Include(gemData => gemData.Gems)
-                                    .AsEnumerable()
-                                    .Where(gemData => PostFilterGemData(gemData, query))
-                                    .OrderBy(gemData => OrderGemData(gemData, query.Sort))
-                                    .ToArray();
+        using var applicationDbContext = _applicationDbContextFactory.CreateDbContext();
+        return applicationDbContext.GemData
+                                   .FromSqlRaw(PreFilterGemDataQuery(query))
+                                   .Include(gemData => gemData.Gems)
+                                   .AsEnumerable()
+                                   .Where(gemData => PostFilterGemData(gemData, query))
+                                   .OrderBy(gemData => OrderGemData(gemData, query.Sort))
+                                   .ToArray();
     }
 
     private static string PreFilterGemDataQuery(GemDataQuery query)

@@ -7,14 +7,18 @@ namespace Api.Controllers;
 
 public class CurrencyController : ApiControllerBase
 {
-    private readonly IApplicationDbContext _applicationDbContext;
+    private readonly IApplicationDbContextFactory _applicationDbContextFactory;
 
-    public CurrencyController(IApplicationDbContext applicationDbContext)
+    public CurrencyController(IApplicationDbContextFactory applicationDbContextFactory)
     {
-        _applicationDbContext = applicationDbContext;
+        _applicationDbContextFactory = applicationDbContextFactory;
     }
 
     [HttpGet]
     [OutputCache(PolicyName = "FetchData")]
-    public IAsyncEnumerable<Currency> GetAll() { return _applicationDbContext.Currency.AsAsyncEnumerable(); }
+    public IAsyncEnumerable<Currency> GetAll()
+    {
+        using var context = _applicationDbContextFactory.CreateDbContext();
+        return context.Currency.AsAsyncEnumerable();
+    }
 }

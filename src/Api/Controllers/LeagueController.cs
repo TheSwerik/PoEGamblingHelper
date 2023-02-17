@@ -7,20 +7,28 @@ namespace Api.Controllers;
 
 public class LeagueController : ApiControllerBase
 {
-    private readonly IApplicationDbContext _applicationDbContext;
+    private readonly IApplicationDbContextFactory _applicationDbContextFactory;
     private readonly ILeagueService _leagueService;
 
-    public LeagueController(IApplicationDbContext applicationDbContext, ILeagueService leagueService)
+    public LeagueController(ILeagueService leagueService, IApplicationDbContextFactory applicationDbContextFactory)
     {
-        _applicationDbContext = applicationDbContext;
         _leagueService = leagueService;
+        _applicationDbContextFactory = applicationDbContextFactory;
     }
 
     [HttpGet]
-    public IAsyncEnumerable<League> GetAllLeagues() { return _applicationDbContext.League.AsAsyncEnumerable(); }
+    public IAsyncEnumerable<League> GetAllLeagues()
+    {
+        using var applicationDbContext = _applicationDbContextFactory.CreateDbContext();
+        return applicationDbContext.League.AsAsyncEnumerable();
+    }
 
     [HttpGet]
     [Route("current")]
     [OutputCache(PolicyName = "FetchData")]
-    public League GetCurrentLeague() { return _leagueService.GetCurrentLeague(_applicationDbContext); }
+    public League GetCurrentLeague()
+    {
+        using var applicationDbContext = _applicationDbContextFactory.CreateDbContext();
+        return _leagueService.GetCurrentLeague(applicationDbContext.League);
+    }
 }
