@@ -1,0 +1,91 @@
+﻿.btn {
+    --bs-btn-hover-color: var(--bs-body-bg);
+    --bs-btn-color: var(--bs-body-bg);
+    --bs-btn-border-color: var(--bs-body-bg);
+    border-radius: 15px 0;
+    border: none;
+    font-size: 1.75rem;
+    font-weight: 1000;
+    -webkit-transition: filter 0.3s, filter 0.3s;
+    transition: filter 0.3s, filter 0.3s;
+}
+
+/*region btn*/
+.btn:hover, .btn:focus, .btn:active, .btn:disabled {
+    color: var(--bs-btn-color) !important;
+    background-color: var(--bs-btn-bg) !important;
+    box-shadow: none !important;
+}
+
+.btn:focus {
+    filter: brightness(100%) !important;
+}
+
+.btn:hover, .btn:disabled {
+    filter: brightness(80%) !important;
+}
+
+.btn:active {
+    filter: brightness(60%) !important;
+}
+
+/*endregion*/
+
+/*region btn-outline*/
+.btn-outline-primary, .btn-outline-secondary, .btn-outline-danger {
+    border: 5px solid;
+}
+
+.btn-outline-primary {
+    --bs-btn-border-color: var(--bs-primary);
+    --bs-btn-color: var(--bs-primary);
+}
+
+.btn-outline-secondary {
+    --bs-btn-border-color: var(--bs-secondary);
+    --bs-btn-color: var(--bs-secondary);
+}
+
+.btn-outline-primary:hover, .btn-outline-secondary:hover, .btn-outline-danger:hover,
+.btn-outline-primary:focus, .btn-outline-secondary:focus, .btn-outline-danger:focus,
+.btn-outline-primary:active, .btn-outline-secondary:active, .btn-outline-danger:active {
+    border-color: var(--bs-btn-border-color) !important;
+    color: var(--bs-btn-color) !important;
+    filter: brightness(60%) !important;
+    box-shadow: none;
+}
+
+.btn-outline-primary:active, .btn-outline-secondary:active, .btn-outline-danger:active {
+    filter: brightness(40%) !important;
+}
+
+.btn-outline-primary:focus, .btn-outline-secondary:focus, .btn-outline-danger:focus {
+    filter: brightness(100%) !important;
+}
+
+.btn-outline-primary:hover, .btn-outline-secondary:hover, .btn-outline-danger:hover {
+    filter: brightness(60%) !important;
+}
+
+/*endregion*/
+
+.btn-primary {
+    --bs-btn-bg: var(--bs-primary);
+}
+
+.btn-secondary {
+    --bs-btn-bg: var(--bs-secondary);
+}
+
+.btn-addon {
+    border-left: solid 1px var(--bs-btn-border-color) !important;
+    border-radius: 10px 0 !important;
+    margin-left: -1rem !important;
+    height: 2.2rem;
+    padding: 0.5rem;
+    z-index: 100 !important;
+}
+
+.btn-addon img {
+    margin-top: -1.75rem;
+}

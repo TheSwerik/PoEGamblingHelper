@@ -1,7 +1,33 @@
+@import "font/fontin.css";
+@import "checkbox.css";
+@import "scrollbar.css";
+@import "input.css";
+@import "button.css";
+@import "theme.css";
+
 html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: fontin, sans-serif, Arial, sans-serif;
 }
 
+a:hover, a label:hover {
+    filter: brightness(80%);
+    cursor: pointer;
+}
+
+.card {
+    border-radius: 15px 0;
+}
+
+.card h5 {
+    --bs-card-color: var(--bs-secondary);
+    color: var(--bs-card-color);
+}
+
+.card-header {
+    border-bottom: none;
+}
+
+/*region default settings*/
 h1:focus {
     outline: none;
 }
@@ -97,3 +123,5 @@ a, .btn-link {
 .loading-progress-text:after {
     content: var(--blazor-load-percentage-text, "Loading");
 }
+
+/*endregion*/
