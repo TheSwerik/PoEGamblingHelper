@@ -15,14 +15,10 @@ public partial class DataFetchService : IDataFetchService
     private readonly IApplicationDbContextFactory _applicationDbContextFactory;
     private readonly HtmlWeb _htmlLoader = new();
     private readonly HttpClient _httpClient = new();
-    private readonly ILeagueService _leagueService;
     private readonly ILogger<DataFetchService> _logger;
 
-    public DataFetchService(ILeagueService leagueService,
-                            ILogger<DataFetchService> logger,
-                            IApplicationDbContextFactory applicationDbContextFactory)
+    public DataFetchService(ILogger<DataFetchService> logger, IApplicationDbContextFactory applicationDbContextFactory)
     {
-        _leagueService = leagueService;
         _logger = logger;
         _applicationDbContextFactory = applicationDbContextFactory;
     }
