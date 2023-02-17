@@ -1,6 +1,5 @@
 using System.Globalization;
 using Blazored.LocalStorage;
-using Blazored.SessionStorage;
 using Blazored.Toast;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -25,7 +24,6 @@ builder.Services.AddScoped<ICurrencyService, CurrencyService>();
 builder.Services.AddScoped<ILeagueService, LeagueService>();
 builder.Services.AddScoped<IScrollInfoService, ScrollInfoService>();
 builder.Services.AddBlazoredToast();
-builder.Services.AddBlazoredSessionStorage();
 builder.Services.AddBlazoredLocalStorage();
 
 await builder.Build().RunAsync();
