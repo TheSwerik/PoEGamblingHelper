@@ -1,4 +1,6 @@
-﻿namespace Domain.Entity.Gem;
+﻿// ReSharper disable UnusedMember.Global
+
+namespace Domain.Entity.Gem;
 
 public enum AlternateQuality
 {

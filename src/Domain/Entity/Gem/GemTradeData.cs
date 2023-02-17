@@ -16,6 +16,7 @@ public partial class GemTradeData : Entity<long>
     public decimal DivineValue { get; set; }
     public int ListingCount { get; set; }
 
+    //TODO move this into frontend or infrastructure
     public string TradeUrl(League currentLeague, bool accurateLevel = true, bool accurateQuality = false)
     {
         const string poeTradeUrl = "https://www.pathofexile.com/trade/search";

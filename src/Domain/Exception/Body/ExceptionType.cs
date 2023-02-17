@@ -1,4 +1,4 @@
-﻿namespace Domain.Exception.Http;
+﻿namespace Domain.Exception.Body;
 
 public enum ExceptionType
 {

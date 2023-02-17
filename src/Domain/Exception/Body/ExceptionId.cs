@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace Domain.Exception.Http;
+namespace Domain.Exception.Body;
 
 public static class ExceptionIdExtensions
 {

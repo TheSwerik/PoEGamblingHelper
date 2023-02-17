@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entity.Abstract;
 
-public abstract class Entity<T> : IEntity
+public abstract class Entity<T>
 {
     [Key] [DatabaseGenerated(DatabaseGeneratedOption.Identity)] public T Id { get; set; }
 

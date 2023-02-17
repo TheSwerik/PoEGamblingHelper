@@ -1,6 +1,8 @@
-﻿namespace Domain.Exception.Http;
+﻿namespace Domain.Exception.Body;
 
-public record PoeGamblingHelperExceptionBody(ExceptionType Type, ExceptionId Id, string? Message = null,
+public record PoeGamblingHelperExceptionBody(ExceptionType Type,
+                                             ExceptionId Id,
+                                             string? Message = null,
                                              object? Body = null)
 {
     public ExceptionType Type { get; } = Type;

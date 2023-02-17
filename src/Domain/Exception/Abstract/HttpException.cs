@@ -1,4 +1,4 @@
-using Domain.Exception.Http;
+using Domain.Exception.Body;
 
 namespace Domain.Exception.Abstract;
 

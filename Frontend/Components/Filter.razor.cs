@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Components;
 using PoEGamblingHelper3.Components.Model;
 using Shared.Entity;
 using Shared.QueryParameters;
-using Shared.Util;
 
 namespace PoEGamblingHelper3.Components;
 
@@ -22,7 +21,8 @@ public partial class Filter : ComponentBase
     private bool FiltersExpanded { get; set; } = false;
 
     private bool IsChaosSelected =>
-        FilterValues.Currency is not null && FilterValues.Currency.Name.EqualsIgnoreCase("chaos orb");
+        FilterValues.Currency is not null &&
+        FilterValues.Currency.Name.Equals("chaos orb", StringComparison.InvariantCultureIgnoreCase);
 
     private async Task SaveFilterValues()
     {

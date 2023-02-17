@@ -11,11 +11,13 @@ public class PageRequest
         set => _pageSize = value is null or <= 0 ? null : value;
     }
 
+    //TODO move to frontend
     public string ToQueryString()
     {
         return _pageSize is null ? $"?pageNumber={PageNumber}" : $"?pageNumber={PageNumber}&pageSize={_pageSize}";
     }
 
+    //TODO move to frontend
     public string ToQueryString(GemDataQuery? query)
     {
         return query is null ? ToQueryString() : query.ToQueryString(this);

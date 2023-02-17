@@ -8,6 +8,7 @@ public class GemData : Entity<Guid>
     public string Icon { get; set; } = string.Empty;
     public ICollection<GemTradeData> Gems { get; set; } = new List<GemTradeData>();
 
+    //TODO: Move this into application
     public int MaxLevel()
     {
         var isAwakened = Name.Contains("Awakened");
@@ -49,10 +50,10 @@ public class GemData : Entity<Guid>
                                   ? Profit(ResultCase.Worst, rawCost, templeCost)
                                   : Profit((decimal)worstCaseValue, rawCost, templeCost);
         var middleCaseProfit = middleCaseValue is null
-                                   ? Profit(ResultCase.Worst, rawCost, templeCost)
+                                   ? Profit(ResultCase.Middle, rawCost, templeCost)
                                    : Profit((decimal)middleCaseValue, rawCost, templeCost);
         var bestCaseProfit = bestCaseValue is null
-                                 ? Profit(ResultCase.Worst, rawCost, templeCost)
+                                 ? Profit(ResultCase.Best, rawCost, templeCost)
                                  : Profit((decimal)bestCaseValue, rawCost, templeCost);
         return (worstCaseProfit + 2 * middleCaseProfit + bestCaseProfit) / 4;
     }

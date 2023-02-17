@@ -1,12 +1,14 @@
 using Domain.Exception.Abstract;
-using Domain.Exception.Http;
+using Domain.Exception.Body;
 
 namespace Domain.Exception;
 
 public class PoeNinjaDownException : InternalServerErrorException
 {
-    public PoeNinjaDownException() : base(
-        "", new PoeGamblingHelperExceptionBody(ExceptionType.InternalError, ExceptionId.PoeNinjaUnreachable))
+    public PoeNinjaDownException() : base("", new PoeGamblingHelperExceptionBody(
+                                              ExceptionType.InternalError,
+                                              ExceptionId.PoeNinjaUnreachable
+                                          ))
     {
     }
 }

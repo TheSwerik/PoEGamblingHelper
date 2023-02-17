@@ -1,8 +1,8 @@
-using Domain.Exception.Http;
+using Domain.Exception.Body;
 
 namespace Domain.Exception.Abstract;
 
 public abstract class NotFoundException : HttpException
 {
-    public NotFoundException(string message, PoeGamblingHelperExceptionBody body) : base(message, 404, body) { }
+    protected NotFoundException(string message, PoeGamblingHelperExceptionBody body) : base(message, 404, body) { }
 }

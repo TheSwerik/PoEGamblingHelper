@@ -9,6 +9,7 @@ public partial class TempleCost : Entity<Guid>
     public decimal[] ChaosValue { get; set; } = Array.Empty<decimal>();
     public decimal AverageChaosValue() { return ChaosValue.Average(); }
 
+    //TODO move this into frontend or infrastructure
     public static string TradeUrl(League currentLeague)
     {
         const string poeTradeUrl = "https://www.pathofexile.com/trade/search";

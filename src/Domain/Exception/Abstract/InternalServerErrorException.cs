@@ -1,10 +1,11 @@
-using Domain.Exception.Http;
+using Domain.Exception.Body;
 
 namespace Domain.Exception.Abstract;
 
 public abstract class InternalServerErrorException : HttpException
 {
-    public InternalServerErrorException(string message, PoeGamblingHelperExceptionBody body) : base(message, 500, body)
+    protected InternalServerErrorException(string message, PoeGamblingHelperExceptionBody body) : base(
+        message, 500, body)
     {
     }
 }
