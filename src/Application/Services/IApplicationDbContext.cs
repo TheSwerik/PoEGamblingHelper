@@ -10,6 +10,7 @@ public interface IApplicationDbContext : IDisposable
     DbSet<League> League { get; }
     DbSet<TempleCost> TempleCost { get; }
     DbSet<GemData> GemData { get; }
+    DbSet<GemTradeData> GemTradeData { get; }
     Task<int> SaveChangesAsync();
     void ClearTrackedEntities();
 }

@@ -72,7 +72,7 @@ public partial class DataFetchService : IDataFetchService, IDisposable
             if (currencyDetails is not null) currencyData.Icon = currencyDetails.Icon;
         }
 
-        await using var applicationDbContext = (ApplicationDbContext)_applicationDbContextFactory.CreateDbContext();
+        using var applicationDbContext = _applicationDbContextFactory.CreateDbContext();
         var existingCurrency = applicationDbContext.Currency.Select(currency => currency.Id).ToArray();
         applicationDbContext.ClearTrackedEntities();
 
@@ -90,7 +90,7 @@ public partial class DataFetchService : IDataFetchService, IDisposable
             updatedPoeNinjaCurrencyData.Select(poeNinjaData => poeNinjaData.ToCurrencyData()));
         _logger.LogInformation("Updated {Result} Currency", updatedPoeNinjaCurrencyData.Length);
 
-        #region Chaos
+        #region Hardcoded Chaos Orb
 
         // not EqualsIgnoreCase because of EntityFramework
         var chaos = applicationDbContext.Currency
@@ -156,7 +156,7 @@ public partial class DataFetchService : IDataFetchService, IDisposable
 
         #endregion
 
-        await using var applicationDbContext = (ApplicationDbContext)_applicationDbContextFactory.CreateDbContext();
+        using var applicationDbContext = _applicationDbContextFactory.CreateDbContext();
         var chaosValues = priceResults.Result
                                       .Select(priceResult =>
                                                   priceResult.Listing
@@ -172,7 +172,61 @@ public partial class DataFetchService : IDataFetchService, IDisposable
         _logger.LogInformation("Saved {PriceLength} TemplePrices", chaosValues.Length);
     }
 
-    public async Task FetchGemPriceData(League league) { Console.WriteLine("NOT IMPLEMENTED"); }
+    public async Task FetchGemPriceData(League league)
+    {
+        var response = await _httpClient.GetAsync(PoeToolUrls.PoeNinjaGemUrl + $"&league={league.Name}");
+        if (!response.IsSuccessStatusCode) throw new PoeNinjaDownException();
+        var gemPriceData = await response.Content.ReadFromJsonAsync<GemPriceData>();
+        if (gemPriceData is null) throw new PoeNinjaDownException();
+        _logger.LogInformation("Got data from {Result} gems", gemPriceData.Lines.Length);
+
+        // GemTradeData
+        using (var applicationDbContext = _applicationDbContextFactory.CreateDbContext())
+        {
+            var existingGemTradeData =
+                applicationDbContext.GemTradeData.Select(gemTradeData => gemTradeData.Id).ToArray();
+            applicationDbContext.ClearTrackedEntities();
+
+            var newGemTradeData = gemPriceData.Lines.Where(gem => !existingGemTradeData.Contains(gem.Id)).ToArray();
+            await applicationDbContext.GemTradeData.AddRangeAsync(
+                newGemTradeData.Select(gemTradeData => gemTradeData.ToGemTradeData()));
+            _logger.LogInformation("Added {Result} new GemTradeData", newGemTradeData.Length);
+
+            var updatedGemTradeData = gemPriceData.Lines.Where(gem => existingGemTradeData.Contains(gem.Id)).ToArray();
+            applicationDbContext.GemTradeData.UpdateRange(
+                updatedGemTradeData.Select(gemTradeData => gemTradeData.ToGemTradeData()));
+            _logger.LogInformation("Updated {Result} GemTradeData", updatedGemTradeData.Length);
+            await applicationDbContext.SaveChangesAsync();
+        }
+
+        // GemData
+        using (var applicationDbContext = _applicationDbContextFactory.CreateDbContext())
+        {
+            var existingGemData = applicationDbContext.GemData.ToArray();
+            var existingGemDataNames = existingGemData.Select(gem => gem.Name.ToLowerInvariant().Trim()).ToArray();
+            applicationDbContext.ClearTrackedEntities();
+
+            var allGemTradeData = applicationDbContext.GemTradeData.ToArray();
+            var groupedPoeNinjaData = gemPriceData.Lines.GroupBy(priceData => priceData.Name).ToArray();
+
+            var newGemData = groupedPoeNinjaData
+                             .Where(group => !existingGemDataNames.Contains(group.Key.ToLowerInvariant().Trim()))
+                             .ToArray();
+            await applicationDbContext.GemData.AddRangeAsync(
+                newGemData.Select(group => group.ToGemData(allGemTradeData)));
+            _logger.LogInformation("Added {Result} GemData", newGemData.Length);
+
+            var updatedGemData = groupedPoeNinjaData
+                                 .Where(group => existingGemDataNames.Contains(group.Key.ToLowerInvariant().Trim()))
+                                 .ToArray();
+            applicationDbContext.GemData.UpdateRange(
+                updatedGemData.Select(group => group.ToGemData(allGemTradeData, existingGemData))
+            );
+            _logger.LogInformation("Updated {Result} GemData", updatedGemData.Length);
+
+            await applicationDbContext.SaveChangesAsync();
+        }
+    }
 
     public void Dispose() { _httpClient.Dispose(); }
 

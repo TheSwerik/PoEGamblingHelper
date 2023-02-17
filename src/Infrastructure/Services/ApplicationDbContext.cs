@@ -15,6 +15,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public virtual DbSet<League> League => Set<League>();
     public virtual DbSet<TempleCost> TempleCost => Set<TempleCost>();
     public virtual DbSet<GemData> GemData => Set<GemData>();
+    public virtual DbSet<GemTradeData> GemTradeData => Set<GemTradeData>();
     public Task<int> SaveChangesAsync() { return base.SaveChangesAsync(); }
 
     public void ClearTrackedEntities() { ChangeTracker.Clear(); }
