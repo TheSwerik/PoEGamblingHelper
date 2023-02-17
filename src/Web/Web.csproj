@@ -17,4 +17,17 @@
         <ProjectReference Include="..\Domain\Domain.csproj"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <AdditionalFiles Include="Shared\Components\CurrencyDropDown.razor"/>
+        <AdditionalFiles Include="Shared\Components\Filter.razor"/>
+        <AdditionalFiles Include="Shared\Components\GemStats.razor"/>
+        <AdditionalFiles Include="Shared\Components\InfiniteScrolling.razor"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="Shared\Components\Filter.razor.cs">
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </Content>
+    </ItemGroup>
+
 </Project>

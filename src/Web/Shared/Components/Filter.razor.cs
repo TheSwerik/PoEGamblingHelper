@@ -1,10 +1,11 @@
 ﻿using Blazored.LocalStorage;
+using Domain.Entity;
+using Domain.QueryParameters;
 using Microsoft.AspNetCore.Components;
-using PoEGamblingHelper3.Components.Model;
-using Shared.Entity;
-using Shared.QueryParameters;
+using Web.Shared.Model;
+using Web.Util;
 
-namespace PoEGamblingHelper3.Components;
+namespace Web.Shared.Components;
 
 public partial class Filter : ComponentBase
 {
@@ -18,7 +19,7 @@ public partial class Filter : ComponentBase
     [Parameter] public List<Currency> Currency { get; set; } = new();
     [Inject] private ILocalStorageService LocalStorage { get; set; } = default!;
 
-    private bool FiltersExpanded { get; set; } = false;
+    private bool FiltersExpanded { get; set; }
 
     private bool IsChaosSelected =>
         FilterValues.Currency is not null &&
