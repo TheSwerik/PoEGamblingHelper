@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Json;
+﻿using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Text.RegularExpressions;
 using Application.Services;
 using Domain.Entity;
@@ -6,21 +7,27 @@ using Domain.Exception;
 using HtmlAgilityPack;
 using Infrastructure.Services.FetchDtos;
 using Infrastructure.Util;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Services;
 
-public partial class DataFetchService : IDataFetchService
+public partial class DataFetchService : IDataFetchService, IDisposable
 {
     private readonly IApplicationDbContextFactory _applicationDbContextFactory;
     private readonly HtmlWeb _htmlLoader = new();
     private readonly HttpClient _httpClient = new();
+    private readonly MediaTypeHeaderValue _jsonMediaTypeHeader = MediaTypeHeaderValue.Parse("application/json");
     private readonly ILogger<DataFetchService> _logger;
+    private readonly string _templeQuery;
 
     public DataFetchService(ILogger<DataFetchService> logger, IApplicationDbContextFactory applicationDbContextFactory)
     {
         _logger = logger;
         _applicationDbContextFactory = applicationDbContextFactory;
+        _httpClient.DefaultRequestHeaders.UserAgent.Add(ProductInfoHeaderValue.Parse("PoEGamblingHelper/1.0.0"));
+        _httpClient.DefaultRequestHeaders.Accept.Add(MediaTypeWithQualityHeaderValue.Parse("application/json"));
+        _templeQuery = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "/TempleQuery.json");
     }
 
     public async Task FetchCurrentLeague()
@@ -104,9 +111,70 @@ public partial class DataFetchService : IDataFetchService
         await applicationDbContext.SaveChangesAsync();
     }
 
-    public async Task FetchTemplePriceData(League league) { Console.WriteLine("NOT IMPLEMENTED"); }
+    public async Task FetchTemplePriceData(League league)
+    {
+        #region Fetch Temple Fetch
+
+        _logger.LogDebug("Fetching Temple IDs...");
+
+        TradeResults temples;
+        var requestUri = $"{PoeToolUrls.PoeApiTradeUrl}/search/{league.Name}";
+        using (var request = new HttpRequestMessage(HttpMethod.Post, requestUri)
+                             { Content = new StringContent(_templeQuery, _jsonMediaTypeHeader) })
+        {
+            var result = await _httpClient.SendAsync(request);
+            if (!result.IsSuccessStatusCode) throw new PoeTradeDownException();
+
+            temples = await result.Content.ReadFromJsonAsync<TradeResults>() ?? throw new PoeTradeDownException();
+        }
+
+        _logger.LogDebug("Found {ResultLength} Temples IDs", temples.Result.Length);
+
+        #endregion
+
+        #region Fetch Temples
+
+        var takeAmount = Math.Min(10, temples.Result.Length);
+        var skipAmount = takeAmount == temples.Result.Length ? 0 : 2;
+        var itemQuery = string.Join(",", temples.Result.Skip(skipAmount).Take(takeAmount));
+
+        _logger.LogDebug("Skipping {SkipAmount} and fetching {TakeAmount} Temples...", skipAmount, takeAmount);
+
+        TradeEntryResult priceResults;
+        requestUri = $"{PoeToolUrls.PoeApiTradeUrl}/fetch/{itemQuery}?query={temples.Id}";
+        using (var request = new HttpRequestMessage(HttpMethod.Get, requestUri)
+                             { Content = new StringContent(_templeQuery, _jsonMediaTypeHeader) })
+        {
+            var result = await _httpClient.SendAsync(request);
+            if (!result.IsSuccessStatusCode) throw new PoeTradeDownException();
+
+            priceResults = await result.Content.ReadFromJsonAsync<TradeEntryResult>()
+                           ?? throw new PoeTradeDownException();
+        }
+
+        _logger.LogDebug("Found {ResultLength} TemplePrices", priceResults.Result.Length);
+
+        #endregion
+
+        await using var applicationDbContext = (ApplicationDbContext)_applicationDbContextFactory.CreateDbContext();
+        var chaosValues = priceResults.Result
+                                      .Select(priceResult =>
+                                                  priceResult.Listing
+                                                             .Price
+                                                             .ChaosAmount(applicationDbContext.Currency)
+                                      )
+                                      .ToArray();
+
+        await applicationDbContext.TempleCost.ExecuteDeleteAsync(); // Delete every Temple Entry
+        await applicationDbContext.TempleCost.AddAsync(new TempleCost { ChaosValue = chaosValues });
+        await applicationDbContext.SaveChangesAsync();
+
+        _logger.LogInformation("Saved {PriceLength} TemplePrices", chaosValues.Length);
+    }
 
     public async Task FetchGemPriceData(League league) { Console.WriteLine("NOT IMPLEMENTED"); }
+
+    public void Dispose() { _httpClient.Dispose(); }
 
     #region Helper Methods
 
@@ -177,7 +245,9 @@ public partial class DataFetchService : IDataFetchService
     }
 
     [GeneratedRegex("^\\d\\d\\d\\d$")] private static partial Regex YearRegex();
+
     [GeneratedRegex("^\\d\\d\\d\\d-\\d\\d-\\d\\d$")] private static partial Regex FullDateRegex();
+
     [GeneratedRegex("&lt;.+&gt;")] private static partial Regex NameExpansionRegex();
 
     #endregion

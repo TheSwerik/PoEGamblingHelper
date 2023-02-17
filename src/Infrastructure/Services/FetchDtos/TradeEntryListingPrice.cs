@@ -1,5 +1,4 @@
-﻿using Domain;
-using Domain.Entity;
+﻿using Domain.Entity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Services.FetchDtos;
@@ -12,7 +11,8 @@ public class TradeEntryListingPrice
 
     public decimal ChaosAmount(DbSet<Currency> currencySet)
     {
-        var currency = currencySet.FirstOrDefault(c => c.Name.EqualsIgnoreCase(Currency + " orb"));
+        var lowerCurrencyName = (Currency + " orb").ToLower();
+        var currency = currencySet.FirstOrDefault(c => c.Name.ToLower().Equals(lowerCurrencyName));
         var conversionValue = currency?.ChaosEquivalent ?? 0;
         return Amount * conversionValue;
     }
