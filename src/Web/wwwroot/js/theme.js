@@ -1,16 +1,17 @@
 ﻿function useTheme(theme) {
-    const themePath = `css/${theme}.theme.css`;
+    const themePath = `css/theme.${theme}.css`;
     if (!CheckUrl(themePath)) return;
 
-    const previousElement = document.getElementById('theme');
+    const head = document.getElementsByTagName('head')[0];
+    const previousElements = document.querySelectorAll('[data-theme]');
 
     const element = document.createElement('link');
-    element.id = 'theme';
+    element.dataset.theme = '';
     element.rel = 'stylesheet';
     element.type = 'text/css';
     element.href = themePath;
-    element.onload = () => document.getElementsByTagName('head')[0].removeChild(previousElement);
-    document.getElementsByTagName('head')[0].appendChild(element);
+    element.onload = () => previousElements.forEach(e => head.removeChild(e));
+    head.appendChild(element);
 
     localStorage.setItem('theme', theme);
 }
