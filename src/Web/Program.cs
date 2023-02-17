@@ -4,6 +4,8 @@ using Blazored.Toast;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Web;
+using Web.Services.Implementations;
+using Web.Services.Interfaces;
 
 Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
 CultureInfo.DefaultThreadCurrentCulture = CultureInfo.CreateSpecificCulture("en-US");

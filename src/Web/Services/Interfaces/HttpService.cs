@@ -1,5 +1,6 @@
 using System.Net.Http.Json;
 using Blazored.Toast.Services;
+using Domain.Exception.Body;
 using Web.Util;
 
 namespace Web.Services.Interfaces;
