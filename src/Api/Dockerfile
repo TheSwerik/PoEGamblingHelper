@@ -3,7 +3,6 @@
 FROM mcr.microsoft.com/dotnet/sdk:7.0-alpine as builder
 WORKDIR /build
 COPY ../../. .
-RUN ls -lisa src/Api
 RUN dotnet publish -c Release -o /build/publish src/Api/Api.csproj
 
 #########################################################################
