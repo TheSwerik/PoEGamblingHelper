@@ -1,0 +1,39 @@
+﻿#avg-profit {
+    cursor: initial;
+}
+
+#avg-profit:hover {
+    filter: none !important;
+}
+
+.edit-button {
+    background: none;
+    border: none;
+    display: flex;
+    height: 1.5rem;
+}
+
+.edit-icon {
+    background-color: var(--bs-secondary);
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.pen-icon {
+    -webkit-mask: url(icons/edit.svg) no-repeat center;
+    mask: url(icons/edit.svg) no-repeat center;
+}
+
+.check-mark-icon {
+    -webkit-mask: url(icons/check-mark.svg) no-repeat center;
+    mask: url(icons/check-mark.svg) no-repeat center;
+}
+
+.reset-icon {
+    -webkit-mask: url(icons/arrow-rotate-right.svg) no-repeat center;
+    mask: url(icons/arrow-rotate-right.svg) no-repeat center;
+}
+
+input {
+    padding-right: 8px !important;
+}

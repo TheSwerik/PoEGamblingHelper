@@ -32,9 +32,13 @@ public partial class GamblingHelper : IDisposable
 
     protected override async Task OnInitializedAsync()
     {
+        Console.WriteLine(1);
         await base.OnInitializedAsync();
+        Console.WriteLine(2);
         var filterValues = await LocalStorage.GetItemAsync<FilterValues>("GemDataQuery");
+        Console.WriteLine(3);
         if (filterValues is not null) _filterValues = filterValues;
+        Console.WriteLine(4);
         _loadGamblingDataTask = Task.Run(async () =>
                                          {
                                              while (true)
@@ -55,6 +59,7 @@ public partial class GamblingHelper : IDisposable
     {
         try
         {
+            Console.WriteLine(5);
             _isUpdating = true;
             _firstLoad = false;
             await InvokeAsync(StateHasChanged);
@@ -62,6 +67,7 @@ public partial class GamblingHelper : IDisposable
             var currency = await CurrencyService.GetAll();
             if (currency is null || currency.Count == 0) return;
             _currency = currency;
+            Console.WriteLine(6);
 
             _filterValues.Currency = _filterValues.Currency is null
                                          ? _currency.First(c => c.Name.Equals("Divine Orb"))
@@ -69,12 +75,14 @@ public partial class GamblingHelper : IDisposable
             _filterValues.Currency ??= _currency.First(c => c.Name.Equals("Divine Orb"));
 
 
+            Console.WriteLine(7);
             var templeCost = await TempleCostService.Get();
             if (templeCost is not null) _templeCost = templeCost;
 
             var league = await LeagueService.GetCurrent();
             if (league is not null) _currentLeague = league;
 
+            Console.WriteLine(8);
             var gemPage = _currentGemPage;
             _isOnLastPage = false;
             _gems.Clear();
@@ -83,6 +91,8 @@ public partial class GamblingHelper : IDisposable
                 _currentGemPage = i;
                 await UpdateGems();
             }
+
+            Console.WriteLine(9);
         }
         catch (HttpRequestException)
         {
@@ -93,8 +103,10 @@ public partial class GamblingHelper : IDisposable
             _lastBackendUpdate = DateTime.Now;
 
             _isUpdating = false;
+            Console.WriteLine(10);
             await InvokeAsync(StateHasChanged);
             await JsRuntime.InvokeVoidAsync("addTooltips");
+            Console.WriteLine(11);
         }
     }
 
