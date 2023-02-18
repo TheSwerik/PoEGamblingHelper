@@ -1,8 +1,8 @@
 @import "font/fontin.css";
+@import "button.css";
 @import "checkbox.css";
 @import "scrollbar.css";
 @import "input.css";
-@import "button.css";
 @import "theme.css";
 
 html, body {
