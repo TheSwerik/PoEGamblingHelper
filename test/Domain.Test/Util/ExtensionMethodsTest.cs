@@ -2,12 +2,12 @@
 using Domain.Util;
 using FluentAssertions;
 
-namespace Domain.Test;
+namespace Domain.Test.Util;
 
-public class TestExtensionMethods
+public class ExtensionMethodsTest
 {
     [Fact]
-    public void TestLevelModifier()
+    public void LevelModifierTest()
     {
         ResultCase.Worst.LevelModifier().Should().Be(-1);
         ResultCase.Middle.LevelModifier().Should().Be(0);

@@ -1,12 +1,12 @@
 using Domain.Entity;
 using FluentAssertions;
 
-namespace Domain.Test;
+namespace Domain.Test.Entity;
 
-public class TestTempleCost
+public class TempleCostTest
 {
     [Fact]
-    public void TestAverageChaosValue()
+    public void AverageChaosValueTest()
     {
         var chaosValues = new[] { 1m, 2m, 3m, 4m, 5m, 6m, 7m, 8m, 9m };
         var templeCost = new TempleCost

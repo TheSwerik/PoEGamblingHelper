@@ -1,12 +1,12 @@
 using Domain.Entity.Gem;
 using FluentAssertions;
 
-namespace Domain.Test;
+namespace Domain.Test.Entity;
 
-public class TestGemData
+public class GemDataTest
 {
     [Fact]
-    public void TestIsExceptional()
+    public void IsExceptionalTest()
     {
         var names = new[] { "Enhance", "Empower", "Enlighten" };
         var gemData = new GemData();
@@ -28,7 +28,7 @@ public class TestGemData
     }
 
     [Fact]
-    public void TestMaxLevel()
+    public void MaxLevelTest()
     {
         var exceptionalNames = new[] { "Enhance", "Empower", "Enlighten" };
         var gemData = new GemData();
@@ -60,4 +60,5 @@ public class TestGemData
         gemData.Name = "test";
         gemData.MaxLevel().Should().Be(20);
     }
+    //TODO more tests
 }

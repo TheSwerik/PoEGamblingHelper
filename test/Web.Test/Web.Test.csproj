@@ -9,6 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="FluentAssertions" Version="6.10.0"/>
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2"/>
         <PackageReference Include="xunit" Version="2.4.2"/>
         <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
@@ -19,6 +20,19 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\Web\Web.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Folder Include="JavaScript"/>
+        <Folder Include="Pages"/>
+        <Folder Include="Services"/>
+        <Folder Include="Shared\Component"/>
+        <Folder Include="Shared\Model"/>
+        <Folder Include="Util"/>
     </ItemGroup>
 
 </Project>

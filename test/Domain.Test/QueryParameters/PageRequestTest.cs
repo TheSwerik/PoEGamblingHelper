@@ -1,12 +1,12 @@
 using Domain.QueryParameters;
 using FluentAssertions;
 
-namespace Domain.Test;
+namespace Domain.Test.QueryParameters;
 
-public class TestPageRequest
+public class PageRequestTest
 {
     [Fact]
-    public void TestSetPageSize()
+    public void SetPageSizeTest()
     {
         var pageRequest = new PageRequest
                           {
