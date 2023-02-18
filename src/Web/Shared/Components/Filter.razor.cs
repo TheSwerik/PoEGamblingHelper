@@ -1,4 +1,5 @@
-﻿using Blazored.LocalStorage;
+﻿using System.Text.RegularExpressions;
+using Blazored.LocalStorage;
 using Domain.Entity;
 using Domain.QueryParameters;
 using Microsoft.AspNetCore.Components;
@@ -56,7 +57,34 @@ public partial class Filter : ComponentBase
     private GemType[] GemTypes() { return Enum.GetValues<GemType>(); }
     private Sort[] Sorts() { return Enum.GetValues<Sort>(); }
 
-    private string TempleTradeUrl() { return TempleCost.TradeUrl(CurrentLeague); }
+    private string TempleTradeUrl()
+    {
+        const string poeTradeUrl = "https://www.pathofexile.com/trade/search";
+        const string queryKey = "?q=";
+
+        var query = JsonMinifyRegex().Replace(@"
+        {
+          ""query"":{
+            ""stats"":[
+              {
+                ""type"":""and"",
+                ""filters"":[
+                  {
+                    ""id"":""pseudo.pseudo_temple_gem_room_3"",
+                    ""value"":{
+                      ""option"":1
+                    },
+                    ""disabled"":false
+                  }
+                ]
+              }
+            ],
+            ""type"": ""Chronicle of Atzoatl""
+          }
+        }
+        ", "$1");
+        return $"{poeTradeUrl}/{CurrentLeague.Name}{queryKey}{query}";
+    }
 
     private IEnumerable<Currency> GetAllowedFilterCurrencies()
     {
@@ -74,6 +102,8 @@ public partial class Filter : ComponentBase
     {
         return FilterValues.CurrencyValue ?? FilterValues.Currency?.ChaosEquivalent ?? 1;
     }
+
+    [GeneratedRegex("(\"(?:[^\"\\\\]|\\\\.)*\")|\\s+")] private static partial Regex JsonMinifyRegex();
 
     #region Update Callback
 

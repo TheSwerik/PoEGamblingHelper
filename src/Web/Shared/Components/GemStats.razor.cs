@@ -2,6 +2,7 @@
 using Blazored.LocalStorage;
 using Domain.Entity;
 using Domain.Entity.Gem;
+using Domain.Util;
 using Microsoft.AspNetCore.Components;
 using Web.Shared.Model;
 using Web.Util;
@@ -37,7 +38,10 @@ public partial class GemStats
             return rawUrlGem.TradeUrl(CurrentLeague);
         }
 
-        var resultGem = GemData.ResultGem(resultCase.Value);
+        // var resultGem = GemData.ResultGem(resultCase.Value);
+        var resultGem = GemData.Gems
+                               .Where(gem => gem.GemLevel == GemData.MaxLevel() + resultCase.Value.LevelModifier())
+                               .MinBy(gem => gem.ChaosValue);
         if (resultGem is not null) return resultGem.TradeUrl(CurrentLeague);
 
         var levelModifier = resultCase switch

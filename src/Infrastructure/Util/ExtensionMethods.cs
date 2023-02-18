@@ -3,7 +3,7 @@ using Infrastructure.Services.FetchDtos;
 
 namespace Infrastructure.Util;
 
-public static class UtilExtensionMethods
+public static class ExtensionMethods
 {
     public static bool EqualsIgnoreCase(this string? a, string? b)
     {
