@@ -16,9 +16,10 @@ public class CurrencyController : ApiControllerBase
 
     [HttpGet]
     [OutputCache(PolicyName = "FetchData")]
-    public IAsyncEnumerable<Currency> GetAll()
+    public async IAsyncEnumerable<Currency> GetAll()
     {
-        using var context = _applicationDbContextFactory.CreateDbContext();
-        return context.Currency.AsAsyncEnumerable();
+        using var applicationDbContext = _applicationDbContextFactory.CreateDbContext();
+        await foreach (var item in applicationDbContext.Currency.AsAsyncEnumerable().ConfigureAwait(false))
+            yield return item;
     }
 }

@@ -17,10 +17,11 @@ public class LeagueController : ApiControllerBase
     }
 
     [HttpGet]
-    public IAsyncEnumerable<League> GetAllLeagues()
+    public async IAsyncEnumerable<League> GetAllLeagues()
     {
         using var applicationDbContext = _applicationDbContextFactory.CreateDbContext();
-        return applicationDbContext.League.AsAsyncEnumerable();
+        await foreach (var item in applicationDbContext.League.AsAsyncEnumerable().ConfigureAwait(false))
+            yield return item;
     }
 
     [HttpGet]
