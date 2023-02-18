@@ -50,7 +50,7 @@ public class GemData : Entity<Guid>
 
     public int MaxLevel()
     {
-        var isAwakened = Name.Contains("Awakened");
+        var isAwakened = Name.ToLowerInvariant().Contains("awakened");
         var isExceptional = IsExceptional();
         return isAwakened && isExceptional ? 4 :
                isExceptional ? 3 :
@@ -58,9 +58,10 @@ public class GemData : Entity<Guid>
                20;
     }
 
-    private bool IsExceptional()
+    public bool IsExceptional()
     {
-        return Name.Contains("Enhance") || Name.Contains("Empower") || Name.Contains("Enlighten");
+        var lowerName = Name.ToLowerInvariant();
+        return lowerName.Contains("enhance") || lowerName.Contains("empower") || lowerName.Contains("enlighten");
     }
 
     public decimal CostPerTry(decimal? rawCost, decimal templeCost = 0) { return (rawCost ?? RawCost()) + templeCost; }

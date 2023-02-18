@@ -2,7 +2,7 @@
 
 namespace Domain.Entity;
 
-public partial class TempleCost : Entity<Guid>
+public class TempleCost : Entity<Guid>
 {
     public DateTime TimeStamp { get; set; } = DateTime.Now.ToUniversalTime();
     public decimal[] ChaosValue { get; set; } = Array.Empty<decimal>();

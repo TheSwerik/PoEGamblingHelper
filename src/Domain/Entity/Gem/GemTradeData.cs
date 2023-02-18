@@ -2,7 +2,7 @@
 
 namespace Domain.Entity.Gem;
 
-public partial class GemTradeData : Entity<long>
+public class GemTradeData : Entity<long>
 {
     public string Name { get; set; } = string.Empty;
     public int GemLevel { get; set; }
