@@ -1,9 +1,13 @@
-﻿using Domain.Entity;
+﻿using System.Runtime.CompilerServices;
+using Domain.Entity;
+using Domain.Exception;
 using Domain.Exception.Abstract;
 using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Timer = System.Timers.Timer;
+
+[assembly: InternalsVisibleTo("Application.Test")]
 
 namespace Application.Services;
 
@@ -67,7 +71,7 @@ public class InitService : IHostedService
         _logger.LogInformation("Fetch timers started");
     }
 
-    private async Task FetchCurrentLeague()
+    internal async Task FetchCurrentLeague()
     {
         try
         {
@@ -79,17 +83,48 @@ public class InitService : IHostedService
         }
     }
 
-    private async Task FetchPriceData()
+    internal async Task FetchPriceData()
     {
         League league;
         using (var context = _applicationDbContextFactory.CreateDbContext())
         {
-            league = _leagueService.GetCurrentLeague(context.League);
+            try
+            {
+                league = _leagueService.GetCurrentLeague(context.League);
+            }
+            catch (NoLeagueDataException e)
+            {
+                _logger.LogError("Could not Fetch Price Data, because League could not be get: {Exception}", e);
+                return;
+            }
         }
 
-        await _dataFetchService.FetchCurrencyData(league);
-        await _dataFetchService.FetchTemplePriceData(league);
-        await _dataFetchService.FetchGemPriceData(league);
+        try
+        {
+            await _dataFetchService.FetchCurrencyData(league);
+        }
+        catch (PoeGamblingHelperException e)
+        {
+            _logger.LogError("Could not Fetch CurrencyData: {Exception}", e);
+        }
+
+        try
+        {
+            await _dataFetchService.FetchTemplePriceData(league);
+        }
+        catch (PoeGamblingHelperException e)
+        {
+            _logger.LogError("Could not Fetch TemplePriceData: {Exception}", e);
+        }
+
+        try
+        {
+            await _dataFetchService.FetchGemPriceData(league);
+        }
+        catch (PoeGamblingHelperException e)
+        {
+            _logger.LogError("Could not Fetch GemPriceData: {Exception}", e);
+        }
 
         await _cache.EvictByTagAsync(_cacheTag, new CancellationToken());
         _logger.LogDebug("Cache cleared");

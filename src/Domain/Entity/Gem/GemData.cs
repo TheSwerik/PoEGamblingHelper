@@ -1,5 +1,8 @@
-﻿using Domain.Entity.Abstract;
+﻿using System.Runtime.CompilerServices;
+using Domain.Entity.Abstract;
 using Domain.Util;
+
+[assembly: InternalsVisibleTo("Domain.Test")]
 
 namespace Domain.Entity.Gem;
 
@@ -43,7 +46,7 @@ public class GemData : Entity<Guid>
 
     public decimal Value(ResultCase resultCase) { return ResultValue(MaxLevel() + resultCase.LevelModifier()); }
 
-    public decimal ResultValue(int level)
+    internal decimal ResultValue(int level)
     {
         return Gems.Where(gem => gem.GemLevel == level && gem.Corrupted).MinBy(gem => gem.GemQuality)?.ChaosValue ?? 0m;
     }
@@ -58,7 +61,7 @@ public class GemData : Entity<Guid>
                20;
     }
 
-    public bool IsExceptional()
+    internal bool IsExceptional()
     {
         var lowerName = Name.ToLowerInvariant();
         return lowerName.Contains("enhance") || lowerName.Contains("empower") || lowerName.Contains("enlighten");
