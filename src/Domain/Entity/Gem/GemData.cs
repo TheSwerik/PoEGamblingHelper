@@ -43,7 +43,7 @@ public class GemData : Entity<Guid>
 
     public decimal Value(ResultCase resultCase) { return ResultValue(MaxLevel() + resultCase.LevelModifier()); }
 
-    private decimal ResultValue(int level)
+    public decimal ResultValue(int level)
     {
         return Gems.Where(gem => gem.GemLevel == level && gem.Corrupted).MinBy(gem => gem.GemQuality)?.ChaosValue ?? 0m;
     }
