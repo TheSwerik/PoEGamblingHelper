@@ -64,7 +64,10 @@ public class GemData : Entity<Guid>
         return lowerName.Contains("enhance") || lowerName.Contains("empower") || lowerName.Contains("enlighten");
     }
 
-    public decimal CostPerTry(decimal? rawCost, decimal templeCost = 0) { return (rawCost ?? RawCost()) + templeCost; }
+    public decimal CostPerTry(decimal? rawCost = null, decimal templeCost = 0)
+    {
+        return (rawCost ?? RawCost()) + templeCost;
+    }
 
     public decimal RawCost()
     {
