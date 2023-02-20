@@ -11,17 +11,14 @@ public class PageRequestTest
         var pageRequest = new PageRequest
                           {
                               PageNumber = 0,
-                              PageSize = null
+                              PageSize = 0
                           };
 
-        pageRequest.PageSize = null;
-        pageRequest.PageSize.Should().BeNull();
-
         pageRequest.PageSize = -1;
-        pageRequest.PageSize.Should().BeNull();
+        pageRequest.PageSize.Should().Be(0);
 
         pageRequest.PageSize = 0;
-        pageRequest.PageSize.Should().BeNull();
+        pageRequest.PageSize.Should().Be(0);
 
         pageRequest.PageSize = 1;
         pageRequest.PageSize.Should().Be(1);
