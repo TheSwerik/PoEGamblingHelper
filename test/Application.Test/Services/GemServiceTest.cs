@@ -14,18 +14,7 @@ public class GemServiceTest
     {
         #region Setup
 
-        var list = new List<GemData>
-                   {
-                       new() { Id = new Guid(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1) },
-                       new() { Id = new Guid(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2) },
-                       new() { Id = new Guid(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3) },
-                       new() { Id = new Guid(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4) },
-                       new() { Id = new Guid(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5) },
-                       new() { Id = new Guid(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8) },
-                       new() { Id = new Guid(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6) },
-                       new() { Id = new Guid(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7) },
-                       new() { Id = new Guid(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9) }
-                   };
+        var list = new List<GemData> { new(), new(), new(), new(), new(), new(), new(), new(), new() };
 
         var queryable = list.AsQueryable().BuildMockDbSet();
         var appDbContextFactory = new Mock<IApplicationDbContextFactory>();
