@@ -20,8 +20,8 @@ public partial class GemService : IGemService
         if (query is null) return await GetAll(page);
 
         var allFoundGems = FilterGemData(query);
-        var skipSize = page.PageNumber * page.PageSize ?? 0;
-        var takeSize = page.PageSize ?? int.MaxValue;
+        var skipSize = page.PageNumber * page.PageSize;
+        var takeSize = page.PageSize;
 
         return new Page<GemData>
                {
@@ -31,15 +31,12 @@ public partial class GemService : IGemService
                };
     }
 
-    private async Task<Page<GemData>> GetAll(PageRequest? page)
+    private async Task<Page<GemData>> GetAll(PageRequest page)
     {
         using var applicationDbContext = _applicationDbContextFactory.CreateDbContext();
-        if (page is null)
-            return new Page<GemData> { Content = applicationDbContext.GemData, CurrentPage = 0, LastPage = true };
 
-        var pageSize = page.PageSize ?? 0;
-        var skipSize = pageSize * page.PageNumber;
-        var takeSize = page.PageSize ?? int.MaxValue;
+        var skipSize = page.PageSize * page.PageNumber;
+        var takeSize = page.PageSize;
 
         var allContentLength = await applicationDbContext.GemData.CountAsync();
         return new Page<GemData>
