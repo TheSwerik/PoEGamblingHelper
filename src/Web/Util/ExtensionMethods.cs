@@ -77,9 +77,7 @@ public static partial class ExtensionMethods
 
     public static string ToQueryString(this PageRequest pageRequest)
     {
-        return pageRequest.PageSize is null
-                   ? $"?pageNumber={pageRequest.PageNumber}"
-                   : $"?pageNumber={pageRequest.PageNumber}&pageSize={pageRequest.PageSize}";
+        return $"?pageNumber={pageRequest.PageNumber}&pageSize={pageRequest.PageSize}";
     }
 
     public static string TradeUrl(this GemTradeData gemTradeData, League currentLeague, bool accurateLevel = true,
