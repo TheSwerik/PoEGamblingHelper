@@ -2,5 +2,5 @@ namespace Infrastructure.Test;
 
 public class TempleQueryTest
 {
-    //TODO
+    [Fact] public void TestAll() { Assert.Fail("Not Implemented"); }
 }
