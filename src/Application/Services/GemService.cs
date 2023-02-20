@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Text.RegularExpressions;
+using Application.Util;
 using Domain.Entity.Gem;
 using Domain.QueryParameters;
 using Microsoft.EntityFrameworkCore;
@@ -20,8 +21,7 @@ public partial class GemService : IGemService
         if (query is null) return await GetAll(page);
 
         var allFoundGems = FilterGemData(query);
-        var skipSize = page.PageNumber * page.PageSize;
-        var takeSize = page.PageSize;
+        var (skipSize, takeSize) = page.ConvertToSizes();
 
         return new Page<GemData>
                {
@@ -35,10 +35,9 @@ public partial class GemService : IGemService
     {
         using var applicationDbContext = _applicationDbContextFactory.CreateDbContext();
 
-        var skipSize = page.PageSize * page.PageNumber;
-        var takeSize = page.PageSize;
-
         var allContentLength = await applicationDbContext.GemData.CountAsync();
+        var (skipSize, takeSize) = page.ConvertToSizes();
+
         return new Page<GemData>
                {
                    Content = applicationDbContext.GemData.Skip(skipSize).Take(takeSize),

@@ -50,4 +50,6 @@ public class GemServiceTest
         result.LastPage.Should().BeTrue();
         result.CurrentPage.Should().Be(pageRequest.PageNumber);
     }
+
+    // TODO test GetAll with query
 }
