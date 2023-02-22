@@ -13,7 +13,7 @@ public class TradeEntryListingPrice
     {
         var lowerCurrencyName = (Currency + " orb").ToLower();
         var currency = currencySet.FirstOrDefault(c => c.Name.ToLower().Equals(lowerCurrencyName));
-        var conversionValue = currency?.ChaosEquivalent ?? 0;
+        var conversionValue = currency?.ChaosEquivalent ?? 1;
         return Amount * conversionValue;
     }
 }

@@ -1,14 +1,10 @@
 using Domain.Entity.Gem;
 using FluentAssertions;
-using Xunit.Abstractions;
 
 namespace Domain.Test.Entity;
 
 public class GemDataTest
 {
-    private readonly ITestOutputHelper _testOutputHelper;
-    public GemDataTest(ITestOutputHelper testOutputHelper) { _testOutputHelper = testOutputHelper; }
-
     [Theory]
     [InlineData("Enhance Support", true)]
     [InlineData("Empower Support", true)]
