@@ -1,4 +1,5 @@
-﻿using Domain.QueryParameters;
+﻿using System.Globalization;
+using Domain.QueryParameters;
 using FluentAssertions;
 using Web.Util;
 using Xunit.Abstractions;
@@ -19,10 +20,12 @@ public class ExtensionFunctionsTest
     [InlineData(123.1325, 5, 8)]
     public void RoundTest(decimal value, int places, int expectedLength)
     {
+        Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
+        CultureInfo.DefaultThreadCurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
         var result = value.Round(places);
 
         result.Length.Should().Be(expectedLength);
-        int.Parse(result.Split(',')[0]).Should().Be((int)value);
+        int.Parse(result.Split('.')[0]).Should().Be((int)value);
     }
 
     [Theory]
@@ -35,6 +38,8 @@ public class ExtensionFunctionsTest
     [InlineData(123.1325, 5, 8)]
     public void RoundNullableTest(double? value, int places, int? expectedLength)
     {
+        Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
+        CultureInfo.DefaultThreadCurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
         var decimalValue = (decimal?)value;
         var result = decimalValue.Round(places);
 
@@ -46,7 +51,7 @@ public class ExtensionFunctionsTest
         {
             result.Should().NotBeNull();
             result!.Length.Should().Be(expectedLength);
-            int.Parse(result.Split(',')[0]).Should().Be((int)decimalValue!);
+            int.Parse(result.Split('.')[0]).Should().Be((int)decimalValue!);
         }
     }
 
