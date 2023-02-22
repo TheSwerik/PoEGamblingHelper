@@ -72,8 +72,4 @@ public class ExtensionFunctionsTest
     {
         gemType.ToPrettyString().Should().Be(prettyString);
     }
-
-    [Fact] public void ToQueryStringTest() { Assert.Fail("Not Implemented"); }
-    [Fact] public void TradeUrlTest() { Assert.Fail("Not Implemented"); }
-    [Fact] public void TradeQueryTest() { Assert.Fail("Not Implemented"); }
 }
