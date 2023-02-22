@@ -47,15 +47,15 @@ public partial class Filter : ComponentBase
 
     private void ToggleFilters() { FiltersExpanded = !FiltersExpanded; }
 
-    private string ToStringOrBlank(decimal? value)
+    private static string ToStringOrBlank(decimal? value)
     {
         return value is null or decimal.MinValue or decimal.MaxValue ? "" : value.Round(2)!;
     }
 
     private string CurrencyValue(decimal? value) { return ToStringOrBlank(value / ConversionRatio()); }
 
-    private GemType[] GemTypes() { return Enum.GetValues<GemType>(); }
-    private Sort[] Sorts() { return Enum.GetValues<Sort>(); }
+    private static GemType[] GemTypes() { return Enum.GetValues<GemType>(); }
+    private static Sort[] Sorts() { return Enum.GetValues<Sort>(); }
 
     private string TempleTradeUrl()
     {
