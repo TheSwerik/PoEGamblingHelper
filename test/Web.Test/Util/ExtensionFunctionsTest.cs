@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using Domain.QueryParameters;
+using FluentAssertions;
 using Web.Util;
 using Xunit.Abstractions;
 
@@ -49,8 +50,29 @@ public class ExtensionFunctionsTest
         }
     }
 
-    [Fact] public void SortToPrettyStringTest() { Assert.Fail("Not Implemented"); }
-    [Fact] public void GemTypeToPrettyStringTest() { Assert.Fail("Not Implemented"); }
+    [Theory]
+    [InlineData(Sort.CostPerTryAsc, "Cost Ascending")]
+    [InlineData(Sort.CostPerTryDesc, "Cost Descending")]
+    [InlineData(Sort.AverageProfitPerTryAsc, "Average profit per try Ascending")]
+    [InlineData(Sort.AverageProfitPerTryDesc, "Average profit per try Descending")]
+    [InlineData(Sort.MaxProfitPerTryAsc, "Maximum profit per try Ascending")]
+    [InlineData(Sort.MaxProfitPerTryDesc, "Maximum profit per try Descending")]
+    public void SortToPrettyStringTest(Sort sort, string prettyString)
+    {
+        sort.ToPrettyString().Should().Be(prettyString);
+    }
+
+    [Theory]
+    [InlineData(GemType.All, "All Gems")]
+    [InlineData(GemType.Awakened, "Awakened Support Gem")]
+    [InlineData(GemType.Exceptional, "Exceptional Support Gem")]
+    [InlineData(GemType.Skill, "Skill Gem")]
+    [InlineData(GemType.RegularSupport, "Regular Support Gem")]
+    public void GemTypeToPrettyStringTest(GemType gemType, string prettyString)
+    {
+        gemType.ToPrettyString().Should().Be(prettyString);
+    }
+
     [Fact] public void ToQueryStringTest() { Assert.Fail("Not Implemented"); }
     [Fact] public void TradeUrlTest() { Assert.Fail("Not Implemented"); }
     [Fact] public void TradeQueryTest() { Assert.Fail("Not Implemented"); }
