@@ -1,9 +1,9 @@
 ﻿version: "3.*"
 name: poegamblinghelper
 services:
-  backend:
-    container_name: poegamblinghelper-backend
-    image: registry.swerik.dev/poegamblinghelper/backend
+  api:
+    container_name: poegamblinghelper-api
+    image: registry.swerik.dev/poegamblinghelper/api
     depends_on:
       - database
     networks:
@@ -60,11 +60,11 @@ services:
       options:
         max-size: '10M'
         max-file: '10'
-  frontend:
-    container_name: poegamblinghelper-frontend
-    image: registry.swerik.dev/poegamblinghelper/frontend
+  web:
+    container_name: poegamblinghelper-web
+    image: registry.swerik.dev/poegamblinghelper/web
     depends_on:
-      - backend
+      - api
     networks:
       - default
       - proxy

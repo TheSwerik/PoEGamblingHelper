@@ -1,0 +1,17 @@
+﻿:root, .card, .form-control, .blazored-typeahead__input, .blazored-typeahead__controls {
+    --transparent: rgba(0, 0, 0, 0);
+    --bs-font-sans-serif: fontin, 'sans-serif', Arial, 'sans-serif';
+    --bs-card-cap-color: var(--bs-body-color);
+    --bs-card-color: var(--bs-body-color);
+    --bs-card-bg: var(--bs-body-bg);
+    --bs-card-cap-bg: var(--transparent);
+    --bs-border-color-translucent: var(--bs-primary);
+    --bs-border-color: var(--bs-primary);
+    --bs-card-border-width: 1px;
+    --bs-link-color: var(--bs-body-color);
+    --bs-link-hover-color: var(--bs-body-color);
+}
+
+.blazored-toast {
+    background: var(--bs-primary) !important;
+}

@@ -1,0 +1,26 @@
+﻿{
+  "query": {
+    "status": {
+      "option": "online"
+    },
+    "type": "Chronicle of Atzoatl",
+    "stats": [
+      {
+        "type": "and",
+        "filters": [
+          {
+            "id": "pseudo.pseudo_temple_gem_room_3",
+            "disabled": false,
+            "value": {
+              "option": 1
+            }
+          }
+        ],
+        "disabled": false
+      }
+    ]
+  },
+  "sort": {
+    "price": "asc"
+  }
+}
