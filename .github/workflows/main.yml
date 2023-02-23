@@ -1,7 +1,7 @@
 name: Deploy to GitHub Pages
 on:
   push:
-    branches: [ main ]
+    branches: [ fix-gh-pages ]
 jobs:
   deploy-to-github-pages:
     # use ubuntu-latest image to run steps on
