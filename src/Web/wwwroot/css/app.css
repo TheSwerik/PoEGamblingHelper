@@ -1,4 +1,4 @@
-@import "font/fontin.css";
+﻿@import "font/fontin.css";
 @import "button.css";
 @import "checkbox.css";
 @import "scrollbar.css";
@@ -43,6 +43,10 @@ a {
 
 p {
     margin: 0;
+}
+
+.pointer {
+    cursor: pointer;
 }
 
 /*region default settings*/
