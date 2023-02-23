@@ -5,9 +5,9 @@ namespace Infrastructure.Services.FetchDtos;
 
 public class PoeNinjaCurrencyData
 {
-    [JsonPropertyName("currencyTypeName")] public string Name { get; set; }
+    [JsonPropertyName("currencyTypeName")] public string Name { get; set; } = null!;
     public decimal ChaosEquivalent { get; set; }
-    public string DetailsId { get; set; }
+    public string DetailsId { get; set; } = null!;
     public string? Icon { get; set; }
 
     public Currency ToCurrencyData()

@@ -5,12 +5,12 @@ namespace Infrastructure.Services.FetchDtos;
 public class PoeNinjaGemData
 {
     public long Id { get; set; }
-    public string Name { get; set; }
-    public string Icon { get; set; }
+    public string Name { get; set; } = null!;
+    public string Icon { get; set; } = null!;
     public int GemLevel { get; set; }
     public int GemQuality { get; set; }
     public bool Corrupted { get; set; }
-    public string DetailsId { get; set; }
+    public string DetailsId { get; set; } = null!;
     public decimal ChaosValue { get; set; }
     public decimal ExaltedValue { get; set; }
     public decimal DivineValue { get; set; }
