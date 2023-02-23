@@ -91,8 +91,8 @@ public partial class GemService : IGemService
         return $"""
             SELECT * FROM "GemData"
                 WHERE LOWER("Name") LIKE '%{query.SearchText}%'
-                  AND {query.ShowAlternateQuality} OR NOT {isAlternateQuality}
-                  AND {query.ShowVaal} OR NOT {isVaal}
+                  AND ({query.ShowAlternateQuality} OR NOT {isAlternateQuality})
+                  AND ({query.ShowVaal} OR NOT {isVaal})
                   AND {isGemTypeMatching}
         """;
     }
