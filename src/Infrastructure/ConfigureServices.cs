@@ -28,7 +28,6 @@ public static class ConfigureServices
                                                                ));
         }
 
-        // services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
         services.AddSingleton<IApplicationDbContextFactory>(
             provider => new ApplicationDbContextFactory(
                 provider.GetRequiredService<IDbContextFactory<ApplicationDbContext>>()

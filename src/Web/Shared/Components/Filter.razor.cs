@@ -54,8 +54,8 @@ public partial class Filter : ComponentBase
 
     private string CurrencyValue(decimal? value) { return ToStringOrBlank(value / ConversionRatio()); }
 
-    private static GemType[] GemTypes() { return Enum.GetValues<GemType>(); }
-    private static Sort[] Sorts() { return Enum.GetValues<Sort>(); }
+    private static IEnumerable<GemType> GemTypes() { return Enum.GetValues<GemType>(); }
+    private static IEnumerable<Sort> Sorts() { return Enum.GetValues<Sort>(); }
 
     private string TempleTradeUrl()
     {
