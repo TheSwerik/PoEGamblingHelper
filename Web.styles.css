@@ -1,38 +1,41 @@
 @import '_content/Blazored.Toast/Blazored.Toast.bundle.scp.css';
 
-/* /Components/Filter.razor.rz.scp.css */
-[b-xacx6lvzt1] .blazored-typeahead {
-    width: 100% !important;
-    height: fit-content;
-}
-
-.sidebar[b-xacx6lvzt1] {
-    height: 100vh;
-    width: 35vw;
+/* /Pages/GamblingHelper.razor.rz.scp.css */
+.vertical-content[b-y1vdupi6cv] {
+    width: 100%;
+    height: 100%;
+    padding: 5rem;
     display: flex;
     flex-direction: column;
-    backdrop-filter: brightness(90%);
-    position: sticky;
-    top: 0;
-    padding: 2%;
+    align-items: center;
 }
 
-.w-65[b-xacx6lvzt1] {
+.footer[b-y1vdupi6cv] {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background-color: var(--bs-body-bg);
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+/* /Shared/Components/Filter.razor.rz.scp.css */
+.w-65[b-0wgqw0wcvf] {
     width: 65%;
 }
 
-.w-35[b-xacx6lvzt1] {
+.w-35[b-0wgqw0wcvf] {
     width: 35%;
 }
 
-.float-container[b-xacx6lvzt1] {
+.float-container[b-0wgqw0wcvf] {
     width: 0;
     height: 0;
     margin: 0;
     padding: 0;
 }
 
-.floating-autoload[b-xacx6lvzt1] {
+.floating-autoload[b-0wgqw0wcvf] {
     position: relative;
     top: -1.7vh;
     /*left: 2.65vw;*/
@@ -44,86 +47,80 @@
     z-index: 99999;
 }
 
-.icon[b-xacx6lvzt1] {
-    /*background-color: red;*/
-    /*-webkit-mask: url(icons/fa-arrows-rotate.svg) no-repeat center;*/
-    /*mask: url(icons/fa-arrows-rotate.svg) no-repeat center;*/
+.icon[b-0wgqw0wcvf] {
     filter: invert(31%) sepia(37%) saturate(6360%) hue-rotate(337deg) brightness(91%) contrast(89%);
     width: 100%;
     height: 100%;
 }
 
-.angles[b-xacx6lvzt1] {
+.angles[b-0wgqw0wcvf] {
     margin: 0 1rem;
     width: 1rem;
     background-color: var(--bs-primary);
 }
 
-.angles-up[b-xacx6lvzt1] {
+.angles-up[b-0wgqw0wcvf] {
     -webkit-mask: url(icons/angles-up.svg) no-repeat center;
     mask: url(icons/angles-up.svg) no-repeat center;
 }
 
-.angles-down[b-xacx6lvzt1] {
+.angles-down[b-0wgqw0wcvf] {
     -webkit-mask: url(icons/angles-down.svg) no-repeat center;
     mask: url(icons/angles-down.svg) no-repeat center;
 }
-/* /Components/GemStats.razor.rz.scp.css */
-#avg-profit[b-s63onf2r6d] {
+/* /Shared/Components/GemStats.razor.rz.scp.css */
+#avg-profit[b-fxbhsl0t1m] {
     cursor: initial;
 }
 
-#avg-profit:hover[b-s63onf2r6d] {
+#avg-profit:hover[b-fxbhsl0t1m] {
     filter: none !important;
 }
 
-.edit-button[b-s63onf2r6d] {
+.edit-button[b-fxbhsl0t1m] {
     background: none;
     border: none;
     display: flex;
     height: 1.5rem;
 }
 
-.edit-icon[b-s63onf2r6d] {
+.edit-icon[b-fxbhsl0t1m] {
     background-color: var(--bs-secondary);
     width: 1.5rem;
     height: 1.5rem;
 }
 
-.pen-icon[b-s63onf2r6d] {
+.pen-icon[b-fxbhsl0t1m] {
     -webkit-mask: url(icons/edit.svg) no-repeat center;
     mask: url(icons/edit.svg) no-repeat center;
 }
 
-.check-mark-icon[b-s63onf2r6d] {
+.check-mark-icon[b-fxbhsl0t1m] {
     -webkit-mask: url(icons/check-mark.svg) no-repeat center;
     mask: url(icons/check-mark.svg) no-repeat center;
 }
 
-.reset-icon[b-s63onf2r6d] {
+.reset-icon[b-fxbhsl0t1m] {
     -webkit-mask: url(icons/arrow-rotate-right.svg) no-repeat center;
     mask: url(icons/arrow-rotate-right.svg) no-repeat center;
 }
 
-input[b-s63onf2r6d] {
+input[b-fxbhsl0t1m] {
     padding-right: 8px !important;
 }
-/* /Pages/GamblingHelper.razor.rz.scp.css */
-.vertical-content[b-zxbo172sad] {
-    width: 100%;
-    height: 100%;
-    padding: 5rem;
+/* /Shared/MainLayout.razor.rz.scp.css */
+.page[b-s29s4s63jm] {
+    position: relative;
     display: flex;
     flex-direction: column;
-    align-items: center;
 }
 
-.footer[b-zxbo172sad] {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    background-color: var(--bs-body-bg);
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
+main[b-s29s4s63jm] {
+    flex: 1;
+}
+
+@media (min-width: 641px) {
+    .page[b-s29s4s63jm] {
+        flex-direction: row;
+    }
 }
