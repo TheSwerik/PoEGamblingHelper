@@ -90,6 +90,8 @@ public partial class DataFetchService : IDataFetchService, IDisposable
             updatedPoeNinjaCurrencyData.Select(poeNinjaData => poeNinjaData.ToCurrencyData()));
         _logger.LogInformation("Updated {Result} Currency", updatedPoeNinjaCurrencyData.Length);
 
+        await applicationDbContext.SaveChangesAsync();
+
         #region Hardcoded Chaos Orb
 
         // not EqualsIgnoreCase because of EntityFramework
