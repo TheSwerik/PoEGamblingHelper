@@ -11,4 +11,4 @@ FROM mcr.microsoft.com/dotnet/aspnet:7.0-alpine AS final
 WORKDIR /app
 EXPOSE 80
 COPY --from=builder /build/publish .
-ENTRYPOINT ["dotnet", "api.dll"]
+ENTRYPOINT ["dotnet", "Api.dll"]
