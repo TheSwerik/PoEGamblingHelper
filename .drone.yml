@@ -25,13 +25,13 @@ trigger:
   branch:
     - release
 steps:
-  - name: build shared lib
+  - name: build Api
     image: plugins/docker
     settings:
-      dockerfile: Shared/Dockerfile
-      context: Shared
+      dockerfile: src/Api/Dockerfile
+      context: .
       registry: registry.swerik.dev
-      repo: registry.swerik.dev/poegamblinghelper/shared
+      repo: registry.swerik.dev/poegamblinghelper/api
       tags: latest
       username:
         from_secret: REGISTRY_USERNAME
@@ -40,13 +40,13 @@ steps:
     environment:
       DOCKER_BUILDKIT: 1
 
-  - name: build backend
+  - name: build Web
     image: plugins/docker
     settings:
-      dockerfile: Backend/Dockerfile
-      context: Backend
+      dockerfile: src/Web/Dockerfile
+      context: .
       registry: registry.swerik.dev
-      repo: registry.swerik.dev/poegamblinghelper/backend
+      repo: registry.swerik.dev/poegamblinghelper/web
       tags: latest
       username:
         from_secret: REGISTRY_USERNAME
@@ -54,33 +54,14 @@ steps:
         from_secret: REGISTRY_PASSWORD
     environment:
       DOCKER_BUILDKIT: 1
-    depends_on:
-      - build shared lib
-
-  - name: build frontend
-    image: plugins/docker
-    settings:
-      dockerfile: Frontend/Dockerfile
-      context: Frontend
-      registry: registry.swerik.dev
-      repo: registry.swerik.dev/poegamblinghelper/frontend
-      tags: latest
-      username:
-        from_secret: REGISTRY_USERNAME
-      password:
-        from_secret: REGISTRY_PASSWORD
-    environment:
-      DOCKER_BUILDKIT: 1
-    depends_on:
-      - build shared lib
 
   - name: parallelism
     image: alpine
     commands:
       - echo finished
     depends_on:
-      - build backend
-      - build frontend
+      - build Api
+      - build Web
 ---
 kind: pipeline
 type: ssh
