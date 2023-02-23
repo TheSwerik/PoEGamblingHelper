@@ -15,10 +15,10 @@ jobs:
         dotnet-version: 7.0.100
         
     - name: Tests
-      run: dotnet test Frontend/Frontend.csproj -c Release  --nologo
+      run: dotnet test
         
     - name: Publish .NET Core Project
-      run: dotnet publish Frontend/Frontend.csproj -c Debug -o release --nologo
+      run: dotnet publish src/Web/Web.csproj -c Debug -o release --nologo
 
     - name: Add .nojekyll file
       run: touch release/wwwroot/.nojekyll
