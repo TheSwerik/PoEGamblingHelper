@@ -58,6 +58,7 @@ input:hover, input:focus, input:active,
 label {
     --bs-body-color: var(--bs-secondary);
     color: var(--bs-body-color);
+    font-weight: 700;
 }
 
 .form-control {
