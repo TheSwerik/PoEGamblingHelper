@@ -146,6 +146,7 @@ public partial class GamblingHelper : IDisposable
         }
 
         await InvokeAsync(StateHasChanged);
+        await JsRuntime.InvokeVoidAsync("addTooltips");
     }
 
     #endregion
