@@ -49,6 +49,12 @@ p {
     cursor: pointer;
 }
 
+.wrap-ellipsis {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
 /*region default settings*/
 h1:focus {
     outline: none;
