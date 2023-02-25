@@ -19,6 +19,24 @@
     width: 100%;
     justify-content: space-between;
 }
+
+h1[b-y1vdupi6cv] {
+    font-weight: 500;
+    font-size: 64px;
+    margin-bottom: 0;
+}
+
+h2[b-y1vdupi6cv] {
+    font-weight: 500;
+    font-size: 36px;
+    margin-bottom: 0;
+}
+
+h4[b-y1vdupi6cv] {
+    font-weight: 500;
+    font-size: 20px;
+    margin: 13px 10px 0 10px;
+}
 /* /Shared/Components/Filter.razor.rz.scp.css */
 .w-65[b-0wgqw0wcvf] {
     width: 65%;
@@ -107,6 +125,34 @@
 
 input[b-fxbhsl0t1m] {
     padding-right: 8px !important;
+}
+/* /Shared/Components/Theme.razor.rz.scp.css */
+.fixed-position[b-idie6llbt2] {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+}
+
+.icon-anchor[b-idie6llbt2] {
+    cursor: pointer;
+    margin: 0;
+}
+
+.theme-icon[b-idie6llbt2] {
+    width: 2rem;
+    height: 2rem;
+    margin: 0;
+    background-color: var(--bs-secondary);
+}
+
+.moon-icon[b-idie6llbt2] {
+    -webkit-mask: url(icons/moon.svg) no-repeat center;
+    mask: url(icons/moon.svg) no-repeat center;
+}
+
+.sun-icon[b-idie6llbt2] {
+    -webkit-mask: url(icons/sun.svg) no-repeat center;
+    mask: url(icons/sun.svg) no-repeat center;
 }
 /* /Shared/MainLayout.razor.rz.scp.css */
 .page[b-s29s4s63jm] {

@@ -11,7 +11,7 @@ input[type=number] {
 }
 
 .input-addon {
-    border-left: solid 1px black !important;
+    border-left: solid 2px black !important;
     border-radius: 10px 0 !important;
     margin-left: -1rem !important;
     padding: 0.5rem;
@@ -58,6 +58,7 @@ input:hover, input:focus, input:active,
 label {
     --bs-body-color: var(--bs-secondary);
     color: var(--bs-body-color);
+    font-weight: 700;
 }
 
 .form-control {
