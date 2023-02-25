@@ -77,7 +77,7 @@
 }
 
 .btn-addon {
-    border-left: solid 1px var(--bs-btn-border-color) !important;
+    border-left: solid 2px var(--bs-btn-border-color) !important;
     border-radius: 10px 0 !important;
     margin-left: -1rem !important;
     height: 2.2rem;

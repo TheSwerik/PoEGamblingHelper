@@ -14,8 +14,9 @@ a:hover, a label:hover {
     cursor: pointer;
 }
 
-.card {
+.card, hr {
     border-radius: 15px 0;
+    border-width: 2px;
 }
 
 .card h5 {
