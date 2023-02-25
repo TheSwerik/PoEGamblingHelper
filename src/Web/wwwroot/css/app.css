@@ -14,8 +14,14 @@ a:hover, a label:hover {
     cursor: pointer;
 }
 
+hr {
+    border-width: 2px;
+}
+
 .card {
     border-radius: 15px 0;
+    border: none;
+    background-color: #2f2f2f;
 }
 
 .card h5 {
@@ -47,6 +53,12 @@ p {
 
 .pointer {
     cursor: pointer;
+}
+
+.wrap-ellipsis {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 /*region default settings*/

@@ -2,10 +2,10 @@
 <div class="card mb-5" style="width: 45rem;">
     <div class="card-body">
         <div class="w-100 d-flex justify-content-between">
-            <h3 class="card-title">
+            <h3 class="card-title wrap-ellipsis">
                 <img src="@GemData.Icon" alt="Gem-Icon" class="icon"/>@GemData.Name
             </h3>
-            <div class="d-flex w-25 justify-content-end">
+            <div class="d-flex justify-content-end" style="width: min-content">
                 @if (_isEditing)
                 {
                     <button class="edit-button" @onclick="ResetValues">
