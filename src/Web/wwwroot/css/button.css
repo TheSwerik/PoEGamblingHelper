@@ -1,13 +1,12 @@
 ﻿.btn {
     --bs-btn-hover-color: var(--bs-body-bg);
-    --bs-btn-color: var(--bs-body-bg);
-    --bs-btn-border-color: var(--bs-body-bg);
     border-radius: 15px 0;
     border: none;
     font-size: 1.75rem;
     font-weight: 1000;
     -webkit-transition: filter 0.3s, filter 0.3s;
     transition: filter 0.3s, filter 0.3s;
+    opacity: 100% !important;
 }
 
 /*region btn*/
@@ -38,12 +37,12 @@
 
 .btn-outline-primary {
     --bs-btn-border-color: var(--bs-primary);
-    --bs-btn-color: var(--bs-primary);
+    --bs-btn-color: var(--bs-primary) !important;
 }
 
 .btn-outline-secondary {
     --bs-btn-border-color: var(--bs-secondary);
-    --bs-btn-color: var(--bs-secondary);
+    --bs-btn-color: var(--bs-secondary) !important;
 }
 
 .btn-outline-primary:hover, .btn-outline-secondary:hover, .btn-outline-danger:hover,
@@ -78,7 +77,7 @@
 }
 
 .btn-addon {
-    border-left: solid 1px var(--bs-btn-border-color) !important;
+    border-left: solid 2px var(--bs-btn-border-color) !important;
     border-radius: 10px 0 !important;
     margin-left: -1rem !important;
     height: 2.2rem;

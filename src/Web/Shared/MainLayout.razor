@@ -10,15 +10,10 @@
     </main>
 </div>
 
-
 @code
 {
     [Inject]
     IJSRuntime JsRuntime { get; set; } = null!;
 
-    protected override async void OnInitialized()
-    {
-        await JsRuntime.InvokeVoidAsync("useSavedTheme");
-        await JsRuntime.InvokeVoidAsync("useTheme", "dark");
-    }
+    protected override async void OnInitialized() { await JsRuntime.InvokeVoidAsync("useSavedTheme"); }
 }
