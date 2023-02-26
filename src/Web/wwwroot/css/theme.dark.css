@@ -7,6 +7,7 @@
 
     --bs-body-color: #f1eded !important;
     --bs-body-bg: #1e1e1e !important;
+    --bs-body-bg-accent: #2f2f2f !important;
 
     --bs-btn-color: var(--bs-body-bg);
     --bs-btn-border-color: var(--bs-body-bg);
