@@ -37,3 +37,8 @@
 input {
     padding-right: 8px !important;
 }
+
+.card {
+    border: none;
+    background-color: var(--bs-body-bg-accent);
+}

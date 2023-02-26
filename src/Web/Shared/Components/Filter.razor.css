@@ -46,3 +46,7 @@
     -webkit-mask: url(icons/angles-down.svg) no-repeat center;
     mask: url(icons/angles-down.svg) no-repeat center;
 }
+
+.card {
+    border-width: 2px;
+}
