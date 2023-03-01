@@ -53,7 +53,7 @@
       "System.Threading.dll": "sha256-ZbUxkfuAxxqgKUMM6EXZfcKKNbu1nUhLhEYBIAWCxOo=",
       "System.Threading.Thread.dll": "sha256-ikSVfAfI5gGrvj+nRy+9fD+bGStWO+V0OLH\/ZXVflps=",
       "System.Web.HttpUtility.dll": "sha256-sj1dv+a2CERen6CZgfSWnaZOycBnzYvwVllLot03QL8=",
-      "Web.dll": "sha256-mZvGhDSxsFTRaB3XFXvGsANx6DohoTipBpT00NQxaag="
+      "Web.dll": "sha256-gOSB2Ji50c6FVLHogZIhdd0KCotulxmDEBhe73DJTqc="
     },
     "extensions": null,
     "lazyAssembly": null,
