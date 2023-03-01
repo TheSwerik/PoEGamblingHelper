@@ -112,9 +112,11 @@ public partial class GamblingHelper : IDisposable
         return _lastBackendUpdate == DateTime.MinValue
                    ? "Never"
                    : _lastBackendUpdate < DateTime.Now.AddMinutes(-1)
-                       ? $"{(int)DateTime.Now.Subtract(_lastBackendUpdate).TotalMinutes} Minutes ago"
+                       ? $"{PassedMinutesSinceUpdate()} Minute{(PassedMinutesSinceUpdate() == 1 ? "" : "s")} ago"
                        : "Just now";
     }
+
+    private int PassedMinutesSinceUpdate() { return (int)DateTime.Now.Subtract(_lastBackendUpdate).TotalMinutes; }
 
     private async Task<bool> UpdateGems()
     {

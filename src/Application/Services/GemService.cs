@@ -53,12 +53,16 @@ public partial class GemService : IGemService
         query.PricePerTryTo ??= decimal.MaxValue;
 
         using var applicationDbContext = _applicationDbContextFactory.CreateDbContext();
+        var templeCost = applicationDbContext.TempleCost
+                                             .OrderByDescending(cost => cost.TimeStamp)
+                                             .FirstOrDefault()
+                                             ?.AverageChaosValue() ?? 0;
         return applicationDbContext.GemData
                                    .FromSqlRaw(PreFilterGemDataQuery(query))
                                    .Include(gemData => gemData.Gems)
                                    .AsEnumerable()
-                                   .Where(gemData => PostFilterGemData(gemData, query))
-                                   .OrderBy(gemData => OrderGemData(gemData, query.Sort))
+                                   .Where(gemData => PostFilterGemData(gemData, query, templeCost))
+                                   .OrderBy(gemData => OrderGemData(gemData, query.Sort, templeCost))
                                    .ToArray();
     }
 
@@ -97,23 +101,23 @@ public partial class GemService : IGemService
         """;
     }
 
-    private static bool PostFilterGemData(GemData gemData, GemDataQuery query)
+    private static bool PostFilterGemData(GemData gemData, GemDataQuery query, decimal averageTempleCost)
     {
         return gemData.RawCost() >= query.PricePerTryFrom
                && gemData.RawCost() <= query.PricePerTryTo
-               && (!query.OnlyShowProfitable || gemData.AvgProfitPerTry() > 0);
+               && (!query.OnlyShowProfitable || gemData.AvgProfitPerTry(templeCost: averageTempleCost) > 0);
     }
 
-    private static decimal OrderGemData(GemData gemData, Sort sort)
+    private static decimal OrderGemData(GemData gemData, Sort sort, decimal averageTempleCost)
     {
         return sort switch
                {
                    Sort.CostPerTryAsc => gemData.RawCost(),
                    Sort.CostPerTryDesc => -gemData.RawCost(),
-                   Sort.AverageProfitPerTryAsc => gemData.AvgProfitPerTry(),
-                   Sort.AverageProfitPerTryDesc => -gemData.AvgProfitPerTry(),
-                   Sort.MaxProfitPerTryAsc => -gemData.Profit(ResultCase.Best),
-                   Sort.MaxProfitPerTryDesc => -gemData.Profit(ResultCase.Best),
+                   Sort.AverageProfitPerTryAsc => gemData.AvgProfitPerTry(templeCost: averageTempleCost),
+                   Sort.AverageProfitPerTryDesc => -gemData.AvgProfitPerTry(templeCost: averageTempleCost),
+                   Sort.MaxProfitPerTryAsc => -gemData.Profit(ResultCase.Best, templeCost: averageTempleCost),
+                   Sort.MaxProfitPerTryDesc => -gemData.Profit(ResultCase.Best, templeCost: averageTempleCost),
                    _ => (decimal)Random.Shared.NextDouble()
                };
     }
