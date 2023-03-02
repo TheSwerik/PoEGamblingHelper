@@ -10,7 +10,19 @@
     <label class="btn btn-outline-primary" for="global">Global</label>
 </div>
 
-You have [Terrible|Bad|Mediocre|Average|Decent|Good|Amazing|Streamer RNG] Luck.
-Your Luck-Rank: 654160
-You Made: 420 [Chaos|Divines]
-Outcomes: PIE CHART
+<div class="d-flex flex-column align-items-center w-100">
+    <h1>
+        You have <i style="color: var(--bs-secondary)">@LuckAdjective()</i> @(LuckScore() > 0.9 ? "" : "luck").
+    </h1>
+    <p>
+        Your Luck-Score is <i style="color: var(--bs-secondary)">@LuckScore().Percent()</i>.
+    </p>
+    <p>
+        Your Luck-Rank is <i style="color: var(--bs-secondary)">679120</i>.
+    </p>
+    <p>
+        You made <i style="color: var(--bs-secondary)">420 Divines</i> profit total.
+    </p>
+
+    <Chart Data="_data"></Chart>
+</div>

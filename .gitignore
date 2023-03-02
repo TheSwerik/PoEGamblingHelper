@@ -351,3 +351,6 @@ MigrationBackup/
 **/.idea/
 
 # test commit
+
+
+**/wwwroot/js/index.bundle.js*

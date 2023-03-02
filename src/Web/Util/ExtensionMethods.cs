@@ -29,6 +29,8 @@ public static partial class ExtensionMethods
         return value is null ? null : string.Format($"{{0:0.{placeCharacters}}}", value);
     }
 
+    public static string Percent(this double value) { return $"{value * 100:0.##}%"; }
+
     public static string ToPrettyString(this Sort sort)
     {
         return sort switch
