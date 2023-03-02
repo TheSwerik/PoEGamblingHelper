@@ -13,5 +13,5 @@ nav ::deep a.test {
 }
 
 nav ::deep a.active {
-    filter: brightness(80%);
+    color: var(--bs-secondary);
 }

@@ -9,7 +9,7 @@ using Web.Shared.Model;
 
 namespace Web.Pages;
 
-public partial class GamblingHelper : IDisposable
+public partial class GamblingHelper : IAsyncDisposable
 {
     private readonly List<GemData> _gems = new();
     private List<Currency> _currency = new();
@@ -28,7 +28,6 @@ public partial class GamblingHelper : IDisposable
 
     [Inject] private IJSRuntime JsRuntime { get; set; } = null!;
 
-    public void Dispose() { _loadGamblingDataTask.Dispose(); }
     private DateTime NextBackendUpdate() { return _lastBackendUpdate.AddMinutes(5); }
 
     protected override async Task OnInitializedAsync()
@@ -36,16 +35,19 @@ public partial class GamblingHelper : IDisposable
         await base.OnInitializedAsync();
         var filterValues = await LocalStorage.GetItemAsync<FilterValues>("GemDataQuery");
         if (filterValues is not null) _filterValues = filterValues;
+
         _loadGamblingDataTask = Task.Run(async () =>
                                          {
                                              while (true)
                                              {
                                                  while (_isUpdating || NextBackendUpdate() > DateTime.Now)
                                                  {
+                                                     _tokenSource.Token.ThrowIfCancellationRequested();
                                                      await InvokeAsync(StateHasChanged);
                                                      await Task.Delay(1000);
                                                  }
 
+                                                 _tokenSource.Token.ThrowIfCancellationRequested();
                                                  await LoadGamblingData();
                                                  await InvokeAsync(StateHasChanged);
                                              }
@@ -129,6 +131,35 @@ public partial class GamblingHelper : IDisposable
         _isOnLastPage = gemPage.LastPage;
         return true;
     }
+
+    #region Dispose
+
+    private readonly CancellationTokenSource _tokenSource = new();
+
+    public async ValueTask DisposeAsync()
+    {
+        await DisposeAsyncCore().ConfigureAwait(false);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual async ValueTask DisposeAsyncCore()
+    {
+        _tokenSource.Cancel();
+        try
+        {
+            await _loadGamblingDataTask;
+        }
+        catch (OperationCanceledException)
+        {
+        }
+        finally
+        {
+            _loadGamblingDataTask.Dispose();
+            _tokenSource.Dispose();
+        }
+    }
+
+    #endregion
 
     #region OnScrollToBottom
 
