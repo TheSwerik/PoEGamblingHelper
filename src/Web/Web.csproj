@@ -17,17 +17,6 @@
         <ProjectReference Include="..\Domain\Domain.csproj"/>
     </ItemGroup>
 
-    <ItemGroup>
-        <Content Update="JavaScript\src\theme.ss">
-            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-            <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-        </Content>
-        <Content Update="JavaScript\src\tooltip.ts">
-            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-            <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-        </Content>
-    </ItemGroup>
-
     <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
         <Exec Command="yarn" WorkingDirectory="JavaScript" EnvironmentVariables="FORCE_COLOR=0"/>
         <Exec Command="yarn build-dev" WorkingDirectory="JavaScript" Condition="$(Configuration) == Debug"/>
