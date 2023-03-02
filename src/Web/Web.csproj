@@ -17,4 +17,9 @@
         <ProjectReference Include="..\Domain\Domain.csproj"/>
     </ItemGroup>
 
+    <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+        <Exec Command="yarn" WorkingDirectory="JavaScript" EnvironmentVariables="FORCE_COLOR=0"/>
+        <Exec Command="yarn build-dev" WorkingDirectory="JavaScript" Condition="$(Configuration) == Debug"/>
+        <Exec Command="yarn build" WorkingDirectory="JavaScript" Condition="$(Configuration) == Release"/>
+    </Target>
 </Project>
