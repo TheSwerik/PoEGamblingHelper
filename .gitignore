@@ -353,4 +353,4 @@ MigrationBackup/
 # test commit
 
 
-**/wwwroot/js/index.bundle.js*
+**/wwwroot/js/bundle.js*
