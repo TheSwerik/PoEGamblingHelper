@@ -25,7 +25,6 @@ public partial class GamblingHelper : IAsyncDisposable
     [Inject] private ICurrencyService CurrencyService { get; set; } = default!;
     [Inject] private ILocalStorageService LocalStorage { get; set; } = default!;
     [Inject] private ILeagueService LeagueService { get; set; } = default!;
-
     [Inject] private IJSRuntime JsRuntime { get; set; } = null!;
 
     private DateTime NextBackendUpdate() { return _lastBackendUpdate.AddMinutes(5); }

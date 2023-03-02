@@ -1,3 +1,16 @@
 ﻿@page "/stats"
 <Navbar></Navbar>
 <h3>Stats</h3>
+
+<div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+    <input type="radio" class="btn-check" name="btnradio" id="my-account" autocomplete="off" checked @onchange="@(() => _isMyAccountSelected = true)">
+    <label class="btn btn-outline-primary" for="my-account">My Account</label>
+
+    <input type="radio" class="btn-check" name="btnradio" id="global" autocomplete="off" @onchange="@(() => _isMyAccountSelected = false)">
+    <label class="btn btn-outline-primary" for="global">Global</label>
+</div>
+
+You have [Terrible|Bad|Mediocre|Average|Decent|Good|Amazing|Streamer RNG] Luck.
+Your Luck-Rank: 654160
+You Made: 420 [Chaos|Divines]
+Outcomes: PIE CHART
