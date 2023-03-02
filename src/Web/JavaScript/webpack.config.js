@@ -1,6 +1,7 @@
 ﻿const path = require('path');
 module.exports = {
-    entry: './src/index.ts',
+    // entry: './src/index.ts',
+    entry: ['./src/index.ts', './src/scroll-to-bottom.ts'],
     output: {
         path: path.resolve(__dirname, '../wwwroot/js/'),
         filename: 'index.bundle.js',
