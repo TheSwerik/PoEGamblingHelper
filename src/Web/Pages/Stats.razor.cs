@@ -18,14 +18,17 @@ public partial class Stats
     {
         return LuckScore() switch
                {
-                   > 0.9 => "a streamer",
-                   > 0.8 => "amazing",
-                   > 0.7 => "good",
-                   > 0.55 => "decent",
-                   > 0.45 => "average",
-                   > 0.3 => "bad",
-                   > 0.2 => "terrible",
-                   _ => "abominable"
+                   > 0.9 => "contacts at GGG",
+                   > 0.7 => "a hacked client",
+                   > 0.5 => "a streamer client",
+                   > 0.4 => "amazing",
+                   > 0.3 => "good",
+                   > 0.26 => "decent",
+                   > 0.24 => "average",
+                   > 0.2 => "bad",
+                   > 0.1 => "terrible",
+                   > 0 => "abominable",
+                   _ => "negative"
                };
     }
 }

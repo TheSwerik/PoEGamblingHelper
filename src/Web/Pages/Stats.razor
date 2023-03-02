@@ -1,5 +1,4 @@
 ﻿@page "/stats"
-<Navbar></Navbar>
 <h3>Stats</h3>
 
 <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
@@ -12,7 +11,7 @@
 
 <div class="d-flex flex-column align-items-center w-100">
     <h1>
-        You have <i style="color: var(--bs-secondary)">@LuckAdjective()</i> @(LuckScore() > 0.9 ? "" : "luck").
+        You have <i style="color: var(--bs-secondary)">@LuckAdjective()</i> @(LuckScore() > 0.5 ? "" : "luck").
     </h1>
     <p>
         Your Luck-Score is <i style="color: var(--bs-secondary)">@LuckScore().Percent()</i>.
