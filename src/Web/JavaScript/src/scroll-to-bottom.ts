@@ -2,23 +2,24 @@ declare global {
     // noinspection JSUnusedGlobalSymbols
     interface Window {
         scrollInfoService: ScrollInfoService;
+
+        RegisterScrollInfoService(scrollInfoService: ScrollInfoService): void;
+
+        UnRegisterScrollInfoService(): void;
     }
 }
 
 
 window.onscroll = () => {
-    console.log(window.scrollInfoService)
-    console.log(window.scrollY)
     if (window.scrollInfoService !== undefined)
         if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight)
             window.scrollInfoService.invokeMethodAsync('OnScrollToBottom', window.scrollY);
 }
 
 
-export function RegisterScrollInfoService(scrollInfoService: any) {
-    window.scrollInfoService = scrollInfoService;
-}
+window.RegisterScrollInfoService = (scrollInfoService: any) => window.scrollInfoService = scrollInfoService;
 
+window.UnRegisterScrollInfoService = UnRegisterScrollInfoService;
 export function UnRegisterScrollInfoService() {
     window.scrollInfoService = undefined;
 }

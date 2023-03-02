@@ -1,7 +1,13 @@
 import Chart from 'chart.js/auto';
 
-// noinspection JSUnusedGlobalSymbols
-export function showChart(data: number[]) {
+declare global {
+    // noinspection JSUnusedGlobalSymbols
+    interface Window {
+        showChart(data: number[]): void;
+    }
+}
+
+window.showChart = (data: number[]) => {
     const ctx = document.getElementById('chart');
     console.log(ctx)
 

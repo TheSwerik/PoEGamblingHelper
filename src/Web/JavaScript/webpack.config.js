@@ -1,10 +1,11 @@
-﻿const path = require('path');
+﻿const glob = require('glob');
+const path = require('path');
+console.log(glob.globSync("./src/**/*.ts").map(e => `\./${e}`))
 module.exports = {
-    // entry: './src/index.ts',
-    entry: ['./src/index.ts', './src/scroll-to-bottom.ts'],
+    entry: glob.globSync("./src/**/*.ts").map(e => `\./${e}`),
     output: {
         path: path.resolve(__dirname, '../wwwroot/js/'),
-        filename: 'index.bundle.js',
+        filename: 'bundle.js',
         libraryTarget: 'window',
     },
     resolve: {
