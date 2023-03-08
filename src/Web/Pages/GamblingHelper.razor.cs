@@ -16,9 +16,6 @@ public partial class GamblingHelper : IAsyncDisposable
     private League _currentLeague = new();
     private FilterValues _filterValues = new();
     private bool _firstLoad = true;
-    private bool _isUpdating;
-    private DateTime _lastBackendUpdate = DateTime.MinValue;
-    private Task _loadGamblingDataTask = null!;
     private TempleCost _templeCost = new() { ChaosValue = new[] { 0m } };
     [Inject] private IGemService GemService { get; set; } = default!;
     [Inject] private ITempleCostService TempleCostService { get; set; } = default!;
@@ -26,8 +23,14 @@ public partial class GamblingHelper : IAsyncDisposable
     [Inject] private ILocalStorageService LocalStorage { get; set; } = default!;
     [Inject] private ILeagueService LeagueService { get; set; } = default!;
     [Inject] private IJSRuntime JsRuntime { get; set; } = null!;
+    [Inject] private IUpdateService UpdateService { get; set; } = null!;
 
-    private DateTime NextBackendUpdate() { return _lastBackendUpdate.AddMinutes(5); }
+    public async ValueTask DisposeAsync()
+    {
+        UpdateService.OnUiUpdate -= async _ => await InvokeAsync(StateHasChanged);
+        UpdateService.OnUpdate -= async _ => await LoadGamblingData();
+        GC.SuppressFinalize(this);
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -35,29 +38,14 @@ public partial class GamblingHelper : IAsyncDisposable
         var filterValues = await LocalStorage.GetItemAsync<FilterValues>("GemDataQuery");
         if (filterValues is not null) _filterValues = filterValues;
 
-        _loadGamblingDataTask = Task.Run(async () =>
-                                         {
-                                             while (true)
-                                             {
-                                                 while (_isUpdating || NextBackendUpdate() > DateTime.Now)
-                                                 {
-                                                     _tokenSource.Token.ThrowIfCancellationRequested();
-                                                     await InvokeAsync(StateHasChanged);
-                                                     await Task.Delay(1000);
-                                                 }
-
-                                                 _tokenSource.Token.ThrowIfCancellationRequested();
-                                                 await LoadGamblingData();
-                                                 await InvokeAsync(StateHasChanged);
-                                             }
-                                         });
+        UpdateService.OnUpdate += async _ => await LoadGamblingData();
+        UpdateService.OnUiUpdate += async _ => await InvokeAsync(StateHasChanged);
     }
 
     public async Task LoadGamblingData()
     {
         try
         {
-            _isUpdating = true;
             _firstLoad = false;
             await InvokeAsync(StateHasChanged);
 
@@ -92,9 +80,6 @@ public partial class GamblingHelper : IAsyncDisposable
         }
         finally
         {
-            _lastBackendUpdate = DateTime.Now;
-
-            _isUpdating = false;
             await InvokeAsync(StateHasChanged);
             await JsRuntime.InvokeVoidAsync("addTooltips");
         }
@@ -105,19 +90,8 @@ public partial class GamblingHelper : IAsyncDisposable
         _filterValues = filterValues;
         _currentGemPage = 0;
         _isOnLastPage = false;
-        await LoadGamblingData();
+        await UpdateService.Update();
     }
-
-    private string LastUpdateText()
-    {
-        return _lastBackendUpdate == DateTime.MinValue
-                   ? "Never"
-                   : _lastBackendUpdate < DateTime.Now.AddMinutes(-1)
-                       ? $"{PassedMinutesSinceUpdate()} Minute{(PassedMinutesSinceUpdate() == 1 ? "" : "s")} ago"
-                       : "Just now";
-    }
-
-    private int PassedMinutesSinceUpdate() { return (int)DateTime.Now.Subtract(_lastBackendUpdate).TotalMinutes; }
 
     private async Task<bool> UpdateGems()
     {
@@ -130,35 +104,6 @@ public partial class GamblingHelper : IAsyncDisposable
         _isOnLastPage = gemPage.LastPage;
         return true;
     }
-
-    #region Dispose
-
-    private readonly CancellationTokenSource _tokenSource = new();
-
-    public async ValueTask DisposeAsync()
-    {
-        await DisposeAsyncCore().ConfigureAwait(false);
-        GC.SuppressFinalize(this);
-    }
-
-    protected virtual async ValueTask DisposeAsyncCore()
-    {
-        _tokenSource.Cancel();
-        try
-        {
-            await _loadGamblingDataTask;
-        }
-        catch (OperationCanceledException)
-        {
-        }
-        finally
-        {
-            _loadGamblingDataTask.Dispose();
-            _tokenSource.Dispose();
-        }
-    }
-
-    #endregion
 
     #region OnScrollToBottom
 

@@ -27,5 +27,6 @@ builder.Services.AddScoped<ITempleCostService, TempleCostService>();
 builder.Services.AddScoped<ICurrencyService, CurrencyService>();
 builder.Services.AddScoped<ILeagueService, LeagueService>();
 builder.Services.AddScoped<IScrollInfoService, ScrollInfoService>();
+builder.Services.AddSingleton<IUpdateService, UpdateService>();
 
 await builder.Build().RunAsync();
