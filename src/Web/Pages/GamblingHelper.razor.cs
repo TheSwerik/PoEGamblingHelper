@@ -9,7 +9,7 @@ using Web.Shared.Model;
 
 namespace Web.Pages;
 
-public partial class GamblingHelper : IAsyncDisposable
+public partial class GamblingHelper : IDisposable
 {
     private readonly List<GemData> _gems = new();
     private List<Currency> _currency = new();
@@ -25,10 +25,10 @@ public partial class GamblingHelper : IAsyncDisposable
     [Inject] private IJSRuntime JsRuntime { get; set; } = null!;
     [Inject] private IUpdateService UpdateService { get; set; } = null!;
 
-    public async ValueTask DisposeAsync()
+    public void Dispose()
     {
-        UpdateService.OnUiUpdate -= async _ => await InvokeAsync(StateHasChanged);
         UpdateService.OnUpdate -= async _ => await LoadGamblingData();
+        UpdateService.OnUiUpdate -= async _ => await InvokeAsync(StateHasChanged);
         GC.SuppressFinalize(this);
     }
 

@@ -1,9 +1,20 @@
-﻿namespace Web.Pages;
+﻿using Microsoft.AspNetCore.Components;
+using Web.Services.Interfaces;
 
-public partial class Stats
+namespace Web.Pages;
+
+public partial class Stats : IDisposable
 {
     private readonly int[] _data = { Random.Shared.Next(10000), Random.Shared.Next(10000), Random.Shared.Next(10000) };
     private bool _isMyAccountSelected = true;
+    [Inject] private IUpdateService UpdateService { get; set; } = null!;
+
+    public void Dispose()
+    {
+        //UpdateService.OnUpdate -= async _ => await LoadGamblingData();
+        UpdateService.OnUiUpdate -= async _ => await InvokeAsync(StateHasChanged);
+        GC.SuppressFinalize(this);
+    }
 
     private double LuckScore()
     {
@@ -12,6 +23,12 @@ public partial class Stats
         return _data.Length > 0
                    ? _data[2] / (double)_data.Sum()
                    : 0;
+    }
+
+    protected override void OnInitialized()
+    {
+        //UpdateService.OnUpdate += async _ => await LoadGamblingData();
+        UpdateService.OnUiUpdate += async _ => await InvokeAsync(StateHasChanged);
     }
 
     private string LuckAdjective()

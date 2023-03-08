@@ -15,7 +15,6 @@ public partial class Footer : IAsyncDisposable
 
     private string LastUpdateText()
     {
-        Console.WriteLine("LAST UPDATE TEXT " + DateTime.Now);
         return UpdateService.LastUpdate() == DateTime.MinValue
                    ? "Never"
                    : UpdateService.LastUpdate() < DateTime.Now.AddMinutes(-1)
