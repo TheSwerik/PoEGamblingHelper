@@ -350,7 +350,4 @@ MigrationBackup/
 
 **/.idea/
 
-# test commit
-
-
 **/wwwroot/js/bundle.js*
