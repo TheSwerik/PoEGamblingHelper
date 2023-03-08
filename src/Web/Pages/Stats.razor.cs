@@ -18,7 +18,6 @@ public partial class Stats : IDisposable
 
     private double LuckScore()
     {
-        Console.WriteLine(Random.Shared.Next(10000));
         Console.WriteLine(_data[2]);
         return _data.Length > 0
                    ? _data[2] / (double)_data.Sum()

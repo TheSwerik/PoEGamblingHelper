@@ -9,6 +9,8 @@ public class UpdateService : IUpdateService
     private DateTime _lastUpdate = DateTime.MinValue;
     private TimeSpan? _updateInterval = TimeSpan.FromSeconds(1);
     private Task _updateTask = null!;
+    private event AsyncEventHandler? _onUpdate;
+    private event AsyncEventHandler? OnUiUpdate;
 
     #region public methods
 
@@ -42,16 +44,12 @@ public class UpdateService : IUpdateService
 
     public async Task Update()
     {
-        if (_onUpdate is null) return;
         _isUpdating = true;
-        await _onUpdate.Invoke(this);
+        if (_onUpdate is not null) await _onUpdate.Invoke(this);
         _lastUpdate = DateTime.Now;
         _isUpdating = false;
         if (OnUiUpdate is not null) await OnUiUpdate.Invoke(this);
     }
-
-    private event AsyncEventHandler? _onUpdate;
-    private event AsyncEventHandler? OnUiUpdate;
 
     AsyncEventHandler? IUpdateService.OnUpdate
     {

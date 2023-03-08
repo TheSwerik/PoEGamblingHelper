@@ -40,6 +40,7 @@ public partial class GamblingHelper : IDisposable
 
         UpdateService.OnUpdate += async _ => await LoadGamblingData();
         UpdateService.OnUiUpdate += async _ => await InvokeAsync(StateHasChanged);
+        await UpdateService.Update();
     }
 
     public async Task LoadGamblingData()
