@@ -14,14 +14,6 @@ public class UpdateService : IUpdateService
 
     #region public methods
 
-    public void Init(Func<Task> updateAction, TimeSpan updateInterval, Func<Task>? uiUpdateAction)
-    {
-        _onUpdate += async _ => await updateAction.Invoke();
-        UpdateInterval = updateInterval;
-        if (uiUpdateAction is not null) OnUiUpdate += async _ => await uiUpdateAction.Invoke();
-        Init();
-    }
-
     public void Init()
     {
         _updateTask = Task.Run(async () =>
