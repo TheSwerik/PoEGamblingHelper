@@ -1,13 +1,12 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Text.Json;
+﻿using System.Text.Json;
 using Application.Services;
 using Domain.Entity;
 using Domain.Entity.Gem;
+using Domain.Entity.Stats;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Services;
 
-[SuppressMessage("ReSharper", "AutoPropertyCanBeMadeGetOnly.Global")]
 public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
@@ -16,6 +15,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public virtual DbSet<TempleCost> TempleCost => Set<TempleCost>();
     public virtual DbSet<GemData> GemData => Set<GemData>();
     public virtual DbSet<GemTradeData> GemTradeData => Set<GemTradeData>();
+    public virtual DbSet<Result> Result => Set<Result>();
     public Task<int> SaveChangesAsync() { return base.SaveChangesAsync(); }
 
     public void ClearTrackedEntities() { ChangeTracker.Clear(); }
