@@ -21,7 +21,7 @@ public class InitServiceTest
 
         Assert.Null(await Record.ExceptionAsync(async () => await service.FetchCurrentLeague()));
 
-        dataFetchService.Setup(s => s.FetchCurrentLeague()).Throws<PoeDbDownException>();
+        dataFetchService.Setup(s => s.FetchCurrentLeague()).Throws(() => new ApiDownException("poedb.tw"));
         Assert.Null(await Record.ExceptionAsync(async () => await service.FetchCurrentLeague()));
 
         dataFetchService.Setup(s => s.FetchCurrentLeague()).Throws<UnreachableException>();
@@ -65,16 +65,19 @@ public class InitServiceTest
         leagueService.Invocations.Clear();
         leagueService.Setup(s => s.GetCurrentLeague(appDbContext.Object.League)).Returns(new League());
 
-        dataFetchService.Setup(s => s.FetchCurrencyData(It.IsAny<League>())).Throws<PoeDbDownException>();
+        dataFetchService.Setup(s => s.FetchCurrencyData(It.IsAny<League>()))
+                        .Throws(() => new ApiDownException("poedb.tw"));
         Assert.Null(await Record.ExceptionAsync(async () => await service.FetchPriceData()));
         dataFetchService.Setup(s => s.FetchCurrencyData(It.IsAny<League>())).Throws(new PoeDbCannotParseException(""));
         Assert.Null(await Record.ExceptionAsync(async () => await service.FetchPriceData()));
 
-        dataFetchService.Setup(s => s.FetchTemplePriceData(It.IsAny<League>())).Throws<PoeTradeDownException>();
+        dataFetchService.Setup(s => s.FetchTemplePriceData(It.IsAny<League>()))
+                        .Throws(() => new ApiDownException("pathofexile.com/trade"));
         Assert.Null(await Record.ExceptionAsync(async () => await service.FetchPriceData()));
         dataFetchService.Invocations.Clear();
 
-        dataFetchService.Setup(s => s.FetchGemPriceData(It.IsAny<League>())).Throws<PoeNinjaDownException>();
+        dataFetchService.Setup(s => s.FetchGemPriceData(It.IsAny<League>()))
+                        .Throws(() => new ApiDownException("poe.ninja"));
         Assert.Null(await Record.ExceptionAsync(async () => await service.FetchPriceData()));
     }
 }
