@@ -17,7 +17,8 @@ public class InitServiceTest
     {
         var logger = new Mock<ILogger<InitService>>();
         var dataFetchService = new Mock<IDataFetchService>();
-        var service = new InitService(logger.Object, dataFetchService.Object, null, TimeSpan.Zero, null, null, null);
+        var service = new InitService(logger.Object, dataFetchService.Object, null, TimeSpan.Zero, null, null, null,
+                                      null);
 
         Assert.Null(await Record.ExceptionAsync(async () => await service.FetchCurrentLeague()));
 
@@ -40,6 +41,7 @@ public class InitServiceTest
         var appDbContext = new Mock<IApplicationDbContext>();
         appDbContextFactory.Setup(f => f.CreateDbContext()).Returns(appDbContext.Object);
         var leagueService = new Mock<ILeagueService>();
+        var analyticsService = new Mock<IAnalyticsService>();
 
         leagueService.Setup(s => s.GetCurrentLeague(appDbContext.Object.League)).Verifiable();
         dataFetchService.Setup(s => s.FetchCurrencyData(null)).Verifiable();
@@ -48,7 +50,7 @@ public class InitServiceTest
         cache.Setup(c => c.EvictByTagAsync(null, new CancellationToken())).Verifiable();
 
         var service = new InitService(logger.Object, dataFetchService.Object, cache.Object, TimeSpan.Zero, null,
-                                      appDbContextFactory.Object, leagueService.Object);
+                                      appDbContextFactory.Object, leagueService.Object, analyticsService.Object);
 
         #endregion
 

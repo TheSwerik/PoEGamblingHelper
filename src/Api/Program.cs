@@ -27,7 +27,8 @@ builder.Services.AddHostedService<InitService>(
         TimeSpan.FromMinutes(builder.Configuration.GetValue<int>("FetchInterval")),
         builder.Configuration.GetValue<string>("CacheTag")!,
         opt.GetRequiredService<IApplicationDbContextFactory>(),
-        opt.GetRequiredService<ILeagueService>()
+        opt.GetRequiredService<ILeagueService>(),
+        opt.GetRequiredService<IAnalyticsService>()
     )
 );
 
