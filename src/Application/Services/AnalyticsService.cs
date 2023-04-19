@@ -34,8 +34,11 @@ public class AnalyticsService : IAnalyticsService
     {
         var yesterday = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-1);
         using var ctx = _applicationDbContextFactory.CreateDbContext();
-        var views = await ctx.View.Where(v => v.TimeStamp == yesterday).CountAsync();
+        var viewCount = await ctx.View.Where(v => v.TimeStamp == yesterday).CountAsync();
         _logger.LogInformation("{Views} People used the website on the {YesterdayDay}.{YesterdayMonth}.{YesterdayYear}",
-                               views, yesterday.Day, yesterday.Month, yesterday.Year);
+                               viewCount, yesterday.Day, yesterday.Month, yesterday.Year);
+        var views = await ctx.View.Where(v => v.TimeStamp <= yesterday).ToArrayAsync();
+        ctx.View.RemoveRange(views);
+        await ctx.SaveChangesAsync();
     }
 }
