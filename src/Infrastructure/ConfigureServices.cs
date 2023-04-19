@@ -33,8 +33,10 @@ public static class ConfigureServices
                 provider.GetRequiredService<IDbContextFactory<ApplicationDbContext>>()
             )
         );
+
         services.AddTransient<IGemService, GemService>();
         services.AddTransient<ILeagueService, LeagueService>();
         services.AddTransient<IDataFetchService, DataFetchService>();
+        services.AddTransient<IAnalyticsService, AnalyticsService>();
     }
 }
