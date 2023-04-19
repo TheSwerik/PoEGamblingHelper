@@ -22,7 +22,6 @@ public class CurrencyController : ApiControllerBase
     public async IAsyncEnumerable<Currency> GetAll()
     {
         await _analyticsService.AddView(Request.HttpContext.Connection.RemoteIpAddress);
-        await _analyticsService.LogYesterdaysViews();
         using var applicationDbContext = _applicationDbContextFactory.CreateDbContext();
         await foreach (var item in applicationDbContext.Currency.AsAsyncEnumerable().ConfigureAwait(false))
             yield return item;
