@@ -22,6 +22,19 @@ namespace Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Domain.Entity.Analytics.View", b =>
+                {
+                    b.Property<byte[]>("IpHash")
+                        .HasColumnType("bytea");
+
+                    b.Property<DateOnly>("TimeStamp")
+                        .HasColumnType("date");
+
+                    b.HasKey("IpHash");
+
+                    b.ToTable("View");
+                });
+
             modelBuilder.Entity("Domain.Entity.Currency", b =>
                 {
                     b.Property<string>("Id")

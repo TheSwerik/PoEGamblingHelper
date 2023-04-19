@@ -8,14 +8,20 @@ namespace Api.Controllers;
 
 public class GemController : ApiControllerBase
 {
+    private readonly IAnalyticsService _analyticsService;
     private readonly IGemService _gemService;
 
-    public GemController(IGemService gemService) { _gemService = gemService; }
+    public GemController(IGemService gemService, IAnalyticsService analyticsService)
+    {
+        _gemService = gemService;
+        _analyticsService = analyticsService;
+    }
 
     [HttpGet]
     [OutputCache(PolicyName = "FetchData")]
     public async Task<Page<GemData>> GetAll([FromQuery] GemDataQuery? query, [FromQuery] PageRequest page)
     {
+        await _analyticsService.AddView(Request.HttpContext.Connection.RemoteIpAddress);
         return await _gemService.GetAll(query, page);
     }
 }
