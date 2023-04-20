@@ -1,9 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Domain.Entity.Abstract;
 
 namespace Domain.Entity.Analytics;
 
-public class View
+public class View : Entity<Guid>
 {
-    [Key] public byte[] IpHash { get; set; } = null!;
+    public byte[] IpHash { get; set; } = null!;
     public DateOnly TimeStamp { get; set; }
 }
