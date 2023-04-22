@@ -4,11 +4,11 @@ public static class HttpUtilFunctions
 {
     public static string? GetRealIpAddress(this HttpRequest httpRequest)
     {
-        var clientIp = httpRequest.HttpContext.Request.Headers["X-Forwarded-For"].First();
+        var forwardedChain = httpRequest.HttpContext.Request.Headers["X-Forwarded-For"].First();
+        Console.WriteLine(forwardedChain);
+        if (string.IsNullOrEmpty(forwardedChain)) return httpRequest.HttpContext.Connection.RemoteIpAddress?.ToString();
+        var clientIp = forwardedChain.Split(',').First();
         Console.WriteLine(clientIp);
-        Console.WriteLine(httpRequest.HttpContext.Request.Headers["X-Forwarded-For"].Count);
-        return string.IsNullOrEmpty(clientIp)
-                   ? httpRequest.HttpContext.Connection.RemoteIpAddress?.ToString()
-                   : clientIp;
+        return clientIp;
     }
 }
