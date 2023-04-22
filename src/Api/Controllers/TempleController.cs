@@ -22,7 +22,7 @@ public class TempleController : ApiControllerBase
     [OutputCache(PolicyName = "FetchData")]
     public TempleCost Get()
     {
-        _analyticsService.AddView(Request.HttpContext.Connection.RemoteIpAddress);
+        _analyticsService.AddView(Request.GetRealIpAddress());
         using var applicationDbContext = _applicationDbContextFactory.CreateDbContext();
         return applicationDbContext.TempleCost.OrderByDescending(cost => cost.TimeStamp).FirstOrDefault()
                ?? throw new NoTempleDataException();

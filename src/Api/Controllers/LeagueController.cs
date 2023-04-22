@@ -22,7 +22,7 @@ public class LeagueController : ApiControllerBase
     [HttpGet]
     public async IAsyncEnumerable<League> GetAllLeagues()
     {
-        await _analyticsService.AddView(Request.HttpContext.Connection.RemoteIpAddress);
+        await _analyticsService.AddView(Request.GetRealIpAddress());
         using var applicationDbContext = _applicationDbContextFactory.CreateDbContext();
         await foreach (var item in applicationDbContext.League.AsAsyncEnumerable().ConfigureAwait(false))
             yield return item;
@@ -33,7 +33,7 @@ public class LeagueController : ApiControllerBase
     [OutputCache(PolicyName = "FetchData")]
     public League GetCurrentLeague()
     {
-        _analyticsService.AddView(Request.HttpContext.Connection.RemoteIpAddress);
+        _analyticsService.AddView(Request.GetRealIpAddress());
         using var applicationDbContext = _applicationDbContextFactory.CreateDbContext();
         return _leagueService.GetCurrentLeague(applicationDbContext.League);
     }

@@ -21,7 +21,7 @@ public class CurrencyController : ApiControllerBase
     [OutputCache(PolicyName = "FetchData")]
     public async IAsyncEnumerable<Currency> GetAll()
     {
-        await _analyticsService.AddView(Request.HttpContext.Connection.RemoteIpAddress);
+        await _analyticsService.AddView(Request.GetRealIpAddress());
         using var applicationDbContext = _applicationDbContextFactory.CreateDbContext();
         await foreach (var item in applicationDbContext.Currency.AsAsyncEnumerable().ConfigureAwait(false))
             yield return item;
