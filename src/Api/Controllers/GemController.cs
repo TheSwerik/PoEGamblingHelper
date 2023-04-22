@@ -21,7 +21,7 @@ public class GemController : ApiControllerBase
     [OutputCache(PolicyName = "FetchData")]
     public async Task<Page<GemData>> GetAll([FromQuery] GemDataQuery? query, [FromQuery] PageRequest page)
     {
-        await _analyticsService.AddView(Request.HttpContext.Connection.RemoteIpAddress);
+        await _analyticsService.AddView(Request.GetRealIpAddress());
         return await _gemService.GetAll(query, page);
     }
 }

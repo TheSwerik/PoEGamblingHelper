@@ -1,9 +1,7 @@
-﻿using System.Net;
-
-namespace Application.Services;
+﻿namespace Application.Services;
 
 public interface IAnalyticsService
 {
-    Task AddView(IPAddress? ipAddress);
+    Task AddView(string? ipAddress);
     Task LogYesterdaysViews();
 }
