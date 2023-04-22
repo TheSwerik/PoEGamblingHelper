@@ -1,5 +1,5 @@
-﻿using System.Net;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
+using System.Text;
 using Domain.Entity.Analytics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -17,10 +17,10 @@ public class AnalyticsService : IAnalyticsService
         _logger = logger;
     }
 
-    public async Task AddView(IPAddress? ipAddress)
+    public async Task AddView(string? ipAddress)
     {
         if (ipAddress is null) return;
-        var ipHash = SHA512.HashData(ipAddress.GetAddressBytes());
+        var ipHash = SHA512.HashData(Encoding.UTF8.GetBytes(ipAddress));
         var today = DateOnly.FromDateTime(DateTime.UtcNow);
         var view = new View { IpHash = ipHash, TimeStamp = today };
         using var ctx = _applicationDbContextFactory.CreateDbContext();
