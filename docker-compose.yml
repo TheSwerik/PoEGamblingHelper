@@ -11,14 +11,10 @@ services:
     environment:
       DOTNET_SYSTEM_GLOBALIZATION_INVARIANT: true
       POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+    restart: unless-stopped
     deploy:
       mode: replicated
       replicas: 1
-      restart_policy:
-        condition: on-failure
-        delay: 10s
-        max_attempts: 3
-        window: 5m
       resources:
         limits:
           cpus: '1'
@@ -40,14 +36,10 @@ services:
       - default
     environment:
       POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+    restart: unless-stopped
     deploy:
       mode: replicated
       replicas: 1
-      restart_policy:
-        condition: on-failure
-        delay: 10s
-        max_attempts: 3
-        window: 5m
       resources:
         limits:
           cpus: '1'
@@ -68,14 +60,10 @@ services:
     networks:
       - default
       - proxy
+    restart: unless-stopped
     deploy:
       mode: replicated
       replicas: 1
-      restart_policy:
-        condition: on-failure
-        delay: 10s
-        max_attempts: 3
-        window: 5m
       resources:
         limits:
           cpus: '0.5'
