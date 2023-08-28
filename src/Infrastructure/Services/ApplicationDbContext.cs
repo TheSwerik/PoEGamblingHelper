@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using Application.Services;
 using Domain.Entity;
+using Domain.Entity.Analytics;
 using Domain.Entity.Gem;
 using Domain.Entity.Stats;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public virtual DbSet<GemData> GemData => Set<GemData>();
     public virtual DbSet<GemTradeData> GemTradeData => Set<GemTradeData>();
     public virtual DbSet<Result> Result => Set<Result>();
+    public virtual DbSet<View> View => Set<View>();
     public Task<int> SaveChangesAsync() { return base.SaveChangesAsync(); }
 
     public void ClearTrackedEntities() { ChangeTracker.Clear(); }

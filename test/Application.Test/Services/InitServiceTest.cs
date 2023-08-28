@@ -17,11 +17,12 @@ public class InitServiceTest
     {
         var logger = new Mock<ILogger<InitService>>();
         var dataFetchService = new Mock<IDataFetchService>();
-        var service = new InitService(logger.Object, dataFetchService.Object, null, TimeSpan.Zero, null, null, null);
+        var service = new InitService(logger.Object, dataFetchService.Object, null, TimeSpan.Zero, null, null, null,
+                                      null);
 
         Assert.Null(await Record.ExceptionAsync(async () => await service.FetchCurrentLeague()));
 
-        dataFetchService.Setup(s => s.FetchCurrentLeague()).Throws<PoeDbDownException>();
+        dataFetchService.Setup(s => s.FetchCurrentLeague()).Throws(() => new ApiDownException("poedb.tw"));
         Assert.Null(await Record.ExceptionAsync(async () => await service.FetchCurrentLeague()));
 
         dataFetchService.Setup(s => s.FetchCurrentLeague()).Throws<UnreachableException>();
@@ -40,6 +41,7 @@ public class InitServiceTest
         var appDbContext = new Mock<IApplicationDbContext>();
         appDbContextFactory.Setup(f => f.CreateDbContext()).Returns(appDbContext.Object);
         var leagueService = new Mock<ILeagueService>();
+        var analyticsService = new Mock<IAnalyticsService>();
 
         leagueService.Setup(s => s.GetCurrentLeague(appDbContext.Object.League)).Verifiable();
         dataFetchService.Setup(s => s.FetchCurrencyData(null)).Verifiable();
@@ -48,7 +50,7 @@ public class InitServiceTest
         cache.Setup(c => c.EvictByTagAsync(null, new CancellationToken())).Verifiable();
 
         var service = new InitService(logger.Object, dataFetchService.Object, cache.Object, TimeSpan.Zero, null,
-                                      appDbContextFactory.Object, leagueService.Object);
+                                      appDbContextFactory.Object, leagueService.Object, analyticsService.Object);
 
         #endregion
 
@@ -65,16 +67,19 @@ public class InitServiceTest
         leagueService.Invocations.Clear();
         leagueService.Setup(s => s.GetCurrentLeague(appDbContext.Object.League)).Returns(new League());
 
-        dataFetchService.Setup(s => s.FetchCurrencyData(It.IsAny<League>())).Throws<PoeDbDownException>();
+        dataFetchService.Setup(s => s.FetchCurrencyData(It.IsAny<League>()))
+                        .Throws(() => new ApiDownException("poedb.tw"));
         Assert.Null(await Record.ExceptionAsync(async () => await service.FetchPriceData()));
         dataFetchService.Setup(s => s.FetchCurrencyData(It.IsAny<League>())).Throws(new PoeDbCannotParseException(""));
         Assert.Null(await Record.ExceptionAsync(async () => await service.FetchPriceData()));
 
-        dataFetchService.Setup(s => s.FetchTemplePriceData(It.IsAny<League>())).Throws<PoeTradeDownException>();
+        dataFetchService.Setup(s => s.FetchTemplePriceData(It.IsAny<League>()))
+                        .Throws(() => new ApiDownException("pathofexile.com/trade"));
         Assert.Null(await Record.ExceptionAsync(async () => await service.FetchPriceData()));
         dataFetchService.Invocations.Clear();
 
-        dataFetchService.Setup(s => s.FetchGemPriceData(It.IsAny<League>())).Throws<PoeNinjaDownException>();
+        dataFetchService.Setup(s => s.FetchGemPriceData(It.IsAny<League>()))
+                        .Throws(() => new ApiDownException("poe.ninja"));
         Assert.Null(await Record.ExceptionAsync(async () => await service.FetchPriceData()));
     }
 }

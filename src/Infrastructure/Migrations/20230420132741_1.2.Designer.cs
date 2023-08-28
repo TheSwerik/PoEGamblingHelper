@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230420132741_1.2")]
+    partial class _12
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -149,48 +152,6 @@ namespace Infrastructure.Migrations
                     b.ToTable("League");
                 });
 
-            modelBuilder.Entity("Domain.Entity.Stats.CurrencyResult", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("text");
-
-                    b.Property<decimal>("ChaosEquivalent")
-                        .HasColumnType("numeric");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CurrencyResult");
-                });
-
-            modelBuilder.Entity("Domain.Entity.Stats.Result", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("CurrencyResultId")
-                        .HasColumnType("text");
-
-                    b.Property<decimal>("CurrencyValue")
-                        .HasColumnType("numeric");
-
-                    b.Property<long>("GemTradeDataId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CurrencyResultId");
-
-                    b.HasIndex("GemTradeDataId");
-
-                    b.ToTable("Result");
-                });
-
             modelBuilder.Entity("Domain.Entity.TempleCost", b =>
                 {
                     b.Property<Guid>("Id")
@@ -214,23 +175,6 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Entity.Gem.GemData", null)
                         .WithMany("Gems")
                         .HasForeignKey("GemDataId");
-                });
-
-            modelBuilder.Entity("Domain.Entity.Stats.Result", b =>
-                {
-                    b.HasOne("Domain.Entity.Stats.CurrencyResult", "CurrencyResult")
-                        .WithMany()
-                        .HasForeignKey("CurrencyResultId");
-
-                    b.HasOne("Domain.Entity.Gem.GemTradeData", "GemTradeData")
-                        .WithMany()
-                        .HasForeignKey("GemTradeDataId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CurrencyResult");
-
-                    b.Navigation("GemTradeData");
                 });
 
             modelBuilder.Entity("Domain.Entity.Gem.GemData", b =>

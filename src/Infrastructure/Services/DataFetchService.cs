@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Headers;
+﻿using System.Net;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.RegularExpressions;
 using Application.Services;
@@ -32,9 +33,17 @@ public partial class DataFetchService : IDataFetchService, IDisposable
 
     public async Task FetchCurrentLeague()
     {
-        var doc = _htmlLoader.Load(PoeToolUrls.PoeDbLeagueUrl);
-        if (doc is null) throw new PoeDbDownException();
+        HtmlDocument doc;
+        try
+        {
+            doc = _htmlLoader.Load(PoeToolUrls.PoeDbLeagueUrl);
+        }
+        catch (WebException e)
+        {
+            throw new ApiDownException(PoeToolUrls.PoeDbLeagueUrl, e.Message);
+        }
 
+        if (doc is null) throw new ApiDownException(PoeToolUrls.PoeDbLeagueUrl);
         var tables = doc.DocumentNode.SelectNodes("//table");
         if (tables is null) throw new PoeDbCannotParseException("No tables found");
         var leaguesTable = tables.FirstOrDefault(n => n.HasChildNodes && n.InnerHtml.Contains("Weeks"));
@@ -56,10 +65,10 @@ public partial class DataFetchService : IDataFetchService, IDisposable
 
     public async Task FetchCurrencyData(League league)
     {
-        var response = await _httpClient.GetAsync($"{PoeToolUrls.PoeNinjaCurrencyUrl}&league={league.Name}");
-        if (!response.IsSuccessStatusCode) throw new PoeNinjaDownException();
+        var response = await GetAsync($"{PoeToolUrls.PoeNinjaCurrencyUrl}&league={league.Name}");
+        if (!response.IsSuccessStatusCode) throw new ApiDownException(PoeToolUrls.PoeNinjaCurrencyUrl);
         var currencyPriceData = await response.Content.ReadFromJsonAsync<CurrencyPriceData>();
-        if (currencyPriceData is null) throw new PoeNinjaDownException();
+        if (currencyPriceData is null) throw new ApiDownException(PoeToolUrls.PoeNinjaCurrencyUrl);
         _logger.LogInformation("Got data from {Result} currency items", currencyPriceData.Lines.Length);
 
         // set icons
@@ -124,10 +133,11 @@ public partial class DataFetchService : IDataFetchService, IDisposable
         using (var request = new HttpRequestMessage(HttpMethod.Post, requestUri)
                              { Content = new StringContent(_templeQuery, _jsonMediaTypeHeader) })
         {
-            var result = await _httpClient.SendAsync(request);
-            if (!result.IsSuccessStatusCode) throw new PoeTradeDownException();
+            var result = await SendAsync(request);
+            if (!result.IsSuccessStatusCode) throw new ApiDownException(PoeToolUrls.PoeApiTradeUrl);
 
-            temples = await result.Content.ReadFromJsonAsync<TradeResults>() ?? throw new PoeTradeDownException();
+            temples = await result.Content.ReadFromJsonAsync<TradeResults>() ??
+                      throw new ApiDownException(PoeToolUrls.PoeApiTradeUrl);
         }
 
         _logger.LogDebug("Found {ResultLength} Temples IDs", temples.Result.Length);
@@ -147,11 +157,11 @@ public partial class DataFetchService : IDataFetchService, IDisposable
         using (var request = new HttpRequestMessage(HttpMethod.Get, requestUri)
                              { Content = new StringContent(_templeQuery, _jsonMediaTypeHeader) })
         {
-            var result = await _httpClient.SendAsync(request);
-            if (!result.IsSuccessStatusCode) throw new PoeTradeDownException();
+            var result = await SendAsync(request);
+            if (!result.IsSuccessStatusCode) throw new ApiDownException(PoeToolUrls.PoeApiTradeUrl);
 
             priceResults = await result.Content.ReadFromJsonAsync<TradeEntryResult>()
-                           ?? throw new PoeTradeDownException();
+                           ?? throw new ApiDownException(PoeToolUrls.PoeApiTradeUrl);
         }
 
         _logger.LogDebug("Found {ResultLength} TemplePrices", priceResults.Result.Length);
@@ -176,10 +186,10 @@ public partial class DataFetchService : IDataFetchService, IDisposable
 
     public async Task FetchGemPriceData(League league)
     {
-        var response = await _httpClient.GetAsync(PoeToolUrls.PoeNinjaGemUrl + $"&league={league.Name}");
-        if (!response.IsSuccessStatusCode) throw new PoeNinjaDownException();
+        var response = await GetAsync(PoeToolUrls.PoeNinjaGemUrl + $"&league={league.Name}");
+        if (!response.IsSuccessStatusCode) throw new ApiDownException(PoeToolUrls.PoeNinjaGemUrl);
         var gemPriceData = await response.Content.ReadFromJsonAsync<GemPriceData>();
-        if (gemPriceData is null) throw new PoeNinjaDownException();
+        if (gemPriceData is null) throw new ApiDownException(PoeToolUrls.PoeNinjaGemUrl);
         _logger.LogInformation("Got data from {Result} gems", gemPriceData.Lines.Length);
 
         // GemTradeData
@@ -298,6 +308,30 @@ public partial class DataFetchService : IDataFetchService, IDisposable
         }
 
         await applicationDbContext.SaveChangesAsync();
+    }
+
+    private async Task<HttpResponseMessage> GetAsync(string url)
+    {
+        try
+        {
+            return await _httpClient.GetAsync(url);
+        }
+        catch (HttpRequestException e)
+        {
+            throw new ApiDownException(url, e.Message);
+        }
+    }
+
+    private async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request)
+    {
+        try
+        {
+            return await _httpClient.SendAsync(request);
+        }
+        catch (HttpRequestException e)
+        {
+            throw new ApiDownException(request.RequestUri!.Host, e.Message);
+        }
     }
 
     [GeneratedRegex("^\\d\\d\\d\\d$")] private static partial Regex YearRegex();

@@ -13,6 +13,7 @@ namespace Application.Services;
 
 public class InitService : IHostedService
 {
+    private readonly IAnalyticsService _analyticsService;
     private readonly IApplicationDbContextFactory _applicationDbContextFactory;
     private readonly IOutputCacheStore _cache;
     private readonly string _cacheTag;
@@ -22,6 +23,7 @@ public class InitService : IHostedService
     private readonly ILogger<InitService> _logger;
     private Timer? _fetchLeagueTimer;
     private Timer? _fetchPriceDataTimer;
+    private Timer? _logAnalyticsTimer;
 
     public InitService(ILogger<InitService> logger,
                        IDataFetchService dataFetchService,
@@ -29,7 +31,8 @@ public class InitService : IHostedService
                        TimeSpan fetchInterval,
                        string cacheTag,
                        IApplicationDbContextFactory applicationDbContextFactory,
-                       ILeagueService leagueService)
+                       ILeagueService leagueService,
+                       IAnalyticsService analyticsService)
     {
         _logger = logger;
         _dataFetchService = dataFetchService;
@@ -37,6 +40,7 @@ public class InitService : IHostedService
         _fetchInterval = fetchInterval;
         _cacheTag = cacheTag;
         _leagueService = leagueService;
+        _analyticsService = analyticsService;
         _applicationDbContextFactory = applicationDbContextFactory;
     }
 
@@ -67,6 +71,15 @@ public class InitService : IHostedService
         _fetchPriceDataTimer.Elapsed += async (_, _) => await FetchPriceData();
         _fetchPriceDataTimer.AutoReset = true;
         _fetchPriceDataTimer.Start();
+
+        _logAnalyticsTimer = new Timer(TimeSpan.FromDays(1));
+        _logAnalyticsTimer.Elapsed += async (_, _) => await _analyticsService.LogYesterdaysViews();
+        _logAnalyticsTimer.AutoReset = true;
+        var timeUntilOneAm = DateTime.UtcNow.AddDays(1).Date.AddHours(1).Subtract(DateTime.UtcNow);
+        var delay = new Timer(timeUntilOneAm);
+        delay.AutoReset = false;
+        delay.Elapsed += (_, _) => _logAnalyticsTimer.Start();
+        delay.Start();
 
         _logger.LogInformation("Fetch timers started");
     }

@@ -10,9 +10,11 @@
             </div>
         </div>
         <div class="col">
-            <a href="@TempleTradeUrl()" target="_blank" rel="noopener noreferrer">
-                <label for="temple-cost">Temple cost</label>
-            </a>
+            <label for="temple-cost">
+                <a href="@TempleTradeUrl()" target="_blank" rel="noopener noreferrer" style="color: inherit">
+                    Temple cost
+                </a>
+            </label>
             <div class="input-group">
                 <input type="text" pattern="[0-9]+([.][0-9]{1,2}){0,1}?" class="form-control" aria-label="Temple Cost" aria-describedby="reset-2" id="temple-cost" value="@TempleCostString()" @onchange="UpdateTempleCost">
                 <button class="btn btn-primary btn-addon" type="button" id="reset-2" onclick="@ResetTempleCost">
@@ -98,13 +100,13 @@
             </div>
             <div class="w-100 mt-2 d-flex justify-content-between">
                 <div class="form-check ps-0 m-0 w-50">
-                    <input class="form-check-input" type="checkbox" id="showAlternateQuality" value="@FilterValues.ShowAlternateQuality" @onchange="UpdateShowAlternateQuality">
+                    <input class="form-check-input" type="checkbox" id="showAlternateQuality" checked="@FilterValues.ShowAlternateQuality" @onchange="UpdateShowAlternateQuality">
                     <label class="form-check-label" for="showAlternateQuality">
                         Alternate Quality
                     </label>
                 </div>
                 <div class="form-check ps-0 m-0 w-50 d-flex justify-content-end">
-                    <input class="form-check-input" type="checkbox" id="onlyProfitable" value="@FilterValues.OnlyShowProfitable" @onchange="UpdateOnlyShowProfitable">
+                    <input class="form-check-input" type="checkbox" id="onlyProfitable" checked="@FilterValues.OnlyShowProfitable" @onchange="UpdateOnlyShowProfitable">
                     <label class="form-check-label" for="onlyProfitable">
                         Only Profitable
                     </label>

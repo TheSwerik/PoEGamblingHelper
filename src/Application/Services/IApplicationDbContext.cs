@@ -1,4 +1,5 @@
 ﻿using Domain.Entity;
+using Domain.Entity.Analytics;
 using Domain.Entity.Gem;
 using Domain.Entity.Stats;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ public interface IApplicationDbContext : IDisposable
     DbSet<GemData> GemData { get; }
     DbSet<GemTradeData> GemTradeData { get; }
     DbSet<Result> Result { get; }
+    DbSet<View> View { get; }
     Task<int> SaveChangesAsync();
     void ClearTrackedEntities();
 }
