@@ -1,6 +1,6 @@
-﻿using Domain.Entity.Gem;
+﻿using PoEGamblingHelper.Domain.Entity.Gem;
 
-namespace Infrastructure.Services.FetchDtos;
+namespace PoEGamblingHelper.Infrastructure.Services.FetchDtos;
 
 public class PoeNinjaGemData
 {

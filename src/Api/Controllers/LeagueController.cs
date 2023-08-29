@@ -1,7 +1,8 @@
-using Application.Services;
-using Domain.Entity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
+using PoEGamblingHelper.Api.Controllers;
+using PoEGamblingHelper.Application.Services;
+using PoEGamblingHelper.Domain.Entity;
 
 namespace Api.Controllers;
 
@@ -11,7 +12,8 @@ public class LeagueController : ApiControllerBase
     private readonly IApplicationDbContextFactory _applicationDbContextFactory;
     private readonly ILeagueService _leagueService;
 
-    public LeagueController(ILeagueService leagueService, IApplicationDbContextFactory applicationDbContextFactory,
+    public LeagueController(ILeagueService leagueService,
+                            IApplicationDbContextFactory applicationDbContextFactory,
                             IAnalyticsService analyticsService)
     {
         _leagueService = leagueService;

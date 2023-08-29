@@ -1,10 +1,13 @@
-﻿using Domain.Entity.Abstract;
+﻿using System;
+using System.Linq;
+using PoEGamblingHelper.Domain.Entity.Abstract;
 
-namespace Domain.Entity;
-
-public class TempleCost : Entity<Guid>
+namespace PoEGamblingHelper.Domain.Entity
 {
-    public DateTime TimeStamp { get; set; } = DateTime.Now.ToUniversalTime();
-    public decimal[] ChaosValue { get; set; } = Array.Empty<decimal>();
-    public decimal AverageChaosValue() { return ChaosValue.Average(); }
+    public class TempleCost : Entity<Guid>
+    {
+        public DateTime TimeStamp { get; set; } = DateTime.Now.ToUniversalTime();
+        public decimal[] ChaosValue { get; set; } = Array.Empty<decimal>();
+        public decimal AverageChaosValue() { return ChaosValue.Average(); }
+    }
 }

@@ -2,16 +2,15 @@
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.RegularExpressions;
-using Application.Services;
-using Domain.Entity;
-using Domain.Exception;
 using HtmlAgilityPack;
-using Infrastructure.Services.FetchDtos;
-using Infrastructure.Util;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using PoEGamblingHelper.Application.Exception;
+using PoEGamblingHelper.Application.Services;
+using PoEGamblingHelper.Domain.Entity;
+using PoEGamblingHelper.Infrastructure.Services.FetchDtos;
+using PoEGamblingHelper.Infrastructure.Util;
 
-namespace Infrastructure.Services;
+namespace PoEGamblingHelper.Infrastructure.Services;
 
 public partial class DataFetchService : IDataFetchService, IDisposable
 {

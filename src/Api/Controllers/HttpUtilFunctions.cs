@@ -1,4 +1,4 @@
-﻿namespace Api.Controllers;
+﻿namespace PoEGamblingHelper.Api.Controllers;
 
 public static class HttpUtilFunctions
 {

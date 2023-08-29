@@ -1,6 +1,4 @@
-﻿using Domain.QueryParameters;
-using FluentAssertions;
-using Web.Shared.Model;
+﻿using Web.Shared.Model;
 
 namespace Web.Test.Shared.Model;
 

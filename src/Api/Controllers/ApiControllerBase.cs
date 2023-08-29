@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Api.Controllers;
+namespace PoEGamblingHelper.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]

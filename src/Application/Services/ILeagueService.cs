@@ -1,9 +1,8 @@
-﻿using Domain.Entity;
-using Microsoft.EntityFrameworkCore;
+﻿using PoEGamblingHelper.Domain.Entity;
 
-namespace Application.Services;
+namespace PoEGamblingHelper.Application.Services;
 
 public interface ILeagueService
 {
-    League GetCurrentLeague(DbSet<League> leagues);
+    League GetCurrentLeague();
 }

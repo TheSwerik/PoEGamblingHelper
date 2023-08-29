@@ -1,8 +1,9 @@
-﻿namespace Domain.Entity.Gem;
-
-public enum ResultCase
+﻿namespace PoEGamblingHelper.Domain.Entity.Gem
 {
-    Worst,
-    Middle,
-    Best
+    public enum ResultCase
+    {
+        Worst,
+        Middle,
+        Best
+    }
 }

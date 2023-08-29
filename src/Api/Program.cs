@@ -1,9 +1,11 @@
 using System.Globalization;
 using Api;
 using Api.Filters;
-using Application.Services;
-using Infrastructure;
 using Microsoft.AspNetCore.OutputCaching;
+using PoEGamblingHelper.Api;
+using PoEGamblingHelper.Application.Services;
+using PoEGamblingHelper.Infrastructure;
+using PoEGamblingHelper.Infrastructure.Database;
 
 #if DEBUG
 Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
@@ -50,4 +52,6 @@ app.UseRateLimiter();
 app.UseOutputCache();
 app.MapControllers();
 app.MigrateDatabase();
+app.UseAnalytics();
+
 app.Run();

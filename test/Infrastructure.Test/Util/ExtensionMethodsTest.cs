@@ -1,7 +1,7 @@
-﻿using Domain.Entity.Gem;
-using FluentAssertions;
-using Infrastructure.Services.FetchDtos;
-using Infrastructure.Util;
+﻿using FluentAssertions;
+using PoEGamblingHelper.Domain.Entity.Gem;
+using PoEGamblingHelper.Infrastructure.Services.FetchDtos;
+using PoEGamblingHelper.Infrastructure.Util;
 
 namespace Infrastructure.Test.Util;
 

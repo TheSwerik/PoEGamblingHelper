@@ -1,16 +1,11 @@
-﻿using Domain.Entity.Gem;
-using Infrastructure.Services.FetchDtos;
+﻿using PoEGamblingHelper.Application.Extensions;
+using PoEGamblingHelper.Domain.Entity.Gem;
+using PoEGamblingHelper.Infrastructure.Services.FetchDtos;
 
-namespace Infrastructure.Util;
+namespace PoEGamblingHelper.Infrastructure.Util;
 
 public static class ExtensionMethods
 {
-    public static bool EqualsIgnoreCase(this string? a, string? b)
-    {
-        return a?.Equals(b, StringComparison.InvariantCultureIgnoreCase)
-               ?? b is null;
-    }
-
     public static GemData ToGemData(this IGrouping<string, PoeNinjaGemData> group,
                                     IEnumerable<GemTradeData> gemTradeData)
     {

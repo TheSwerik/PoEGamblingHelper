@@ -1,20 +1,14 @@
 ﻿using System.Diagnostics;
 using System.Text.RegularExpressions;
-using Application.Util;
-using Domain.Entity.Gem;
-using Domain.QueryParameters;
-using Microsoft.EntityFrameworkCore;
+using PoEGamblingHelper.Application.Repositories;
+using PoEGamblingHelper.Domain.Entity.Gem;
 
-namespace Application.Services;
+namespace PoEGamblingHelper.Application.Services;
 
 public partial class GemService : IGemService
 {
-    private readonly IApplicationDbContextFactory _applicationDbContextFactory;
-
-    public GemService(IApplicationDbContextFactory applicationDbContextFactory)
-    {
-        _applicationDbContextFactory = applicationDbContextFactory;
-    }
+    private readonly IGemRepository _gemRepository;
+    public GemService(IGemRepository gemRepository) { _gemRepository = gemRepository; }
 
     public async Task<Page<GemData>> GetAll(GemDataQuery? query, PageRequest page)
     {
@@ -69,17 +63,17 @@ public partial class GemService : IGemService
     private static string PreFilterGemDataQuery(GemDataQuery query)
     {
         const string isAlternateQuality = """
-               (LOWER("Name") LIKE 'anomalous%'
-               OR LOWER("Name") LIKE 'divergent%'
-               OR LOWER("Name") LIKE 'phantasmal%')
-        """;
+                                                 (LOWER("Name") LIKE 'anomalous%'
+                                                 OR LOWER("Name") LIKE 'divergent%'
+                                                 OR LOWER("Name") LIKE 'phantasmal%')
+                                          """;
         const string isVaal = """LOWER("Name") LIKE 'vaal%' """;
 
         const string isExceptional = """
-                (LOWER("Name") LIKE '%enhance%'
-                OR LOWER("Name") LIKE '%empower%'
-                OR LOWER("Name") LIKE '%enlighten%')
-        """;
+                                             (LOWER("Name") LIKE '%enhance%'
+                                             OR LOWER("Name") LIKE '%empower%'
+                                             OR LOWER("Name") LIKE '%enlighten%')
+                                     """;
         const string isAwakened = """LOWER("Name") LIKE 'awakened%' """;
         const string isSupport = """LOWER("Name") LIKE '%support' """;
         var isGemTypeMatching = query.GemType switch
@@ -93,12 +87,12 @@ public partial class GemService : IGemService
                                 };
 
         return $"""
-            SELECT * FROM "GemData"
-                WHERE LOWER("Name") LIKE '%{query.SearchText}%'
-                  AND ({query.ShowAlternateQuality} OR NOT {isAlternateQuality})
-                  AND ({query.ShowVaal} OR NOT {isVaal})
-                  AND {isGemTypeMatching}
-        """;
+                    SELECT * FROM "GemData"
+                        WHERE LOWER("Name") LIKE '%{query.SearchText}%'
+                          AND ({query.ShowAlternateQuality} OR NOT {isAlternateQuality})
+                          AND ({query.ShowVaal} OR NOT {isVaal})
+                          AND {isGemTypeMatching}
+                """;
     }
 
     private static bool PostFilterGemData(GemData gemData, GemDataQuery query, decimal averageTempleCost)

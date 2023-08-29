@@ -1,5 +1,4 @@
-using Domain.Entity.Gem;
-using Domain.QueryParameters;
+using PoEGamblingHelper.Domain.Entity.Gem;
 
 namespace Web.Services.Interfaces;
 

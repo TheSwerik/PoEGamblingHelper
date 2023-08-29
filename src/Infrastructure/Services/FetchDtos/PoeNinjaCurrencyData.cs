@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
-using Domain.Entity;
+using PoEGamblingHelper.Domain.Entity;
 
-namespace Infrastructure.Services.FetchDtos;
+namespace PoEGamblingHelper.Infrastructure.Services.FetchDtos;
 
 public class PoeNinjaCurrencyData
 {

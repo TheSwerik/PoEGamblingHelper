@@ -1,9 +1,8 @@
 ﻿using Blazored.LocalStorage;
-using Domain.Entity;
-using Domain.Entity.Gem;
-using Domain.QueryParameters;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using PoEGamblingHelper.Domain.Entity;
+using PoEGamblingHelper.Domain.Entity.Gem;
 using Web.Services.Interfaces;
 using Web.Shared.Model;
 

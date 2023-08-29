@@ -1,5 +1,4 @@
-using Domain.Entity.Gem;
-using FluentAssertions;
+using PoEGamblingHelper.Domain.Entity.Gem;
 
 namespace Domain.Test.Entity;
 
@@ -187,7 +186,10 @@ public class GemDataTest
     [InlineData("Enlighten Support", 25, 15, 45, 35)]
     [InlineData("Brutality Support", 105, 95, 65, 55)]
     [InlineData("Seismic Trap", 105, 95, 65, 55)]
-    public void ProfitTest(string name, int rawValue, int expectedMiddle, int rawValueAwakened,
+    public void ProfitTest(string name,
+                           int rawValue,
+                           int expectedMiddle,
+                           int rawValueAwakened,
                            int expectedMiddleAwakened)
     {
         var gemData = new GemData

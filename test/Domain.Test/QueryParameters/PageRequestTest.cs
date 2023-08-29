@@ -1,6 +1,3 @@
-using Domain.QueryParameters;
-using FluentAssertions;
-
 namespace Domain.Test.QueryParameters;
 
 public class PageRequestTest

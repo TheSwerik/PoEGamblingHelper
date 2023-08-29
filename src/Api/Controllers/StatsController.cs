@@ -1,10 +1,6 @@
-using Application.Services;
-using Domain.Entity;
-using Domain.Entity.Stats;
-using Domain.Exception;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.OutputCaching;
-using Microsoft.EntityFrameworkCore;
+using PoEGamblingHelper.Api.Controllers;
+using PoEGamblingHelper.Domain.Entity.Stats;
 
 namespace Api.Controllers;
 

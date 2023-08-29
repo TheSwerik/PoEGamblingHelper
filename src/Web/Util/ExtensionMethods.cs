@@ -2,10 +2,8 @@ using System.Diagnostics;
 using System.Net.Http.Json;
 using System.Text.RegularExpressions;
 using System.Web;
-using Domain.Entity;
-using Domain.Entity.Gem;
-using Domain.Exception.Body;
-using Domain.QueryParameters;
+using PoEGamblingHelper.Domain.Entity;
+using PoEGamblingHelper.Domain.Entity.Gem;
 
 namespace Web.Util;
 
@@ -82,7 +80,9 @@ public static partial class ExtensionMethods
         return $"?pageNumber={pageRequest.PageNumber}&pageSize={pageRequest.PageSize}";
     }
 
-    public static string TradeUrl(this GemTradeData gemTradeData, League currentLeague, bool accurateLevel = true,
+    public static string TradeUrl(this GemTradeData gemTradeData,
+                                  League currentLeague,
+                                  bool accurateLevel = true,
                                   bool accurateQuality = false)
     {
         const string poeTradeUrl = "https://www.pathofexile.com/trade/search";
@@ -90,7 +90,8 @@ public static partial class ExtensionMethods
         return $"{poeTradeUrl}/{currentLeague.Name}{queryKey}{gemTradeData.TradeQuery(accurateLevel, accurateQuality)}";
     }
 
-    public static string TradeQuery(this GemTradeData gemTradeData, bool accurateLevel = true,
+    public static string TradeQuery(this GemTradeData gemTradeData,
+                                    bool accurateLevel = true,
                                     bool accurateQuality = false)
     {
         var gemAlternateQuality = -1;

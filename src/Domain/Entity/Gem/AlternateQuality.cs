@@ -1,10 +1,11 @@
 ﻿// ReSharper disable UnusedMember.Global
 
-namespace Domain.Entity.Gem;
-
-public enum AlternateQuality
+namespace PoEGamblingHelper.Domain.Entity.Gem
 {
-    Anomalous,
-    Divergent,
-    Phantasmal
+    public enum AlternateQuality
+    {
+        Anomalous,
+        Divergent,
+        Phantasmal
+    }
 }

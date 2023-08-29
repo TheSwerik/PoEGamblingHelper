@@ -1,5 +1,4 @@
-﻿using Domain.Entity;
-using Domain.QueryParameters;
+﻿using PoEGamblingHelper.Domain.Entity;
 
 namespace Web.Shared.Model;
 

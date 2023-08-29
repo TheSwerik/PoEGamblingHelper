@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.Services.FetchDtos;
+﻿namespace PoEGamblingHelper.Infrastructure.Services.FetchDtos;
 
 public class TradeEntry
 {

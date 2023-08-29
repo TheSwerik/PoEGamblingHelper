@@ -1,7 +1,7 @@
-﻿using Domain.Entity;
-using FluentAssertions;
-using Infrastructure.Services.FetchDtos;
+﻿using FluentAssertions;
 using MockQueryable.Moq;
+using PoEGamblingHelper.Domain.Entity;
+using PoEGamblingHelper.Infrastructure.Services.FetchDtos;
 
 namespace Infrastructure.Test.Services.FetchDtos;
 

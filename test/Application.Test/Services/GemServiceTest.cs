@@ -1,9 +1,7 @@
-﻿using Application.Services;
-using Domain.Entity.Gem;
-using Domain.QueryParameters;
-using FluentAssertions;
-using MockQueryable.Moq;
+﻿using MockQueryable.Moq;
 using Moq;
+using PoEGamblingHelper.Application.Services;
+using PoEGamblingHelper.Domain.Entity.Gem;
 
 namespace Application.Test.Services;
 

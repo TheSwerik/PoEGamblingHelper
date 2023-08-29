@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using Domain.QueryParameters;
 using FluentAssertions;
 using Web.Util;
 using Xunit.Abstractions;

@@ -1,7 +1,7 @@
-﻿using Domain.Entity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using PoEGamblingHelper.Domain.Entity;
 
-namespace Infrastructure.Services.FetchDtos;
+namespace PoEGamblingHelper.Infrastructure.Services.FetchDtos;
 
 public class TradeEntryListingPrice
 {

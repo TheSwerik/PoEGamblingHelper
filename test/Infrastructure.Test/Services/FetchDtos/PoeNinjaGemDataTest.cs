@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using Infrastructure.Services.FetchDtos;
+using PoEGamblingHelper.Infrastructure.Services.FetchDtos;
 
 namespace Infrastructure.Test.Services.FetchDtos;
 

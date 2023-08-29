@@ -1,4 +1,4 @@
-﻿namespace Application.Services;
+﻿namespace PoEGamblingHelper.Application.Services;
 
 public interface IAnalyticsService
 {

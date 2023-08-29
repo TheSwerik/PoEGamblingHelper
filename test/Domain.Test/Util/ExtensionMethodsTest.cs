@@ -1,6 +1,4 @@
-﻿using Domain.Entity.Gem;
-using Domain.Util;
-using FluentAssertions;
+﻿using PoEGamblingHelper.Domain.Entity.Gem;
 
 namespace Domain.Test.Util;
 

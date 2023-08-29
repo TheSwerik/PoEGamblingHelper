@@ -1,6 +1,4 @@
-﻿using Domain.QueryParameters;
-
-namespace Application.Util;
+﻿namespace PoEGamblingHelper.Application.Util;
 
 public static class ExtensionMethods
 {

@@ -1,8 +1,8 @@
-using Application.Services;
-using Domain.Entity.Gem;
-using Domain.QueryParameters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
+using PoEGamblingHelper.Api.Controllers;
+using PoEGamblingHelper.Application.Services;
+using PoEGamblingHelper.Domain.Entity.Gem;
 
 namespace Api.Controllers;
 

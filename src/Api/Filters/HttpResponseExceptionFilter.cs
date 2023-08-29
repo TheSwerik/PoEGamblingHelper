@@ -1,6 +1,6 @@
-using Domain.Exception.Abstract;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using PoEGamblingHelper.Application.Exception.Abstract;
 
 namespace Api.Filters;
 

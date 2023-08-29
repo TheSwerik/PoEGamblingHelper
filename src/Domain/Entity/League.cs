@@ -1,15 +1,17 @@
-﻿using Domain.Entity.Abstract;
+﻿using System;
+using PoEGamblingHelper.Domain.Entity.Abstract;
 
-namespace Domain.Entity;
-
-public class League : Entity<Guid>
+namespace PoEGamblingHelper.Domain.Entity
 {
-    public string Name { get; set; } = null!;
-    public DateTime StartDate { get; set; }
-    public string Version { get; set; } = null!;
-
-    public override string ToString()
+    public class League : Entity<Guid>
     {
-        return $"[id={Id}, Version={Version}, Name={Name}, StartDate={StartDate.ToLongDateString()}]";
+        public string Name { get; set; } = null!;
+        public DateTime StartDate { get; set; }
+        public string Version { get; set; } = null!;
+
+        public override string ToString()
+        {
+            return $"[id={Id}, Version={Version}, Name={Name}, StartDate={StartDate.ToLongDateString()}]";
+        }
     }
 }

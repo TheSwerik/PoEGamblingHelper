@@ -1,9 +1,11 @@
-﻿using Domain.Entity.Abstract;
+﻿using System;
+using PoEGamblingHelper.Domain.Entity.Abstract;
 
-namespace Domain.Entity.Analytics;
-
-public class View : Entity<Guid>
+namespace PoEGamblingHelper.Domain.Entity.Analytics
 {
-    public byte[] IpHash { get; set; } = null!;
-    public DateOnly TimeStamp { get; set; }
+    public class View : Entity<Guid>
+    {
+        public byte[] IpHash { get; set; } = null!;
+        public DateTime TimeStamp { get; set; }
+    }
 }

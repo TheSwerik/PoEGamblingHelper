@@ -1,9 +1,8 @@
 ﻿using System.Diagnostics;
 using Blazored.LocalStorage;
-using Domain.Entity;
-using Domain.Entity.Gem;
-using Domain.Util;
 using Microsoft.AspNetCore.Components;
+using PoEGamblingHelper.Domain.Entity;
+using PoEGamblingHelper.Domain.Entity.Gem;
 using Web.Shared.Model;
 using Web.Util;
 

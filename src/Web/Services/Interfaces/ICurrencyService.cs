@@ -1,4 +1,4 @@
-using Domain.Entity;
+using PoEGamblingHelper.Domain.Entity;
 
 namespace Web.Services.Interfaces;
 

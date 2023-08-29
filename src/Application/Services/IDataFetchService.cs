@@ -1,6 +1,6 @@
-﻿using Domain.Entity;
+﻿using PoEGamblingHelper.Domain.Entity;
 
-namespace Application.Services;
+namespace PoEGamblingHelper.Application.Services;
 
 public interface IDataFetchService
 {
