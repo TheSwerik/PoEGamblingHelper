@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PoEGamblingHelper.Application.Repositories;
-using PoEGamblingHelper.Application.Services;
 using PoEGamblingHelper.Infrastructure.BackgroundJobs;
 using PoEGamblingHelper.Infrastructure.Database;
 using PoEGamblingHelper.Infrastructure.Repositories;
@@ -16,8 +15,8 @@ public static class ServiceCollectionExtensions
     {
         services.AddDatabase(configuration);
 
-        services.AddTransient<IGemService, GemService>();
-        services.AddTransient<IDataFetchService, DataFetchService>();
+        services.AddTransient<IGemSearchService, GemRepository>();
+        services.AddTransient<IDataFetcher, DataFetcher>();
         services.AddTransient<ICurrencyRepository, CurrencyRepository>();
 
         services.AddTransient<ILeagueRepository, LeagueRepository>();

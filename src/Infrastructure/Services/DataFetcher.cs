@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PoEGamblingHelper.Application.Exception;
 using PoEGamblingHelper.Application.Extensions;
-using PoEGamblingHelper.Application.Services;
 using PoEGamblingHelper.Domain.Entity;
 using PoEGamblingHelper.Infrastructure.Database;
 using PoEGamblingHelper.Infrastructure.Services.FetchDtos;
@@ -15,18 +14,18 @@ using PoEGamblingHelper.Infrastructure.Util;
 
 namespace PoEGamblingHelper.Infrastructure.Services;
 
-public partial class DataFetchService : IDataFetchService
+public partial class DataFetcher : IDataFetcher
 {
     private readonly IDbContextFactory<ApplicationDbContext> _applicationDbContextFactory;
     private readonly HtmlWeb _htmlLoader = new();
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly MediaTypeHeaderValue _jsonMediaTypeHeader = MediaTypeHeaderValue.Parse("application/json");
-    private readonly ILogger<DataFetchService> _logger;
+    private readonly ILogger<DataFetcher> _logger;
     private readonly string _templeQuery;
 
-    public DataFetchService(ILogger<DataFetchService> logger,
-                            IDbContextFactory<ApplicationDbContext> applicationDbContextFactory,
-                            IHttpClientFactory httpClientFactory)
+    public DataFetcher(ILogger<DataFetcher> logger,
+                       IDbContextFactory<ApplicationDbContext> applicationDbContextFactory,
+                       IHttpClientFactory httpClientFactory)
     {
         _logger = logger;
         _applicationDbContextFactory = applicationDbContextFactory;

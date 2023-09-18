@@ -1,8 +1,10 @@
-﻿namespace PoEGamblingHelper.Application.QueryParameters;
+﻿using System.Collections.Immutable;
 
-public class Page<T>
+namespace PoEGamblingHelper.Application.QueryParameters;
+
+public record Page<T>
 {
-    public IEnumerable<T> Content { get; init; } = null!;
+    public IImmutableList<T> Content { get; init; } = null!;
     public int CurrentPage { get; init; }
     public bool LastPage { get; init; }
 }

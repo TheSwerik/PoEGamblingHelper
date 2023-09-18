@@ -1,8 +1,8 @@
 ﻿using PoEGamblingHelper.Domain.Entity;
 
-namespace PoEGamblingHelper.Application.Services;
+namespace PoEGamblingHelper.Infrastructure.Services;
 
-public interface IDataFetchService //TODO rename
+public interface IDataFetcher //TODO rename
 {
     Task FetchCurrentLeague();
     Task FetchCurrencyData(League league);

@@ -10,6 +10,4 @@ public class PageRequest
         get => _pageSize;
         init => _pageSize = value <= 0 ? 0 : value;
     }
-
-    public (int skipSize, int takeSize) ConvertToSizes() { return (PageSize * PageNumber, PageSize); }
 }

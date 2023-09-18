@@ -3,8 +3,8 @@ using Microsoft.Extensions.Logging;
 using PoEGamblingHelper.Application.Exception;
 using PoEGamblingHelper.Application.Exception.Abstract;
 using PoEGamblingHelper.Application.Repositories;
-using PoEGamblingHelper.Application.Services;
 using PoEGamblingHelper.Domain.Entity;
+using PoEGamblingHelper.Infrastructure.Services;
 
 namespace PoEGamblingHelper.Infrastructure.BackgroundJobs;
 
@@ -12,19 +12,19 @@ public class FetchPriceDataJob : BackgroundJob
 {
     private readonly IOutputCacheStore _cache;
     private readonly string _cacheTag = ""; //TODO
-    private readonly IDataFetchService _dataFetchService;
+    private readonly IDataFetcher _dataFetcher;
 
     private readonly TimeSpan _interval = TimeSpan.FromHours(6); //TODO
     private readonly ILeagueRepository _leagueRepository;
     private readonly ILogger<FetchPriceDataJob> _logger;
 
     public FetchPriceDataJob(ILogger<FetchPriceDataJob> logger,
-                             IDataFetchService dataFetchService,
+                             IDataFetcher dataFetcher,
                              IOutputCacheStore cache,
                              ILeagueRepository leagueRepository)
     {
         _logger = logger;
-        _dataFetchService = dataFetchService;
+        _dataFetcher = dataFetcher;
         _cache = cache;
         _leagueRepository = leagueRepository;
     }
@@ -48,7 +48,7 @@ public class FetchPriceDataJob : BackgroundJob
 
         try
         {
-            await _dataFetchService.FetchCurrencyData(league);
+            await _dataFetcher.FetchCurrencyData(league);
         }
         catch (PoeGamblingHelperException e)
         {
@@ -57,7 +57,7 @@ public class FetchPriceDataJob : BackgroundJob
 
         try
         {
-            await _dataFetchService.FetchTemplePriceData(league);
+            await _dataFetcher.FetchTemplePriceData(league);
         }
         catch (PoeGamblingHelperException e)
         {
@@ -66,7 +66,7 @@ public class FetchPriceDataJob : BackgroundJob
 
         try
         {
-            await _dataFetchService.FetchGemPriceData(league);
+            await _dataFetcher.FetchGemPriceData(league);
         }
         catch (PoeGamblingHelperException e)
         {
