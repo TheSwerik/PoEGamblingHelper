@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PoEGamblingHelper.Application.Repositories;
 using PoEGamblingHelper.Domain.Entity;
 using PoEGamblingHelper.Infrastructure.Database;
 
 namespace PoEGamblingHelper.Infrastructure.Repositories;
 
-public class CurrencyRepository
+public class CurrencyRepository : ICurrencyRepository
 {
     private readonly IDbContextFactory<ApplicationDbContext> _dbContextFactory;
 

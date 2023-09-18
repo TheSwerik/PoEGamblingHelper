@@ -20,6 +20,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient<ILeagueService, LeagueService>();
         services.AddTransient<IDataFetchService, DataFetchService>();
         services.AddTransient<IAnalyticsService, AnalyticsService>();
+        services.AddTransient<ICurrencyRepository, CurrencyRepository>();
 
         services.AddTransient<ILeagueRepository, LeagueRepository>();
         services.AddTransient<IViewRepository, ViewRepository>();

@@ -16,6 +16,8 @@ public class ViewRepository : IViewRepository
 
     public async Task AddAsync(View view)
     {
+        view.TimeStamp = new DateTime(view.TimeStamp.Ticks, DateTimeKind.Utc);
+
         await using var context = await _dbContextFactory.CreateDbContextAsync();
 
         if (await context.View.AnyAsync(v => v.IpHash.Equals(view.IpHash) && v.TimeStamp == view.TimeStamp)) return;
