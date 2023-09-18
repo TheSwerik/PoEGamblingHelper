@@ -24,6 +24,7 @@ public static class ServiceCollectionExtensions
 
         services.AddTransient<ILeagueRepository, LeagueRepository>();
         services.AddTransient<IViewRepository, ViewRepository>();
+        services.AddTransient<IAnalyticsDayRepository, AnalyticsDayRepository>();
 
         services.AddBackgroundJobs();
     }

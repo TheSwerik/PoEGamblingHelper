@@ -35,7 +35,7 @@ public class AnalyticsService : IAnalyticsService
                                viewCount, yesterday.Day, yesterday.Month, yesterday.Year);
 
 
-        await _analyticsDayRepository.AddAsync(viewCount);
+        await _analyticsDayRepository.AddAsync(viewCount, yesterday);
         await _viewRepository.RemoveAllAsync(yesterday);
     }
 }

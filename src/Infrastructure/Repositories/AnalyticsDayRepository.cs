@@ -14,12 +14,12 @@ public class AnalyticsDayRepository : IAnalyticsDayRepository
         _dbContextFactory = dbContextFactory;
     }
 
-    public async Task AddAsync(int viewCount)
+    public async Task AddAsync(int viewCount, DateOnly date)
     {
         var analyticsDay = new AnalyticsDay
                            {
                                Views = viewCount,
-                               TimeStamp = DateOnly.FromDateTime(DateTime.UtcNow) //TODO remove UtcNow
+                               Date = date
                            };
         await using var context = await _dbContextFactory.CreateDbContextAsync();
         context.AnalyticsDay.Add(analyticsDay);

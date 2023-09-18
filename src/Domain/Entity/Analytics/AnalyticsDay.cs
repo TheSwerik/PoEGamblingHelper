@@ -5,6 +5,6 @@ namespace PoEGamblingHelper.Domain.Entity.Analytics;
 
 public class AnalyticsDay : Entity<Guid>
 {
-    public DateOnly TimeStamp { get; set; }
+    public DateOnly Date { get; set; }
     public long Views { get; set; }
 }

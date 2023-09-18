@@ -5,14 +5,16 @@ namespace PoEGamblingHelper.Application.Services;
 
 public class LeagueService : ILeagueService
 {
+    private readonly IDateTimeService _dateTimeService;
     private readonly ILeagueRepository _leagueRepository;
-    public LeagueService(ILeagueRepository leagueRepository) { _leagueRepository = leagueRepository; }
 
-    public League GetCurrent()
+    public LeagueService(ILeagueRepository leagueRepository, IDateTimeService dateTimeService)
     {
-        var utcNow = DateTime.Today.ToUniversalTime(); //TODO DateTime Today in Infrastructure
-        return _leagueRepository.GetByStartDateAfter(utcNow);
+        _leagueRepository = leagueRepository;
+        _dateTimeService = dateTimeService;
     }
+
+    public League GetCurrent() { return _leagueRepository.GetByStartDateBefore(_dateTimeService.UtcNow()); }
 
     public IAsyncEnumerable<League> GetAll() { return _leagueRepository.GetAllLeagues(); }
 }

@@ -15,10 +15,10 @@ public class LeagueRepository : ILeagueRepository
         _dbContextFactory = dbContextFactory;
     }
 
-    public League GetByStartDateAfter(DateTime dateTime)
+    public League GetByStartDateBefore(DateTime dateTime)
     {
         using var applicationDbContext = _dbContextFactory.CreateDbContext();
-        return applicationDbContext.League.Where(league => dateTime >= league.StartDate)
+        return applicationDbContext.League.Where(league => league.StartDate <= dateTime)
                                    .OrderByDescending(league => league.StartDate)
                                    .FirstOrDefault()
                ?? throw new NoLeagueDataException();

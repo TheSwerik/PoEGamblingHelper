@@ -2,5 +2,5 @@
 
 public interface IAnalyticsDayRepository
 {
-    Task AddAsync(int viewCount);
+    Task AddAsync(int viewCount, DateOnly date);
 }
