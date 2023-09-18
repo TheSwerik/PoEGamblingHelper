@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using PoEGamblingHelper.Application.Exception.Abstract;
 
-namespace Api.Filters;
+namespace PoEGamblingHelper.Api.Filters;
 
 // ReSharper disable once ClassNeverInstantiated.Global
 internal class HttpResponseExceptionFilter : IActionFilter, IOrderedFilter

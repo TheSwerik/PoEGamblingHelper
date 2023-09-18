@@ -1,4 +1,4 @@
-﻿using Web.Shared.Model;
+﻿using PoEGamblingHelper.Web.Shared.Model;
 
 namespace Web.Test.Shared.Model;
 

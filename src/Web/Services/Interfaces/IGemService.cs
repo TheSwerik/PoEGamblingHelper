@@ -1,6 +1,7 @@
 using PoEGamblingHelper.Domain.Entity.Gem;
+using PoEGamblingHelper.Shared.QueryParameters;
 
-namespace Web.Services.Interfaces;
+namespace PoEGamblingHelper.Web.Services.Interfaces;
 
 public interface IGemService
 {

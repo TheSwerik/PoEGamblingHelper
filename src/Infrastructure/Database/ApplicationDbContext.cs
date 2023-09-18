@@ -7,7 +7,7 @@ using PoEGamblingHelper.Domain.Entity.Stats;
 
 namespace PoEGamblingHelper.Infrastructure.Database;
 
-public class ApplicationDbContext : DbContext, IApplicationDbContext
+public class ApplicationDbContext : DbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
     public virtual DbSet<Currency> Currency => Set<Currency>();

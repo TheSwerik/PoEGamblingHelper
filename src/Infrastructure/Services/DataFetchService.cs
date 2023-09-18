@@ -3,10 +3,12 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.RegularExpressions;
 using HtmlAgilityPack;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PoEGamblingHelper.Application.Exception;
 using PoEGamblingHelper.Application.Services;
 using PoEGamblingHelper.Domain.Entity;
+using PoEGamblingHelper.Infrastructure.Database;
 using PoEGamblingHelper.Infrastructure.Services.FetchDtos;
 using PoEGamblingHelper.Infrastructure.Util;
 
@@ -14,14 +16,15 @@ namespace PoEGamblingHelper.Infrastructure.Services;
 
 public partial class DataFetchService : IDataFetchService, IDisposable
 {
-    private readonly IApplicationDbContextFactory _applicationDbContextFactory;
+    private readonly IDbContextFactory<ApplicationDbContext> _applicationDbContextFactory;
     private readonly HtmlWeb _htmlLoader = new();
     private readonly HttpClient _httpClient = new();
     private readonly MediaTypeHeaderValue _jsonMediaTypeHeader = MediaTypeHeaderValue.Parse("application/json");
     private readonly ILogger<DataFetchService> _logger;
     private readonly string _templeQuery;
 
-    public DataFetchService(ILogger<DataFetchService> logger, IApplicationDbContextFactory applicationDbContextFactory)
+    public DataFetchService(ILogger<DataFetchService> logger,
+                            IDbContextFactory<ApplicationDbContext> applicationDbContextFactory)
     {
         _logger = logger;
         _applicationDbContextFactory = applicationDbContextFactory;

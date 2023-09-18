@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
-namespace Web.Shared.Components;
+namespace PoEGamblingHelper.Web.Shared.Components;
 
 public partial class Theme
 {

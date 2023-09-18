@@ -1,4 +1,6 @@
-﻿namespace PoEGamblingHelper.Application.Util;
+﻿using PoEGamblingHelper.Domain.Entity.Gem;
+
+namespace PoEGamblingHelper.Application.Util;
 
 public static class ExtensionMethods
 {
@@ -6,4 +8,6 @@ public static class ExtensionMethods
     {
         return (pageRequest.PageSize * pageRequest.PageNumber, pageRequest.PageSize);
     }
+
+    public static int LevelModifier(this ResultCase resultCase) { return (int)resultCase - 1; }
 }

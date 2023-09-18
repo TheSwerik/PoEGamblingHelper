@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using PoEGamblingHelper.Api.Controllers;
 using PoEGamblingHelper.Domain.Entity.Stats;
 
-namespace Api.Controllers;
+namespace PoEGamblingHelper.Api.Controllers;
 
 public class StatsController : ApiControllerBase
 {

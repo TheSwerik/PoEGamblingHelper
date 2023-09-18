@@ -2,7 +2,7 @@
 using System.Net;
 using System.Threading.RateLimiting;
 
-namespace Api;
+namespace PoEGamblingHelper.Api;
 
 public static class ConfigureRateLimiter
 {
@@ -62,7 +62,8 @@ public static class ConfigureRateLimiter
     }
 
     private static RateLimitPartition<IPAddress> GetIpAddressRateLimiter(
-        IConfiguration configuration, HttpContext context)
+        IConfiguration configuration,
+        HttpContext context)
     {
         var remoteIpAddress = context.Connection.RemoteIpAddress;
         if (IPAddress.IsLoopback(remoteIpAddress!)) return RateLimitPartition.GetNoLimiter(IPAddress.Loopback);

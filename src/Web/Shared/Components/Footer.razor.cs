@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Web.Services.Interfaces;
+using PoEGamblingHelper.Web.Services.Interfaces;
 
-namespace Web.Shared.Components;
+namespace PoEGamblingHelper.Web.Shared.Components;
 
 public partial class Footer : IAsyncDisposable
 {

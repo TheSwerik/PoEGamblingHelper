@@ -1,10 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
-using PoEGamblingHelper.Api.Controllers;
 using PoEGamblingHelper.Application.Services;
 using PoEGamblingHelper.Domain.Entity;
 
-namespace Api.Controllers;
+namespace PoEGamblingHelper.Api.Controllers;
 
 public class LeagueController : ApiControllerBase
 {

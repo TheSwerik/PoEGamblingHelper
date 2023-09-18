@@ -1,8 +1,9 @@
 using Blazored.Toast.Services;
 using PoEGamblingHelper.Domain.Entity.Gem;
-using Web.Services.Interfaces;
+using PoEGamblingHelper.Shared.QueryParameters;
+using PoEGamblingHelper.Web.Services.Interfaces;
 
-namespace Web.Services.Implementations;
+namespace PoEGamblingHelper.Web.Services.Implementations;
 
 public class GemService : HttpService, IGemService
 {

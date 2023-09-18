@@ -1,9 +1,8 @@
 using System.Net.Http.Json;
 using Blazored.Toast.Services;
-using Domain.Exception.Body;
-using Web.Util;
+using PoEGamblingHelper.Web.Util;
 
-namespace Web.Services.Interfaces;
+namespace PoEGamblingHelper.Web.Services.Interfaces;
 
 public abstract class HttpService
 {

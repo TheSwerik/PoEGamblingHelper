@@ -3,10 +3,11 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using PoEGamblingHelper.Domain.Entity;
 using PoEGamblingHelper.Domain.Entity.Gem;
-using Web.Services.Interfaces;
-using Web.Shared.Model;
+using PoEGamblingHelper.Shared.QueryParameters;
+using PoEGamblingHelper.Web.Services.Interfaces;
+using PoEGamblingHelper.Web.Shared.Model;
 
-namespace Web.Pages;
+namespace PoEGamblingHelper.Web.Pages;
 
 public partial class GamblingHelper : IDisposable
 {

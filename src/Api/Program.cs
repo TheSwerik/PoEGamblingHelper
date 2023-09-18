@@ -1,8 +1,7 @@
 using System.Globalization;
-using Api;
-using Api.Filters;
 using Microsoft.AspNetCore.OutputCaching;
 using PoEGamblingHelper.Api;
+using PoEGamblingHelper.Api.Filters;
 using PoEGamblingHelper.Application.Services;
 using PoEGamblingHelper.Infrastructure;
 using PoEGamblingHelper.Infrastructure.Database;

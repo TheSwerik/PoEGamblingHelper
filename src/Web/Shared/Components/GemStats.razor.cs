@@ -1,12 +1,13 @@
 ﻿using System.Diagnostics;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
+using PoEGamblingHelper.Application.Extensions;
 using PoEGamblingHelper.Domain.Entity;
 using PoEGamblingHelper.Domain.Entity.Gem;
-using Web.Shared.Model;
-using Web.Util;
+using PoEGamblingHelper.Web.Shared.Model;
+using PoEGamblingHelper.Web.Util;
 
-namespace Web.Shared.Components;
+namespace PoEGamblingHelper.Web.Shared.Components;
 
 public partial class GemStats
 {

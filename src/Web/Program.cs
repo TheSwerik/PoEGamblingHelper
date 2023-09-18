@@ -3,9 +3,9 @@ using Blazored.LocalStorage;
 using Blazored.Toast;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Web;
-using Web.Services.Implementations;
-using Web.Services.Interfaces;
+using PoEGamblingHelper.Web;
+using PoEGamblingHelper.Web.Services.Implementations;
+using PoEGamblingHelper.Web.Services.Interfaces;
 
 Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
 CultureInfo.DefaultThreadCurrentCulture = CultureInfo.CreateSpecificCulture("en-US");

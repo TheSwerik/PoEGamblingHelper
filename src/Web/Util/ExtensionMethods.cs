@@ -2,10 +2,12 @@ using System.Diagnostics;
 using System.Net.Http.Json;
 using System.Text.RegularExpressions;
 using System.Web;
+using PoEGamblingHelper.Application.Exception.Body;
 using PoEGamblingHelper.Domain.Entity;
 using PoEGamblingHelper.Domain.Entity.Gem;
+using PoEGamblingHelper.Shared.QueryParameters;
 
-namespace Web.Util;
+namespace PoEGamblingHelper.Web.Util;
 
 public static partial class ExtensionMethods
 {
