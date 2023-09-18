@@ -1,5 +1,5 @@
 ﻿using PoEGamblingHelper.Api.Extensions;
-using PoEGamblingHelper.Application.Services;
+using PoEGamblingHelper.Application.Repositories;
 
 namespace PoEGamblingHelper.Api.Middleware;
 
@@ -9,9 +9,11 @@ public class AnalyticsMiddleware
 
     public AnalyticsMiddleware(RequestDelegate next) { _next = next; }
 
-    public async Task InvokeAsync(HttpContext httpContext, IAnalyticsService analyticsService)
+    public async Task InvokeAsync(HttpContext httpContext, IViewRepository viewRepository)
     {
-        await analyticsService.AddView(httpContext.Request.GetRealIpAddress());
+        var ip = httpContext.Request.GetRealIpAddress();
+        if (ip is not null) await viewRepository.AddAsync(ip);
+
         await _next(httpContext);
     }
 }
