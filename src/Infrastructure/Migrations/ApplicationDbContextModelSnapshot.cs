@@ -8,7 +8,7 @@ using PoEGamblingHelper.Infrastructure.Database;
 
 #nullable disable
 
-namespace Infrastructure.Migrations
+namespace PoEGamblingHelper.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -81,6 +81,19 @@ namespace Infrastructure.Migrations
                     b.UseTphMappingStrategy();
                 });
 
+            modelBuilder.Entity("PoEGamblingHelper.Domain.Entity.Analytics.AnalyticsDay", b =>
+                {
+                    b.HasBaseType("PoEGamblingHelper.Domain.Entity.Abstract.Entity<System.Guid>");
+
+                    b.Property<DateOnly>("Date")
+                        .HasColumnType("date");
+
+                    b.Property<long>("Views")
+                        .HasColumnType("bigint");
+
+                    b.HasDiscriminator().HasValue("AnalyticsDay");
+                });
+
             modelBuilder.Entity("PoEGamblingHelper.Domain.Entity.Analytics.View", b =>
                 {
                     b.HasBaseType("PoEGamblingHelper.Domain.Entity.Abstract.Entity<System.Guid>");
@@ -89,8 +102,8 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("bytea");
 
-                    b.Property<DateTime>("TimeStamp")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateOnly>("TimeStamp")
+                        .HasColumnType("date");
 
                     b.HasDiscriminator().HasValue("View");
                 });
@@ -158,9 +171,9 @@ namespace Infrastructure.Migrations
                 {
                     b.HasBaseType("PoEGamblingHelper.Domain.Entity.Abstract.Entity<System.Guid>");
 
-                    b.Property<string>("ChaosValue")
+                    b.Property<decimal[]>("ChaosValue")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("numeric[]");
 
                     b.Property<DateTime>("TimeStamp")
                         .HasColumnType("timestamp with time zone");
