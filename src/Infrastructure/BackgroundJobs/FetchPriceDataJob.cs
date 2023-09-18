@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.OutputCaching;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using PoEGamblingHelper.Application.Exception;
 using PoEGamblingHelper.Application.Exception.Abstract;
@@ -13,23 +14,20 @@ public class FetchPriceDataJob : BackgroundJob
     private readonly IOutputCacheStore _cache;
     private readonly string _cacheTag = ""; //TODO
     private readonly IDataFetcher _dataFetcher;
-
-    private readonly TimeSpan _interval = TimeSpan.FromHours(6); //TODO
     private readonly ILeagueRepository _leagueRepository;
     private readonly ILogger<FetchPriceDataJob> _logger;
 
     public FetchPriceDataJob(ILogger<FetchPriceDataJob> logger,
                              IDataFetcher dataFetcher,
                              IOutputCacheStore cache,
-                             ILeagueRepository leagueRepository)
+                             ILeagueRepository leagueRepository,
+                             IConfiguration configuration) : base(configuration)
     {
         _logger = logger;
         _dataFetcher = dataFetcher;
         _cache = cache;
         _leagueRepository = leagueRepository;
     }
-
-    protected override TimeSpan Interval() { return _interval; }
 
     protected override async Task ExecuteJobAsync(CancellationToken stoppingToken)
     {

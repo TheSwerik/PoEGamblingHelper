@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using PoEGamblingHelper.Application.Repositories;
 using PoEGamblingHelper.Application.Services;
 
@@ -8,23 +9,21 @@ public class LogAnalyticsJob : BackgroundJob
 {
     private readonly IAnalyticsDayRepository _analyticsDayRepository;
     private readonly IDateTimeService _dateTimeService;
-
-    private readonly TimeSpan _interval = TimeSpan.FromDays(1);
     private readonly ILogger<LogAnalyticsJob> _logger;
     private readonly IViewRepository _viewRepository;
 
     public LogAnalyticsJob(IDateTimeService dateTimeService,
                            IViewRepository viewRepository,
                            ILogger<LogAnalyticsJob> logger,
-                           IAnalyticsDayRepository analyticsDayRepository)
+                           IAnalyticsDayRepository analyticsDayRepository,
+                           IConfiguration configuration)
+        : base(configuration, dateTimeService)
     {
         _dateTimeService = dateTimeService;
         _viewRepository = viewRepository;
         _logger = logger;
         _analyticsDayRepository = analyticsDayRepository;
     }
-
-    protected override TimeSpan Interval() { return _interval; }
 
     protected override async Task ExecuteJobAsync(CancellationToken stoppingToken)
     {
