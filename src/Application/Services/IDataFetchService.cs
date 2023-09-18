@@ -2,7 +2,7 @@
 
 namespace PoEGamblingHelper.Application.Services;
 
-public interface IDataFetchService
+public interface IDataFetchService //TODO rename
 {
     Task FetchCurrentLeague();
     Task FetchCurrencyData(League league);

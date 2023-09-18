@@ -32,20 +32,20 @@ public static class GemDataExtensions
         return gemData.Profit(gemData.Value(resultCase), rawCost, templeCost);
     }
 
-    public static decimal Profit(this GemData gemData,
-                                 decimal value,
-                                 decimal? rawCost = null,
-                                 decimal templeCost = 0)
+    private static decimal Profit(this GemData gemData,
+                                  decimal value,
+                                  decimal? rawCost = null,
+                                  decimal templeCost = 0)
     {
         return value - gemData.CostPerTry(rawCost, templeCost);
     }
 
-    public static decimal Value(this GemData gemData, ResultCase resultCase)
+    private static decimal Value(this GemData gemData, ResultCase resultCase)
     {
         return gemData.ResultValue(gemData.MaxLevel() + resultCase.LevelModifier());
     }
 
-    internal static decimal ResultValue(this GemData gemData, int level)
+    private static decimal ResultValue(this GemData gemData, int level)
     {
         return gemData.Gems.Where(gem => gem.GemLevel == level && gem.Corrupted).MinBy(gem => gem.GemQuality)
                       ?.ChaosValue ?? 0m;
@@ -61,15 +61,15 @@ public static class GemDataExtensions
                20;
     }
 
-    internal static bool IsExceptional(this GemData gemData)
+    private static bool IsExceptional(this GemData gemData)
     {
         var lowerName = gemData.Name.ToLowerInvariant();
         return lowerName.Contains("enhance") || lowerName.Contains("empower") || lowerName.Contains("enlighten");
     }
 
-    public static decimal CostPerTry(this GemData gemData,
-                                     decimal? rawCost = null,
-                                     decimal templeCost = 0)
+    private static decimal CostPerTry(this GemData gemData,
+                                      decimal? rawCost = null,
+                                      decimal templeCost = 0)
     {
         return (rawCost ?? gemData.RawCost()) + templeCost;
     }

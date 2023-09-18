@@ -1,9 +1,8 @@
-﻿namespace PoEGamblingHelper.Application.QueryParameters
+﻿namespace PoEGamblingHelper.Application.QueryParameters;
+
+public class Page<T>
 {
-    public class Page<T>
-    {
-        public IEnumerable<T> Content { get; init; } = null!;
-        public int CurrentPage { get; init; }
-        public bool LastPage { get; init; }
-    }
+    public IEnumerable<T> Content { get; init; } = null!;
+    public int CurrentPage { get; init; }
+    public bool LastPage { get; init; }
 }

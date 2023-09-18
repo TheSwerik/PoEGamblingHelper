@@ -1,11 +1,10 @@
-﻿namespace PoEGamblingHelper.Application.QueryParameters
+﻿namespace PoEGamblingHelper.Application.QueryParameters;
+
+public enum GemType
 {
-    public enum GemType
-    {
-        All,
-        Exceptional,
-        Awakened,
-        RegularSupport,
-        Skill
-    }
+    All,
+    Exceptional,
+    Awakened,
+    RegularSupport,
+    Skill
 }

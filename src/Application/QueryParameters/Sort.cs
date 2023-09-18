@@ -1,12 +1,11 @@
-﻿namespace PoEGamblingHelper.Application.QueryParameters
+﻿namespace PoEGamblingHelper.Application.QueryParameters;
+
+public enum Sort
 {
-    public enum Sort
-    {
-        CostPerTryAsc,
-        CostPerTryDesc,
-        AverageProfitPerTryAsc,
-        AverageProfitPerTryDesc,
-        MaxProfitPerTryAsc,
-        MaxProfitPerTryDesc
-    }
+    CostPerTryAsc,
+    CostPerTryDesc,
+    AverageProfitPerTryAsc,
+    AverageProfitPerTryDesc,
+    MaxProfitPerTryAsc,
+    MaxProfitPerTryDesc
 }

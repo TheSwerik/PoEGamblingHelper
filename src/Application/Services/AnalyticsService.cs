@@ -37,4 +37,5 @@ public class AnalyticsService : IAnalyticsService
         // ctx.View.RemoveRange(views);
         // await ctx.SaveChangesAsync();
     }
+    //TODO fix this
 }

@@ -2,7 +2,7 @@
 
 namespace PoEGamblingHelper.Application.Services;
 
-public interface ILeagueService
+public interface ILeagueService //TODO rename
 {
     League GetCurrentLeague();
 }

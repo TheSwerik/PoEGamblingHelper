@@ -2,7 +2,7 @@
 
 namespace PoEGamblingHelper.Application.Exception.Body;
 
-public static class ExceptionIdExtensions
+public static class ExceptionIdExtensions //TODO what is this
 {
     public static string ToIdString(this ExceptionId exceptionId)
     {
