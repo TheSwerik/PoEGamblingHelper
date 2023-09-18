@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
+using PoEGamblingHelper.Api.Extensions;
 using PoEGamblingHelper.Application.Services;
 using PoEGamblingHelper.Domain.Entity;
 using PoEGamblingHelper.Infrastructure.Repositories;
@@ -20,9 +21,9 @@ public class CurrencyController : ApiControllerBase
 
     [HttpGet]
     [OutputCache(PolicyName = "FetchData")]
-    public async IAsyncEnumerable<Currency> GetAll()
+    public IAsyncEnumerable<Currency> GetAll() //TODO
     {
-        await _analyticsService.AddView(Request.GetRealIpAddress());
+        _analyticsService.AddView(Request.GetRealIpAddress()).RunSynchronously();
         return _currencyRepository.GetAll();
     }
 }

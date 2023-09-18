@@ -1,4 +1,4 @@
-﻿using PoEGamblingHelper.Api.Controllers;
+﻿using PoEGamblingHelper.Api.Extensions;
 using PoEGamblingHelper.Application.Services;
 
 namespace PoEGamblingHelper.Api;
@@ -12,6 +12,7 @@ public class AnalyticsMiddleware
     // IMessageWriter is injected into InvokeAsync
     public async Task InvokeAsync(HttpContext httpContext, IAnalyticsService analyticsService)
     {
+        Console.WriteLine("CALL INVOKE"); //TODO
         await analyticsService.AddView(httpContext.Request.GetRealIpAddress());
         await _next(httpContext);
     }

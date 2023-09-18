@@ -5,4 +5,5 @@ namespace PoEGamblingHelper.Application.Repositories;
 public interface ILeagueRepository
 {
     League GetByStartDateAfter(DateTime dateTime);
+    IAsyncEnumerable<League> GetAllLeagues();
 }

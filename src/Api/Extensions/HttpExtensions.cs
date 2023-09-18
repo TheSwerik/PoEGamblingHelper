@@ -1,6 +1,6 @@
-﻿namespace PoEGamblingHelper.Api.Controllers;
+﻿namespace PoEGamblingHelper.Api.Extensions;
 
-public static class HttpUtilFunctions
+public static class HttpExtensions
 {
     public static string? GetRealIpAddress(this HttpRequest httpRequest)
     {

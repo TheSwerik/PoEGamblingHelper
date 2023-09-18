@@ -10,11 +10,9 @@ public class LeagueService : ILeagueService
 
     public League GetCurrentLeague()
     {
-        var utcNow = DateTime.Today.ToUniversalTime();
+        var utcNow = DateTime.Today.ToUniversalTime(); //TODO DateTime Today in Infrastructure
         return _leagueRepository.GetByStartDateAfter(utcNow);
-        // return leagues.Where(league => utcNow >= league.StartDate)
-        // .OrderByDescending(league => league.StartDate)
-        // .FirstOrDefault()
-        // ?? throw new NoLeagueDataException();
-    } //TODO fix this
+    }
+
+    public IAsyncEnumerable<League> GetAllLeagues() { return _leagueRepository.GetAllLeagues(); }
 }

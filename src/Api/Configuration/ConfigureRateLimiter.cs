@@ -2,7 +2,7 @@
 using System.Net;
 using System.Threading.RateLimiting;
 
-namespace PoEGamblingHelper.Api;
+namespace PoEGamblingHelper.Api.Configuration;
 
 public static class ConfigureRateLimiter
 {

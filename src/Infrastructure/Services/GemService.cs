@@ -1,18 +1,26 @@
 ﻿using System.Diagnostics;
 using System.Text.RegularExpressions;
+using Microsoft.EntityFrameworkCore;
 using PoEGamblingHelper.Application.Extensions;
 using PoEGamblingHelper.Application.QueryParameters;
 using PoEGamblingHelper.Application.Repositories;
 using PoEGamblingHelper.Application.Services;
 using PoEGamblingHelper.Application.Util;
 using PoEGamblingHelper.Domain.Entity.Gem;
+using PoEGamblingHelper.Infrastructure.Database;
 
 namespace PoEGamblingHelper.Infrastructure.Services;
 
 public partial class GemService : IGemService
 {
+    private readonly IDbContextFactory<ApplicationDbContext> _dbContextFactory;
     private readonly IGemRepository _gemRepository;
-    public GemService(IGemRepository gemRepository) { _gemRepository = gemRepository; }
+
+    public GemService(IGemRepository gemRepository, IDbContextFactory<ApplicationDbContext> dbContextFactory)
+    {
+        _gemRepository = gemRepository;
+        _dbContextFactory = dbContextFactory;
+    }
 
     public async Task<Page<GemData>> GetAll(GemDataQuery? query, PageRequest page)
     {
@@ -31,7 +39,7 @@ public partial class GemService : IGemService
 
     private async Task<Page<GemData>> GetAll(PageRequest page)
     {
-        using var applicationDbContext = _applicationDbContextFactory.CreateDbContext();
+        await using var applicationDbContext = await _dbContextFactory.CreateDbContextAsync();
 
         var allContentLength = await applicationDbContext.GemData.CountAsync();
         var (skipSize, takeSize) = page.ConvertToSizes();
@@ -50,7 +58,7 @@ public partial class GemService : IGemService
         query.PricePerTryFrom ??= decimal.MinValue;
         query.PricePerTryTo ??= decimal.MaxValue;
 
-        using var applicationDbContext = _applicationDbContextFactory.CreateDbContext();
+        using var applicationDbContext = _dbContextFactory.CreateDbContext();
         var templeCost = applicationDbContext.TempleCost
                                              .OrderByDescending(cost => cost.TimeStamp)
                                              .FirstOrDefault()

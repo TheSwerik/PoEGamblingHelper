@@ -1,4 +1,4 @@
-﻿namespace PoEGamblingHelper.Api;
+﻿namespace PoEGamblingHelper.Api.Configuration;
 
 public static class ConfigureCache
 {

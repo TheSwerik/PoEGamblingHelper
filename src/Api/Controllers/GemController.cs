@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
+using PoEGamblingHelper.Api.Extensions;
+using PoEGamblingHelper.Application.QueryParameters;
 using PoEGamblingHelper.Application.Services;
 using PoEGamblingHelper.Domain.Entity.Gem;
 

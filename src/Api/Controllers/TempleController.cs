@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
-using PoEGamblingHelper.Application.Exception;
+using PoEGamblingHelper.Api.Extensions;
+using PoEGamblingHelper.Application.Repositories;
 using PoEGamblingHelper.Application.Services;
 using PoEGamblingHelper.Domain.Entity;
 
@@ -9,13 +10,12 @@ namespace PoEGamblingHelper.Api.Controllers;
 public class TempleController : ApiControllerBase
 {
     private readonly IAnalyticsService _analyticsService;
-    private readonly IApplicationDbContextFactory _applicationDbContextFactory;
+    private readonly ITempleRepository _templeRepository;
 
-    public TempleController(IApplicationDbContextFactory applicationDbContextFactory,
-                            IAnalyticsService analyticsService)
+    public TempleController(IAnalyticsService analyticsService, ITempleRepository templeRepository)
     {
-        _applicationDbContextFactory = applicationDbContextFactory;
         _analyticsService = analyticsService;
+        _templeRepository = templeRepository;
     }
 
     [HttpGet]
@@ -23,8 +23,6 @@ public class TempleController : ApiControllerBase
     public TempleCost Get()
     {
         _analyticsService.AddView(Request.GetRealIpAddress());
-        using var applicationDbContext = _applicationDbContextFactory.CreateDbContext();
-        return applicationDbContext.TempleCost.OrderByDescending(cost => cost.TimeStamp).FirstOrDefault()
-               ?? throw new NoTempleDataException();
+        return _templeRepository.GetCurrent();
     }
 }

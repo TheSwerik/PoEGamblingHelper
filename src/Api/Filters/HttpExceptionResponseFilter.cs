@@ -5,7 +5,7 @@ using PoEGamblingHelper.Application.Exception.Abstract;
 namespace PoEGamblingHelper.Api.Filters;
 
 // ReSharper disable once ClassNeverInstantiated.Global
-internal class HttpResponseExceptionFilter : IActionFilter, IOrderedFilter
+internal class HttpExceptionResponseFilter : IActionFilter, IOrderedFilter
 {
     public void OnActionExecuting(ActionExecutingContext context) { }
 
