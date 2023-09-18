@@ -9,16 +9,15 @@ namespace PoEGamblingHelper.Infrastructure.Database;
 
 public class ApplicationDbContext : DbContext
 {
+    public readonly DbSet<AnalyticsDay> AnalyticsDay = null!;
+    public readonly DbSet<Currency> Currency = null!;
+    public readonly DbSet<GemData> GemData = null!;
+    public readonly DbSet<GemTradeData> GemTradeData = null!;
+    public readonly DbSet<League> League = null!;
+    public readonly DbSet<Result> Result = null!;
+    public readonly DbSet<TempleCost> TempleCost = null!;
+    public readonly DbSet<View> View = null!;
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
-    public virtual DbSet<Currency> Currency => Set<Currency>();
-    public virtual DbSet<League> League => Set<League>();
-    public virtual DbSet<TempleCost> TempleCost => Set<TempleCost>();
-    public virtual DbSet<GemData> GemData => Set<GemData>();
-    public virtual DbSet<GemTradeData> GemTradeData => Set<GemTradeData>();
-    public virtual DbSet<Result> Result => Set<Result>();
-    public virtual DbSet<AnalyticsDay> AnalyticsDay => Set<AnalyticsDay>();
-    public virtual DbSet<View> View => Set<View>();
-    public Task<int> SaveChangesAsync() { return base.SaveChangesAsync(); }
 
     public void ClearTrackedEntities() { ChangeTracker.Clear(); }
 

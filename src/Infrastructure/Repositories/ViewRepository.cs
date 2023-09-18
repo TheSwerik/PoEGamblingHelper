@@ -23,7 +23,7 @@ public class ViewRepository : IViewRepository
 
     public async Task AddAsync(string ipAddress)
     {
-        var view = new View()
+        var view = new View
                    {
                        IpHash = _hashingService.HashIpAddress(ipAddress),
                        TimeStamp = _dateTimeService.UtcToday()

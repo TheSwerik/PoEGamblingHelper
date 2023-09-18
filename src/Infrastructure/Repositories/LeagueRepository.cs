@@ -23,7 +23,8 @@ public class LeagueRepository : ILeagueRepository
     public League GetByStartDateBefore(DateTime dateTime)
     {
         using var applicationDbContext = _dbContextFactory.CreateDbContext();
-        return applicationDbContext.League.Where(league => league.StartDate <= dateTime)
+        return applicationDbContext.League
+                                   .Where(league => league.StartDate <= dateTime)
                                    .OrderByDescending(league => league.StartDate)
                                    .FirstOrDefault()
                ?? throw new NoLeagueDataException();
