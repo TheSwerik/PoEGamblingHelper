@@ -2,13 +2,13 @@
 
 public class PageRequest
 {
-    private int _pageSize;
-    public int PageNumber { get; set; }
+    private readonly int _pageSize;
+    public int PageNumber { get; init; }
 
     public int PageSize
     {
         get => _pageSize;
-        set => _pageSize = value <= 0 ? 0 : value;
+        init => _pageSize = value <= 0 ? 0 : value;
     }
 
     public (int skipSize, int takeSize) ConvertToSizes() { return (PageSize * PageNumber, PageSize); }
