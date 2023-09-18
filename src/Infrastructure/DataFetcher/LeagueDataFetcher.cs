@@ -10,11 +10,11 @@ using PoEGamblingHelper.Infrastructure.Database;
 
 namespace PoEGamblingHelper.Infrastructure.DataFetcher;
 
-public partial class LeagueDataFetcher(ILogger logger,
-                                       IDbContextFactory<ApplicationDbContext> applicationDbContextFactory)
+public class LeagueDataFetcher(ILogger logger,
+                               IDbContextFactory<ApplicationDbContext> applicationDbContextFactory)
     : ILeagueDataFetcher
 {
-    private static readonly Regex Regex1 = new Regex("^\\d\\d\\d\\d$");
+    private static readonly Regex Regex1 = new("^\\d\\d\\d\\d$");
     private readonly HtmlWeb _htmlLoader = new();
 
     public async Task Fetch()

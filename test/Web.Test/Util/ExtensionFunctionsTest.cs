@@ -1,7 +1,5 @@
 ﻿using System.Globalization;
-using FluentAssertions;
 using PoEGamblingHelper.Web.Util;
-using Xunit.Abstractions;
 
 namespace Web.Test.Util;
 

@@ -1,4 +1,3 @@
-using FluentAssertions;
 using PoEGamblingHelper.Domain.Entity;
 
 namespace Domain.Test.Entity;

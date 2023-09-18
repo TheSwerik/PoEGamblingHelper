@@ -1,8 +1,4 @@
-﻿using MockQueryable.Moq;
-using Moq;
-using PoEGamblingHelper.Domain.Entity.Gem;
-
-namespace PoEGamblingHelper.Application.Test.Services;
+﻿namespace PoEGamblingHelper.Application.Test.Services;
 
 public class GemServiceTest
 {
