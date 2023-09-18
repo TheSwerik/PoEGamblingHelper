@@ -13,15 +13,10 @@ public static class GemDataExtensions
                                           decimal? bestCaseValue = null,
                                           decimal templeCost = 0)
     {
-        var worstCaseProfit = worstCaseValue is null
-                                  ? gemData.Profit(ResultCase.Worst, rawCost, templeCost)
-                                  : gemData.Profit((decimal)worstCaseValue, rawCost, templeCost);
-        var middleCaseProfit = middleCaseValue is null
-                                   ? gemData.Profit(ResultCase.Middle, rawCost, templeCost)
-                                   : gemData.Profit((decimal)middleCaseValue, rawCost, templeCost);
-        var bestCaseProfit = bestCaseValue is null
-                                 ? gemData.Profit(ResultCase.Best, rawCost, templeCost)
-                                 : gemData.Profit((decimal)bestCaseValue, rawCost, templeCost);
+        var worstCaseProfit = gemData.Profit(worstCaseValue ?? gemData.Value(ResultCase.Worst), rawCost, templeCost);
+        var middleCaseProfit = gemData.Profit(middleCaseValue ?? gemData.Value(ResultCase.Middle), rawCost, templeCost);
+        var bestCaseProfit = gemData.Profit(bestCaseValue ?? gemData.Value(ResultCase.Best), rawCost, templeCost);
+
         return (worstCaseProfit + 2 * middleCaseProfit + bestCaseProfit) / 4;
     }
 
