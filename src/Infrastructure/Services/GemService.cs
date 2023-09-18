@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using PoEGamblingHelper.Application.Extensions;
 using PoEGamblingHelper.Application.QueryParameters;
 using PoEGamblingHelper.Application.Services;
-using PoEGamblingHelper.Application.Util;
 using PoEGamblingHelper.Domain.Entity.Gem;
 using PoEGamblingHelper.Infrastructure.Database;
 

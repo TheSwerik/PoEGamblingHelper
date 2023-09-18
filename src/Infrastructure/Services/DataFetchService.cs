@@ -15,22 +15,22 @@ using PoEGamblingHelper.Infrastructure.Util;
 
 namespace PoEGamblingHelper.Infrastructure.Services;
 
-public partial class DataFetchService : IDataFetchService, IDisposable
+public partial class DataFetchService : IDataFetchService
 {
     private readonly IDbContextFactory<ApplicationDbContext> _applicationDbContextFactory;
     private readonly HtmlWeb _htmlLoader = new();
-    private readonly HttpClient _httpClient = new();
+    private readonly IHttpClientFactory _httpClientFactory;
     private readonly MediaTypeHeaderValue _jsonMediaTypeHeader = MediaTypeHeaderValue.Parse("application/json");
     private readonly ILogger<DataFetchService> _logger;
     private readonly string _templeQuery;
 
     public DataFetchService(ILogger<DataFetchService> logger,
-                            IDbContextFactory<ApplicationDbContext> applicationDbContextFactory)
+                            IDbContextFactory<ApplicationDbContext> applicationDbContextFactory,
+                            IHttpClientFactory httpClientFactory)
     {
         _logger = logger;
         _applicationDbContextFactory = applicationDbContextFactory;
-        _httpClient.DefaultRequestHeaders.UserAgent.Add(ProductInfoHeaderValue.Parse("PoEGamblingHelper/1.0.0"));
-        _httpClient.DefaultRequestHeaders.Accept.Add(MediaTypeWithQualityHeaderValue.Parse("application/json"));
+        _httpClientFactory = httpClientFactory;
         _templeQuery = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "/TempleQuery.json");
     }
 
@@ -243,8 +243,6 @@ public partial class DataFetchService : IDataFetchService, IDisposable
         }
     }
 
-    public void Dispose() { _httpClient.Dispose(); }
-
     #region Helper Methods
 
     private static (int versionColumn, int nameColumn, int releaseColumn) GetIndexesFromTitleRow(HtmlNode titleRow)
@@ -317,7 +315,10 @@ public partial class DataFetchService : IDataFetchService, IDisposable
     {
         try
         {
-            return await _httpClient.GetAsync(url);
+            var httpClient = _httpClientFactory.CreateClient();
+            httpClient.DefaultRequestHeaders.UserAgent.Add(ProductInfoHeaderValue.Parse("PoEGamblingHelper/1.0.0"));
+            httpClient.DefaultRequestHeaders.Accept.Add(MediaTypeWithQualityHeaderValue.Parse("application/json"));
+            return await httpClient.GetAsync(url);
         }
         catch (HttpRequestException e)
         {
@@ -329,7 +330,10 @@ public partial class DataFetchService : IDataFetchService, IDisposable
     {
         try
         {
-            return await _httpClient.SendAsync(request);
+            var httpClient = _httpClientFactory.CreateClient();
+            httpClient.DefaultRequestHeaders.UserAgent.Add(ProductInfoHeaderValue.Parse("PoEGamblingHelper/1.0.0"));
+            httpClient.DefaultRequestHeaders.Accept.Add(MediaTypeWithQualityHeaderValue.Parse("application/json"));
+            return await httpClient.SendAsync(request);
         }
         catch (HttpRequestException e)
         {

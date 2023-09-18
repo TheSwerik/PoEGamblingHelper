@@ -1,10 +1,11 @@
-﻿using PoEGamblingHelper.Application.Util;
-using PoEGamblingHelper.Domain.Entity.Gem;
+﻿using PoEGamblingHelper.Domain.Entity.Gem;
 
 namespace PoEGamblingHelper.Application.Extensions;
 
 public static class GemDataExtensions
 {
+    public static int LevelModifier(this ResultCase resultCase) { return (int)resultCase - 1; }
+
     public static decimal AvgProfitPerTry(this GemData gemData,
                                           decimal? rawCost = null,
                                           decimal? worstCaseValue = null,

@@ -1,5 +1,6 @@
 using System.Net.Http.Json;
 using Blazored.Toast.Services;
+using PoEGamblingHelper.Application.Exception.Body;
 using PoEGamblingHelper.Web.Util;
 
 namespace PoEGamblingHelper.Web.Services.Interfaces;
