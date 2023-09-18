@@ -8,16 +8,17 @@ using PoEGamblingHelper.Application.Repositories;
 using PoEGamblingHelper.Domain.Entity.Gem;
 using PoEGamblingHelper.Infrastructure.Database;
 
-namespace PoEGamblingHelper.Infrastructure.Services;
+namespace PoEGamblingHelper.Infrastructure.Repositories;
 
 public partial class GemRepository : IGemRepository
 {
     private readonly IDbContextFactory<ApplicationDbContext> _dbContextFactory;
     private readonly ITempleRepository _templeRepository;
 
-    public GemRepository(IDbContextFactory<ApplicationDbContext> dbContextFactory)
+    public GemRepository(IDbContextFactory<ApplicationDbContext> dbContextFactory, ITempleRepository templeRepository)
     {
         _dbContextFactory = dbContextFactory;
+        _templeRepository = templeRepository;
     }
 
     public async Task<Page<GemData>> Search(GemDataQuery? query, PageRequest page)
