@@ -1,5 +1,5 @@
-﻿using PoEGamblingHelper.Domain.Entity;
-using PoEGamblingHelper.Shared.QueryParameters;
+﻿using PoEGamblingHelper.Application.QueryParameters;
+using PoEGamblingHelper.Domain.Entity;
 
 namespace PoEGamblingHelper.Web.Shared.Model;
 

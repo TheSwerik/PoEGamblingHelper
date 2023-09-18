@@ -1,6 +1,6 @@
 using Blazored.Toast.Services;
+using PoEGamblingHelper.Application.QueryParameters;
 using PoEGamblingHelper.Domain.Entity.Gem;
-using PoEGamblingHelper.Shared.QueryParameters;
 using PoEGamblingHelper.Web.Services.Interfaces;
 
 namespace PoEGamblingHelper.Web.Services.Implementations;

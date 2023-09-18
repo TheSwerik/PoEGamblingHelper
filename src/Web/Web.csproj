@@ -16,7 +16,6 @@
     <ItemGroup>
         <ProjectReference Include="..\Application\Application.csproj"/>
         <ProjectReference Include="..\Domain\Domain.csproj"/>
-        <ProjectReference Include="..\Shared\Shared.csproj"/>
     </ItemGroup>
 
     <Target Name="PreBuild" BeforeTargets="PreBuildEvent">

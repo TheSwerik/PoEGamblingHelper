@@ -1,5 +1,5 @@
-﻿using PoEGamblingHelper.Domain.Entity.Gem;
-using PoEGamblingHelper.Domain.Util;
+﻿using PoEGamblingHelper.Application.Util;
+using PoEGamblingHelper.Domain.Entity.Gem;
 
 namespace PoEGamblingHelper.Application.Extensions;
 

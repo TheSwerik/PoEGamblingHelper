@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using PoEGamblingHelper.Domain.Entity;
 using PoEGamblingHelper.Domain.Entity.Gem;
-using PoEGamblingHelper.Shared.QueryParameters;
 using PoEGamblingHelper.Web.Services.Interfaces;
 using PoEGamblingHelper.Web.Shared.Model;
 

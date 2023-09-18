@@ -1,8 +1,8 @@
 ﻿using System.Text.RegularExpressions;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
+using PoEGamblingHelper.Application.QueryParameters;
 using PoEGamblingHelper.Domain.Entity;
-using PoEGamblingHelper.Shared.QueryParameters;
 using PoEGamblingHelper.Web.Shared.Model;
 using PoEGamblingHelper.Web.Util;
 

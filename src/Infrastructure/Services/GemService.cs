@@ -1,9 +1,13 @@
 ﻿using System.Diagnostics;
 using System.Text.RegularExpressions;
+using PoEGamblingHelper.Application.Extensions;
+using PoEGamblingHelper.Application.QueryParameters;
 using PoEGamblingHelper.Application.Repositories;
+using PoEGamblingHelper.Application.Services;
+using PoEGamblingHelper.Application.Util;
 using PoEGamblingHelper.Domain.Entity.Gem;
 
-namespace PoEGamblingHelper.Application.Services;
+namespace PoEGamblingHelper.Infrastructure.Services;
 
 public partial class GemService : IGemService
 {

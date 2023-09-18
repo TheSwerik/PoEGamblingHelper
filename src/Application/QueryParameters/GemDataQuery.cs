@@ -1,4 +1,4 @@
-﻿namespace PoEGamblingHelper.Shared.QueryParameters
+﻿namespace PoEGamblingHelper.Application.QueryParameters
 {
     public class GemDataQuery
     {

@@ -1,6 +1,8 @@
-﻿using PoEGamblingHelper.Domain.Entity.Gem;
+﻿using FluentAssertions;
+using PoEGamblingHelper.Application.Util;
+using PoEGamblingHelper.Domain.Entity.Gem;
 
-namespace Domain.Test.Util;
+namespace PoEGamblingHelper.Application.Test.Util;
 
 public class ExtensionMethodsTest
 {

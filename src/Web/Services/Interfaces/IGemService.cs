@@ -1,5 +1,5 @@
+using PoEGamblingHelper.Application.QueryParameters;
 using PoEGamblingHelper.Domain.Entity.Gem;
-using PoEGamblingHelper.Shared.QueryParameters;
 
 namespace PoEGamblingHelper.Web.Services.Interfaces;
 

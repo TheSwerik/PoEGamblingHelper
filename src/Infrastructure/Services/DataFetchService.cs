@@ -6,6 +6,7 @@ using HtmlAgilityPack;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PoEGamblingHelper.Application.Exception;
+using PoEGamblingHelper.Application.Extensions;
 using PoEGamblingHelper.Application.Services;
 using PoEGamblingHelper.Domain.Entity;
 using PoEGamblingHelper.Infrastructure.Database;

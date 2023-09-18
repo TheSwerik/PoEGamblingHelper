@@ -3,9 +3,9 @@ using System.Net.Http.Json;
 using System.Text.RegularExpressions;
 using System.Web;
 using PoEGamblingHelper.Application.Exception.Body;
+using PoEGamblingHelper.Application.QueryParameters;
 using PoEGamblingHelper.Domain.Entity;
 using PoEGamblingHelper.Domain.Entity.Gem;
-using PoEGamblingHelper.Shared.QueryParameters;
 
 namespace PoEGamblingHelper.Web.Util;
 
