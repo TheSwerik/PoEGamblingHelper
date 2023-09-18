@@ -15,7 +15,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddDatabase(configuration);
 
-        services.AddTransient<IGemSearchService, GemRepository>();
+        services.AddTransient<IGemRepository, GemRepository>();
         services.AddTransient<IDataFetcher, DataFetcher>();
         services.AddTransient<ICurrencyRepository, CurrencyRepository>();
 
