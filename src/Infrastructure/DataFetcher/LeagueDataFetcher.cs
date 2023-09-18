@@ -14,7 +14,6 @@ public class LeagueDataFetcher(ILogger logger,
                                IDbContextFactory<ApplicationDbContext> applicationDbContextFactory)
     : ILeagueDataFetcher
 {
-    private static readonly Regex Regex1 = new("^\\d\\d\\d\\d$");
     private readonly HtmlWeb _htmlLoader = new();
 
     public async Task Fetch()
