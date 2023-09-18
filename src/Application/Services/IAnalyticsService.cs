@@ -1,6 +1,6 @@
 ﻿namespace PoEGamblingHelper.Application.Services;
 
-public interface IAnalyticsService //TODO rename
+public interface IAnalyticsService
 {
     Task AddView(string? ipAddress);
     Task LogYesterdaysViews();

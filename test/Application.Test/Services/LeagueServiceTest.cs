@@ -4,7 +4,7 @@ using PoEGamblingHelper.Application.Exception;
 using PoEGamblingHelper.Application.Services;
 using PoEGamblingHelper.Domain.Entity;
 
-namespace Application.Test.Services;
+namespace PoEGamblingHelper.Application.Test.Services;
 
 public class LeagueServiceTest
 {

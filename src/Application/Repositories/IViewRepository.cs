@@ -1,10 +1,8 @@
-﻿using PoEGamblingHelper.Domain.Entity.Analytics;
-
-namespace PoEGamblingHelper.Application.Repositories;
+﻿namespace PoEGamblingHelper.Application.Repositories;
 
 public interface IViewRepository
 {
-    Task AddAsync(View view);
+    Task AddAsync(string ipAddress);
     Task<int> CountViewsAsync(DateOnly date);
     Task RemoveAllAsync(DateOnly date);
 }

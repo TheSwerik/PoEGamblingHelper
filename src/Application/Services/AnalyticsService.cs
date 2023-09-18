@@ -1,38 +1,34 @@
-﻿using System.Security.Cryptography;
-using System.Text;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using PoEGamblingHelper.Application.Repositories;
-using PoEGamblingHelper.Domain.Entity.Analytics;
 
 namespace PoEGamblingHelper.Application.Services;
 
 public class AnalyticsService : IAnalyticsService
 {
     private readonly IAnalyticsDayRepository _analyticsDayRepository;
+    private readonly IDateTimeService _dateTimeService;
     private readonly ILogger<AnalyticsService> _logger;
     private readonly IViewRepository _viewRepository;
 
     public AnalyticsService(IViewRepository viewRepository,
                             ILogger<AnalyticsService> logger,
-                            IAnalyticsDayRepository analyticsDayRepository)
+                            IAnalyticsDayRepository analyticsDayRepository,
+                            IDateTimeService dateTimeService)
     {
         _viewRepository = viewRepository;
         _logger = logger;
         _analyticsDayRepository = analyticsDayRepository;
+        _dateTimeService = dateTimeService;
     }
 
     public async Task AddView(string? ipAddress)
     {
-        if (ipAddress is null) return;
-        var ipHash = SHA512.HashData(Encoding.UTF8.GetBytes(ipAddress));
-        var today = DateOnly.FromDateTime(DateTime.UtcNow);
-        var view = new View { IpHash = ipHash, TimeStamp = today };
-        await _viewRepository.AddAsync(view);
+        if (ipAddress is not null) await _viewRepository.AddAsync(ipAddress);
     }
 
     public async Task LogYesterdaysViews()
     {
-        var yesterday = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-1);
+        var yesterday = _dateTimeService.UtcToday().AddDays(-1);
 
         var viewCount = await _viewRepository.CountViewsAsync(yesterday);
         _logger.LogInformation("{Views} People used the website on the {YesterdayDay}.{YesterdayMonth}.{YesterdayYear}",
