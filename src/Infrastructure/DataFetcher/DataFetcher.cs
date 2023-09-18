@@ -9,10 +9,9 @@ using PoEGamblingHelper.Application.Exception;
 using PoEGamblingHelper.Application.Extensions;
 using PoEGamblingHelper.Domain.Entity;
 using PoEGamblingHelper.Infrastructure.Database;
-using PoEGamblingHelper.Infrastructure.Services.FetchDtos;
-using PoEGamblingHelper.Infrastructure.Util;
+using PoEGamblingHelper.Infrastructure.Extensions;
 
-namespace PoEGamblingHelper.Infrastructure.Services;
+namespace PoEGamblingHelper.Infrastructure.DataFetcher;
 
 public partial class DataFetcher : IDataFetcher
 {
@@ -79,11 +78,12 @@ public partial class DataFetcher : IDataFetcher
             var currencyDetails =
                 currencyPriceData.CurrencyDetails
                                  .FirstOrDefault(currencyDetails =>
-                                                     currencyData.Name.EqualsIgnoreCase(currencyDetails.Name));
+                                                     currencyData.CurrencyTypeName.EqualsIgnoreCase(
+                                                         currencyDetails.Name));
             if (currencyDetails is not null) currencyData.Icon = currencyDetails.Icon;
         }
 
-        using var applicationDbContext = _applicationDbContextFactory.CreateDbContext();
+        await using var applicationDbContext = await _applicationDbContextFactory.CreateDbContextAsync();
         var existingCurrency = applicationDbContext.Currency.Select(currency => currency.Id).ToArray();
         applicationDbContext.ClearTrackedEntities();
 
@@ -132,9 +132,9 @@ public partial class DataFetcher : IDataFetcher
 
         TradeResults temples;
         var requestUri = $"{PoeToolUrls.PoeApiTradeUrl}/search/{league.Name}";
-        using (var request = new HttpRequestMessage(HttpMethod.Post, requestUri)
-                             { Content = new StringContent(_templeQuery, _jsonMediaTypeHeader) })
+        using (var request = new HttpRequestMessage(HttpMethod.Post, requestUri))
         {
+            request.Content = new StringContent(_templeQuery, _jsonMediaTypeHeader);
             var result = await SendAsync(request);
             if (!result.IsSuccessStatusCode) throw new ApiDownException(PoeToolUrls.PoeApiTradeUrl);
 
@@ -156,9 +156,9 @@ public partial class DataFetcher : IDataFetcher
 
         TradeEntryResult priceResults;
         requestUri = $"{PoeToolUrls.PoeApiTradeUrl}/fetch/{itemQuery}?query={temples.Id}";
-        using (var request = new HttpRequestMessage(HttpMethod.Get, requestUri)
-                             { Content = new StringContent(_templeQuery, _jsonMediaTypeHeader) })
+        using (var request = new HttpRequestMessage(HttpMethod.Get, requestUri))
         {
+            request.Content = new StringContent(_templeQuery, _jsonMediaTypeHeader);
             var result = await SendAsync(request);
             if (!result.IsSuccessStatusCode) throw new ApiDownException(PoeToolUrls.PoeApiTradeUrl);
 
@@ -170,7 +170,7 @@ public partial class DataFetcher : IDataFetcher
 
         #endregion
 
-        using var applicationDbContext = _applicationDbContextFactory.CreateDbContext();
+        await using var applicationDbContext = await _applicationDbContextFactory.CreateDbContextAsync();
         var chaosValues = priceResults.Result
                                       .Select(priceResult =>
                                                   priceResult.Listing
@@ -195,7 +195,7 @@ public partial class DataFetcher : IDataFetcher
         _logger.LogInformation("Got data from {Result} gems", gemPriceData.Lines.Length);
 
         // GemTradeData
-        using (var applicationDbContext = _applicationDbContextFactory.CreateDbContext())
+        await using (var applicationDbContext = await _applicationDbContextFactory.CreateDbContextAsync())
         {
             var existingGemTradeData =
                 applicationDbContext.GemTradeData.Select(gemTradeData => gemTradeData.Id).ToArray();
@@ -214,7 +214,7 @@ public partial class DataFetcher : IDataFetcher
         }
 
         // GemData
-        using (var applicationDbContext = _applicationDbContextFactory.CreateDbContext())
+        await using (var applicationDbContext = await _applicationDbContextFactory.CreateDbContextAsync())
         {
             var existingGemData = applicationDbContext.GemData.ToArray();
             var existingGemDataNames = existingGemData.Select(gem => gem.Name.ToLowerInvariant().Trim()).ToArray();
@@ -270,7 +270,7 @@ public partial class DataFetcher : IDataFetcher
         var fullDateRegex = FullDateRegex();
         var nameExpansionRegex = NameExpansionRegex();
 
-        using var applicationDbContext = _applicationDbContextFactory.CreateDbContext();
+        await using var applicationDbContext = await _applicationDbContextFactory.CreateDbContextAsync();
         foreach (var row in leagueRows)
         {
             var releaseDateText = row.ChildNodes[releaseColumnIndex].InnerText;

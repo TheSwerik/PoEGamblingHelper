@@ -1,14 +1,19 @@
 ﻿using PoEGamblingHelper.Domain.Entity;
 using PoEGamblingHelper.Domain.Entity.Gem;
 
-namespace PoEGamblingHelper.Infrastructure.Services;
+namespace PoEGamblingHelper.Infrastructure.DataFetcher;
 
 public record CurrencyPriceData(PoeNinjaCurrencyData[] Lines, PoeNinjaCurrencyDetails[] CurrencyDetails);
 
 public record GemPriceData(PoeNinjaGemData[] Lines);
 
-public record PoeNinjaCurrencyData(string CurrencyTypeName, decimal ChaosEquivalent, string DetailsId, string? Icon)
+public class PoeNinjaCurrencyData
 {
+    public string CurrencyTypeName { get; init; }
+    public decimal ChaosEquivalent { get; init; }
+    public string DetailsId { get; init; }
+    public string? Icon { get; set; }
+
     public Currency ToCurrencyData()
     {
         return new Currency

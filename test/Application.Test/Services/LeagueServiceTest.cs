@@ -1,7 +1,5 @@
-﻿using FluentAssertions;
-using MockQueryable.Moq;
+﻿using MockQueryable.Moq;
 using PoEGamblingHelper.Application.Exception;
-using PoEGamblingHelper.Application.Services;
 using PoEGamblingHelper.Domain.Entity;
 
 namespace PoEGamblingHelper.Application.Test.Services;

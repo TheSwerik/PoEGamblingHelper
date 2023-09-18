@@ -37,8 +37,8 @@ public static class GemDataExtensions
     }
 
     /// <summary>
-    /// Finds the ChaosValue of the Gem for the specified resultCase. <see cref="ResultValue"/>
-    /// If there are multiple, it just gets the cheapest one.
+    ///     Finds the ChaosValue of the Gem for the specified resultCase. <see cref="ResultValue" />
+    ///     If there are multiple, it just gets the cheapest one.
     /// </summary>
     private static decimal Value(this GemData gemData, ResultCase resultCase)
     {
@@ -46,8 +46,8 @@ public static class GemDataExtensions
     }
 
     /// <summary>
-    /// Finds the ChaosValue of the Gem with the specified level and corrupted.
-    /// If there are multiple, it just gets the cheapest one.
+    ///     Finds the ChaosValue of the Gem with the specified level and corrupted.
+    ///     If there are multiple, it just gets the cheapest one.
     /// </summary>
     private static decimal ResultValue(this GemData gemData, int level)
     {
@@ -76,8 +76,8 @@ public static class GemDataExtensions
     }
 
     /// <summary>
-    /// Finds the ChaosValue of the Gem with maximum level and not corrupted.
-    /// If there are multiple, it just gets the cheapest one.
+    ///     Finds the ChaosValue of the Gem with maximum level and not corrupted.
+    ///     If there are multiple, it just gets the cheapest one.
     /// </summary>
     public static decimal RawCost(this GemData gemData)
     {

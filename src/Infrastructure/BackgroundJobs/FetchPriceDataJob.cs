@@ -5,7 +5,7 @@ using PoEGamblingHelper.Application.Exception;
 using PoEGamblingHelper.Application.Exception.Abstract;
 using PoEGamblingHelper.Application.Repositories;
 using PoEGamblingHelper.Domain.Entity;
-using PoEGamblingHelper.Infrastructure.Services;
+using PoEGamblingHelper.Infrastructure.DataFetcher;
 
 namespace PoEGamblingHelper.Infrastructure.BackgroundJobs;
 

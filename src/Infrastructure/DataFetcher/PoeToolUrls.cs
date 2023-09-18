@@ -1,4 +1,4 @@
-﻿namespace PoEGamblingHelper.Infrastructure.Util;
+﻿namespace PoEGamblingHelper.Infrastructure.DataFetcher;
 
 public static class PoeToolUrls
 {

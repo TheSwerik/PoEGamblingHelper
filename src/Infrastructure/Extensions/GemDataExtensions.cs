@@ -1,10 +1,10 @@
 ﻿using PoEGamblingHelper.Application.Extensions;
 using PoEGamblingHelper.Domain.Entity.Gem;
-using PoEGamblingHelper.Infrastructure.Services.FetchDtos;
+using PoEGamblingHelper.Infrastructure.DataFetcher;
 
-namespace PoEGamblingHelper.Infrastructure.Util;
+namespace PoEGamblingHelper.Infrastructure.Extensions;
 
-public static class ExtensionMethods
+public static class GemDataExtensions
 {
     public static GemData ToGemData(this IGrouping<string, PoeNinjaGemData> group,
                                     IEnumerable<GemTradeData> gemTradeData,

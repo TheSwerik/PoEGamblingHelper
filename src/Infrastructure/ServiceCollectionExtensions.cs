@@ -5,6 +5,7 @@ using PoEGamblingHelper.Application.Repositories;
 using PoEGamblingHelper.Application.Services;
 using PoEGamblingHelper.Infrastructure.BackgroundJobs;
 using PoEGamblingHelper.Infrastructure.Database;
+using PoEGamblingHelper.Infrastructure.DataFetcher;
 using PoEGamblingHelper.Infrastructure.Repositories;
 using PoEGamblingHelper.Infrastructure.Services;
 
@@ -25,7 +26,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IAnalyticsDayRepository, AnalyticsDayRepository>();
         services.AddTransient<ITempleRepository, TempleRepository>();
 
-        services.AddSingleton<IDataFetcher, DataFetcher>();
+        services.AddSingleton<IDataFetcher, DataFetcher.DataFetcher>();
         services.AddSingleton<IDateTimeService, DateTimeService>();
         services.AddSingleton<IHashingService, HashingService>();
 

@@ -1,7 +1,4 @@
-﻿using FluentAssertions;
-using PoEGamblingHelper.Infrastructure.Services.FetchDtos;
-
-namespace Infrastructure.Test.Services.FetchDtos;
+﻿namespace Infrastructure.Test.Services.FetchDtos;
 
 public class PoeNinjaGemDataTest
 {

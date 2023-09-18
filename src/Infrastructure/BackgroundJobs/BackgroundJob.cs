@@ -10,7 +10,7 @@ public abstract class BackgroundJob : BackgroundService
     private readonly TimeSpan _interval;
 
     /// <summary>
-    /// Gets the StartTime from the configuration as well.
+    ///     Gets the StartTime from the configuration as well.
     /// </summary>
     protected BackgroundJob(IConfiguration configuration, IDateTimeService dateTimeService) : this(configuration)
     {

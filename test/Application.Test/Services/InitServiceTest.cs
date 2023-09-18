@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Logging;
 using Moq;
 using PoEGamblingHelper.Application.Exception;
-using PoEGamblingHelper.Application.Services;
 using PoEGamblingHelper.Domain.Entity;
 
 #pragma warning disable CS8625

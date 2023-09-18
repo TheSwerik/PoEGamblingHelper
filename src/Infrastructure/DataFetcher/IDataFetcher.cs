@@ -1,6 +1,6 @@
 ﻿using PoEGamblingHelper.Domain.Entity;
 
-namespace PoEGamblingHelper.Infrastructure.Services;
+namespace PoEGamblingHelper.Infrastructure.DataFetcher;
 
 public interface IDataFetcher
 {
