@@ -2,18 +2,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
 using PoEGamblingHelper.Application.Repositories;
 using PoEGamblingHelper.Domain.Entity;
+using PoEGamblingHelper.Infrastructure;
 
 namespace PoEGamblingHelper.Api.Controllers;
 
-public class LeagueController : ApiControllerBase
+public class LeagueController(ILeagueRepository leagueRepository) : ApiControllerBase
 {
-    private readonly ILeagueRepository _leagueRepository;
-
-    public LeagueController(ILeagueRepository leagueRepository) { _leagueRepository = leagueRepository; }
-
-    [HttpGet] public IAsyncEnumerable<League> GetAll() { return _leagueRepository.GetAllLeagues(); }
+    [HttpGet] public IAsyncEnumerable<League> GetAll() { return leagueRepository.GetAllLeagues(); }
 
     [HttpGet("current")]
-    [OutputCache(PolicyName = "FetchData")]
-    public League GetCurrent() { return _leagueRepository.GetCurrent(); }
+    [OutputCache(PolicyName = Constants.DataFetcherCacheTag)]
+    public League GetCurrent() { return leagueRepository.GetCurrent(); }
 }

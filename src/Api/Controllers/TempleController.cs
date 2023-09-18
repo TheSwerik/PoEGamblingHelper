@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
 using PoEGamblingHelper.Application.Repositories;
 using PoEGamblingHelper.Domain.Entity;
+using PoEGamblingHelper.Infrastructure;
 
 namespace PoEGamblingHelper.Api.Controllers;
 
@@ -11,5 +12,7 @@ public class TempleController : ApiControllerBase
 
     public TempleController(ITempleRepository templeRepository) { _templeRepository = templeRepository; }
 
-    [HttpGet] [OutputCache(PolicyName = "FetchData")] public TempleCost Get() { return _templeRepository.GetCurrent(); }
+    [HttpGet]
+    [OutputCache(PolicyName = Constants.DataFetcherCacheTag)]
+    public TempleCost Get() { return _templeRepository.GetCurrent(); }
 }

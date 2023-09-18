@@ -3,19 +3,16 @@ using Microsoft.AspNetCore.OutputCaching;
 using PoEGamblingHelper.Application.QueryParameters;
 using PoEGamblingHelper.Application.Repositories;
 using PoEGamblingHelper.Domain.Entity.Gem;
+using PoEGamblingHelper.Infrastructure;
 
 namespace PoEGamblingHelper.Api.Controllers;
 
-public class GemController : ApiControllerBase
+public class GemController(IGemRepository gemRepository) : ApiControllerBase
 {
-    private readonly IGemRepository _gemRepository;
-
-    public GemController(IGemRepository gemRepository) { _gemRepository = gemRepository; }
-
     [HttpGet]
-    [OutputCache(PolicyName = "FetchData")]
+    [OutputCache(PolicyName = Constants.DataFetcherCacheTag)]
     public async Task<Page<GemData>> GetAll([FromQuery] GemDataQuery? query, [FromQuery] PageRequest page)
     {
-        return await _gemRepository.Search(query, page);
+        return await gemRepository.Search(query, page);
     }
 }

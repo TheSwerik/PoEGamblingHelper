@@ -5,28 +5,20 @@ using PoEGamblingHelper.Infrastructure.DataFetcher;
 
 namespace PoEGamblingHelper.Infrastructure.BackgroundJobs;
 
-public class FetchLeagueJob : BackgroundJob
+public class FetchLeagueJob(ILogger logger,
+                            ILeagueDataFetcher leagueDataFetcher,
+                            IConfiguration configuration)
+    : BackgroundJob(configuration)
 {
-    private readonly IDataFetcher _dataFetcher;
-    private readonly ILogger<FetchLeagueJob> _logger;
-
-    public FetchLeagueJob(ILogger<FetchLeagueJob> logger,
-                          IDataFetcher dataFetcher,
-                          IConfiguration configuration) : base(configuration)
-    {
-        _logger = logger;
-        _dataFetcher = dataFetcher;
-    }
-
     protected override async Task ExecuteJobAsync(CancellationToken stoppingToken)
     {
         try
         {
-            await _dataFetcher.FetchCurrentLeague();
+            await leagueDataFetcher.Fetch();
         }
         catch (PoeGamblingHelperException e)
         {
-            _logger.LogError("{Exception}", e);
+            logger.LogError("{Exception}", e);
         }
     }
 }

@@ -26,9 +26,13 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IAnalyticsDayRepository, AnalyticsDayRepository>();
         services.AddTransient<ITempleRepository, TempleRepository>();
 
-        services.AddSingleton<IDataFetcher, DataFetcher.DataFetcher>();
         services.AddSingleton<IDateTimeService, DateTimeService>();
         services.AddSingleton<IHashingService, HashingService>();
+
+        services.AddSingleton<ILeagueDataFetcher, LeagueDataFetcher>();
+        services.AddKeyedTransient<IDataFetcher, CurrencyDataFetcher>("currency");
+        services.AddKeyedTransient<IDataFetcher, GemDataFetcher>("gem");
+        services.AddKeyedTransient<IDataFetcher, TempleDataFetcher>("temple");
 
         services.AddBackgroundJobs();
     }

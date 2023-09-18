@@ -3,5 +3,6 @@
         <RootNamespace>PoEGamblingHelper.$(MSBuildProjectName)</RootNamespace>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <InvariantGlobalization>true</InvariantGlobalization>
     </PropertyGroup>
 </Project>

@@ -2,16 +2,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
 using PoEGamblingHelper.Application.Repositories;
 using PoEGamblingHelper.Domain.Entity;
+using PoEGamblingHelper.Infrastructure;
 
 namespace PoEGamblingHelper.Api.Controllers;
 
-public class CurrencyController : ApiControllerBase
+public class CurrencyController(ICurrencyRepository currencyRepository) : ApiControllerBase
 {
-    private readonly ICurrencyRepository _currencyRepository;
-
-    public CurrencyController(ICurrencyRepository currencyRepository) { _currencyRepository = currencyRepository; }
-
     [HttpGet]
-    [OutputCache(PolicyName = "FetchData")]
-    public IAsyncEnumerable<Currency> GetAll() { return _currencyRepository.GetAll(); }
+    [OutputCache(PolicyName = Constants.DataFetcherCacheTag)]
+    public IAsyncEnumerable<Currency> GetAll() { return currencyRepository.GetAll(); }
 }

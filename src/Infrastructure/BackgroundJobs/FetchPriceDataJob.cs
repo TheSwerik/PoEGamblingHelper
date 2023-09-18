@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PoEGamblingHelper.Application.Exception;
 using PoEGamblingHelper.Application.Exception.Abstract;
@@ -9,36 +10,25 @@ using PoEGamblingHelper.Infrastructure.DataFetcher;
 
 namespace PoEGamblingHelper.Infrastructure.BackgroundJobs;
 
-public class FetchPriceDataJob : BackgroundJob
+public class FetchPriceDataJob(ILogger logger,
+                               IOutputCacheStore cache,
+                               ILeagueRepository leagueRepository,
+                               IConfiguration configuration,
+                               [FromKeyedServices("currency")] IDataFetcher currencyDataFetcher,
+                               [FromKeyedServices("temple")] IDataFetcher templeDataFetcher,
+                               [FromKeyedServices("gem")] IDataFetcher gemDataFetcher)
+    : BackgroundJob(configuration)
 {
-    private readonly IOutputCacheStore _cache;
-    private readonly string _cacheTag = ""; //TODO
-    private readonly IDataFetcher _dataFetcher;
-    private readonly ILeagueRepository _leagueRepository;
-    private readonly ILogger<FetchPriceDataJob> _logger;
-
-    public FetchPriceDataJob(ILogger<FetchPriceDataJob> logger,
-                             IDataFetcher dataFetcher,
-                             IOutputCacheStore cache,
-                             ILeagueRepository leagueRepository,
-                             IConfiguration configuration) : base(configuration)
-    {
-        _logger = logger;
-        _dataFetcher = dataFetcher;
-        _cache = cache;
-        _leagueRepository = leagueRepository;
-    }
-
     protected override async Task ExecuteJobAsync(CancellationToken stoppingToken)
     {
         League league;
         try
         {
-            league = _leagueRepository.GetCurrent();
+            league = leagueRepository.GetCurrent();
         }
         catch (NoLeagueDataException e)
         {
-            _logger.LogError("Could not Fetch Price Data, because League could not be get: {Exception}", e);
+            logger.LogError("Could not Fetch Price Data, because League could not be get: {Exception}", e);
             return;
         }
 
@@ -46,34 +36,34 @@ public class FetchPriceDataJob : BackgroundJob
 
         try
         {
-            await _dataFetcher.FetchCurrencyData(league);
+            await currencyDataFetcher.Fetch(league);
         }
         catch (PoeGamblingHelperException e)
         {
-            _logger.LogError("Could not Fetch CurrencyData: {Exception}", e);
+            logger.LogError("Could not Fetch CurrencyData: {Exception}", e);
         }
 
         try
         {
-            await _dataFetcher.FetchTemplePriceData(league);
+            await templeDataFetcher.Fetch(league);
         }
         catch (PoeGamblingHelperException e)
         {
-            _logger.LogError("Could not Fetch TemplePriceData: {Exception}", e);
+            logger.LogError("Could not Fetch TemplePriceData: {Exception}", e);
         }
 
         try
         {
-            await _dataFetcher.FetchGemPriceData(league);
+            await gemDataFetcher.Fetch(league);
         }
         catch (PoeGamblingHelperException e)
         {
-            _logger.LogError("Could not Fetch GemPriceData: {Exception}", e);
+            logger.LogError("Could not Fetch GemPriceData: {Exception}", e);
         }
 
         #endregion
 
-        await _cache.EvictByTagAsync(_cacheTag, stoppingToken);
-        _logger.LogDebug("Cache cleared");
+        await cache.EvictByTagAsync(Constants.DataFetcherCacheTag, stoppingToken);
+        logger.LogDebug("Cache cleared");
     }
 }
