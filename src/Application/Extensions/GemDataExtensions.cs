@@ -29,55 +29,61 @@ public static class GemDataExtensions
     }
 
     private static decimal Profit(this GemData gemData,
-                                  decimal value,
+                                  decimal resultValue,
                                   decimal? rawCost = null,
                                   decimal templeCost = 0)
     {
-        return value - gemData.CostPerTry(rawCost, templeCost);
+        return resultValue - gemData.CostPerTry(rawCost, templeCost);
     }
 
+    /// <summary>
+    /// Finds the ChaosValue of the Gem for the specified resultCase. <see cref="ResultValue"/>
+    /// If there are multiple, it just gets the cheapest one.
+    /// </summary>
     private static decimal Value(this GemData gemData, ResultCase resultCase)
     {
         return gemData.ResultValue(gemData.MaxLevel() + resultCase.LevelModifier());
     }
 
+    /// <summary>
+    /// Finds the ChaosValue of the Gem with the specified level and corrupted.
+    /// If there are multiple, it just gets the cheapest one.
+    /// </summary>
     private static decimal ResultValue(this GemData gemData, int level)
     {
-        return gemData.Gems.Where(gem => gem.GemLevel == level && gem.Corrupted).MinBy(gem => gem.GemQuality)
+        return gemData.Gems
+                      .Where(gem => gem.GemLevel == level && gem.Corrupted)
+                      .MinBy(gem => gem.ChaosValue)
                       ?.ChaosValue ?? 0m;
     }
 
     public static int MaxLevel(this GemData gemData)
-    {
-        var isAwakened = gemData.Name.ToLowerInvariant().Contains("awakened");
-        var isExceptional = gemData.IsExceptional();
+    { //TODO this is incorrect, I need to pull this data from somewhere
+        var lowerName = gemData.Name.ToLowerInvariant();
+        var isAwakened = lowerName.Contains("awakened");
+        var isExceptional = lowerName.Contains("enhance")
+                            || lowerName.Contains("empower")
+                            || lowerName.Contains("enlighten");
         return isAwakened && isExceptional ? 4 :
                isExceptional ? 3 :
                isAwakened ? 5 :
                20;
     }
 
-    private static bool IsExceptional(this GemData gemData)
-    {
-        var lowerName = gemData.Name.ToLowerInvariant();
-        return lowerName.Contains("enhance") || lowerName.Contains("empower") || lowerName.Contains("enlighten");
-    }
-
-    private static decimal CostPerTry(this GemData gemData,
-                                      decimal? rawCost = null,
-                                      decimal templeCost = 0)
+    private static decimal CostPerTry(this GemData gemData, decimal? rawCost = null, decimal templeCost = 0)
     {
         return (rawCost ?? gemData.RawCost()) + templeCost;
     }
 
+    /// <summary>
+    /// Finds the ChaosValue of the Gem with maximum level and not corrupted.
+    /// If there are multiple, it just gets the cheapest one.
+    /// </summary>
     public static decimal RawCost(this GemData gemData)
     {
-        return gemData.Gems.Where(gem => gem.GemLevel == gemData.MaxLevel() && !gem.Corrupted)
-                      .MinBy(gem => gem.GemQuality)?.ChaosValue ?? 0m;
-    }
-
-    public static string ToString(this GemData gemData)
-    {
-        return $"[Id={gemData.Id}, Name={gemData.Name}, MaxLevel={gemData.MaxLevel()}]";
+        return gemData.Gems
+                      .Where(gem => gem.GemLevel == gemData.MaxLevel() && !gem.Corrupted)
+                      .MinBy(gem => gem.ChaosValue)?
+                      .ChaosValue ?? 0m;
     }
 }
