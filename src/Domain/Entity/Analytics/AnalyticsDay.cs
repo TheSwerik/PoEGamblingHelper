@@ -3,8 +3,8 @@ using PoEGamblingHelper.Domain.Entity.Abstract;
 
 namespace PoEGamblingHelper.Domain.Entity.Analytics;
 
-public class View : Entity<Guid>
+public class AnalyticsDay : Entity<Guid>
 {
-    public byte[] IpHash { get; set; } = null!;
     public DateOnly TimeStamp { get; set; }
+    public long Views { get; set; }
 }

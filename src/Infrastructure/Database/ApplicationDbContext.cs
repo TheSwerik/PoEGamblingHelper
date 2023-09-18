@@ -16,6 +16,7 @@ public class ApplicationDbContext : DbContext
     public virtual DbSet<GemData> GemData => Set<GemData>();
     public virtual DbSet<GemTradeData> GemTradeData => Set<GemTradeData>();
     public virtual DbSet<Result> Result => Set<Result>();
+    public virtual DbSet<AnalyticsDay> AnalyticsDay => Set<AnalyticsDay>();
     public virtual DbSet<View> View => Set<View>();
     public Task<int> SaveChangesAsync() { return base.SaveChangesAsync(); }
 
