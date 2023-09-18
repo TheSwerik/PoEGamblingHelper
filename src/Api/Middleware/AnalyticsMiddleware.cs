@@ -1,7 +1,7 @@
 ﻿using PoEGamblingHelper.Api.Extensions;
 using PoEGamblingHelper.Application.Services;
 
-namespace PoEGamblingHelper.Api;
+namespace PoEGamblingHelper.Api.Middleware;
 
 public class AnalyticsMiddleware
 {
@@ -9,10 +9,8 @@ public class AnalyticsMiddleware
 
     public AnalyticsMiddleware(RequestDelegate next) { _next = next; }
 
-    // IMessageWriter is injected into InvokeAsync
     public async Task InvokeAsync(HttpContext httpContext, IAnalyticsService analyticsService)
     {
-        Console.WriteLine("CALL INVOKE"); //TODO
         await analyticsService.AddView(httpContext.Request.GetRealIpAddress());
         await _next(httpContext);
     }
