@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PoEGamblingHelper.Application.Extensions;
 using PoEGamblingHelper.Application.Repositories;
 using PoEGamblingHelper.Domain.Entity.Analytics;
 using PoEGamblingHelper.Infrastructure.Database;
@@ -28,14 +29,14 @@ public class ViewRepository : IViewRepository
 
     public async Task<int> CountViewsAsync(DateOnly date)
     {
-        var timeStamp = date.ToDateTime(TimeOnly.MinValue, DateTimeKind.Utc);
+        var timeStamp = date.ToUtcDateTime();
         await using var context = await _dbContextFactory.CreateDbContextAsync();
         return await context.View.CountAsync(v => v.TimeStamp == timeStamp);
     }
 
     public async Task RemoveAllAsync(DateOnly date)
     {
-        var timeStamp = date.ToDateTime(TimeOnly.MinValue, DateTimeKind.Utc);
+        var timeStamp = date.ToUtcDateTime();
         await using var context = await _dbContextFactory.CreateDbContextAsync();
 
         var views = context.View.Where(v => v.TimeStamp <= timeStamp);

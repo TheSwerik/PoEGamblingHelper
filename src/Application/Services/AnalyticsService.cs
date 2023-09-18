@@ -1,6 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 using Microsoft.Extensions.Logging;
+using PoEGamblingHelper.Application.Extensions;
 using PoEGamblingHelper.Application.Repositories;
 using PoEGamblingHelper.Domain.Entity.Analytics;
 
@@ -22,7 +23,7 @@ public class AnalyticsService : IAnalyticsService
         if (ipAddress is null) return;
         var ipHash = SHA512.HashData(Encoding.UTF8.GetBytes(ipAddress));
         var today = DateOnly.FromDateTime(DateTime.UtcNow);
-        var view = new View { IpHash = ipHash, TimeStamp = today.ToDateTime(TimeOnly.MinValue) };
+        var view = new View { IpHash = ipHash, TimeStamp = today.ToUtcDateTime() };
         await _viewRepository.AddAsync(view);
     }
 
