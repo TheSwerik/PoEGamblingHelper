@@ -11,14 +11,9 @@ public class LeagueController : ApiControllerBase
 
     public LeagueController(ILeagueService leagueService) { _leagueService = leagueService; }
 
-    [HttpGet]
-    public IAsyncEnumerable<League> GetAllLeagues() //TODO
-    {
-        return _leagueService.GetAllLeagues();
-    }
+    [HttpGet] public IAsyncEnumerable<League> GetAll() { return _leagueService.GetAll(); }
 
-    [HttpGet]
-    [Route("current")]
+    [HttpGet("current")]
     [OutputCache(PolicyName = "FetchData")]
-    public League GetCurrentLeague() { return _leagueService.GetCurrentLeague(); }
+    public League GetCurrent() { return _leagueService.GetCurrent(); }
 }

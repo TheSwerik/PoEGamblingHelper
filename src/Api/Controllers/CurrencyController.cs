@@ -13,8 +13,5 @@ public class CurrencyController : ApiControllerBase
 
     [HttpGet]
     [OutputCache(PolicyName = "FetchData")]
-    public IAsyncEnumerable<Currency> GetAll() //TODO
-    {
-        return _currencyRepository.GetAll();
-    }
+    public IAsyncEnumerable<Currency> GetAll() { return _currencyRepository.GetAll(); }
 }

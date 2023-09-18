@@ -28,7 +28,7 @@ public class LeagueServiceTest
         var queryable = list.AsQueryable().BuildMockDbSet();
         var service = new LeagueService();
 
-        service.GetCurrentLeague(queryable.Object).Id.Should().Be(expectedId);
+        service.GetCurrent(queryable.Object).Id.Should().Be(expectedId);
     }
 
     [Fact]
@@ -37,6 +37,6 @@ public class LeagueServiceTest
         var queryable = new List<League>().AsQueryable().BuildMockDbSet();
         var service = new LeagueService();
 
-        Assert.Throws<NoLeagueDataException>(() => service.GetCurrentLeague(queryable.Object));
+        Assert.Throws<NoLeagueDataException>(() => service.GetCurrent(queryable.Object));
     }
 }

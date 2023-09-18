@@ -42,7 +42,7 @@ public class InitServiceTest
         var leagueService = new Mock<ILeagueService>();
         var analyticsService = new Mock<IAnalyticsService>();
 
-        leagueService.Setup(s => s.GetCurrentLeague(appDbContext.Object.League)).Verifiable();
+        leagueService.Setup(s => s.GetCurrent(appDbContext.Object.League)).Verifiable();
         dataFetchService.Setup(s => s.FetchCurrencyData(null)).Verifiable();
         dataFetchService.Setup(s => s.FetchTemplePriceData(null)).Verifiable();
         dataFetchService.Setup(s => s.FetchGemPriceData(null)).Verifiable();
@@ -60,11 +60,11 @@ public class InitServiceTest
         cache.Verify();
 
 
-        leagueService.Setup(s => s.GetCurrentLeague(appDbContext.Object.League)).Throws<NoLeagueDataException>();
+        leagueService.Setup(s => s.GetCurrent(appDbContext.Object.League)).Throws<NoLeagueDataException>();
         Assert.Null(await Record.ExceptionAsync(async () => await service.FetchPriceData()));
 
         leagueService.Invocations.Clear();
-        leagueService.Setup(s => s.GetCurrentLeague(appDbContext.Object.League)).Returns(new League());
+        leagueService.Setup(s => s.GetCurrent(appDbContext.Object.League)).Returns(new League());
 
         dataFetchService.Setup(s => s.FetchCurrencyData(It.IsAny<League>()))
                         .Throws(() => new ApiDownException("poedb.tw"));

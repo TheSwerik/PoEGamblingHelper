@@ -35,7 +35,7 @@ public class FetchPriceDataJob : BackgroundJob
         League league;
         try
         {
-            league = _leagueService.GetCurrentLeague();
+            league = _leagueService.GetCurrent();
         }
         catch (NoLeagueDataException e)
         {
