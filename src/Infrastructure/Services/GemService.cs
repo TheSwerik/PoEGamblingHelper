@@ -3,7 +3,6 @@ using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
 using PoEGamblingHelper.Application.Extensions;
 using PoEGamblingHelper.Application.QueryParameters;
-using PoEGamblingHelper.Application.Repositories;
 using PoEGamblingHelper.Application.Services;
 using PoEGamblingHelper.Application.Util;
 using PoEGamblingHelper.Domain.Entity.Gem;
@@ -14,11 +13,9 @@ namespace PoEGamblingHelper.Infrastructure.Services;
 public partial class GemService : IGemService
 {
     private readonly IDbContextFactory<ApplicationDbContext> _dbContextFactory;
-    private readonly IGemRepository _gemRepository;
 
-    public GemService(IGemRepository gemRepository, IDbContextFactory<ApplicationDbContext> dbContextFactory)
+    public GemService(IDbContextFactory<ApplicationDbContext> dbContextFactory)
     {
-        _gemRepository = gemRepository;
         _dbContextFactory = dbContextFactory;
     }
 

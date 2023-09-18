@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PoEGamblingHelper.Application.Repositories;
 using PoEGamblingHelper.Application.Services;
 using PoEGamblingHelper.Infrastructure.BackgroundJobs;
 using PoEGamblingHelper.Infrastructure.Database;
+using PoEGamblingHelper.Infrastructure.Repositories;
 using PoEGamblingHelper.Infrastructure.Services;
 
 namespace PoEGamblingHelper.Infrastructure;
@@ -18,6 +20,9 @@ public static class ServiceCollectionExtensions
         services.AddTransient<ILeagueService, LeagueService>();
         services.AddTransient<IDataFetchService, DataFetchService>();
         services.AddTransient<IAnalyticsService, AnalyticsService>();
+
+        services.AddTransient<ILeagueRepository, LeagueRepository>();
+        services.AddTransient<IViewRepository, ViewRepository>();
 
         services.AddBackgroundJobs();
     }
@@ -34,8 +39,7 @@ public static class ServiceCollectionExtensions
             var connectionString = configuration.GetConnectionString("DBConnection")
                                    + $"Password={configuration["POSTGRES_PASSWORD"]};";
             var assemblyName = typeof(ApplicationDbContext).Assembly.FullName;
-            services.AddEntityFrameworkNpgsql()
-                    .AddDbContextFactory<ApplicationDbContext>(opt => opt.UseNpgsql(
+            services.AddDbContextFactory<ApplicationDbContext>(opt => opt.UseNpgsql(
                                                                    connectionString,
                                                                    builder => builder.MigrationsAssembly(assemblyName)
                                                                ));

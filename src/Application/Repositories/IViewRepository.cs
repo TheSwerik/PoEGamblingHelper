@@ -5,5 +5,6 @@ namespace PoEGamblingHelper.Application.Repositories;
 public interface IViewRepository
 {
     Task AddAsync(View view);
-    Task LogViewsAsync(DateOnly date);
+    Task<int> CountViewsAsync(DateOnly date);
+    Task RemoveAllAsync(DateOnly date);
 }

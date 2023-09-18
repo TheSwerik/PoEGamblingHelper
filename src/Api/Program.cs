@@ -1,7 +1,7 @@
 using System.Globalization;
-using PoEGamblingHelper.Api;
 using PoEGamblingHelper.Api.Configuration;
 using PoEGamblingHelper.Api.Filters;
+using PoEGamblingHelper.Api.Middleware;
 using PoEGamblingHelper.Infrastructure;
 using PoEGamblingHelper.Infrastructure.Database;
 
@@ -15,10 +15,13 @@ builder.Logging.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogL
 
 builder.Services.AddConfiguredRateLimiter(builder.Configuration);
 builder.Services.AddControllers(options => { options.Filters.Add<HttpExceptionResponseFilter>(); });
+builder.Services.AddCache(builder.Configuration);
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 builder.Services.AddInfrastructureServices(builder.Configuration);
-builder.Services.AddCache(builder.Configuration);
+
 // builder.Services.AddHostedService<InitService>(
 //     opt => new InitService(
 //         opt.GetRequiredService<ILogger<InitService>>(),
