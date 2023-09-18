@@ -20,6 +20,7 @@ window.onscroll = () => {
 window.RegisterScrollInfoService = (scrollInfoService: any) => window.scrollInfoService = scrollInfoService;
 
 window.UnRegisterScrollInfoService = UnRegisterScrollInfoService;
+
 export function UnRegisterScrollInfoService() {
     window.scrollInfoService = undefined;
 }

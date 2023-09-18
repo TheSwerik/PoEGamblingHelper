@@ -16,7 +16,7 @@ public class AnalyticsDayRepository : IAnalyticsDayRepository
 
     public async Task AddAsync(int viewCount)
     {
-        var analyticsDay = new AnalyticsDay()
+        var analyticsDay = new AnalyticsDay
                            {
                                Views = viewCount,
                                TimeStamp = DateOnly.FromDateTime(DateTime.UtcNow) //TODO remove UtcNow

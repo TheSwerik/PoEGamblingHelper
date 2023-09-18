@@ -1,7 +1,6 @@
-﻿namespace PoEGamblingHelper.Domain.Entity.Abstract
+﻿namespace PoEGamblingHelper.Domain.Entity.Abstract;
+
+public abstract class Entity<T>
 {
-    public abstract class Entity<T>
-    {
-        public T Id { get; set; } = default!;
-    }
+    public T Id { get; set; } = default!;
 }
