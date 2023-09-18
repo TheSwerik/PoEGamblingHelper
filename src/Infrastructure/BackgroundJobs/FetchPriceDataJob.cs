@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using PoEGamblingHelper.Application.Exception;
 using PoEGamblingHelper.Application.Exception.Abstract;
+using PoEGamblingHelper.Application.Repositories;
 using PoEGamblingHelper.Application.Services;
 using PoEGamblingHelper.Domain.Entity;
 
@@ -14,18 +15,18 @@ public class FetchPriceDataJob : BackgroundJob
     private readonly IDataFetchService _dataFetchService;
 
     private readonly TimeSpan _interval = TimeSpan.FromHours(6); //TODO
-    private readonly ILeagueService _leagueService;
+    private readonly ILeagueRepository _leagueRepository;
     private readonly ILogger<FetchPriceDataJob> _logger;
 
     public FetchPriceDataJob(ILogger<FetchPriceDataJob> logger,
                              IDataFetchService dataFetchService,
-                             ILeagueService leagueService,
-                             IOutputCacheStore cache)
+                             IOutputCacheStore cache,
+                             ILeagueRepository leagueRepository)
     {
         _logger = logger;
         _dataFetchService = dataFetchService;
-        _leagueService = leagueService;
         _cache = cache;
+        _leagueRepository = leagueRepository;
     }
 
     protected override TimeSpan Interval() { return _interval; }
@@ -35,7 +36,7 @@ public class FetchPriceDataJob : BackgroundJob
         League league;
         try
         {
-            league = _leagueService.GetCurrent();
+            league = _leagueRepository.GetCurrent();
         }
         catch (NoLeagueDataException e)
         {

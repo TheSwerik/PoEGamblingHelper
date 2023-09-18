@@ -17,7 +17,6 @@ public static class ServiceCollectionExtensions
         services.AddDatabase(configuration);
 
         services.AddTransient<IGemService, GemService>();
-        services.AddTransient<ILeagueService, LeagueService>();
         services.AddTransient<IDataFetchService, DataFetchService>();
         services.AddTransient<IAnalyticsService, AnalyticsService>();
         services.AddTransient<ICurrencyRepository, CurrencyRepository>();

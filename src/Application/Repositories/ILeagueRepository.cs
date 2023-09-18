@@ -6,4 +6,5 @@ public interface ILeagueRepository
 {
     League GetByStartDateBefore(DateTime dateTime);
     IAsyncEnumerable<League> GetAllLeagues();
+    League GetCurrent();
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PoEGamblingHelper.Application.Exception;
 using PoEGamblingHelper.Application.Repositories;
+using PoEGamblingHelper.Application.Services;
 using PoEGamblingHelper.Domain.Entity;
 using PoEGamblingHelper.Infrastructure.Database;
 
@@ -8,12 +9,16 @@ namespace PoEGamblingHelper.Infrastructure.Repositories;
 
 public class LeagueRepository : ILeagueRepository
 {
+    private readonly IDateTimeService _dateTimeService;
     private readonly IDbContextFactory<ApplicationDbContext> _dbContextFactory;
 
-    public LeagueRepository(IDbContextFactory<ApplicationDbContext> dbContextFactory)
+    public LeagueRepository(IDbContextFactory<ApplicationDbContext> dbContextFactory, IDateTimeService dateTimeService)
     {
         _dbContextFactory = dbContextFactory;
+        _dateTimeService = dateTimeService;
     }
+
+    public League GetCurrent() { return GetByStartDateBefore(_dateTimeService.UtcNow()); }
 
     public League GetByStartDateBefore(DateTime dateTime)
     {
