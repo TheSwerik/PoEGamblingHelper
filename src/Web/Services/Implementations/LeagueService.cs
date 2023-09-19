@@ -4,8 +4,8 @@ using PoEGamblingHelper.Web.Services.Interfaces;
 
 namespace PoEGamblingHelper.Web.Services.Implementations;
 
-public class LeagueService : HttpService, ILeagueService
+public class LeagueService(HttpClient httpClient, IToastService toastService) : HttpService(httpClient, toastService),
+    ILeagueService
 {
-    public LeagueService(HttpClient httpClient, IToastService toastService) : base(httpClient, toastService) { }
     public async Task<League?> GetCurrent() { return await GetAsync<League>("league/current"); }
 }

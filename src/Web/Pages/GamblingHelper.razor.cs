@@ -1,6 +1,7 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using PoEGamblingHelper.Application.Extensions;
 using PoEGamblingHelper.Application.QueryParameters;
 using PoEGamblingHelper.Domain.Entity;
 using PoEGamblingHelper.Domain.Entity.Gem;
@@ -43,7 +44,7 @@ public partial class GamblingHelper : IDisposable
         await UpdateService.Update();
     }
 
-    public async Task LoadGamblingData()
+    private async Task LoadGamblingData()
     {
         try
         {
@@ -55,9 +56,9 @@ public partial class GamblingHelper : IDisposable
             _currency = currency;
 
             _filterValues.Currency = _filterValues.Currency is null
-                                         ? _currency.First(c => c.Name.Equals("Divine Orb"))
+                                         ? _currency.First(c => c.Name.EqualsIgnoreCase("Divine Orb"))
                                          : _currency.FirstOrDefault(c => c.Id.Equals(_filterValues.Currency.Id));
-            _filterValues.Currency ??= _currency.First(c => c.Name.Equals("Divine Orb"));
+            _filterValues.Currency ??= _currency.First(c => c.Name.EqualsIgnoreCase("Divine Orb"));
 
 
             var templeCost = await TempleCostService.Get();
@@ -100,6 +101,7 @@ public partial class GamblingHelper : IDisposable
         var gemPage = await GemService.GetAll(new PageRequest { PageSize = 20, PageNumber = _currentGemPage },
                                               _filterValues.ToQuery());
         if (gemPage is null) return false;
+
         _gems.AddRange(gemPage.Content);
         _currentGemPage = gemPage.CurrentPage;
         _isOnLastPage = gemPage.LastPage;

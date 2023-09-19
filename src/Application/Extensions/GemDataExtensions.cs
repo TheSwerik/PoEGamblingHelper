@@ -28,10 +28,10 @@ public static class GemDataExtensions
         return gemData.Profit(gemData.Value(resultCase), rawCost, templeCost);
     }
 
-    private static decimal Profit(this GemData gemData,
-                                  decimal resultValue,
-                                  decimal? rawCost = null,
-                                  decimal templeCost = 0)
+    public static decimal Profit(this GemData gemData,
+                                 decimal resultValue,
+                                 decimal? rawCost = null,
+                                 decimal templeCost = 0)
     {
         return resultValue - gemData.CostPerTry(rawCost, templeCost);
     }
@@ -40,7 +40,7 @@ public static class GemDataExtensions
     ///     Finds the ChaosValue of the Gem for the specified resultCase. <see cref="ResultValue" />
     ///     If there are multiple, it just gets the cheapest one.
     /// </summary>
-    private static decimal Value(this GemData gemData, ResultCase resultCase)
+    public static decimal Value(this GemData gemData, ResultCase resultCase)
     {
         return gemData.ResultValue(gemData.MaxLevel() + resultCase.LevelModifier());
     }
@@ -70,7 +70,7 @@ public static class GemDataExtensions
                20;
     }
 
-    private static decimal CostPerTry(this GemData gemData, decimal? rawCost = null, decimal templeCost = 0)
+    public static decimal CostPerTry(this GemData gemData, decimal? rawCost = null, decimal templeCost = 0)
     {
         return (rawCost ?? gemData.RawCost()) + templeCost;
     }

@@ -1,15 +1,14 @@
 using Blazored.Toast.Services;
 using PoEGamblingHelper.Application.QueryParameters;
 using PoEGamblingHelper.Domain.Entity.Gem;
+using PoEGamblingHelper.Web.Extensions;
 using PoEGamblingHelper.Web.Services.Interfaces;
-using PoEGamblingHelper.Web.Util;
 
 namespace PoEGamblingHelper.Web.Services.Implementations;
 
-public class GemService : HttpService, IGemService
+public class GemService(HttpClient httpClient, IToastService toastService) : HttpService(httpClient, toastService),
+                                                                             IGemService
 {
-    public GemService(HttpClient httpClient, IToastService toastService) : base(httpClient, toastService) { }
-
     public async Task<Page<GemData>?> GetAll(PageRequest? page, GemDataQuery? query)
     {
         var queryString = query?.ToQueryString(page) ?? page?.ToQueryString() ?? "";

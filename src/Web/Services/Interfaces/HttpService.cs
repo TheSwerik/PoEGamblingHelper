@@ -1,20 +1,14 @@
 using System.Net.Http.Json;
 using Blazored.Toast.Services;
 using PoEGamblingHelper.Application.Exception.Body;
-using PoEGamblingHelper.Web.Util;
+using PoEGamblingHelper.Web.Extensions;
 
 namespace PoEGamblingHelper.Web.Services.Interfaces;
 
-public abstract class HttpService
+public abstract class HttpService(HttpClient httpClient, IToastService toastService)
 {
-    protected HttpService(HttpClient httpClient, IToastService toastService)
-    {
-        HttpClient = httpClient;
-        ToastService = toastService;
-    }
-
-    protected IToastService ToastService { get; }
-    protected HttpClient HttpClient { get; }
+    protected IToastService ToastService { get; } = toastService;
+    protected HttpClient HttpClient { get; } = httpClient;
 
     protected async Task<HttpResponseMessage> GetAsync(string url)
     {

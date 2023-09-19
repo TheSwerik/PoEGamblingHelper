@@ -2,9 +2,9 @@
 
 public static class StringExtensions
 {
-    public static bool EqualsIgnoreCase(this string? a, string? b)
+    public static bool EqualsIgnoreCase(this string? source, string? value)
     {
-        return a?.Equals(b, StringComparison.InvariantCultureIgnoreCase)
-               ?? b is null;
+        return source?.Equals(value, StringComparison.InvariantCultureIgnoreCase)
+               ?? value is null;
     }
 }

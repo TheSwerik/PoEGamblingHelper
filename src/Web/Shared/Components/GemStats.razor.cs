@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Components;
 using PoEGamblingHelper.Application.Extensions;
 using PoEGamblingHelper.Domain.Entity;
 using PoEGamblingHelper.Domain.Entity.Gem;
+using PoEGamblingHelper.Web.Extensions;
 using PoEGamblingHelper.Web.Shared.Model;
-using PoEGamblingHelper.Web.Util;
 
 namespace PoEGamblingHelper.Web.Shared.Components;
 

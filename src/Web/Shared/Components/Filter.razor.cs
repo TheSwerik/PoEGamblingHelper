@@ -3,8 +3,8 @@ using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
 using PoEGamblingHelper.Application.QueryParameters;
 using PoEGamblingHelper.Domain.Entity;
+using PoEGamblingHelper.Web.Extensions;
 using PoEGamblingHelper.Web.Shared.Model;
-using PoEGamblingHelper.Web.Util;
 
 namespace PoEGamblingHelper.Web.Shared.Components;
 
@@ -62,27 +62,28 @@ public partial class Filter : ComponentBase
         const string poeTradeUrl = "https://www.pathofexile.com/trade/search";
         const string queryKey = "?q=";
 
-        var query = JsonMinifyRegex().Replace(@"
-        {
-          ""query"":{
-            ""stats"":[
-              {
-                ""type"":""and"",
-                ""filters"":[
-                  {
-                    ""id"":""pseudo.pseudo_temple_gem_room_3"",
-                    ""value"":{
-                      ""option"":1
-                    },
-                    ""disabled"":false
-                  }
-                ]
-              }
-            ],
-            ""type"": ""Chronicle of Atzoatl""
-          }
-        }
-        ", "$1");
+        var query = Regex.Replace("(\"(?:[^\"\\\\]|\\\\.)*\")|\\s+",
+                                  """
+                                  {
+                                      "query":{
+                                          "stats":[
+                                                {
+                                                  "type":"and",
+                                                  "filters":[
+                                                      {
+                                                          "id":"pseudo.pseudo_temple_gem_room_3",
+                                                          "value":{
+                                                            "option":1
+                                                          },
+                                                          "disabled":false
+                                                      }
+                                                    ]
+                                                }
+                                          ],
+                                          "type": "Chronicle of Atzoatl"
+                                      }
+                                  }
+                                  """, "$1");
         return $"{poeTradeUrl}/{CurrentLeague.Name}{queryKey}{query}";
     }
 
@@ -102,8 +103,6 @@ public partial class Filter : ComponentBase
     {
         return FilterValues.CurrencyValue ?? FilterValues.Currency?.ChaosEquivalent ?? 1;
     }
-
-    [GeneratedRegex("(\"(?:[^\"\\\\]|\\\\.)*\")|\\s+")] private static partial Regex JsonMinifyRegex();
 
     #region Update Callback
 

@@ -1,4 +1,6 @@
-﻿namespace PoEGamblingHelper.Application.Test.Util;
+﻿using PoEGamblingHelper.Domain.Entity.Gem;
+
+namespace PoEGamblingHelper.Application.Test.Util;
 
 public class ExtensionMethodsTest
 {

@@ -4,8 +4,8 @@ using PoEGamblingHelper.Web.Services.Interfaces;
 
 namespace PoEGamblingHelper.Web.Services.Implementations;
 
-public class TempleCostService : HttpService, ITempleCostService
+public class TempleCostService
+    (HttpClient httpClient, IToastService toastService) : HttpService(httpClient, toastService), ITempleCostService
 {
-    public TempleCostService(HttpClient httpClient, IToastService toastService) : base(httpClient, toastService) { }
     public async Task<TempleCost?> Get() { return await GetAsync<TempleCost>("temple"); }
 }
