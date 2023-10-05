@@ -11,8 +11,8 @@ public class GemController(IGemRepository gemRepository) : ApiControllerBase
 {
     [HttpGet]
     [OutputCache(PolicyName = Constants.DataFetcherCacheTag)]
-    public async Task<Page<GemData>> GetAll([FromQuery] GemDataQuery? query, [FromQuery] PageRequest page)
+    public Page<GemData> GetAll([FromQuery] GemDataQuery? query, [FromQuery] PageRequest page)
     {
-        return await gemRepository.Search(query, page);
+        return gemRepository.Search(query, page);
     }
 }

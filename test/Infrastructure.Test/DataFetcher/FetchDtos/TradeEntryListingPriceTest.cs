@@ -1,14 +1,12 @@
-﻿using MockQueryable.Moq;
+﻿using FluentAssertions;
+using MockQueryable.Moq;
 using PoEGamblingHelper.Domain.Entity;
+using PoEGamblingHelper.Infrastructure.DataFetcher;
 
-namespace Infrastructure.Test.Services.FetchDtos;
+namespace PoEGamblingHelper.Infrastructure.Test.DataFetcher.FetchDtos;
 
 public class TradeEntryListingPriceTest
 {
-    private const decimal DivineChaosEquivalent = 220;
-    private const decimal ExaltedChaosEquivalent = 12;
-    private const decimal test = 0.6m;
-
     [Theory]
     [InlineData("chaos", 120, 1)]
     [InlineData("divine", 0.6, 220)]
@@ -23,13 +21,7 @@ public class TradeEntryListingPriceTest
                    };
         var queryable = list.AsQueryable().BuildMockDbSet();
 
-        var source = new TradeEntryListingPrice
-                     {
-                         Type = "Chronicle of Atzoatl",
-                         Amount = currencyAmount,
-                         Currency = currency
-                     };
-
+        var source = new TradeEntryListingPrice("Chronicle of Atzoatl", currencyAmount, currency);
 
         source.ChaosAmount(queryable.Object).Should().Be(currencyChaosEquivalent * currencyAmount);
     }

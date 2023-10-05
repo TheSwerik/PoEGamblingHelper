@@ -1,32 +1,11 @@
+using FluentAssertions;
+using PoEGamblingHelper.Application.Extensions;
 using PoEGamblingHelper.Domain.Entity.Gem;
 
-namespace Domain.Test.Entity;
+namespace PoEGamblingHelper.Application.Test.Extensions;
 
-public class GemDataTest
+public class GemDataExtensionsTest
 {
-    [Theory]
-    [InlineData("Enhance Support", true)]
-    [InlineData("Empower Support", true)]
-    [InlineData("Enlighten Support", true)]
-    [InlineData("Brutality Support", false)]
-    [InlineData("Seismic Trap", false)]
-    public void IsExceptionalTest(string name, bool expected)
-    {
-        var gemData = new GemData();
-
-        gemData.Name = name;
-        gemData.IsExceptional().Should().Be(expected);
-
-        gemData.Name = name.ToLowerInvariant();
-        gemData.IsExceptional().Should().Be(expected);
-
-        gemData.Name = $"Awakened {name}";
-        gemData.IsExceptional().Should().Be(expected);
-
-        gemData.Name = $"Awakened {name.ToLowerInvariant()}";
-        gemData.IsExceptional().Should().Be(expected);
-    }
-
     [Theory]
     [InlineData("Enhance Support", 3, 4)]
     [InlineData("Empower Support", 3, 4)]
@@ -51,15 +30,16 @@ public class GemDataTest
     }
 
     [Theory]
-    [InlineData("Enhance Support", 3, 6)]
-    [InlineData("Empower Support", 3, 6)]
-    [InlineData("Enlighten Support", 3, 6)]
+    [InlineData("Enhance Support", 1, 6)]
+    [InlineData("Empower Support", 1, 6)]
+    [InlineData("Enlighten Support", 1, 6)]
     [InlineData("Brutality Support", 12, 8)]
     [InlineData("Seismic Trap", 12, 8)]
     public void RawCostTest(string name, int expected, int expectedAwakened)
     {
         var gemData = new GemData
                       {
+                          Name = name,
                           Gems = new List<GemTradeData>
                                  {
                                      new() { Corrupted = false, GemLevel = 3, ChaosValue = 1, GemQuality = 15 },
@@ -79,7 +59,6 @@ public class GemDataTest
                                  }
                       };
 
-        gemData.Name = name;
         gemData.RawCost().Should().Be(expected);
 
         gemData.Name = $"Awakened {name}";
@@ -123,23 +102,6 @@ public class GemDataTest
         gemData.CostPerTry(templeCost: templeCost).Should().Be(expectedAwakened + templeCost);
         gemData.CostPerTry(null, templeCost).Should().Be(expectedAwakened + templeCost);
         gemData.CostPerTry(rawCost, templeCost).Should().Be(rawCost + templeCost);
-    }
-
-    [Fact]
-    public void ResultValueTest()
-    {
-        var gemData = new GemData
-                      {
-                          Gems = new List<GemTradeData>
-                                 {
-                                     new() { Corrupted = true, GemLevel = 1, ChaosValue = 1 },
-                                     new() { Corrupted = true, GemLevel = 1, ChaosValue = 2 },
-                                     new() { Corrupted = true, GemLevel = 1, ChaosValue = 3, GemQuality = 15 },
-                                     new() { Corrupted = false, GemLevel = 1, ChaosValue = 4 }
-                                 }
-                      };
-        gemData.ResultValue(1).Should().Be(1);
-        gemData.ResultValue(2).Should().Be(0);
     }
 
     [Theory]

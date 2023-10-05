@@ -1,24 +1,26 @@
-﻿namespace Infrastructure.Test.Services.FetchDtos;
+﻿using FluentAssertions;
+using PoEGamblingHelper.Infrastructure.DataFetcher;
+
+namespace PoEGamblingHelper.Infrastructure.Test.DataFetcher.FetchDtos;
 
 public class PoeNinjaGemDataTest
 {
     [Fact]
     public void ToGemTradeDataTest()
     {
-        var source = new PoeNinjaGemData
-                     {
-                         Id = 123456,
-                         Name = "Empower Support",
-                         Icon = "testIcon",
-                         GemLevel = 3,
-                         GemQuality = 17,
-                         Corrupted = true,
-                         DetailsId = "empower-support",
-                         ChaosValue = 100,
-                         ExaltedValue = 8,
-                         DivineValue = 0.5m,
-                         ListingCount = 7
-                     };
+        var source = new PoeNinjaGemData(
+            123456,
+            "Empower Support",
+            "testIcon",
+            3,
+            17,
+            true,
+            "empower-support",
+            100,
+            8,
+            0.5m,
+            7
+        );
 
         var gemTradeData = source.ToGemTradeData();
 

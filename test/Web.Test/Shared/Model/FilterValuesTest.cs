@@ -1,6 +1,8 @@
-﻿using PoEGamblingHelper.Web.Shared.Model;
+﻿using FluentAssertions;
+using PoEGamblingHelper.Application.QueryParameters;
+using PoEGamblingHelper.Web.Shared.Model;
 
-namespace Web.Test.Shared.Model;
+namespace PoEGamblingHelper.Web.Test.Shared.Model;
 
 public class FilterValuesTest
 {

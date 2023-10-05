@@ -10,27 +10,21 @@ using PoEGamblingHelper.Infrastructure.Database;
 
 namespace PoEGamblingHelper.Infrastructure.Repositories;
 
-public partial class GemRepository : IGemRepository
+public partial class GemRepository(IDbContextFactory<ApplicationDbContext> dbContextFactory,
+                                   ITempleRepository templeRepository)
+    : IGemRepository
 {
-    private readonly IDbContextFactory<ApplicationDbContext> _dbContextFactory;
-    private readonly ITempleRepository _templeRepository;
-
-    public GemRepository(IDbContextFactory<ApplicationDbContext> dbContextFactory, ITempleRepository templeRepository)
+    public Page<GemData> Search(GemDataQuery? query, PageRequest page)
     {
-        _dbContextFactory = dbContextFactory;
-        _templeRepository = templeRepository;
+        return query is null
+                   ? GetAll(page)
+                   : GeneratePage(FilterGemData(query), page);
     }
 
-    public async Task<Page<GemData>> Search(GemDataQuery? query, PageRequest page)
+    private Page<GemData> GetAll(PageRequest page)
     {
-        if (query is null) return await GetAll(page);
-        return GeneratePage(FilterGemData(query), page);
-    }
-
-    private async Task<Page<GemData>> GetAll(PageRequest page)
-    {
-        await using var context = await _dbContextFactory.CreateDbContextAsync();
-        return GeneratePage(await context.GemData.ToArrayAsync(), page);
+        using var context = dbContextFactory.CreateDbContext();
+        return GeneratePage(context.GemData.ToArray(), page);
     }
 
     private GemData[] FilterGemData(GemDataQuery query)
@@ -39,9 +33,9 @@ public partial class GemRepository : IGemRepository
         query.PricePerTryFrom ??= decimal.MinValue;
         query.PricePerTryTo ??= decimal.MaxValue;
         var preFilterSqlQuery = PreFilterSqlQuery(query);
-        var templeCost = _templeRepository.GetCurrent().AverageChaosValue();
+        var templeCost = templeRepository.GetCurrent().AverageChaosValue();
 
-        using var applicationDbContext = _dbContextFactory.CreateDbContext();
+        using var applicationDbContext = dbContextFactory.CreateDbContext();
         return applicationDbContext.GemData
                                    .FromSqlRaw(preFilterSqlQuery)
                                    .Include(gemData => gemData.Gems)

@@ -5,5 +5,5 @@ namespace PoEGamblingHelper.Application.Repositories;
 
 public interface IGemRepository
 {
-    Task<Page<GemData>> Search(GemDataQuery? query, PageRequest page);
+    Page<GemData> Search(GemDataQuery? query, PageRequest page);
 }

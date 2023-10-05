@@ -1,25 +1,13 @@
-﻿using PoEGamblingHelper.Domain.Entity.Gem;
+﻿using FluentAssertions;
+using PoEGamblingHelper.Application.Extensions;
+using PoEGamblingHelper.Domain.Entity.Gem;
+using PoEGamblingHelper.Infrastructure.DataFetcher;
+using PoEGamblingHelper.Infrastructure.Extensions;
 
-namespace Infrastructure.Test.Util;
+namespace PoEGamblingHelper.Infrastructure.Test.Extensions;
 
-public class ExtensionMethodsTest
+public class GemDataExtensionsTest
 {
-    [Theory]
-    [InlineData("test", "test", true)]
-    [InlineData("tEst", "teSt", true)]
-    [InlineData("TEST", "TEST", true)]
-    [InlineData("testa", "test", false)]
-    [InlineData(null, "test", false)]
-    [InlineData("test", null, false)]
-    [InlineData(null, null, true)]
-    public void EqualsIgnoreCaseTest(string? a, string? b, bool isTrue)
-    {
-        a.EqualsIgnoreCase(b).Should().Be(isTrue);
-        b.EqualsIgnoreCase(a).Should().Be(isTrue);
-        a.EqualsIgnoreCase(a).Should().BeTrue();
-        b.EqualsIgnoreCase(b).Should().BeTrue();
-    }
-
     [Fact]
     public void ToGemDataTest()
     {
@@ -29,11 +17,11 @@ public class ExtensionMethodsTest
         const string enlightenIcon = "Enlighten Icon";
         var list = new List<PoeNinjaGemData>
                    {
-                       new() { Name = empower, Icon = empowerIcon },
-                       new() { Name = enlighten, Icon = enlightenIcon },
-                       new() { Name = empower, Icon = empowerIcon },
-                       new() { Name = empower, Icon = empowerIcon },
-                       new() { Name = enlighten, Icon = enlightenIcon }
+                       new(0, empower, empowerIcon, 1, 1, false, "", 1, 1, 1, 1),
+                       new(1, enlighten, enlightenIcon, 2, 2, false, "", 1, 1, 1, 1),
+                       new(2, empower, empowerIcon, 3, 3, false, "", 1, 1, 1, 1),
+                       new(3, empower, empowerIcon, 4, 4, false, "", 1, 1, 1, 1),
+                       new(4, enlighten, enlightenIcon, 5, 5, false, "", 1, 1, 1, 1),
                    };
         var group = list.GroupBy(p => p.Name).First();
         var gemTradeData = new List<GemTradeData>
@@ -63,11 +51,11 @@ public class ExtensionMethodsTest
         const string enlightenIcon = "Enlighten Icon";
         var list = new List<PoeNinjaGemData>
                    {
-                       new() { Name = empower, Icon = empowerIcon },
-                       new() { Name = enlighten, Icon = enlightenIcon },
-                       new() { Name = empower, Icon = empowerIcon },
-                       new() { Name = empower, Icon = empowerIcon },
-                       new() { Name = enlighten, Icon = enlightenIcon }
+                       new(0, empower, empowerIcon, 1, 1, false, "", 1, 1, 1, 1),
+                       new(1, enlighten, enlightenIcon, 2, 2, false, "", 1, 1, 1, 1),
+                       new(2, empower, empowerIcon, 3, 3, false, "", 1, 1, 1, 1),
+                       new(3, empower, empowerIcon, 4, 4, false, "", 1, 1, 1, 1),
+                       new(4, enlighten, enlightenIcon, 5, 5, false, "", 1, 1, 1, 1),
                    };
         var group = list.GroupBy(p => p.Name).First();
         var gemTradeData = new List<GemTradeData>
