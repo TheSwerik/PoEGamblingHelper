@@ -1,15 +1,15 @@
-﻿using Domain.QueryParameters;
-using FluentAssertions;
-using Web.Shared.Model;
+﻿using FluentAssertions;
+using PoEGamblingHelper.Application.QueryParameters;
+using PoEGamblingHelper.Web.Pages.GamblingHelper.Components.Filter;
 
-namespace Web.Test.Shared.Model;
+namespace PoEGamblingHelper.Web.Test.Shared.Model;
 
 public class FilterValuesTest
 {
     [Fact]
     public void ToQuery()
     {
-        var source = new FilterValues
+        var source = new FilterModel
                      {
                          Gem = "Empower Support",
                          Sort = Sort.CostPerTryDesc,

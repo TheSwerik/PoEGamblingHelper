@@ -1,11 +1,12 @@
-﻿using Domain.Entity.Gem;
+﻿using System;
+using PoEGamblingHelper.Domain.Entity.Abstract;
+using PoEGamblingHelper.Domain.Entity.Gem;
 
-namespace Domain.Entity.Stats;
+namespace PoEGamblingHelper.Domain.Entity.Stats;
 
-public class Result: Abstract.Entity<Guid>
+public class Result : Entity<Guid>
 {
-    
-    public GemTradeData GemTradeData { get; set; } 
-    public decimal CurrencyValue { get; set; } 
-    public CurrencyResult CurrencyResult { get; set; } 
+    public GemTradeData GemTradeData { get; set; } = null!;
+    public decimal CurrencyValue { get; set; }
+    public CurrencyResult CurrencyResult { get; set; } = null!;
 }

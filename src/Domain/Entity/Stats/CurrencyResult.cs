@@ -1,6 +1,8 @@
-﻿namespace Domain.Entity.Stats;
+﻿using PoEGamblingHelper.Domain.Entity.Abstract;
 
-public class CurrencyResult: Abstract.Entity<string>
+namespace PoEGamblingHelper.Domain.Entity.Stats;
+
+public class CurrencyResult : Entity<string>
 {
     public string Name { get; set; } = string.Empty;
     public decimal ChaosEquivalent { get; set; }

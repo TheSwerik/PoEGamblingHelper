@@ -1,6 +1,7 @@
-﻿using Domain.Entity.Abstract;
+﻿using System;
+using PoEGamblingHelper.Domain.Entity.Abstract;
 
-namespace Domain.Entity;
+namespace PoEGamblingHelper.Domain.Entity;
 
 public class League : Entity<Guid>
 {

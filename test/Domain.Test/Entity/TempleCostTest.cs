@@ -1,7 +1,7 @@
-using Domain.Entity;
 using FluentAssertions;
+using PoEGamblingHelper.Domain.Entity;
 
-namespace Domain.Test.Entity;
+namespace PoEGamblingHelper.Domain.Test.Entity;
 
 public class TempleCostTest
 {

@@ -1,14 +1,14 @@
-using System.Globalization;
+﻿using System.Globalization;
 using Blazored.LocalStorage;
 using Blazored.Toast;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Web;
-using Web.Services.Implementations;
-using Web.Services.Interfaces;
+using PoEGamblingHelper.Web;
+using PoEGamblingHelper.Web.Services.Implementations;
+using PoEGamblingHelper.Web.Services.Interfaces;
 
-Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
-CultureInfo.DefaultThreadCurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
+Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");

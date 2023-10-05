@@ -1,6 +1,6 @@
-﻿using Web.Services.Implementations;
+﻿using PoEGamblingHelper.Web.Services.Implementations;
 
-namespace Web.Services.Interfaces;
+namespace PoEGamblingHelper.Web.Services.Interfaces;
 
 public interface IUpdateService : IAsyncDisposable
 {
