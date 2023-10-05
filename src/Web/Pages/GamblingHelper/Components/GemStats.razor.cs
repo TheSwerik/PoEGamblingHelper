@@ -39,7 +39,8 @@ public partial class GemStats
         }
 
         var resultGem = GemData.Gems
-                               .Where(gem => gem.GemLevel == GemData.MaxLevel() + resultCase.Value.LevelModifier())
+                               .Where(gem => gem.Corrupted &&
+                                             gem.GemLevel == GemData.MaxLevel() + resultCase.Value.LevelModifier())
                                .MinBy(gem => gem.ChaosValue);
         if (resultGem is not null) return resultGem.TradeUrl(CurrentLeague);
 
