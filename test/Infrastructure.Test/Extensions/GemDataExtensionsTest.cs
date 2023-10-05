@@ -21,7 +21,7 @@ public class GemDataExtensionsTest
                        new(1, enlighten, enlightenIcon, 2, 2, false, "", 1, 1, 1, 1),
                        new(2, empower, empowerIcon, 3, 3, false, "", 1, 1, 1, 1),
                        new(3, empower, empowerIcon, 4, 4, false, "", 1, 1, 1, 1),
-                       new(4, enlighten, enlightenIcon, 5, 5, false, "", 1, 1, 1, 1),
+                       new(4, enlighten, enlightenIcon, 5, 5, false, "", 1, 1, 1, 1)
                    };
         var group = list.GroupBy(p => p.Name).First();
         var gemTradeData = new List<GemTradeData>
@@ -55,7 +55,7 @@ public class GemDataExtensionsTest
                        new(1, enlighten, enlightenIcon, 2, 2, false, "", 1, 1, 1, 1),
                        new(2, empower, empowerIcon, 3, 3, false, "", 1, 1, 1, 1),
                        new(3, empower, empowerIcon, 4, 4, false, "", 1, 1, 1, 1),
-                       new(4, enlighten, enlightenIcon, 5, 5, false, "", 1, 1, 1, 1),
+                       new(4, enlighten, enlightenIcon, 5, 5, false, "", 1, 1, 1, 1)
                    };
         var group = list.GroupBy(p => p.Name).First();
         var gemTradeData = new List<GemTradeData>

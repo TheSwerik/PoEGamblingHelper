@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Blazored.LocalStorage;
+﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
 using PoEGamblingHelper.Application.Extensions;
 using PoEGamblingHelper.Domain.Entity;
@@ -44,18 +43,11 @@ public partial class GemStats
                                .MinBy(gem => gem.ChaosValue);
         if (resultGem is not null) return resultGem.TradeUrl(CurrentLeague);
 
-        var levelModifier = resultCase switch
-                            {
-                                ResultCase.Worst => -1,
-                                ResultCase.Middle => 0,
-                                ResultCase.Best => 1,
-                                _ => throw new UnreachableException()
-                            };
         var urlGem = new GemTradeData
                      {
                          Name = gemData.Name,
                          Corrupted = true,
-                         GemLevel = gemData.MaxLevel() + levelModifier,
+                         GemLevel = gemData.MaxLevel() + resultCase.Value.LevelModifier(),
                          GemQuality = 0
                      };
         return urlGem.TradeUrl(CurrentLeague);
