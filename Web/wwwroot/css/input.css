@@ -1,0 +1,68 @@
+﻿/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.input-addon {
+    border-left: solid 2px black !important;
+    border-radius: 10px 0 !important;
+    margin-left: -1rem !important;
+    padding: 0.5rem;
+    z-index: 95 !important;
+}
+
+input, .dropdown-toggle {
+    background-color: var(--bs-primary) !important;
+    border-radius: 10px 0 !important;
+    border: none !important;
+    height: 2.2rem;
+    max-height: 2.2rem;
+    text-align: right;
+    padding-right: 1.5rem !important;
+}
+
+.dropdown-toggle {
+    font-size: 1rem;
+    font-weight: normal;
+}
+
+.dropdown-toggle img, .dropdown-item img {
+    height: 1.75rem;
+}
+
+.dropdown-menu, .dropdown-menu li, .dropdown-item {
+    width: 100%;
+    background-color: var(--bs-primary) !important;
+    border: none !important;
+    height: 2.2rem;
+    max-height: 2.2rem;
+    font-size: 1rem;
+    font-weight: normal;
+}
+
+input:hover, input:focus, input:active,
+.dropdown-toggle:hover, .dropdown-toggle:focus, .dropdown-toggle:active,
+.dropdown-item:hover, .dropdown-item:focus, .dropdown-item:active {
+    background-color: var(--bs-primary) !important;
+    filter: brightness(90%) !important;
+    box-shadow: none !important;
+}
+
+label {
+    --bs-body-color: var(--bs-secondary);
+    color: var(--bs-body-color);
+    font-weight: 700;
+}
+
+.form-control {
+    background-color: var(--bs-primary);
+    border: none;
+    border-radius: 15px 0;
+}

@@ -1,0 +1,17 @@
+﻿@font-face {
+    font-family: fontin;
+    src: url(fontin/Fontin-Regular.ttf) format('truetype'), url(fontin/Fontin-Regular.otf) format('opentype');
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: fontin;
+    src: url(fontin/Fontin-Bold.ttf) format('truetype'), url(fontin/Fontin-Bold.otf) format('opentype');
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: fontin;
+    src: url(fontin/Fontin-Italic.ttf) format('truetype'), url(fontin/Fontin-Italic.otf) format('opentype');
+    font-style: italic;
+}

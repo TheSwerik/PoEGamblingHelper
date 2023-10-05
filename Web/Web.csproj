@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Blazored.LocalStorage" Version="4.4.0"/>
+        <PackageReference Include="Blazored.Toast" Version="4.1.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.0-rc.1.23421.29"/>
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.0-rc.1.23421.29" PrivateAssets="all"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\src\Application\Application.csproj"/>
+        <ProjectReference Include="..\src\Domain\Domain.csproj"/>
+    </ItemGroup>
+
+    <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+        <Exec Command="yarn" WorkingDirectory="JavaScript" EnvironmentVariables="FORCE_COLOR=0"/>
+        <Exec Command="yarn build-dev" WorkingDirectory="JavaScript" Condition="$(Configuration) == Debug"/>
+        <Exec Command="yarn build" WorkingDirectory="JavaScript" Condition="$(Configuration) == Release"/>
+    </Target>
+
+</Project>
