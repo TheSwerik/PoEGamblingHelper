@@ -6,7 +6,7 @@ using PoEGamblingHelper.Infrastructure;
 using PoEGamblingHelper.Infrastructure.Database;
 
 #if DEBUG
-Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
+Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
 #endif
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,19 +21,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddInfrastructureServices(builder.Configuration);
-
-// builder.Services.AddHostedService<InitService>(
-//     opt => new InitService(
-//         opt.GetRequiredService<ILogger<InitService>>(),
-//         opt.GetRequiredService<IDataFetchService>(),
-//         opt.GetRequiredService<IOutputCacheStore>(),
-//         TimeSpan.FromMinutes(builder.Configuration.GetValue<int>("FetchInterval")),
-//         builder.Configuration.GetValue<string>("CacheTag")!,
-//         opt.GetRequiredService<IApplicationDbContextFactory>(),
-//         opt.GetRequiredService<ILeagueService>(),
-//         opt.GetRequiredService<IAnalyticsService>()
-//     )
-// );
 
 var app = builder.Build();
 

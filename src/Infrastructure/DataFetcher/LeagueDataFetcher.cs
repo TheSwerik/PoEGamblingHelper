@@ -10,7 +10,8 @@ using PoEGamblingHelper.Infrastructure.Database;
 
 namespace PoEGamblingHelper.Infrastructure.DataFetcher;
 
-public class LeagueDataFetcher(ILogger logger,
+// ReSharper disable once SuggestBaseTypeForParameterInConstructor
+public class LeagueDataFetcher(ILogger<TempleDataFetcher> logger,
                                IDbContextFactory<ApplicationDbContext> applicationDbContextFactory)
     : ILeagueDataFetcher
 {

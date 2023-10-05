@@ -8,7 +8,8 @@ using PoEGamblingHelper.Infrastructure.Database;
 
 namespace PoEGamblingHelper.Infrastructure.DataFetcher;
 
-public class TempleDataFetcher(ILogger logger,
+// ReSharper disable once SuggestBaseTypeForParameterInConstructor
+public class TempleDataFetcher(ILogger<TempleDataFetcher> logger,
                                IDbContextFactory<ApplicationDbContext> applicationDbContextFactory,
                                IHttpClientFactory httpClientFactory) : IDataFetcher
 {

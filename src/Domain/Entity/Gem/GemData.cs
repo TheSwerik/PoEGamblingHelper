@@ -10,6 +10,6 @@ namespace PoEGamblingHelper.Domain.Entity.Gem;
 public class GemData : Entity<Guid>
 {
     public string Name { get; set; } = string.Empty;
-    public string Icon { get; set; } = string.Empty;
+    public string? Icon { get; set; }
     public IList<GemTradeData> Gems { get; set; } = new List<GemTradeData>();
 }

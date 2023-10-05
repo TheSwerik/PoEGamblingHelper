@@ -9,7 +9,8 @@ using PoEGamblingHelper.Infrastructure.Extensions;
 
 namespace PoEGamblingHelper.Infrastructure.DataFetcher;
 
-public class GemDataFetcher(ILogger logger,
+// ReSharper disable once SuggestBaseTypeForParameterInConstructor
+public class GemDataFetcher(ILogger<GemDataFetcher> logger,
                             IDbContextFactory<ApplicationDbContext> applicationDbContextFactory,
                             IHttpClientFactory httpClientFactory) : IDataFetcher
 {

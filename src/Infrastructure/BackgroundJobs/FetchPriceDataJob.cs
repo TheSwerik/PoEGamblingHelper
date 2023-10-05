@@ -10,7 +10,8 @@ using PoEGamblingHelper.Infrastructure.DataFetcher;
 
 namespace PoEGamblingHelper.Infrastructure.BackgroundJobs;
 
-public class FetchPriceDataJob(ILogger logger,
+// ReSharper disable once SuggestBaseTypeForParameterInConstructor
+public class FetchPriceDataJob(ILogger<FetchPriceDataJob> logger,
                                IOutputCacheStore cache,
                                ILeagueRepository leagueRepository,
                                IConfiguration configuration,

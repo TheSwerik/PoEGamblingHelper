@@ -9,9 +9,11 @@ using PoEGamblingHelper.Infrastructure.Database;
 
 namespace PoEGamblingHelper.Infrastructure.DataFetcher;
 
-public class CurrencyDataFetcher(ILogger logger,
+// ReSharper disable once SuggestBaseTypeForParameterInConstructor
+public class CurrencyDataFetcher(ILogger<CurrencyDataFetcher> logger,
                                  IDbContextFactory<ApplicationDbContext> applicationDbContextFactory,
-                                 IHttpClientFactory httpClientFactory) : IDataFetcher
+                                 IHttpClientFactory httpClientFactory)
+    : IDataFetcher
 {
     public async Task Fetch(League league)
     {
