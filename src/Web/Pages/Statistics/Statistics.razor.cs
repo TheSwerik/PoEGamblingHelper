@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components;
 using PoEGamblingHelper.Web.Services.Interfaces;
 
-namespace PoEGamblingHelper.Web.Pages.Stats;
+namespace PoEGamblingHelper.Web.Pages.Statistics;
 
-public partial class Stats : IDisposable
+public partial class Statistics : IDisposable
 {
     private readonly int[] _data = { Random.Shared.Next(10000), Random.Shared.Next(10000), Random.Shared.Next(10000) };
     private bool _isMyAccountSelected = true;
