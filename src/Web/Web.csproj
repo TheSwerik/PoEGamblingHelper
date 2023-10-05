@@ -18,6 +18,19 @@
         <ProjectReference Include="..\Domain\Domain.csproj"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <AdditionalFiles Include="Shared\Layout\Components\Footer.razor"/>
+        <AdditionalFiles Include="Shared\Layout\Components\Navbar.razor"/>
+        <AdditionalFiles Include="Shared\Layout\Components\Theme.razor"/>
+        <AdditionalFiles Include="Shared\Layout\MainLayout.razor"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <_ContentIncludedByDefault Remove="Shared\Components\Footer.razor"/>
+        <_ContentIncludedByDefault Remove="Shared\Components\Navbar.razor"/>
+        <_ContentIncludedByDefault Remove="Shared\Components\Theme.razor"/>
+    </ItemGroup>
+
     <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
         <Exec Command="yarn" WorkingDirectory="JavaScript" EnvironmentVariables="FORCE_COLOR=0"/>
         <Exec Command="yarn build-dev" WorkingDirectory="JavaScript" Condition="$(Configuration) == Debug"/>
