@@ -1,7 +1,7 @@
 ﻿using Microsoft.JSInterop;
-using Web.Services.Interfaces;
+using PoEGamblingHelper.Web.Services.Interfaces;
 
-namespace Web.Services.Implementations;
+namespace PoEGamblingHelper.Web.Services.Implementations;
 
 public class ScrollInfoService : IScrollInfoService, IDisposable
 {

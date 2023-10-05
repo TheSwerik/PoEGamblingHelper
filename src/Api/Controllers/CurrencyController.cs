@@ -1,29 +1,14 @@
-using Application.Services;
-using Domain.Entity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
+using PoEGamblingHelper.Application.Repositories;
+using PoEGamblingHelper.Domain.Entity;
+using PoEGamblingHelper.Infrastructure;
 
-namespace Api.Controllers;
+namespace PoEGamblingHelper.Api.Controllers;
 
-public class CurrencyController : ApiControllerBase
+public class CurrencyController(ICurrencyRepository currencyRepository) : ApiControllerBase
 {
-    private readonly IAnalyticsService _analyticsService;
-    private readonly IApplicationDbContextFactory _applicationDbContextFactory;
-
-    public CurrencyController(IApplicationDbContextFactory applicationDbContextFactory,
-                              IAnalyticsService analyticsService)
-    {
-        _applicationDbContextFactory = applicationDbContextFactory;
-        _analyticsService = analyticsService;
-    }
-
     [HttpGet]
-    [OutputCache(PolicyName = "FetchData")]
-    public async IAsyncEnumerable<Currency> GetAll()
-    {
-        await _analyticsService.AddView(Request.GetRealIpAddress());
-        using var applicationDbContext = _applicationDbContextFactory.CreateDbContext();
-        await foreach (var item in applicationDbContext.Currency.AsAsyncEnumerable().ConfigureAwait(false))
-            yield return item;
-    }
+    [OutputCache(PolicyName = Constants.DataFetcherCacheTag)]
+    public IAsyncEnumerable<Currency> GetAll() { return currencyRepository.GetAll(); }
 }

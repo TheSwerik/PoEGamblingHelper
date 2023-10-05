@@ -1,4 +1,4 @@
-﻿namespace Web.Services.Interfaces;
+﻿namespace PoEGamblingHelper.Web.Services.Interfaces;
 
 public interface IScrollInfoService
 {

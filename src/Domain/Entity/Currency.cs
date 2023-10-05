@@ -1,6 +1,6 @@
-﻿using Domain.Entity.Abstract;
+﻿using PoEGamblingHelper.Domain.Entity.Abstract;
 
-namespace Domain.Entity;
+namespace PoEGamblingHelper.Domain.Entity;
 
 public class Currency : Entity<string>
 {

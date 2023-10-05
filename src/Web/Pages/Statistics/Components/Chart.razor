@@ -1,0 +1,23 @@
+﻿<canvas id="chart" style="@style" class="test"></canvas>
+
+@code {
+
+    [Inject]
+    private IJSRuntime JsRuntime { get; set; } = null!;
+
+    [Parameter]
+    // ReSharper disable once InconsistentNaming
+    public string style { get; set; } = "";
+
+    [Parameter]
+    public IEnumerable<int> Data { get; set; } = null!;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JsRuntime.InvokeVoidAsync("showChart", Data);
+        }
+    }
+
+}
