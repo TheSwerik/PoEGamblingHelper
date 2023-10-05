@@ -39,21 +39,13 @@ public static class ServiceCollectionExtensions
 
     private static void AddDatabase(this IServiceCollection services, IConfiguration configuration)
     {
-        if (configuration.GetValue<bool>("UseInMemoryDatabase"))
-        {
-            services.AddDbContextFactory<ApplicationDbContext>(
-                options => options.UseInMemoryDatabase("PoEGamblingHelper"));
-        }
-        else
-        {
-            var connectionString = configuration.GetConnectionString("DBConnection")
-                                   + $"Password={configuration["POSTGRES_PASSWORD"]};";
-            var assemblyName = typeof(ApplicationDbContext).Assembly.FullName;
-            services.AddDbContextFactory<ApplicationDbContext>(opt => opt.UseNpgsql(
-                                                                   connectionString,
-                                                                   builder => builder.MigrationsAssembly(assemblyName)
-                                                               ));
-        }
+        var connectionString = configuration.GetConnectionString("DBConnection")
+                               + $"Password={configuration["POSTGRES_PASSWORD"]};";
+        var assemblyName = typeof(ApplicationDbContext).Assembly.FullName;
+        services.AddDbContextFactory<ApplicationDbContext>(opt => opt.UseNpgsql(
+                                                               connectionString,
+                                                               builder => builder.MigrationsAssembly(assemblyName)
+                                                           ));
     }
 
     private static void AddBackgroundJobs(this IServiceCollection services)
