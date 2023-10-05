@@ -18,7 +18,7 @@ public class FetchPriceDataJobTest
     {
         #region Creation
 
-        var logger = new Mock<ILogger>();
+        var logger = new Mock<ILogger<FetchPriceDataJob>>();
         var cache = new Mock<IOutputCacheStore>();
         var leagueRepository = new Mock<ILeagueRepository>();
         var currencyDataFetcher = new Mock<IDataFetcher>();

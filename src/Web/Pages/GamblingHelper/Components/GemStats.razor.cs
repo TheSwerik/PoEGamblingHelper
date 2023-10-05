@@ -5,9 +5,9 @@ using PoEGamblingHelper.Application.Extensions;
 using PoEGamblingHelper.Domain.Entity;
 using PoEGamblingHelper.Domain.Entity.Gem;
 using PoEGamblingHelper.Web.Extensions;
-using PoEGamblingHelper.Web.Shared.Model;
+using PoEGamblingHelper.Web.Pages.GamblingHelper.Components.Filter;
 
-namespace PoEGamblingHelper.Web.Shared.Components;
+namespace PoEGamblingHelper.Web.Pages.GamblingHelper.Components;
 
 public partial class GemStats
 {
@@ -17,12 +17,12 @@ public partial class GemStats
 
     [Parameter] public TempleCost TempleCost { get; set; } = null!;
 
-    [Parameter] public FilterValues FilterValues { get; set; } = null!;
+    [Parameter] public FilterModel FilterModel { get; set; } = null!;
 
     [Parameter] public League CurrentLeague { get; set; } = null!;
     [Inject] private ILocalStorageService LocalStorage { get; set; } = default!;
 
-    private decimal FilterTempleCost() { return FilterValues.TempleCost ?? TempleCost.AverageChaosValue(); }
+    private decimal FilterTempleCost() { return FilterModel.TempleCost ?? TempleCost.AverageChaosValue(); }
 
     private string TradeUrl(GemData gemData, ResultCase? resultCase = null)
     {
@@ -64,8 +64,8 @@ public partial class GemStats
 
     private decimal CurrencyValue()
     {
-        return FilterValues.CurrencyValue
-               ?? FilterValues.Currency?.ChaosEquivalent
+        return FilterModel.CurrencyValue
+               ?? FilterModel.Currency?.ChaosEquivalent
                ?? 1;
     }
 

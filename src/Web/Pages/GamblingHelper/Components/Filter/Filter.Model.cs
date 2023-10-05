@@ -1,9 +1,9 @@
 ﻿using PoEGamblingHelper.Application.QueryParameters;
 using PoEGamblingHelper.Domain.Entity;
 
-namespace PoEGamblingHelper.Web.Shared.Model;
+namespace PoEGamblingHelper.Web.Pages.GamblingHelper.Components.Filter;
 
-public class FilterValues
+public class FilterModel
 {
     public string Gem { get; set; } = string.Empty;
     public Sort Sort { get; set; } = Sort.AverageProfitPerTryDesc;

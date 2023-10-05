@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using PoEGamblingHelper.Application.QueryParameters;
-using PoEGamblingHelper.Web.Shared.Model;
+using PoEGamblingHelper.Web.Pages.GamblingHelper.Components.Filter;
 
 namespace PoEGamblingHelper.Web.Test.Shared.Model;
 
@@ -9,7 +9,7 @@ public class FilterValuesTest
     [Fact]
     public void ToQuery()
     {
-        var source = new FilterValues
+        var source = new FilterModel
                      {
                          Gem = "Empower Support",
                          Sort = Sort.CostPerTryDesc,

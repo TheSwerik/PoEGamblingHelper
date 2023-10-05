@@ -4,9 +4,8 @@ using Microsoft.AspNetCore.Components;
 using PoEGamblingHelper.Application.QueryParameters;
 using PoEGamblingHelper.Domain.Entity;
 using PoEGamblingHelper.Web.Extensions;
-using PoEGamblingHelper.Web.Shared.Model;
 
-namespace PoEGamblingHelper.Web.Shared.Components;
+namespace PoEGamblingHelper.Web.Pages.GamblingHelper.Components.Filter;
 
 public partial class Filter : ComponentBase
 {
@@ -14,8 +13,8 @@ public partial class Filter : ComponentBase
         { "mirror-of-kalandra", "mirror-shard", "chaos-orb", "divine-orb" };
 
     [Parameter] public TempleCost TempleCost { get; set; } = null!;
-    [Parameter] public FilterValues FilterValues { get; set; } = null!;
-    [Parameter] public EventCallback<FilterValues> OnFilterValuesChanged { get; set; }
+    [Parameter] public FilterModel FilterModel { get; set; } = null!;
+    [Parameter] public EventCallback<FilterModel> OnFilterValuesChanged { get; set; }
     [Parameter] public League CurrentLeague { get; set; } = null!;
     [Parameter] public List<Currency> Currency { get; set; } = new();
     [Inject] private ILocalStorageService LocalStorage { get; set; } = default!;
@@ -23,26 +22,26 @@ public partial class Filter : ComponentBase
     private bool FiltersExpanded { get; set; }
 
     private bool IsChaosSelected =>
-        FilterValues.Currency is not null &&
-        FilterValues.Currency.Name.Equals("chaos orb", StringComparison.InvariantCultureIgnoreCase);
+        FilterModel.Currency is not null &&
+        FilterModel.Currency.Name.Equals("chaos orb", StringComparison.InvariantCultureIgnoreCase);
 
     private async Task SaveFilterValues()
     {
-        await OnFilterValuesChanged.InvokeAsync(FilterValues);
-        await LocalStorage.SetItemAsync("GemDataQuery", FilterValues);
+        await OnFilterValuesChanged.InvokeAsync(FilterModel);
+        await LocalStorage.SetItemAsync("GemDataQuery", FilterModel);
     }
 
     private string TempleCostString()
     {
-        var templeCost = FilterValues.TempleCost ?? TempleCost.AverageChaosValue();
+        var templeCost = FilterModel.TempleCost ?? TempleCost.AverageChaosValue();
         return CurrencyValue(templeCost);
     }
 
     private string CurrencyValueString()
     {
-        return FilterValues.CurrencyValue is null && FilterValues.Currency is not null
-                   ? ToStringOrBlank(FilterValues.Currency.ChaosEquivalent)
-                   : ToStringOrBlank(FilterValues.CurrencyValue);
+        return FilterModel.CurrencyValue is null && FilterModel.Currency is not null
+                   ? ToStringOrBlank(FilterModel.Currency.ChaosEquivalent)
+                   : ToStringOrBlank(FilterModel.CurrencyValue);
     }
 
     private void ToggleFilters() { FiltersExpanded = !FiltersExpanded; }
@@ -95,13 +94,13 @@ public partial class Filter : ComponentBase
 
     private string CurrencyName()
     {
-        if (FilterValues.Currency is null || IsChaosSelected) return "";
-        return $"Chaos per {FilterValues.Currency.Name}";
+        if (FilterModel.Currency is null || IsChaosSelected) return "";
+        return $"Chaos per {FilterModel.Currency.Name}";
     }
 
     private decimal ConversionRatio()
     {
-        return FilterValues.CurrencyValue ?? FilterValues.Currency?.ChaosEquivalent ?? 1;
+        return FilterModel.CurrencyValue ?? FilterModel.Currency?.ChaosEquivalent ?? 1;
     }
 
     #region Update Callback
@@ -109,41 +108,41 @@ public partial class Filter : ComponentBase
     private async Task UpdateTempleCost(ChangeEventArgs args)
     {
         if (args.Value is null || !decimal.TryParse(args.Value.ToString(), out var value)) return;
-        FilterValues.TempleCost = value * ConversionRatio();
+        FilterModel.TempleCost = value * ConversionRatio();
         await SaveFilterValues();
     }
 
     private async Task UpdateCurrencyValueChanged(ChangeEventArgs args)
     {
         if (args.Value is null || !decimal.TryParse(args.Value.ToString(), out var value)) return;
-        FilterValues.CurrencyValue = value;
+        FilterModel.CurrencyValue = value;
         await SaveFilterValues();
     }
 
     private async Task UpdateGemSearchText(ChangeEventArgs args)
     {
         if (args.Value?.ToString() is null) return;
-        FilterValues.Gem = args.Value.ToString()!;
+        FilterModel.Gem = args.Value.ToString()!;
         await SaveFilterValues();
     }
 
     private async Task UpdatePricePerTryFrom(ChangeEventArgs args)
     {
         if (args.Value is null || !decimal.TryParse(args.Value.ToString(), out var value)) return;
-        FilterValues.PricePerTryFrom = value * ConversionRatio();
+        FilterModel.PricePerTryFrom = value * ConversionRatio();
         await SaveFilterValues();
     }
 
     private async Task UpdatePricePerTryTo(ChangeEventArgs args)
     {
         if (args.Value is null || !decimal.TryParse(args.Value.ToString(), out var value)) return;
-        FilterValues.PricePerTryTo = value * ConversionRatio();
+        FilterModel.PricePerTryTo = value * ConversionRatio();
         await SaveFilterValues();
     }
 
     private async Task UpdateGemType(GemType gemType)
     {
-        FilterValues.GemType = gemType;
+        FilterModel.GemType = gemType;
         await SaveFilterValues();
     }
 
@@ -151,28 +150,28 @@ public partial class Filter : ComponentBase
     {
         var currency = Currency.FirstOrDefault(currency => currency.Id.Equals(id));
         if (currency is null) return;
-        FilterValues.Currency = currency;
-        FilterValues.CurrencyValue = null;
+        FilterModel.Currency = currency;
+        FilterModel.CurrencyValue = null;
         await SaveFilterValues();
     }
 
     private async Task UpdateShowAlternateQuality(ChangeEventArgs args)
     {
         if (args.Value is null || !bool.TryParse(args.Value.ToString(), out var value)) return;
-        FilterValues.ShowAlternateQuality = value;
+        FilterModel.ShowAlternateQuality = value;
         await SaveFilterValues();
     }
 
     private async Task UpdateOnlyShowProfitable(ChangeEventArgs args)
     {
         if (args.Value is null || !bool.TryParse(args.Value.ToString(), out var value)) return;
-        FilterValues.OnlyShowProfitable = value;
+        FilterModel.OnlyShowProfitable = value;
         await SaveFilterValues();
     }
 
     private async Task UpdateSort(Sort sort)
     {
-        FilterValues.Sort = sort;
+        FilterModel.Sort = sort;
         await SaveFilterValues();
     }
 
@@ -182,26 +181,26 @@ public partial class Filter : ComponentBase
 
     private async void ResetTempleCost()
     {
-        FilterValues.TempleCost = null;
+        FilterModel.TempleCost = null;
         await SaveFilterValues();
     }
 
     private async void ResetCurrencyValue()
     {
-        FilterValues.CurrencyValue = null;
+        FilterModel.CurrencyValue = null;
         await SaveFilterValues();
     }
 
     private async void ResetGemSearch()
     {
-        FilterValues.Gem = string.Empty;
+        FilterModel.Gem = string.Empty;
         await SaveFilterValues();
     }
 
     private async void ResetCostFilter()
     {
-        FilterValues.PricePerTryFrom = null;
-        FilterValues.PricePerTryTo = null;
+        FilterModel.PricePerTryFrom = null;
+        FilterModel.PricePerTryTo = null;
         await SaveFilterValues();
     }
 

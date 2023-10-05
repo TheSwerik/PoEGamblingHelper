@@ -14,7 +14,7 @@ public class FetchLeagueJobTest
     [Fact]
     public async Task FetchCurrentLeagueTest()
     {
-        var logger = new Mock<ILogger>();
+        var logger = new Mock<ILogger<FetchLeagueJob>>();
         var dataFetchService = new Mock<ILeagueDataFetcher>();
         var configuration = new Mock<IConfiguration>();
         configuration.Setup(c => c.GetSection("BackgroundJobIntervals")).Returns(new MockConfigurationSection());

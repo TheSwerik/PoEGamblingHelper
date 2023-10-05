@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using PoEGamblingHelper.Web.Pages.GamblingHelper.Components.Filter
 
 <PageTitle>Gambling Helper</PageTitle>
 
@@ -11,7 +12,7 @@
     </div>
     <h1 class="mb-5">GAMBLING HELPER</h1>
 
-    <Filter TempleCost="_templeCost" FilterValues="_filterValues" OnFilterValuesChanged="OnFilterValuesChanged" CurrentLeague="_currentLeague" Currency="_currency"/>
+    <Filter TempleCost="_templeCost" FilterModel="_filterModel" OnFilterValuesChanged="OnFilterValuesChanged" CurrentLeague="_currentLeague" Currency="_currency"/>
 
     @if (UpdateService.IsUpdating() || _firstLoad)
     {
@@ -25,14 +26,15 @@
         <div class="container d-flex flex-wrap p-0 justify-content-between">
             @foreach (var gem in _gems)
             {
-                <GemStats GemData="gem" TempleCost="_templeCost" FilterValues="_filterValues" CurrentLeague="_currentLeague"/>
+                <GemStats GemData="@gem" TempleCost="@_templeCost" FilterModel="@_filterModel" CurrentLeague="@_currentLeague"/>
+                <testtest></testtest>
             }
         </div>
-        @if (!_isOnLastPage)
-        {
-            <div class="spinner-border mb-5" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-        }
+        @* @if (!_isOnLastPage) *@
+        @* { *@
+        @*     <div class="spinner-border mb-5" role="status"> *@
+        @*         <span class="visually-hidden">Loading...</span> *@
+        @*     </div> *@
+        @* } *@
     }
 </div>

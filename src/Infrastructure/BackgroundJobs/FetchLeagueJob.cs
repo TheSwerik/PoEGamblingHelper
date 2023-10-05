@@ -6,7 +6,7 @@ using PoEGamblingHelper.Infrastructure.DataFetcher;
 namespace PoEGamblingHelper.Infrastructure.BackgroundJobs;
 
 // ReSharper disable once SuggestBaseTypeForParameterInConstructor
-public class FetchLeagueJob(ILogger<FetchPriceDataJob> logger,
+public class FetchLeagueJob(ILogger<FetchLeagueJob> logger,
                             ILeagueDataFetcher leagueDataFetcher,
                             IConfiguration configuration)
     : BackgroundJob(configuration)
