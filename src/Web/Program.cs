@@ -7,8 +7,8 @@ using PoEGamblingHelper.Web;
 using PoEGamblingHelper.Web.Services.Implementations;
 using PoEGamblingHelper.Web.Services.Interfaces;
 
-Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
-CultureInfo.DefaultThreadCurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
+Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
