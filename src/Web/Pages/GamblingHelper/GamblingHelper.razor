@@ -1,5 +1,7 @@
 ﻿@page "/"
 @using PoEGamblingHelper.Web.Pages.GamblingHelper.Components.Filter
+@using PoEGamblingHelper.Web.Shared.Util
+@using PoEGamblingHelper.Web.Pages.GamblingHelper.Components
 
 <PageTitle>Gambling Helper</PageTitle>
 
@@ -27,14 +29,13 @@
             @foreach (var gem in _gems)
             {
                 <GemStats GemData="@gem" TempleCost="@_templeCost" FilterModel="@_filterModel" CurrentLeague="@_currentLeague"/>
-                <testtest></testtest>
             }
         </div>
-        @* @if (!_isOnLastPage) *@
-        @* { *@
-        @*     <div class="spinner-border mb-5" role="status"> *@
-        @*         <span class="visually-hidden">Loading...</span> *@
-        @*     </div> *@
-        @* } *@
+        @if (!_isOnLastPage)
+        {
+            <div class="spinner-border mb-5" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        }
     }
 </div>

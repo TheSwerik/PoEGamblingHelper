@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using PoEGamblingHelper.Web.Services.Interfaces;
 
-namespace PoEGamblingHelper.Web.Pages;
+namespace PoEGamblingHelper.Web.Pages.Stats;
 
 public partial class Stats : IDisposable
 {
