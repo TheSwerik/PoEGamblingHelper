@@ -12,7 +12,7 @@ jobs:
     - name: Setup .NET Core SDK
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 7.0.100
+        dotnet-version: 8.0.100
         
     - name: Tests
       run: dotnet test
