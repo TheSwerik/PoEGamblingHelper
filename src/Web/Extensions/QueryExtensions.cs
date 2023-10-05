@@ -1,5 +1,4 @@
-﻿using System.Text.RegularExpressions;
-using System.Web;
+﻿using System.Web;
 using PoEGamblingHelper.Application.QueryParameters;
 using PoEGamblingHelper.Domain.Entity;
 using PoEGamblingHelper.Domain.Entity.Gem;
@@ -60,6 +59,7 @@ public static class QueryExtensions
         var corruptedText = $"""
                              "corrupted": {gemTradeData.Corrupted.ToString().ToLower()}
                              """;
+        Console.WriteLine(gemTradeData.Corrupted);
 
         var minGemLevel = accurateLevel ? gemTradeData.GemLevel : int.MinValue;
         var maxGemLevel = accurateLevel ? gemTradeData.GemLevel : int.MaxValue;
@@ -78,23 +78,22 @@ public static class QueryExtensions
                                           : $$""","gem_alternate_quality": {"option": "{{gemAlternateQuality}}"},""";
 
 
-        return Regex.Replace("(\"(?:[^\"\\\\]|\\\\.)*\")|\\s+",
-                             $$"""
-                               {
-                                   "query": {
-                                    "filters": {
-                                        "misc_filters": {
-                                            "filters": {
-                                               {{corruptedText}}
-                                               {{levelText}}
-                                               {{gemAlternateQualityText}}
-                                               {{qualityText}}
-                                               }
-                                        }
-                                    },
-                                    "type": "{{HttpUtility.UrlPathEncode(name)}}"
-                                   }
-                               }
-                               """, "$1");
+        return $$"""
+                 {
+                    "query": {
+                      "filters": {
+                          "misc_filters": {
+                              "filters": {
+                                  {{corruptedText}}
+                                  {{levelText}}
+                                  {{gemAlternateQualityText}}
+                                  {{qualityText}}
+                              }
+                          }
+                      },
+                      "type": "{{HttpUtility.UrlPathEncode(name)}}"
+                    }
+                 }
+                 """.ToQueryUrl();
     }
 }

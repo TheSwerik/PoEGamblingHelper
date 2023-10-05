@@ -4,7 +4,7 @@ namespace PoEGamblingHelper.Application.Extensions;
 
 public static class GemDataExtensions
 {
-    public static int LevelModifier(this ResultCase resultCase) { return (int)resultCase - 1; }
+    public static int LevelModifier(this ResultCase resultCase) { return (int)resultCase; }
 
     public static decimal AvgProfitPerTry(this GemData gemData,
                                           decimal? rawCost = null,

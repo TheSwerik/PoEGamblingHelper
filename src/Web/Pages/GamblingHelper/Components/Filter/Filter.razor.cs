@@ -1,5 +1,4 @@
-﻿using System.Text.RegularExpressions;
-using Blazored.LocalStorage;
+﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
 using PoEGamblingHelper.Application.QueryParameters;
 using PoEGamblingHelper.Domain.Entity;
@@ -61,28 +60,27 @@ public partial class Filter : ComponentBase
         const string poeTradeUrl = "https://www.pathofexile.com/trade/search";
         const string queryKey = "?q=";
 
-        var query = Regex.Replace("(\"(?:[^\"\\\\]|\\\\.)*\")|\\s+",
-                                  """
+        var query = """
+                    {
+                        "query":{
+                            "stats":[
                                   {
-                                      "query":{
-                                          "stats":[
-                                                {
-                                                  "type":"and",
-                                                  "filters":[
-                                                      {
-                                                          "id":"pseudo.pseudo_temple_gem_room_3",
-                                                          "value":{
-                                                            "option":1
-                                                          },
-                                                          "disabled":false
-                                                      }
-                                                    ]
-                                                }
-                                          ],
-                                          "type": "Chronicle of Atzoatl"
-                                      }
+                                    "type":"and",
+                                    "filters":[
+                                        {
+                                            "id":"pseudo.pseudo_temple_gem_room_3",
+                                            "value":{
+                                              "option":1
+                                            },
+                                            "disabled":false
+                                        }
+                                      ]
                                   }
-                                  """, "$1");
+                            ],
+                            "type": "Chronicle of Atzoatl"
+                        }
+                    }
+                    """.ToQueryUrl();
         return $"{poeTradeUrl}/{CurrentLeague.Name}{queryKey}{query}";
     }
 

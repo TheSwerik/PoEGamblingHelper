@@ -2,7 +2,7 @@
 
 public enum ResultCase
 {
-    Worst,
-    Middle,
-    Best
+    Worst = -1,
+    Middle = 0,
+    Best = 1
 }

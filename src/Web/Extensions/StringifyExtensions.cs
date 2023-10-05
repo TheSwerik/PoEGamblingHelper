@@ -1,9 +1,10 @@
 ﻿using System.Diagnostics;
+using System.Text.RegularExpressions;
 using PoEGamblingHelper.Application.QueryParameters;
 
 namespace PoEGamblingHelper.Web.Extensions;
 
-public static class StringifyExtensions
+public static partial class StringifyExtensions
 {
     public static string Percent(this double value) { return $"{value * 100:0.##}%"; }
 
@@ -33,4 +34,8 @@ public static class StringifyExtensions
                    _ => throw new UnreachableException(nameof(GemType))
                };
     }
+
+    public static string ToQueryUrl(this string input) { return QueryUrlRegex().Replace(input, "$1"); }
+
+    [GeneratedRegex("(\"(?:[^\"\\\\]|\\\\.)*\")|\\s+")] private static partial Regex QueryUrlRegex();
 }
