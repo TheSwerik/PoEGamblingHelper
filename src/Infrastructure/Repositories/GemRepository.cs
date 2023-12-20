@@ -10,15 +10,16 @@ using PoEGamblingHelper.Infrastructure.Database;
 
 namespace PoEGamblingHelper.Infrastructure.Repositories;
 
-public partial class GemRepository(IDbContextFactory<ApplicationDbContext> dbContextFactory,
-                                   ITempleRepository templeRepository)
+public partial class GemRepository(
+    IDbContextFactory<ApplicationDbContext> dbContextFactory,
+    ITempleRepository templeRepository)
     : IGemRepository
 {
     public Page<GemData> Search(GemDataQuery? query, PageRequest page)
     {
         return query is null
-                   ? GetAll(page)
-                   : GeneratePage(FilterGemData(query), page);
+            ? GetAll(page)
+            : GeneratePage(FilterGemData(query), page);
     }
 
     private Page<GemData> GetAll(PageRequest page)
@@ -47,11 +48,6 @@ public partial class GemRepository(IDbContextFactory<ApplicationDbContext> dbCon
 
     private static string PreFilterSqlQuery(GemDataQuery query)
     {
-        const string isAlternateQuality = """
-                                                 (LOWER("Name") LIKE 'anomalous%'
-                                                 OR LOWER("Name") LIKE 'divergent%'
-                                                 OR LOWER("Name") LIKE 'phantasmal%')
-                                          """;
         const string isVaal = """LOWER("Name") LIKE 'vaal%' """;
 
         const string isExceptional = """
@@ -74,7 +70,6 @@ public partial class GemRepository(IDbContextFactory<ApplicationDbContext> dbCon
         return $"""
                     SELECT * FROM "GemData"
                         WHERE LOWER("Name") LIKE '%{query.SearchText}%'
-                          AND ({query.ShowAlternateQuality} OR NOT {isAlternateQuality})
                           AND ({query.ShowVaal} OR NOT {isVaal})
                           AND {isGemTypeMatching}
                 """;
@@ -102,7 +97,8 @@ public partial class GemRepository(IDbContextFactory<ApplicationDbContext> dbCon
                };
     }
 
-    [GeneratedRegex("[^a-z ]")] private static partial Regex SqlSanitizeRegex();
+    [GeneratedRegex("[^a-z ]")]
+    private static partial Regex SqlSanitizeRegex();
 
     private static Page<GemData> GeneratePage(IReadOnlyCollection<GemData> gemData, PageRequest page)
     {
