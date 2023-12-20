@@ -68,18 +68,13 @@ public partial class GemService : IGemService
 
     private static string PreFilterGemDataQuery(GemDataQuery query)
     {
-        const string isAlternateQuality = """
-               (LOWER("Name") LIKE 'anomalous%'
-               OR LOWER("Name") LIKE 'divergent%'
-               OR LOWER("Name") LIKE 'phantasmal%')
-        """;
         const string isVaal = """LOWER("Name") LIKE 'vaal%' """;
 
         const string isExceptional = """
-                (LOWER("Name") LIKE '%enhance%'
-                OR LOWER("Name") LIKE '%empower%'
-                OR LOWER("Name") LIKE '%enlighten%')
-        """;
+                                             (LOWER("Name") LIKE '%enhance%'
+                                             OR LOWER("Name") LIKE '%empower%'
+                                             OR LOWER("Name") LIKE '%enlighten%')
+                                     """;
         const string isAwakened = """LOWER("Name") LIKE 'awakened%' """;
         const string isSupport = """LOWER("Name") LIKE '%support' """;
         var isGemTypeMatching = query.GemType switch
@@ -93,12 +88,11 @@ public partial class GemService : IGemService
                                 };
 
         return $"""
-            SELECT * FROM "GemData"
-                WHERE LOWER("Name") LIKE '%{query.SearchText}%'
-                  AND ({query.ShowAlternateQuality} OR NOT {isAlternateQuality})
-                  AND ({query.ShowVaal} OR NOT {isVaal})
-                  AND {isGemTypeMatching}
-        """;
+                    SELECT * FROM "GemData"
+                        WHERE LOWER("Name") LIKE '%{query.SearchText}%'
+                          AND ({query.ShowVaal} OR NOT {isVaal})
+                          AND {isGemTypeMatching}
+                """;
     }
 
     private static bool PostFilterGemData(GemData gemData, GemDataQuery query, decimal averageTempleCost)
@@ -122,5 +116,6 @@ public partial class GemService : IGemService
                };
     }
 
-    [GeneratedRegex("[^a-z ]")] private static partial Regex SqlSanitizeRegex();
+    [GeneratedRegex("[^a-z ]")]
+    private static partial Regex SqlSanitizeRegex();
 }

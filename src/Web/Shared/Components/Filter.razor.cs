@@ -41,21 +41,34 @@ public partial class Filter : ComponentBase
     private string CurrencyValueString()
     {
         return FilterValues.CurrencyValue is null && FilterValues.Currency is not null
-                   ? ToStringOrBlank(FilterValues.Currency.ChaosEquivalent)
-                   : ToStringOrBlank(FilterValues.CurrencyValue);
+            ? ToStringOrBlank(FilterValues.Currency.ChaosEquivalent)
+            : ToStringOrBlank(FilterValues.CurrencyValue);
     }
 
-    private void ToggleFilters() { FiltersExpanded = !FiltersExpanded; }
+    private void ToggleFilters()
+    {
+        FiltersExpanded = !FiltersExpanded;
+    }
 
     private static string ToStringOrBlank(decimal? value)
     {
         return value is null or decimal.MinValue or decimal.MaxValue ? "" : value.Round(2)!;
     }
 
-    private string CurrencyValue(decimal? value) { return ToStringOrBlank(value / ConversionRatio()); }
+    private string CurrencyValue(decimal? value)
+    {
+        return ToStringOrBlank(value / ConversionRatio());
+    }
 
-    private static IEnumerable<GemType> GemTypes() { return Enum.GetValues<GemType>(); }
-    private static IEnumerable<Sort> Sorts() { return Enum.GetValues<Sort>(); }
+    private static IEnumerable<GemType> GemTypes()
+    {
+        return Enum.GetValues<GemType>();
+    }
+
+    private static IEnumerable<Sort> Sorts()
+    {
+        return Enum.GetValues<Sort>();
+    }
 
     private string TempleTradeUrl()
     {
@@ -103,7 +116,8 @@ public partial class Filter : ComponentBase
         return FilterValues.CurrencyValue ?? FilterValues.Currency?.ChaosEquivalent ?? 1;
     }
 
-    [GeneratedRegex("(\"(?:[^\"\\\\]|\\\\.)*\")|\\s+")] private static partial Regex JsonMinifyRegex();
+    [GeneratedRegex("(\"(?:[^\"\\\\]|\\\\.)*\")|\\s+")]
+    private static partial Regex JsonMinifyRegex();
 
     #region Update Callback
 
@@ -154,13 +168,6 @@ public partial class Filter : ComponentBase
         if (currency is null) return;
         FilterValues.Currency = currency;
         FilterValues.CurrencyValue = null;
-        await SaveFilterValues();
-    }
-
-    private async Task UpdateShowAlternateQuality(ChangeEventArgs args)
-    {
-        if (args.Value is null || !bool.TryParse(args.Value.ToString(), out var value)) return;
-        FilterValues.ShowAlternateQuality = value;
         await SaveFilterValues();
     }
 
