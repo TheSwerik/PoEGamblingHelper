@@ -3,13 +3,9 @@ using PoEGamblingHelper.Application.Exception.Body;
 
 namespace PoEGamblingHelper.Application.Exception;
 
-public class PoeDbCannotParseException : InternalServerErrorException
-{
-    public PoeDbCannotParseException(string message) : base(message, new PoeGamblingHelperExceptionBody(
-                                                                ExceptionType.InternalError,
-                                                                ExceptionId.PoeDbCannotParse,
-                                                                message
-                                                            ))
-    {
-    }
-}
+public class PoeDbCannotParseException(string message) : InternalServerErrorException(message,
+                                                                                      new PoeGamblingHelperExceptionBody(
+                                                                                          ExceptionType.InternalError,
+                                                                                          ExceptionId.PoeDbCannotParse,
+                                                                                          message
+                                                                                      ));

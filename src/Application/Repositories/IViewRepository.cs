@@ -3,6 +3,6 @@
 public interface IViewRepository
 {
     Task AddAsync(string ipAddress);
-    Task<int> CountViewsAsync(DateOnly date);
+    Task<int> CountAsync(DateOnly date);
     Task RemoveAllAsync(DateOnly date);
 }

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PoEGamblingHelper.Domain.Entity;
 using PoEGamblingHelper.Domain.Entity.Analytics;
 using PoEGamblingHelper.Domain.Entity.Gem;
+using PoEGamblingHelper.Domain.Entity.Stats;
 
 namespace PoEGamblingHelper.Infrastructure.Database;
 
@@ -15,6 +16,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<League> League { get; set; } = null!;
     public DbSet<TempleCost> TempleCost { get; set; } = null!;
     public DbSet<View> View { get; set; } = null!;
+    public DbSet<Result> Result { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

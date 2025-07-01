@@ -8,9 +8,16 @@ namespace PoEGamblingHelper.Api.Controllers;
 
 public class LeagueController(ILeagueRepository leagueRepository) : ApiControllerBase
 {
-    [HttpGet] public IAsyncEnumerable<League> GetAll() { return leagueRepository.GetAllLeagues(); }
+    [HttpGet]
+    public IAsyncEnumerable<League> GetAll()
+    {
+        return leagueRepository.GetAll();
+    }
 
     [HttpGet("current")]
     [OutputCache(PolicyName = Constants.DataFetcherCacheTag)]
-    public League GetCurrent() { return leagueRepository.GetCurrent(); }
+    public League GetCurrent()
+    {
+        return leagueRepository.GetCurrent();
+    }
 }

@@ -24,10 +24,10 @@ public class ViewRepository : IViewRepository
     public async Task AddAsync(string ipAddress)
     {
         var view = new View
-                   {
-                       IpHash = _hashingService.HashIpAddress(ipAddress),
-                       TimeStamp = _dateTimeService.UtcToday()
-                   };
+        {
+            IpHash = _hashingService.HashIpAddress(ipAddress),
+            TimeStamp = _dateTimeService.UtcToday()
+        };
 
         await using var context = await _dbContextFactory.CreateDbContextAsync();
 
@@ -37,7 +37,7 @@ public class ViewRepository : IViewRepository
         await context.SaveChangesAsync();
     }
 
-    public async Task<int> CountViewsAsync(DateOnly date)
+    public async Task<int> CountAsync(DateOnly date)
     {
         await using var context = await _dbContextFactory.CreateDbContextAsync();
         return await context.View.CountAsync(v => v.TimeStamp == date);

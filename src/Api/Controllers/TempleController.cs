@@ -6,13 +6,12 @@ using PoEGamblingHelper.Infrastructure;
 
 namespace PoEGamblingHelper.Api.Controllers;
 
-public class TempleController : ApiControllerBase
+public class TempleController(ITempleRepository templeRepository) : ApiControllerBase
 {
-    private readonly ITempleRepository _templeRepository;
-
-    public TempleController(ITempleRepository templeRepository) { _templeRepository = templeRepository; }
-
     [HttpGet]
     [OutputCache(PolicyName = Constants.DataFetcherCacheTag)]
-    public TempleCost Get() { return _templeRepository.GetCurrent(); }
+    public TempleCost Get()
+    {
+        return templeRepository.GetCurrent();
+    }
 }

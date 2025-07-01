@@ -18,7 +18,10 @@ public class LeagueRepository : ILeagueRepository
         _dateTimeService = dateTimeService;
     }
 
-    public League GetCurrent() { return GetByStartDateBefore(_dateTimeService.UtcNow()); }
+    public League GetCurrent()
+    {
+        return GetByStartDateBefore(_dateTimeService.UtcNow());
+    }
 
     public League GetByStartDateBefore(DateTime dateTime)
     {
@@ -26,11 +29,11 @@ public class LeagueRepository : ILeagueRepository
         return applicationDbContext.League
                                    .Where(league => league.StartDate <= dateTime)
                                    .OrderByDescending(league => league.StartDate)
-                                   .FirstOrDefault()
-               ?? throw new NoLeagueDataException();
+                                   .FirstOrDefault() ??
+               throw new NoLeagueDataException();
     }
 
-    public async IAsyncEnumerable<League> GetAllLeagues()
+    public async IAsyncEnumerable<League> GetAll()
     {
         await using var applicationDbContext = await _dbContextFactory.CreateDbContextAsync();
         await foreach (var item in applicationDbContext.League.AsAsyncEnumerable().ConfigureAwait(false))

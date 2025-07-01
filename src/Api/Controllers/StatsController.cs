@@ -1,25 +1,21 @@
+using Microsoft.AspNetCore.Mvc;
+using PoEGamblingHelper.Application.Repositories;
+using PoEGamblingHelper.Domain.Entity.Stats;
+
 namespace PoEGamblingHelper.Api.Controllers;
 
-public class StatsController : ApiControllerBase
-{ //TODO
+public class StatsController(IResultRepository resultRepository) : ApiControllerBase
+{
+    [HttpGet]
+    public IAsyncEnumerable<Result> GetAll()
+    {
+        return resultRepository.GetAll();
+    }
 
-    // [HttpGet]
-    // public async IAsyncEnumerable<Result> GetAll()
-    // {
-    // using var applicationDbContext = _applicationDbContextFactory.CreateDbContext();
-    // await foreach (var item in applicationDbContext.Result
-    // .Include(r => r.CurrencyResult)
-    // .Include(r => r.GemTradeData)
-    // .AsAsyncEnumerable()
-    // .ConfigureAwait(false))
-    // yield return item;
-    // }
-
-    // [HttpPost]
-    // public async Task Post(Result result)
-    // {
-    // using var applicationDbContext = _applicationDbContextFactory.CreateDbContext();
-    // await applicationDbContext.Result.AddAsync(result);
-    // await applicationDbContext.SaveChangesAsync();
-    // }
+    [HttpPost]
+    public async Task<ActionResult> Post(Result result)
+    {
+        await resultRepository.SaveAsync(result);
+        return Created();
+    }
 }
