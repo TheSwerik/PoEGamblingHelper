@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using Infrastructure.Services.FetchDtos;
+﻿using Infrastructure.Services.FetchDtos;
 
 namespace Infrastructure.Test.Services.FetchDtos;
 
@@ -9,18 +8,18 @@ public class PoeNinjaCurrencyDataTest
     public void ToCurrencyDataTest()
     {
         var source = new PoeNinjaCurrencyData
-                     {
-                         Name = "Divine Orb",
-                         Icon = "testIcon",
-                         ChaosEquivalent = 200,
-                         DetailsId = "divine-orb"
-                     };
+        {
+            Name = "Divine Orb",
+            Icon = "testIcon",
+            ChaosEquivalent = 200,
+            DetailsId = "divine-orb"
+        };
 
         var currency = source.ToCurrencyData();
 
-        currency.Id.Should().Be(source.DetailsId);
-        currency.Icon.Should().Be(source.Icon);
-        currency.Name.Should().Be(source.Name);
-        currency.ChaosEquivalent.Should().Be(source.ChaosEquivalent);
+        currency.Id.ShouldBe(source.DetailsId);
+        currency.Icon.ShouldBe(source.Icon);
+        currency.Name.ShouldBe(source.Name);
+        currency.ChaosEquivalent.ShouldBe(source.ChaosEquivalent);
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Domain.Entity;
-using FluentAssertions;
 using Infrastructure.Services.FetchDtos;
 using MockQueryable.Moq;
 
@@ -18,21 +17,21 @@ public class TradeEntryListingPriceTest
     public void ChaosAmountTest(string currency, decimal currencyAmount, decimal currencyChaosEquivalent)
     {
         var list = new List<Currency>
-                   {
-                       new() { ChaosEquivalent = 1, Name = "Chaos Orb" },
-                       new() { ChaosEquivalent = 220, Name = "Divine Orb" },
-                       new() { ChaosEquivalent = 12, Name = "Exalted Orb" }
-                   };
+        {
+            new() { ChaosEquivalent = 1, Name = "Chaos Orb" },
+            new() { ChaosEquivalent = 220, Name = "Divine Orb" },
+            new() { ChaosEquivalent = 12, Name = "Exalted Orb" }
+        };
         var queryable = list.AsQueryable().BuildMockDbSet();
 
         var source = new TradeEntryListingPrice
-                     {
-                         Type = "Chronicle of Atzoatl",
-                         Amount = currencyAmount,
-                         Currency = currency
-                     };
+        {
+            Type = "Chronicle of Atzoatl",
+            Amount = currencyAmount,
+            Currency = currency
+        };
 
 
-        source.ChaosAmount(queryable.Object).Should().Be(currencyChaosEquivalent * currencyAmount);
+        source.ChaosAmount(queryable.Object).ShouldBe(currencyChaosEquivalent * currencyAmount);
     }
 }

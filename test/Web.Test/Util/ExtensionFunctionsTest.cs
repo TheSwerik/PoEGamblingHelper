@@ -1,6 +1,5 @@
 ﻿using System.Globalization;
 using Domain.QueryParameters;
-using FluentAssertions;
 using Web.Util;
 using Xunit.Abstractions;
 
@@ -9,7 +8,11 @@ namespace Web.Test.Util;
 public class ExtensionFunctionsTest
 {
     private readonly ITestOutputHelper _testOutputHelper;
-    public ExtensionFunctionsTest(ITestOutputHelper testOutputHelper) { _testOutputHelper = testOutputHelper; }
+
+    public ExtensionFunctionsTest(ITestOutputHelper testOutputHelper)
+    {
+        _testOutputHelper = testOutputHelper;
+    }
 
     [Theory]
     [InlineData(123.1325, 0, 3)]
@@ -24,8 +27,8 @@ public class ExtensionFunctionsTest
         CultureInfo.DefaultThreadCurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
         var result = value.Round(places);
 
-        result.Length.Should().Be(expectedLength);
-        int.Parse(result.Split('.')[0]).Should().Be((int)value);
+        result.Length.ShouldBe(expectedLength);
+        int.Parse(result.Split('.')[0]).ShouldBe((int)value);
     }
 
     [Theory]
@@ -45,13 +48,13 @@ public class ExtensionFunctionsTest
 
         if (expectedLength is null)
         {
-            result.Should().BeNull();
+            result.ShouldBeNull();
         }
         else
         {
-            result.Should().NotBeNull();
-            result!.Length.Should().Be(expectedLength);
-            int.Parse(result.Split('.')[0]).Should().Be((int)decimalValue!);
+            result.ShouldNotBeNull();
+            result.Length.ShouldBe(expectedLength.Value);
+            int.Parse(result.Split('.')[0]).ShouldBe((int)decimalValue!);
         }
     }
 
@@ -64,7 +67,7 @@ public class ExtensionFunctionsTest
     [InlineData(Sort.MaxProfitPerTryDesc, "Maximum profit per try Descending")]
     public void SortToPrettyStringTest(Sort sort, string prettyString)
     {
-        sort.ToPrettyString().Should().Be(prettyString);
+        sort.ToPrettyString().ShouldBe(prettyString);
     }
 
     [Theory]
@@ -75,6 +78,6 @@ public class ExtensionFunctionsTest
     [InlineData(GemType.RegularSupport, "Regular Support Gem")]
     public void GemTypeToPrettyStringTest(GemType gemType, string prettyString)
     {
-        gemType.ToPrettyString().Should().Be(prettyString);
+        gemType.ToPrettyString().ShouldBe(prettyString);
     }
 }
