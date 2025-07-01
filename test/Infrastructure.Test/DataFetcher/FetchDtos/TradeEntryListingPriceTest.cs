@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using MockQueryable.Moq;
+﻿using MockQueryable.Moq;
 using PoEGamblingHelper.Domain.Entity;
 using PoEGamblingHelper.Infrastructure.DataFetcher;
 
@@ -14,15 +13,15 @@ public class TradeEntryListingPriceTest
     public void ChaosAmountTest(string currency, decimal currencyAmount, decimal currencyChaosEquivalent)
     {
         var list = new List<Currency>
-                   {
-                       new() { ChaosEquivalent = 1, Name = "Chaos Orb" },
-                       new() { ChaosEquivalent = 220, Name = "Divine Orb" },
-                       new() { ChaosEquivalent = 12, Name = "Exalted Orb" }
-                   };
+        {
+            new() { ChaosEquivalent = 1, Name = "Chaos Orb" },
+            new() { ChaosEquivalent = 220, Name = "Divine Orb" },
+            new() { ChaosEquivalent = 12, Name = "Exalted Orb" }
+        };
         var queryable = list.AsQueryable().BuildMockDbSet();
 
         var source = new TradeEntryListingPrice("Chronicle of Atzoatl", currencyAmount, currency);
 
-        source.ChaosAmount(queryable.Object).Should().Be(currencyChaosEquivalent * currencyAmount);
+        source.ChaosAmount(queryable.Object).ShouldBe(currencyChaosEquivalent * currencyAmount);
     }
 }

@@ -1,4 +1,3 @@
-﻿using FluentAssertions;
 using PoEGamblingHelper.Application.QueryParameters;
 using PoEGamblingHelper.Web.Pages.GamblingHelper.Components.Filter;
 
@@ -21,12 +20,12 @@ public class FilterValuesTest
 
         var result = source.ToQuery();
 
-        result.SearchText.Should().Be(source.Gem);
-        result.Sort.Should().Be(source.Sort);
-        result.GemType.Should().Be(source.GemType);
-        result.OnlyShowProfitable.Should().Be(source.OnlyShowProfitable);
-        result.PricePerTryFrom.Should().Be(source.PricePerTryFrom);
-        result.PricePerTryTo.Should().Be(source.PricePerTryTo);
-        result.ShowVaal.Should().BeFalse();
+        result.SearchText.ShouldBe(source.Gem);
+        result.Sort.ShouldBe(source.Sort);
+        result.GemType.ShouldBe(source.GemType);
+        result.OnlyShowProfitable.ShouldBe(source.OnlyShowProfitable);
+        result.PricePerTryFrom.ShouldBe(source.PricePerTryFrom);
+        result.PricePerTryTo.ShouldBe(source.PricePerTryTo);
+        result.ShowVaal.ShouldBeFalse();
     }
 }

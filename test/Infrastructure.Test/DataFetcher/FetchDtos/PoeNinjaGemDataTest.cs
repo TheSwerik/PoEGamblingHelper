@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using PoEGamblingHelper.Infrastructure.DataFetcher;
+﻿using PoEGamblingHelper.Infrastructure.DataFetcher;
 
 namespace PoEGamblingHelper.Infrastructure.Test.DataFetcher.FetchDtos;
 
@@ -24,15 +23,15 @@ public class PoeNinjaGemDataTest
 
         var gemTradeData = source.ToGemTradeData();
 
-        gemTradeData.Id.Should().Be(source.Id);
-        gemTradeData.Name.Should().Be(source.Name);
-        gemTradeData.GemLevel.Should().Be(source.GemLevel);
-        gemTradeData.GemQuality.Should().Be(source.GemQuality);
-        gemTradeData.Corrupted.Should().Be(source.Corrupted);
-        gemTradeData.DetailsId.Should().Be(source.DetailsId);
-        gemTradeData.ChaosValue.Should().Be(source.ChaosValue);
-        gemTradeData.ExaltedValue.Should().Be(source.ExaltedValue);
-        gemTradeData.DivineValue.Should().Be(source.DivineValue);
-        gemTradeData.ListingCount.Should().Be(source.ListingCount);
+        gemTradeData.Id.ShouldBe(source.Id);
+        gemTradeData.Name.ShouldBe(source.Name);
+        gemTradeData.GemLevel.ShouldBe(source.GemLevel);
+        gemTradeData.GemQuality.ShouldBe(source.GemQuality);
+        gemTradeData.Corrupted.ShouldBe(source.Corrupted);
+        gemTradeData.DetailsId.ShouldBe(source.DetailsId);
+        gemTradeData.ChaosValue.ShouldBe(source.ChaosValue);
+        gemTradeData.ExaltedValue.ShouldBe(source.ExaltedValue);
+        gemTradeData.DivineValue.ShouldBe(source.DivineValue);
+        gemTradeData.ListingCount.ShouldBe(source.ListingCount);
     }
 }

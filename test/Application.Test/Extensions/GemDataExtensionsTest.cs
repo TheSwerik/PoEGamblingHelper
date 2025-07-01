@@ -1,4 +1,3 @@
-using FluentAssertions;
 using PoEGamblingHelper.Application.Extensions;
 using PoEGamblingHelper.Domain.Entity.Gem;
 
@@ -17,16 +16,16 @@ public class GemDataExtensionsTest
         var gemData = new GemData();
 
         gemData.Name = name;
-        gemData.MaxLevel().Should().Be(expected);
+        gemData.MaxLevel().ShouldBe(expected);
 
         gemData.Name = name.ToLowerInvariant();
-        gemData.MaxLevel().Should().Be(expected);
+        gemData.MaxLevel().ShouldBe(expected);
 
         gemData.Name = $"Awakened {name}";
-        gemData.MaxLevel().Should().Be(expectedAwakened);
+        gemData.MaxLevel().ShouldBe(expectedAwakened);
 
         gemData.Name = $"Awakened {name.ToLowerInvariant()}";
-        gemData.MaxLevel().Should().Be(expectedAwakened);
+        gemData.MaxLevel().ShouldBe(expectedAwakened);
     }
 
     [Theory]
@@ -59,10 +58,10 @@ public class GemDataExtensionsTest
                                  }
                       };
 
-        gemData.RawCost().Should().Be(expected);
+        gemData.RawCost().ShouldBe(expected);
 
         gemData.Name = $"Awakened {name}";
-        gemData.RawCost().Should().Be(expectedAwakened);
+        gemData.RawCost().ShouldBe(expectedAwakened);
     }
 
     [Theory]
@@ -74,34 +73,34 @@ public class GemDataExtensionsTest
     public void CostPerTryTest(string name, int expected, int expectedAwakened)
     {
         var gemData = new GemData
-                      {
-                          Gems = new List<GemTradeData>
-                                 {
-                                     new() { Corrupted = false, GemLevel = 3, ChaosValue = 11 },
-                                     new() { Corrupted = false, GemLevel = 4, ChaosValue = 22 },
-                                     new() { Corrupted = false, GemLevel = 5, ChaosValue = 33 },
-                                     new() { Corrupted = false, GemLevel = 20, ChaosValue = 44 }
-                                 }
-                      };
+        {
+            Gems = new List<GemTradeData>
+            {
+                new() { Corrupted = false, GemLevel = 3, ChaosValue = 11 },
+                new() { Corrupted = false, GemLevel = 4, ChaosValue = 22 },
+                new() { Corrupted = false, GemLevel = 5, ChaosValue = 33 },
+                new() { Corrupted = false, GemLevel = 20, ChaosValue = 44 }
+            }
+        };
 
         const int rawCost = 5;
         const int templeCost = 7;
 
         gemData.Name = name;
-        gemData.CostPerTry().Should().Be(expected);
-        gemData.CostPerTry().Should().Be(expected);
-        gemData.CostPerTry(rawCost).Should().Be(rawCost);
-        gemData.CostPerTry(templeCost: templeCost).Should().Be(expected + templeCost);
-        gemData.CostPerTry(null, templeCost).Should().Be(expected + templeCost);
-        gemData.CostPerTry(rawCost, templeCost).Should().Be(rawCost + templeCost);
+        gemData.CostPerTry().ShouldBe(expected);
+        gemData.CostPerTry().ShouldBe(expected);
+        gemData.CostPerTry(rawCost).ShouldBe(rawCost);
+        gemData.CostPerTry(templeCost: templeCost).ShouldBe(expected + templeCost);
+        gemData.CostPerTry(null, templeCost).ShouldBe(expected + templeCost);
+        gemData.CostPerTry(rawCost, templeCost).ShouldBe(rawCost + templeCost);
 
         gemData.Name = $"Awakened {name}";
-        gemData.CostPerTry().Should().Be(expectedAwakened);
-        gemData.CostPerTry().Should().Be(expectedAwakened);
-        gemData.CostPerTry(rawCost).Should().Be(rawCost);
-        gemData.CostPerTry(templeCost: templeCost).Should().Be(expectedAwakened + templeCost);
-        gemData.CostPerTry(null, templeCost).Should().Be(expectedAwakened + templeCost);
-        gemData.CostPerTry(rawCost, templeCost).Should().Be(rawCost + templeCost);
+        gemData.CostPerTry().ShouldBe(expectedAwakened);
+        gemData.CostPerTry().ShouldBe(expectedAwakened);
+        gemData.CostPerTry(rawCost).ShouldBe(rawCost);
+        gemData.CostPerTry(templeCost: templeCost).ShouldBe(expectedAwakened + templeCost);
+        gemData.CostPerTry(null, templeCost).ShouldBe(expectedAwakened + templeCost);
+        gemData.CostPerTry(rawCost, templeCost).ShouldBe(rawCost + templeCost);
     }
 
     [Theory]
@@ -113,33 +112,33 @@ public class GemDataExtensionsTest
     public void ValueTest(string name, int expectedMiddle, int expectedMiddleAwakened)
     {
         var gemData = new GemData
-                      {
-                          Gems = new List<GemTradeData>
-                                 {
-                                     new() { Corrupted = true, GemLevel = 2, ChaosValue = 5 },
-                                     new() { Corrupted = true, GemLevel = 3, ChaosValue = 15 },
-                                     new() { Corrupted = false, GemLevel = 3, ChaosValue = 25 },
-                                     new() { Corrupted = true, GemLevel = 4, ChaosValue = 35 },
-                                     new() { Corrupted = false, GemLevel = 4, ChaosValue = 45 },
-                                     new() { Corrupted = true, GemLevel = 5, ChaosValue = 55 },
-                                     new() { Corrupted = false, GemLevel = 5, ChaosValue = 65 },
-                                     new() { Corrupted = true, GemLevel = 6, ChaosValue = 75 },
-                                     new() { Corrupted = true, GemLevel = 19, ChaosValue = 85 },
-                                     new() { Corrupted = true, GemLevel = 20, ChaosValue = 95 },
-                                     new() { Corrupted = false, GemLevel = 20, ChaosValue = 105 },
-                                     new() { Corrupted = true, GemLevel = 21, ChaosValue = 115 }
-                                 }
-                      };
+        {
+            Gems = new List<GemTradeData>
+            {
+                new() { Corrupted = true, GemLevel = 2, ChaosValue = 5 },
+                new() { Corrupted = true, GemLevel = 3, ChaosValue = 15 },
+                new() { Corrupted = false, GemLevel = 3, ChaosValue = 25 },
+                new() { Corrupted = true, GemLevel = 4, ChaosValue = 35 },
+                new() { Corrupted = false, GemLevel = 4, ChaosValue = 45 },
+                new() { Corrupted = true, GemLevel = 5, ChaosValue = 55 },
+                new() { Corrupted = false, GemLevel = 5, ChaosValue = 65 },
+                new() { Corrupted = true, GemLevel = 6, ChaosValue = 75 },
+                new() { Corrupted = true, GemLevel = 19, ChaosValue = 85 },
+                new() { Corrupted = true, GemLevel = 20, ChaosValue = 95 },
+                new() { Corrupted = false, GemLevel = 20, ChaosValue = 105 },
+                new() { Corrupted = true, GemLevel = 21, ChaosValue = 115 }
+            }
+        };
 
         gemData.Name = name;
-        gemData.Value(ResultCase.Worst).Should().Be(expectedMiddle - 10);
-        gemData.Value(ResultCase.Middle).Should().Be(expectedMiddle);
-        gemData.Value(ResultCase.Best).Should().Be(expectedMiddle + 20);
+        gemData.Value(ResultCase.Worst).ShouldBe(expectedMiddle - 10);
+        gemData.Value(ResultCase.Middle).ShouldBe(expectedMiddle);
+        gemData.Value(ResultCase.Best).ShouldBe(expectedMiddle + 20);
 
         gemData.Name = $"Awakened {name}";
-        gemData.Value(ResultCase.Worst).Should().Be(expectedMiddleAwakened - 20);
-        gemData.Value(ResultCase.Middle).Should().Be(expectedMiddleAwakened);
-        gemData.Value(ResultCase.Best).Should().Be(expectedMiddleAwakened + 20);
+        gemData.Value(ResultCase.Worst).ShouldBe(expectedMiddleAwakened - 20);
+        gemData.Value(ResultCase.Middle).ShouldBe(expectedMiddleAwakened);
+        gemData.Value(ResultCase.Best).ShouldBe(expectedMiddleAwakened + 20);
     }
 
     [Theory]
@@ -155,84 +154,78 @@ public class GemDataExtensionsTest
                            int expectedMiddleAwakened)
     {
         var gemData = new GemData
-                      {
-                          Gems = new List<GemTradeData>
-                                 {
-                                     new() { Corrupted = true, GemLevel = 2, ChaosValue = 5 },
-                                     new() { Corrupted = true, GemLevel = 3, ChaosValue = 15 },
-                                     new() { Corrupted = false, GemLevel = 3, ChaosValue = 25 },
-                                     new() { Corrupted = true, GemLevel = 4, ChaosValue = 35 },
-                                     new() { Corrupted = false, GemLevel = 4, ChaosValue = 45 },
-                                     new() { Corrupted = true, GemLevel = 5, ChaosValue = 55 },
-                                     new() { Corrupted = false, GemLevel = 5, ChaosValue = 65 },
-                                     new() { Corrupted = true, GemLevel = 6, ChaosValue = 75 },
-                                     new() { Corrupted = true, GemLevel = 19, ChaosValue = 85 },
-                                     new() { Corrupted = true, GemLevel = 20, ChaosValue = 95 },
-                                     new() { Corrupted = false, GemLevel = 20, ChaosValue = 105 },
-                                     new() { Corrupted = true, GemLevel = 21, ChaosValue = 115 }
-                                 }
-                      };
+        {
+            Gems = new List<GemTradeData>
+            {
+                new() { Corrupted = true, GemLevel = 2, ChaosValue = 5 },
+                new() { Corrupted = true, GemLevel = 3, ChaosValue = 15 },
+                new() { Corrupted = false, GemLevel = 3, ChaosValue = 25 },
+                new() { Corrupted = true, GemLevel = 4, ChaosValue = 35 },
+                new() { Corrupted = false, GemLevel = 4, ChaosValue = 45 },
+                new() { Corrupted = true, GemLevel = 5, ChaosValue = 55 },
+                new() { Corrupted = false, GemLevel = 5, ChaosValue = 65 },
+                new() { Corrupted = true, GemLevel = 6, ChaosValue = 75 },
+                new() { Corrupted = true, GemLevel = 19, ChaosValue = 85 },
+                new() { Corrupted = true, GemLevel = 20, ChaosValue = 95 },
+                new() { Corrupted = false, GemLevel = 20, ChaosValue = 105 },
+                new() { Corrupted = true, GemLevel = 21, ChaosValue = 115 }
+            }
+        };
         const int rawCost = 100;
         const int templeCost = 50;
         const int value = 200;
 
         gemData.Name = name;
-        gemData.Profit(ResultCase.Worst).Should().Be(expectedMiddle - 10 - rawValue);
-        gemData.Profit(ResultCase.Worst, null, templeCost).Should().Be(expectedMiddle - 10 - rawValue - templeCost);
-        gemData.Profit(ResultCase.Worst, rawCost).Should().Be(expectedMiddle - 10 - rawCost);
-        gemData.Profit(ResultCase.Worst, rawCost, templeCost).Should().Be(expectedMiddle - 10 - rawCost - templeCost);
-        gemData.Profit(ResultCase.Middle).Should().Be(expectedMiddle - rawValue);
-        gemData.Profit(ResultCase.Middle, null, templeCost).Should().Be(expectedMiddle - rawValue - templeCost);
-        gemData.Profit(ResultCase.Middle, rawCost).Should().Be(expectedMiddle - rawCost);
-        gemData.Profit(ResultCase.Middle, rawCost, templeCost).Should().Be(expectedMiddle - rawCost - templeCost);
-        gemData.Profit(ResultCase.Best).Should().Be(expectedMiddle + 20 - rawValue);
-        gemData.Profit(ResultCase.Best, null, templeCost).Should().Be(expectedMiddle + 20 - rawValue - templeCost);
-        gemData.Profit(ResultCase.Best, rawCost).Should().Be(expectedMiddle + 20 - rawCost);
-        gemData.Profit(ResultCase.Best, rawCost, templeCost).Should().Be(expectedMiddle + 20 - rawCost - templeCost);
-        gemData.Profit(value).Should().Be(value - rawValue);
-        gemData.Profit(value, null, templeCost).Should().Be(value - rawValue - templeCost);
-        gemData.Profit(value, rawCost).Should().Be(value - rawCost);
-        gemData.Profit(value, rawCost, templeCost).Should().Be(value - rawCost - templeCost);
+        gemData.Profit(ResultCase.Worst).ShouldBe(expectedMiddle - 10 - rawValue);
+        gemData.Profit(ResultCase.Worst, null, templeCost).ShouldBe(expectedMiddle - 10 - rawValue - templeCost);
+        gemData.Profit(ResultCase.Worst, rawCost).ShouldBe(expectedMiddle - 10 - rawCost);
+        gemData.Profit(ResultCase.Worst, rawCost, templeCost).ShouldBe(expectedMiddle - 10 - rawCost - templeCost);
+        gemData.Profit(ResultCase.Middle).ShouldBe(expectedMiddle - rawValue);
+        gemData.Profit(ResultCase.Middle, null, templeCost).ShouldBe(expectedMiddle - rawValue - templeCost);
+        gemData.Profit(ResultCase.Middle, rawCost).ShouldBe(expectedMiddle - rawCost);
+        gemData.Profit(ResultCase.Middle, rawCost, templeCost).ShouldBe(expectedMiddle - rawCost - templeCost);
+        gemData.Profit(ResultCase.Best).ShouldBe(expectedMiddle + 20 - rawValue);
+        gemData.Profit(ResultCase.Best, null, templeCost).ShouldBe(expectedMiddle + 20 - rawValue - templeCost);
+        gemData.Profit(ResultCase.Best, rawCost).ShouldBe(expectedMiddle + 20 - rawCost);
+        gemData.Profit(ResultCase.Best, rawCost, templeCost).ShouldBe(expectedMiddle + 20 - rawCost - templeCost);
+        gemData.Profit(value).ShouldBe(value - rawValue);
+        gemData.Profit(value, null, templeCost).ShouldBe(value - rawValue - templeCost);
+        gemData.Profit(value, rawCost).ShouldBe(value - rawCost);
+        gemData.Profit(value, rawCost, templeCost).ShouldBe(value - rawCost - templeCost);
 
         gemData.Name = $"Awakened {name}";
-        gemData.Profit(ResultCase.Worst).Should().Be(expectedMiddleAwakened - 20 - rawValueAwakened);
-        gemData.Profit(ResultCase.Worst, null, templeCost).Should()
-               .Be(expectedMiddleAwakened - 20 - rawValueAwakened - templeCost);
-        gemData.Profit(ResultCase.Worst, rawCost).Should().Be(expectedMiddleAwakened - 20 - rawCost);
-        gemData.Profit(ResultCase.Worst, rawCost, templeCost).Should()
-               .Be(expectedMiddleAwakened - 20 - rawCost - templeCost);
-        gemData.Profit(ResultCase.Middle).Should().Be(expectedMiddleAwakened - rawValueAwakened);
-        gemData.Profit(ResultCase.Middle, null, templeCost).Should()
-               .Be(expectedMiddleAwakened - rawValueAwakened - templeCost);
-        gemData.Profit(ResultCase.Middle, rawCost).Should().Be(expectedMiddleAwakened - rawCost);
-        gemData.Profit(ResultCase.Middle, rawCost, templeCost).Should()
-               .Be(expectedMiddleAwakened - rawCost - templeCost);
-        gemData.Profit(ResultCase.Best).Should().Be(expectedMiddleAwakened + 20 - rawValueAwakened);
-        gemData.Profit(ResultCase.Best, null, templeCost).Should()
-               .Be(expectedMiddleAwakened + 20 - rawValueAwakened - templeCost);
-        gemData.Profit(ResultCase.Best, rawCost).Should().Be(expectedMiddleAwakened + 20 - rawCost);
-        gemData.Profit(ResultCase.Best, rawCost, templeCost).Should()
-               .Be(expectedMiddleAwakened + 20 - rawCost - templeCost);
-        gemData.Profit(value).Should().Be(value - rawValueAwakened);
-        gemData.Profit(value, null, templeCost).Should().Be(value - rawValueAwakened - templeCost);
-        gemData.Profit(value, rawCost).Should().Be(value - rawCost);
-        gemData.Profit(value, rawCost, templeCost).Should().Be(value - rawCost - templeCost);
+        gemData.Profit(ResultCase.Worst).ShouldBe(expectedMiddleAwakened - 20 - rawValueAwakened);
+        gemData.Profit(ResultCase.Worst, null, templeCost).ShouldBe(expectedMiddleAwakened - 20 - rawValueAwakened - templeCost);
+        gemData.Profit(ResultCase.Worst, rawCost).ShouldBe(expectedMiddleAwakened - 20 - rawCost);
+        gemData.Profit(ResultCase.Worst, rawCost, templeCost).ShouldBe(expectedMiddleAwakened - 20 - rawCost - templeCost);
+        gemData.Profit(ResultCase.Middle).ShouldBe(expectedMiddleAwakened - rawValueAwakened);
+        gemData.Profit(ResultCase.Middle, null, templeCost).ShouldBe(expectedMiddleAwakened - rawValueAwakened - templeCost);
+        gemData.Profit(ResultCase.Middle, rawCost).ShouldBe(expectedMiddleAwakened - rawCost);
+        gemData.Profit(ResultCase.Middle, rawCost, templeCost).ShouldBe(expectedMiddleAwakened - rawCost - templeCost);
+        gemData.Profit(ResultCase.Best).ShouldBe(expectedMiddleAwakened + 20 - rawValueAwakened);
+        gemData.Profit(ResultCase.Best, null, templeCost).ShouldBe(expectedMiddleAwakened + 20 - rawValueAwakened - templeCost);
+        gemData.Profit(ResultCase.Best, rawCost).ShouldBe(expectedMiddleAwakened + 20 - rawCost);
+        gemData.Profit(ResultCase.Best, rawCost, templeCost).ShouldBe(expectedMiddleAwakened + 20 - rawCost - templeCost);
+        gemData.Profit(value).ShouldBe(value - rawValueAwakened);
+        gemData.Profit(value, null, templeCost).ShouldBe(value - rawValueAwakened - templeCost);
+        gemData.Profit(value, rawCost).ShouldBe(value - rawCost);
+        gemData.Profit(value, rawCost, templeCost).ShouldBe(value - rawCost - templeCost);
     }
 
     [Fact]
     public void AvgProfitPerTryTest()
     {
         var gemData = new GemData
-                      {
-                          Name = "Test",
-                          Gems = new List<GemTradeData>
-                                 {
-                                     new() { Corrupted = true, GemLevel = 19, ChaosValue = 1 },
-                                     new() { Corrupted = true, GemLevel = 20, ChaosValue = 2 },
-                                     new() { Corrupted = true, GemLevel = 21, ChaosValue = 3 },
-                                     new() { Corrupted = false, GemLevel = 20, ChaosValue = 4 }
-                                 }
-                      };
+        {
+            Name = "Test",
+            Gems = new List<GemTradeData>
+            {
+                new() { Corrupted = true, GemLevel = 19, ChaosValue = 1 },
+                new() { Corrupted = true, GemLevel = 20, ChaosValue = 2 },
+                new() { Corrupted = true, GemLevel = 21, ChaosValue = 3 },
+                new() { Corrupted = false, GemLevel = 20, ChaosValue = 4 }
+            }
+        };
 
         const int rawCost = 10;
         const int worstCaseValue = 11;
@@ -240,11 +233,11 @@ public class GemDataExtensionsTest
         const int bestCaseValue = 13;
         const int templeCost = 50;
 
-        gemData.AvgProfitPerTry().Should().Be(-2);
-        gemData.AvgProfitPerTry(templeCost: templeCost).Should().Be(-52);
-        gemData.AvgProfitPerTry(rawCost).Should().Be(-8);
-        gemData.AvgProfitPerTry(worstCaseValue: worstCaseValue).Should().Be(0.5m);
-        gemData.AvgProfitPerTry(middleCaseValue: middleCaseValue).Should().Be(3);
-        gemData.AvgProfitPerTry(bestCaseValue: bestCaseValue).Should().Be(0.5m);
+        gemData.AvgProfitPerTry().ShouldBe(-2);
+        gemData.AvgProfitPerTry(templeCost: templeCost).ShouldBe(-52);
+        gemData.AvgProfitPerTry(rawCost).ShouldBe(-8);
+        gemData.AvgProfitPerTry(worstCaseValue: worstCaseValue).ShouldBe(0.5m);
+        gemData.AvgProfitPerTry(middleCaseValue: middleCaseValue).ShouldBe(3);
+        gemData.AvgProfitPerTry(bestCaseValue: bestCaseValue).ShouldBe(0.5m);
     }
 }

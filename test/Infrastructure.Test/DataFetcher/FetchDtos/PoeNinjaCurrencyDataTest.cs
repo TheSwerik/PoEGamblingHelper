@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using PoEGamblingHelper.Infrastructure.DataFetcher;
+﻿using PoEGamblingHelper.Infrastructure.DataFetcher;
 
 namespace PoEGamblingHelper.Infrastructure.Test.DataFetcher.FetchDtos;
 
@@ -9,18 +8,18 @@ public class PoeNinjaCurrencyDataTest
     public void ToCurrencyDataTest()
     {
         var source = new PoeNinjaCurrencyData
-                     {
-                         CurrencyTypeName = "Divine Orb",
-                         Icon = "testIcon",
-                         ChaosEquivalent = 200,
-                         DetailsId = "divine-orb"
-                     };
+        {
+            CurrencyTypeName = "Divine Orb",
+            Icon = "testIcon",
+            ChaosEquivalent = 200,
+            DetailsId = "divine-orb"
+        };
 
         var currency = source.ToCurrencyData();
 
-        currency.Id.Should().Be(source.DetailsId);
-        currency.Icon.Should().Be(source.Icon);
-        currency.Name.Should().Be(source.CurrencyTypeName);
-        currency.ChaosEquivalent.Should().Be(source.ChaosEquivalent);
+        currency.Id.ShouldBe(source.DetailsId);
+        currency.Icon.ShouldBe(source.Icon);
+        currency.Name.ShouldBe(source.CurrencyTypeName);
+        currency.ChaosEquivalent.ShouldBe(source.ChaosEquivalent);
     }
 }

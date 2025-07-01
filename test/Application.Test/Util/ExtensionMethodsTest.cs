@@ -1,6 +1,5 @@
-﻿using FluentAssertions;
-using PoEGamblingHelper.Application.Extensions;
-using PoEGamblingHelper.Domain.Entity.Gem;
+﻿using Domain.Entity.Gem;
+using Domain.Util;
 
 namespace PoEGamblingHelper.Application.Test.Util;
 
@@ -9,8 +8,8 @@ public class ExtensionMethodsTest
     [Fact]
     public void LevelModifierTest()
     {
-        ResultCase.Worst.LevelModifier().Should().Be(-1);
-        ResultCase.Middle.LevelModifier().Should().Be(0);
-        ResultCase.Best.LevelModifier().Should().Be(1);
+        ResultCase.Worst.LevelModifier().ShouldBe(-1);
+        ResultCase.Middle.LevelModifier().ShouldBe(0);
+        ResultCase.Best.LevelModifier().ShouldBe(1);
     }
 }
