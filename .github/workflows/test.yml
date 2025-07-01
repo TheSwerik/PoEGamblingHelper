@@ -2,7 +2,7 @@ name: Test
 
 on:
   push:
-    branches: [ "*","feature/analytics" ]
+    branches: [ "*" ]
   pull_request:
     branches: [ "*" ]
 
