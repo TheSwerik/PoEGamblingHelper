@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using PoEGamblingHelper.Application.QueryParameters;
+﻿using PoEGamblingHelper.Application.QueryParameters;
 using PoEGamblingHelper.Web.Extensions;
 
 namespace PoEGamblingHelper.Web.Test.Extensions;
@@ -15,7 +14,7 @@ public class StringifyExtensionsTest
     [InlineData(Sort.MaxProfitPerTryDesc, "Maximum profit per try Descending")]
     public void SortToPrettyStringTest(Sort sort, string prettyString)
     {
-        sort.ToPrettyString().Should().Be(prettyString);
+        sort.ToPrettyString().ShouldBe(prettyString);
     }
 
     [Theory]
@@ -26,6 +25,6 @@ public class StringifyExtensionsTest
     [InlineData(GemType.RegularSupport, "Regular Support Gem")]
     public void GemTypeToPrettyStringTest(GemType gemType, string prettyString)
     {
-        gemType.ToPrettyString().Should().Be(prettyString);
+        gemType.ToPrettyString().ShouldBe(prettyString);
     }
 }

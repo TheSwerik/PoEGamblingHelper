@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using MockQueryable.Moq;
 using Moq;
 using PoEGamblingHelper.Application.QueryParameters;
@@ -31,27 +30,27 @@ public class GemRepositoryTest
 
         var pageRequest = new PageRequest { PageNumber = 0, PageSize = int.MaxValue };
         var result = service.Search(null, pageRequest);
-        result.Content.Count.Should().Be(list.Count);
-        result.LastPage.Should().BeTrue();
-        result.CurrentPage.Should().Be(pageRequest.PageNumber);
+        result.Content.Count.ShouldBe(list.Count);
+        result.LastPage.ShouldBeTrue();
+        result.CurrentPage.ShouldBe(pageRequest.PageNumber);
 
         pageRequest = new PageRequest { PageNumber = 0, PageSize = 2 };
         result = service.Search(null, pageRequest);
-        result.Content.Count.Should().Be(pageRequest.PageSize);
-        result.LastPage.Should().BeFalse();
-        result.CurrentPage.Should().Be(pageRequest.PageNumber);
+        result.Content.Count.ShouldBe(pageRequest.PageSize);
+        result.LastPage.ShouldBeFalse();
+        result.CurrentPage.ShouldBe(pageRequest.PageNumber);
 
         pageRequest = new PageRequest { PageNumber = 1, PageSize = 2 };
         result = service.Search(null, pageRequest);
-        result.Content.Count.Should().Be(pageRequest.PageSize);
-        result.Content.Should().NotBeSameAs(list);
-        result.LastPage.Should().BeFalse();
-        result.CurrentPage.Should().Be(pageRequest.PageNumber);
+        result.Content.Count.ShouldBe(pageRequest.PageSize);
+        result.Content.ShouldNotBeSameAs(list);
+        result.LastPage.ShouldBeFalse();
+        result.CurrentPage.ShouldBe(pageRequest.PageNumber);
 
         pageRequest = new PageRequest { PageNumber = 1, PageSize = 5 };
         result = service.Search(null, pageRequest);
-        result.Content.Count.Should().Be(list.Count - pageRequest.PageSize);
-        result.LastPage.Should().BeTrue();
-        result.CurrentPage.Should().Be(pageRequest.PageNumber);
+        result.Content.Count.ShouldBe(list.Count - pageRequest.PageSize);
+        result.LastPage.ShouldBeTrue();
+        result.CurrentPage.ShouldBe(pageRequest.PageNumber);
     }
 }

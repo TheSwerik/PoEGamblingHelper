@@ -1,19 +1,11 @@
 ﻿using System.Globalization;
-using Domain.QueryParameters;
-using Web.Util;
-using Xunit.Abstractions;
+using PoEGamblingHelper.Application.QueryParameters;
+using PoEGamblingHelper.Web.Extensions;
 
-namespace Web.Test.Util;
+namespace PoEGamblingHelper.Web.Test.Util;
 
 public class ExtensionFunctionsTest
 {
-    private readonly ITestOutputHelper _testOutputHelper;
-
-    public ExtensionFunctionsTest(ITestOutputHelper testOutputHelper)
-    {
-        _testOutputHelper = testOutputHelper;
-    }
-
     [Theory]
     [InlineData(123.1325, 0, 3)]
     [InlineData(123.1325, 1, 5)]

@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using MockQueryable.Moq;
 using Moq;
 using PoEGamblingHelper.Application.Exception;
@@ -18,17 +17,17 @@ public class LeagueRepositoryTest
         var expectedId = new Guid(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4);
         var today = DateTime.Today.ToUniversalTime();
         var list = new List<League>
-                   {
-                       new() { Id = new Guid(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1), StartDate = today.AddDays(-1) },
-                       new() { Id = new Guid(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2), StartDate = today.AddMinutes(1) },
-                       new() { Id = new Guid(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3), StartDate = today.AddDays(1) },
-                       new() { Id = expectedId, StartDate = today },
-                       new() { Id = new Guid(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5), StartDate = today.AddSeconds(1) },
-                       new() { Id = new Guid(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8), StartDate = today.AddMinutes(-1) },
-                       new() { Id = new Guid(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6), StartDate = today.AddYears(1) },
-                       new() { Id = new Guid(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7), StartDate = today.AddMonths(1) },
-                       new() { Id = new Guid(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9), StartDate = today }
-                   };
+        {
+            new() { Id = new Guid(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1), StartDate = today.AddDays(-1) },
+            new() { Id = new Guid(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2), StartDate = today.AddMinutes(1) },
+            new() { Id = new Guid(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3), StartDate = today.AddDays(1) },
+            new() { Id = expectedId, StartDate = today },
+            new() { Id = new Guid(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5), StartDate = today.AddSeconds(1) },
+            new() { Id = new Guid(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8), StartDate = today.AddMinutes(-1) },
+            new() { Id = new Guid(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6), StartDate = today.AddYears(1) },
+            new() { Id = new Guid(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7), StartDate = today.AddMonths(1) },
+            new() { Id = new Guid(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9), StartDate = today }
+        };
 
         #region Setup
 
@@ -44,7 +43,7 @@ public class LeagueRepositoryTest
 
         var service = new LeagueRepository(appDbContextFactory.Object, dateTimeService.Object);
 
-        service.GetCurrent().Id.Should().Be(expectedId);
+        service.GetCurrent().Id.ShouldBe(expectedId);
     }
 
     [Fact(Skip = "Cannot Mock ApplicationDbContext")] //TODO

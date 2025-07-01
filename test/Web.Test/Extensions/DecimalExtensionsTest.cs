@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using FluentAssertions;
 using PoEGamblingHelper.Web.Extensions;
 
 namespace PoEGamblingHelper.Web.Test.Extensions;
@@ -19,8 +18,8 @@ public class DecimalExtensionsTest
         CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
         var result = value.Round(places);
 
-        result.Length.Should().Be(expectedLength);
-        int.Parse(result.Split('.')[0]).Should().Be((int)value);
+        result.Length.ShouldBe(expectedLength);
+        int.Parse(result.Split('.')[0]).ShouldBe((int)value);
     }
 
     [Theory]
@@ -40,13 +39,13 @@ public class DecimalExtensionsTest
 
         if (expectedLength is null)
         {
-            result.Should().BeNull();
+            result.ShouldBeNull();
         }
         else
         {
-            result.Should().NotBeNull();
-            result!.Length.Should().Be(expectedLength);
-            int.Parse(result.Split('.')[0]).Should().Be((int)decimalValue!);
+            result.ShouldNotBeNull();
+            result!.Length.ShouldBe(expectedLength.Value);
+            int.Parse(result.Split('.')[0]).ShouldBe((int)decimalValue!);
         }
     }
 }

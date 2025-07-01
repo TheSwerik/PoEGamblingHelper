@@ -1,7 +1,6 @@
-using FluentAssertions;
 using PoEGamblingHelper.Application.QueryParameters;
 
-namespace Domain.Test.QueryParameters;
+namespace PoEGamblingHelper.Application.Test.QueryParameters;
 
 public class PageRequestTest
 {
@@ -12,6 +11,6 @@ public class PageRequestTest
     public void SetPageSizeTest(int size, int expected)
     {
         var pageRequest = new PageRequest { PageNumber = 0, PageSize = size };
-        pageRequest.PageSize.Should().Be(expected);
+        pageRequest.PageSize.ShouldBe(expected);
     }
 }
