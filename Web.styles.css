@@ -1,59 +1,23 @@
+@import '_content/Blazor.Bootstrap/Blazor.Bootstrap.7t9tbfaemk.bundle.scp.css';
 @import '_content/Blazored.Toast/Blazored.Toast.bundle.scp.css';
 
-/* /Pages/GamblingHelper.razor.rz.scp.css */
-.vertical-content[b-y1vdupi6cv] {
-    width: 100%;
-    height: 100%;
-    padding: 5rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.footer[b-y1vdupi6cv] {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    background-color: var(--bs-body-bg);
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-}
-
-h1[b-y1vdupi6cv] {
-    font-weight: 500;
-    font-size: 64px;
-    margin-bottom: 0;
-}
-
-h2[b-y1vdupi6cv] {
-    font-weight: 500;
-    font-size: 36px;
-    margin-bottom: 0;
-}
-
-h4[b-y1vdupi6cv] {
-    font-weight: 500;
-    font-size: 20px;
-    margin: 13px 10px 0 10px;
-}
-/* /Shared/Components/Filter.razor.rz.scp.css */
-.w-65[b-0wgqw0wcvf] {
+/* /Pages/GamblingHelper/Components/Filter/Filter.razor.rz.scp.css */
+.w-65[b-se9jebxun1] {
     width: 65%;
 }
 
-.w-35[b-0wgqw0wcvf] {
+.w-35[b-se9jebxun1] {
     width: 35%;
 }
 
-.float-container[b-0wgqw0wcvf] {
+.float-container[b-se9jebxun1] {
     width: 0;
     height: 0;
     margin: 0;
     padding: 0;
 }
 
-.floating-autoload[b-0wgqw0wcvf] {
+.floating-autoload[b-se9jebxun1] {
     position: relative;
     top: -1.7vh;
     /*left: 2.65vw;*/
@@ -65,117 +29,162 @@ h4[b-y1vdupi6cv] {
     z-index: 99999;
 }
 
-.icon[b-0wgqw0wcvf] {
+.icon[b-se9jebxun1] {
     filter: invert(31%) sepia(37%) saturate(6360%) hue-rotate(337deg) brightness(91%) contrast(89%);
     width: 100%;
     height: 100%;
 }
 
-.angles[b-0wgqw0wcvf] {
+.angles[b-se9jebxun1] {
     margin: 0 1rem;
     width: 1rem;
     background-color: var(--bs-primary);
 }
 
-.angles-up[b-0wgqw0wcvf] {
+.angles-up[b-se9jebxun1] {
     -webkit-mask: url(icons/angles-up.svg) no-repeat center;
     mask: url(icons/angles-up.svg) no-repeat center;
 }
 
-.angles-down[b-0wgqw0wcvf] {
+.angles-down[b-se9jebxun1] {
     -webkit-mask: url(icons/angles-down.svg) no-repeat center;
     mask: url(icons/angles-down.svg) no-repeat center;
 }
 
-.card[b-0wgqw0wcvf] {
+.card[b-se9jebxun1] {
     border-width: 2px;
 }
-/* /Shared/Components/GemStats.razor.rz.scp.css */
-#avg-profit[b-fxbhsl0t1m] {
+/* /Pages/GamblingHelper/Components/GemStats.razor.rz.scp.css */
+#avg-profit[b-ybqe1112pw] {
     cursor: initial;
 }
 
-#avg-profit:hover[b-fxbhsl0t1m] {
+#avg-profit:hover[b-ybqe1112pw] {
     filter: none !important;
 }
 
-.edit-button[b-fxbhsl0t1m] {
+.edit-button[b-ybqe1112pw] {
     background: none;
     border: none;
     display: flex;
     height: 1.5rem;
 }
 
-.edit-icon[b-fxbhsl0t1m] {
+.edit-icon[b-ybqe1112pw] {
     background-color: var(--bs-secondary);
     width: 1.5rem;
     height: 1.5rem;
 }
 
-.pen-icon[b-fxbhsl0t1m] {
+.pen-icon[b-ybqe1112pw] {
     -webkit-mask: url(icons/edit.svg) no-repeat center;
     mask: url(icons/edit.svg) no-repeat center;
 }
 
-.check-mark-icon[b-fxbhsl0t1m] {
+.check-mark-icon[b-ybqe1112pw] {
     -webkit-mask: url(icons/check-mark.svg) no-repeat center;
     mask: url(icons/check-mark.svg) no-repeat center;
 }
 
-.reset-icon[b-fxbhsl0t1m] {
+.reset-icon[b-ybqe1112pw] {
     -webkit-mask: url(icons/arrow-rotate-right.svg) no-repeat center;
     mask: url(icons/arrow-rotate-right.svg) no-repeat center;
 }
 
-input[b-fxbhsl0t1m] {
+input[b-ybqe1112pw] {
     padding-right: 8px !important;
 }
 
-.card[b-fxbhsl0t1m] {
+.card[b-ybqe1112pw] {
     border: none;
     background-color: var(--bs-body-bg-accent);
 }
-/* /Shared/Components/Theme.razor.rz.scp.css */
-.fixed-position[b-idie6llbt2] {
-    position: fixed;
-    top: 1rem;
-    left: 1rem;
+/* /Pages/GamblingHelper/GamblingHelper.razor.rz.scp.css */
+h1[b-uy0mfmc5tr] {
+    font-weight: 500;
+    font-size: 64px;
+    margin-bottom: 0;
 }
 
-.icon-anchor[b-idie6llbt2] {
+h2[b-uy0mfmc5tr] {
+    font-weight: 500;
+    font-size: 36px;
+    margin-bottom: 0;
+}
+
+h4[b-uy0mfmc5tr] {
+    font-weight: 500;
+    font-size: 20px;
+    margin: 13px 10px 0 10px;
+}
+/* /Pages/Statistics/Components/Chart.razor.rz.scp.css */
+.test[b-rq81r9b5wp] {
+    width: 30% !important;
+    height: 30% !important;
+}
+/* /Shared/Layout/Components/Footer.razor.rz.scp.css */
+.footer[b-rgw5nfum1a] {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background-color: var(--bs-body-bg);
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+/* /Shared/Layout/Components/Navbar.razor.rz.scp.css */
+nav[b-3k6njdeqoq] {
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    margin: 0;
+    width: 100%;
+    height: 5vh;
+    background-color: var(--bs-body-bg-accent);
+}
+
+nav[b-3k6njdeqoq]  a {
+    color: var(--bs-link-color);
+}
+
+nav[b-3k6njdeqoq]  a.active {
+    color: var(--bs-secondary);
+}
+/* /Shared/Layout/Components/Theme.razor.rz.scp.css */
+.icon-anchor[b-xvmrd3imtf] {
     cursor: pointer;
     margin: 0;
 }
 
-.theme-icon[b-idie6llbt2] {
+.theme-icon[b-xvmrd3imtf] {
     width: 2rem;
     height: 2rem;
     margin: 0;
     background-color: var(--bs-secondary);
 }
 
-.moon-icon[b-idie6llbt2] {
+.moon-icon[b-xvmrd3imtf] {
     -webkit-mask: url(icons/moon.svg) no-repeat center;
     mask: url(icons/moon.svg) no-repeat center;
 }
 
-.sun-icon[b-idie6llbt2] {
+.sun-icon[b-xvmrd3imtf] {
     -webkit-mask: url(icons/sun.svg) no-repeat center;
     mask: url(icons/sun.svg) no-repeat center;
 }
-/* /Shared/MainLayout.razor.rz.scp.css */
-.page[b-s29s4s63jm] {
+/* /Shared/Layout/MainLayout.razor.rz.scp.css */
+.page[b-g2sra1s6uz] {
     position: relative;
     display: flex;
     flex-direction: column;
 }
 
-main[b-s29s4s63jm] {
+main[b-g2sra1s6uz] {
     flex: 1;
 }
 
 @media (min-width: 641px) {
-    .page[b-s29s4s63jm] {
+    .page[b-g2sra1s6uz] {
         flex-direction: row;
     }
 }
