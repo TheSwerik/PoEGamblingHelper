@@ -1,7 +1,36 @@
-﻿@page "/Analytics"
-<h3>Analytics</h3>
-<PassKeyProtection/>
+﻿@page "/analytics"
 
-@code {
-
-}
+<PassKeyProtection>
+    <div class="d-grid" style="grid-template-rows: auto 1fr; height: 100%;">
+        <div class="d-flex justify-content-center">
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle w-100 d-flex justify-content-between align-items-center"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                        id="range">
+                    <p class="ms-0">
+                        @_selectedRange
+                    </p>
+                </button>
+                <ul class="dropdown-menu">
+                    @foreach (RangeSelect range in Enum.GetValuesAsUnderlyingType<RangeSelect>())
+                    {
+                        <li>
+                            <a class="dropdown-item" @onclick="() => UpdateSelectedRange(range)">
+                                @range
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div class="ms-1" style="display: @(_selectedRange == RangeSelect.Custom ? "flex" : "none")">
+                <DateInput @bind-Value="StartDate"></DateInput>
+                <DateInput @bind-Value="EndDate" class="ms-1"></DateInput>
+            </div>
+        </div>
+        <div class="chart-container">
+            <LineChart @ref="_lineChart" Style="height: 100%; width: 100%;"/>
+        </div>
+    </div>
+</PassKeyProtection>

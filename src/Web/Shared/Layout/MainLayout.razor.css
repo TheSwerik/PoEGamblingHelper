@@ -4,10 +4,6 @@
     flex-direction: column;
 }
 
-main {
-    flex: 1;
-}
-
 @media (min-width: 641px) {
     .page {
         flex-direction: row;

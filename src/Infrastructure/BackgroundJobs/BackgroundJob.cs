@@ -20,11 +20,14 @@ public abstract class BackgroundJob : BackgroundService
         // 13:00 - 23:00 = -10h WRONG -> + 24 = 14
         var startTime = configuration.GetSection("BackgroundJobIntervals")
                                      .GetValue<TimeOnly>(GetType().Name + "StartTime");
-        _delay = startTime.ToTimeSpan().Subtract(dateTimeService.UtcNow().TimeOfDay);
+        var rightNow = dateTimeService.UtcNow().TimeOfDay;
+        _delay = startTime.ToTimeSpan().Subtract(rightNow);
         if (_delay < TimeSpan.Zero) _delay = _delay.Add(TimeSpan.FromHours(24));
     }
 
-    protected BackgroundJob(IConfiguration configuration) : this(TimeSpan.Zero, configuration) { }
+    protected BackgroundJob(IConfiguration configuration) : this(TimeSpan.Zero, configuration)
+    {
+    }
 
     private BackgroundJob(TimeSpan delay, IConfiguration configuration)
     {

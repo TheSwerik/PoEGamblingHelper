@@ -52,7 +52,7 @@
                     @foreach (var currency in GetAllowedFilterCurrencies())
                     {
                         <li>
-                            <a class="dropdown-item" href="#" @onclick="() => UpdateCurrency(currency.Id)">
+                            <a class="dropdown-item" @onclick="() => UpdateCurrency(currency.Id)">
                                 <img src="@currency.Icon" alt="Currency-Icon"/> @currency.Name
                             </a>
                         </li>
@@ -91,7 +91,7 @@
                         @foreach (var gemType in GemTypes())
                         {
                             <li>
-                                <a class="dropdown-item" href="#" @onclick="() => UpdateGemType(gemType)">
+                                <a class="dropdown-item" @onclick="() => UpdateGemType(gemType)">
                                     @gemType.ToPrettyString()
                                 </a>
                             </li>
@@ -118,7 +118,7 @@
                     @foreach (var sort in Sorts())
                     {
                         <li>
-                            <a class="dropdown-item" href="#" @onclick="() => UpdateSort(sort)">
+                            <a class="dropdown-item" @onclick="() => UpdateSort(sort)">
                                 @sort.ToPrettyString()
                             </a>
                         </li>

@@ -43,6 +43,12 @@ hr {
 
 a {
     text-decoration: none;
+    color: var(--bs-link);
+}
+
+a.dropdown-item, .dropdown-item:hover {
+    text-decoration: none;
+    color: #212529;
 }
 
 p {
@@ -139,3 +145,13 @@ h1:focus {
 }
 
 /*endregion*/
+
+.chart-container {
+    height: 100%;
+    min-height: 0;
+}
+
+.chart-container > * {
+    height: 100% !important;
+    width: 100% !important;
+}
