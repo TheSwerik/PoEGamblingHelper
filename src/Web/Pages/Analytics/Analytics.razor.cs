@@ -31,7 +31,6 @@ public partial class Analytics
         set
         {
             _startDate = value;
-            Console.WriteLne(2);
             if (_selectedRange == RangeSelect.Custom) _ = UpdateSelectedRange(_selectedRange);
         }
     }
