@@ -25,6 +25,10 @@
                 }
             </ul>
         </div>
+        <div class="ms-1" style="display: @(_selectedRange == RangeSelect.Custom ? "flex" : "none")">
+            <DateInput @bind-Value="StartDate"></DateInput>
+            <DateInput @bind-Value="EndDate" class="ms-1"></DateInput>
+        </div>
     </div>
     <div class="chart-container">
         <LineChart @ref="_lineChart" Style="height: 100%; width: 100%;"/>
