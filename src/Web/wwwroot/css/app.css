@@ -43,6 +43,7 @@ hr {
 
 a {
     text-decoration: none;
+    color: var(--bs-link);
 }
 
 p {
