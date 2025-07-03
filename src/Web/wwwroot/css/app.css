@@ -46,6 +46,11 @@ a {
     color: var(--bs-link);
 }
 
+a.dropdown-item, .dropdown-item:hover {
+    text-decoration: none;
+    color: #212529;
+}
+
 p {
     margin: 0;
 }
