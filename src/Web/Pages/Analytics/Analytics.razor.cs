@@ -31,7 +31,7 @@ public partial class Analytics
         set
         {
             _startDate = value;
-            Console.WriteLine(2);
+            Console.WriteLne(2);
             if (_selectedRange == RangeSelect.Custom) _ = UpdateSelectedRange(_selectedRange);
         }
     }
@@ -42,14 +42,12 @@ public partial class Analytics
         set
         {
             _endDate = value;
-            Console.WriteLine(1);
             if (_selectedRange == RangeSelect.Custom) _ = UpdateSelectedRange(_selectedRange);
         }
     }
 
     private async Task UpdateSelectedRange(RangeSelect range)
     {
-        Console.WriteLine(3);
         _selectedRange = range;
         DateTime start;
         var end = DateTime.UtcNow;
