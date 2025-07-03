@@ -28,4 +28,15 @@ public class AnalyticsDayRepository(IDbContextFactory<ApplicationDbContext> dbCo
                            .ConfigureAwait(false);
         await foreach (var item in items) yield return item;
     }
+
+    public async IAsyncEnumerable<AnalyticsDay> Get(DateOnly startDate, DateOnly endDate)
+    {
+        await using var context = await dbContextFactory.CreateDbContextAsync();
+        var items = context.AnalyticsDay
+                           .Where(a => a.Date >= startDate && a.Date <= endDate)
+                           .OrderByDescending(day => day.Date)
+                           .AsAsyncEnumerable()
+                           .ConfigureAwait(false);
+        await foreach (var item in items) yield return item;
+    }
 }

@@ -7,8 +7,10 @@ namespace PoEGamblingHelper.Api.Controllers;
 public class AnalyticsController(IAnalyticsDayRepository analyticsRepository) : ApiControllerBase
 {
     [HttpGet]
-    public IAsyncEnumerable<AnalyticsDay> GetAll()
+    public IAsyncEnumerable<AnalyticsDay> Get([FromQuery] DateOnly? start, [FromQuery] DateOnly? end)
     {
-        return analyticsRepository.GetAll();
+        if (start is null || end is null) return analyticsRepository.GetAll();
+
+        return analyticsRepository.Get(start.Value, end.Value);
     }
 }

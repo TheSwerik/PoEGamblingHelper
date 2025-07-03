@@ -6,4 +6,5 @@ public interface IAnalyticsDayRepository
 {
     Task AddAsync(int viewCount, DateOnly date);
     IAsyncEnumerable<AnalyticsDay> GetAll();
+    IAsyncEnumerable<AnalyticsDay> Get(DateOnly startDate, DateOnly endDate);
 }
