@@ -2,6 +2,14 @@
 
 <PassKeyProtection/>
 
-<h3>Analytics</h3>
-
-<LineChart @ref="_lineChart" Width="800" Class="mb-4"/>
+<div class="d-grid" style="grid-template-rows: auto 1fr; flex: 1;">
+    <div class="d-flex justify-content-center">
+        @* <InputSelect> *@
+        @* <option>1</option> *@
+        @* </InputSelect> *@
+        <p>test</p>
+    </div>
+    <div class="chart-container">
+        <LineChart @ref="_lineChart" Style="height: 100%; width: 100%;"/>
+    </div>
+</div>
