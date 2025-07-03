@@ -81,6 +81,8 @@ public partial class Analytics
 
     private async Task CreateLineChart(List<Data> data)
     {
+        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+        if (_lineChart is null) return;
         var colors = ColorUtility.CategoricalTwelveColors;
 
         var labels = data.Select(d => d.Label).ToList();
@@ -121,10 +123,10 @@ public partial class Analytics
         }
     }
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        await UpdateSelectedRange(_selectedRange);
-        await base.OnInitializedAsync();
+        if (firstRender) await UpdateSelectedRange(_selectedRange);
+        await base.OnAfterRenderAsync(firstRender);
     }
 
     private record Data(string Label, double Value);

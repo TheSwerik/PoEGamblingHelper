@@ -20,6 +20,16 @@ public class AnalyticsService(HttpClient httpClient, IToastService toastService)
         return await GetAsync<List<AnalyticsDay>?>($"analytics?start={DateOnly.FromDateTime(start)}&end={DateOnly.FromDateTime(end)}");
     }
 
+    public async Task<bool> Check()
+    {
+        return await GetAsync<bool>("analytics/check");
+    }
+
+    public async Task Login(string password)
+    {
+        await GetAsync("analytics/login", ("Authorization", $"Bearer {password}"));
+    }
+
     public async Task<Page<GemData>?> GetAll(PageRequest? page, GemDataQuery? query)
     {
         var queryString = query?.ToQueryString(page) ?? page?.ToQueryString() ?? "";
