@@ -11,6 +11,7 @@ namespace PoEGamblingHelper.Api.Controllers;
 public class AnalyticsController(IAnalyticsDayRepository analyticsRepository, IConfiguration configuration) : ApiControllerBase
 {
     [HttpGet]
+    [Authorize]
     public IAsyncEnumerable<AnalyticsDay> Get([FromQuery] DateOnly? start, [FromQuery] DateOnly? end)
     {
         if (start is null || end is null) return analyticsRepository.GetAll();
@@ -48,8 +49,6 @@ public class AnalyticsController(IAnalyticsDayRepository analyticsRepository, IC
     public async Task<IActionResult> Login([FromHeader(Name = "Authorization")] string apiKey)
     {
         var apiKeySolution = configuration.GetValue<string>("ApiKey");
-        Console.WriteLine(apiKey);
-        Console.WriteLine(apiKeySolution);
         if (apiKey.Length <= "Bearer ".Length || !string.Equals(apiKey["Bearer ".Length..], apiKeySolution)) return Unauthorized();
 
         var claimsIdentity = new ClaimsIdentity(
