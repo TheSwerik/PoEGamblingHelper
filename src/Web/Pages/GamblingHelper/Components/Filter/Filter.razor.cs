@@ -39,8 +39,8 @@ public partial class Filter : ComponentBase
     private string CurrencyValueString()
     {
         return FilterModel.CurrencyValue is null && FilterModel.Currency is not null
-            ? ToStringOrBlank(FilterModel.Currency.ChaosEquivalent)
-            : ToStringOrBlank(FilterModel.CurrencyValue);
+                   ? ToStringOrBlank(FilterModel.Currency.ChaosEquivalent)
+                   : ToStringOrBlank(FilterModel.CurrencyValue);
     }
 
     private void ToggleFilters()
@@ -116,16 +116,18 @@ public partial class Filter : ComponentBase
 
     #region Update Callback
 
-    private async Task UpdateTempleCost(ChangeEventArgs args)
+    private async Task UpdateTempleCost(string newValue)
     {
-        if (args.Value is null || !decimal.TryParse(args.Value.ToString(), out var value)) return;
+        var value = newValue.ToDecimal();
+        if (value is null) return;
         FilterModel.TempleCost = value * ConversionRatio();
         await SaveFilterValues();
     }
 
-    private async Task UpdateCurrencyValueChanged(ChangeEventArgs args)
+    private async Task UpdateCurrencyValueChanged(string newValue)
     {
-        if (args.Value is null || !decimal.TryParse(args.Value.ToString(), out var value)) return;
+        var value = newValue.ToDecimal();
+        if (value is null) return;
         FilterModel.CurrencyValue = value;
         await SaveFilterValues();
     }
@@ -137,16 +139,18 @@ public partial class Filter : ComponentBase
         await SaveFilterValues();
     }
 
-    private async Task UpdatePricePerTryFrom(ChangeEventArgs args)
+    private async Task UpdatePricePerTryFrom(string newValue)
     {
-        if (args.Value is null || !decimal.TryParse(args.Value.ToString(), out var value)) return;
+        var value = newValue.ToDecimal();
+        if (value is null) return;
         FilterModel.PricePerTryFrom = value * ConversionRatio();
         await SaveFilterValues();
     }
 
-    private async Task UpdatePricePerTryTo(ChangeEventArgs args)
+    private async Task UpdatePricePerTryTo(string newValue)
     {
-        if (args.Value is null || !decimal.TryParse(args.Value.ToString(), out var value)) return;
+        var value = newValue.ToDecimal();
+        if (value is null) return;
         FilterModel.PricePerTryTo = value * ConversionRatio();
         await SaveFilterValues();
     }

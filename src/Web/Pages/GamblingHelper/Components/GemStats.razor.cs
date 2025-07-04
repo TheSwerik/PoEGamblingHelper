@@ -21,19 +21,22 @@ public partial class GemStats
     [Parameter] public League CurrentLeague { get; set; } = null!;
     [Inject] private ILocalStorageService LocalStorage { get; set; } = default!;
 
-    private decimal FilterTempleCost() { return FilterModel.TempleCost ?? TempleCost.AverageChaosValue(); }
+    private decimal FilterTempleCost()
+    {
+        return FilterModel.TempleCost ?? TempleCost.AverageChaosValue();
+    }
 
     private string TradeUrl(GemData gemData, ResultCase? resultCase = null)
     {
         if (resultCase is null) // raw gem
         {
             var rawUrlGem = new GemTradeData
-                            {
-                                Name = gemData.Name,
-                                Corrupted = false,
-                                GemLevel = gemData.MaxLevel(),
-                                GemQuality = 0
-                            };
+            {
+                Name = gemData.Name,
+                Corrupted = false,
+                GemLevel = gemData.MaxLevel(),
+                GemQuality = 0
+            };
             return rawUrlGem.TradeUrl(CurrentLeague);
         }
 
@@ -44,77 +47,82 @@ public partial class GemStats
         if (resultGem is not null) return resultGem.TradeUrl(CurrentLeague);
 
         var urlGem = new GemTradeData
-                     {
-                         Name = gemData.Name,
-                         Corrupted = true,
-                         GemLevel = gemData.MaxLevel() + resultCase.Value.LevelModifier(),
-                         GemQuality = 0
-                     };
+        {
+            Name = gemData.Name,
+            Corrupted = true,
+            GemLevel = gemData.MaxLevel() + resultCase.Value.LevelModifier(),
+            GemQuality = 0
+        };
         return urlGem.TradeUrl(CurrentLeague);
     }
 
-    private string CurrencyValue(decimal chaosValue) { return (chaosValue / CurrencyValue()).Round(2); }
+    private string CurrencyValue(decimal chaosValue)
+    {
+        return (chaosValue / CurrencyValue()).Round(2);
+    }
 
     private decimal CurrencyValue()
     {
-        return FilterModel.CurrencyValue
-               ?? FilterModel.Currency?.ChaosEquivalent
-               ?? 1;
+        return FilterModel.CurrencyValue ?? FilterModel.Currency?.ChaosEquivalent ?? 1;
     }
 
-    private async Task UpdateRawValue(ChangeEventArgs args)
+    private async Task UpdateRawValue(string? newValue)
     {
-        if (args.Value is null || string.IsNullOrWhiteSpace(args.Value.ToString()))
+        if (string.IsNullOrWhiteSpace(newValue))
         {
             _values.RawValue = null;
             await SaveValues();
             return;
         }
 
-        if (!decimal.TryParse(args.Value.ToString(), out var value)) return;
-        _values.RawValue = value * CurrencyValue();
+        var value = newValue.ToDecimal();
+        if (value is null) return;
+        _values.RawValue = (value * CurrencyValue()).ToString();
         await SaveValues();
     }
 
-    private async Task UpdateWorstCaseValue(ChangeEventArgs args)
+    private async Task UpdateWorstCaseValue(string? newValue)
     {
-        if (args.Value is null || string.IsNullOrWhiteSpace(args.Value.ToString()))
+        if (string.IsNullOrWhiteSpace(newValue))
         {
             _values.WorstCaseValue = null;
             await SaveValues();
             return;
         }
 
-        if (!decimal.TryParse(args.Value.ToString(), out var value)) return;
-        _values.WorstCaseValue = value * CurrencyValue();
+        var value = newValue.ToDecimal();
+        if (value is null) return;
+        _values.WorstCaseValue = (value * CurrencyValue()).ToString();
         await SaveValues();
     }
 
-    private async Task UpdateMiddleCaseValue(ChangeEventArgs args)
+    private async Task UpdateMiddleCaseValue(string? newValue)
     {
-        if (args.Value is null || string.IsNullOrWhiteSpace(args.Value.ToString()))
+        if (string.IsNullOrWhiteSpace(newValue))
         {
             _values.MiddleCaseValue = null;
             await SaveValues();
             return;
         }
 
-        if (!decimal.TryParse(args.Value.ToString(), out var value)) return;
-        _values.MiddleCaseValue = value * CurrencyValue();
+        var value = newValue.ToDecimal();
+        if (value is null) return;
+        _values.MiddleCaseValue = (value * CurrencyValue()).ToString();
         await SaveValues();
     }
 
-    private async Task UpdateBestCaseValue(ChangeEventArgs args)
+    private async Task UpdateBestCaseValue(string? newValue)
     {
-        if (args.Value is null || string.IsNullOrWhiteSpace(args.Value.ToString()))
+        if (string.IsNullOrWhiteSpace(newValue))
         {
             _values.BestCaseValue = null;
             await SaveValues();
             return;
         }
 
-        if (!decimal.TryParse(args.Value.ToString(), out var value)) return;
-        _values.BestCaseValue = value * CurrencyValue();
+        var value = newValue.ToDecimal();
+        if (value is null) return;
+        _values.BestCaseValue = (value * CurrencyValue()).ToString();
         await SaveValues();
     }
 
@@ -125,7 +133,10 @@ public partial class GemStats
         _isEditing = false;
     }
 
-    private async Task SaveValues() { await LocalStorage.SetItemAsync(GemData.Id.ToString(), _values); }
+    private async Task SaveValues()
+    {
+        await LocalStorage.SetItemAsync(GemData.Id.ToString(), _values);
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -133,13 +144,17 @@ public partial class GemStats
         _values = values ?? new Values();
     }
 
-    private string GetCurrencyString(decimal? value) { return value is null ? "" : CurrencyValue(value.Value); }
+    private string GetCurrencyString(string? value)
+    {
+        var parsed = value.ToDecimal();
+        return parsed is null ? "" : CurrencyValue(parsed.Value);
+    }
 
     private class Values
     {
-        public decimal? RawValue { get; set; }
-        public decimal? WorstCaseValue { get; set; }
-        public decimal? MiddleCaseValue { get; set; }
-        public decimal? BestCaseValue { get; set; }
+        public string? RawValue { get; set; }
+        public string? WorstCaseValue { get; set; }
+        public string? MiddleCaseValue { get; set; }
+        public string? BestCaseValue { get; set; }
     }
 }
