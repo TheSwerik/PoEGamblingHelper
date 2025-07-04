@@ -1,19 +1,21 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Components;
 
 namespace PoEGamblingHelper.Web.Shared.Components;
 
 public partial class MathInput : ComponentBase
 {
-    public string Value { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? InputAttributes { get; set; }
 
-    protected override async Task OnInitializedAsync()
-    {
-        Console.WriteLine(Calc("123.123 + 231232.32 / 132123 * 1234 * 432 - 123 * 123 + 13 / 54"));
-    }
+    public double Value { get; set; }
 
-    private void Calculate(ChangeEventArgs obj)
+    private void OnValueChanged(ChangeEventArgs obj)
     {
-        var multiplications = Value.Split('*');
+        if (obj.Value is null) return;
+        var value = obj.Value.ToString()!.Trim();
+        if (!InputRegex().IsMatch(value)) return;
+        Value = Calc(value);
     }
 
     private static double Calc(string expression)
@@ -32,4 +34,7 @@ public partial class MathInput : ComponentBase
 
         return double.Parse(expression);
     }
+
+    [GeneratedRegex(@"^([0-9]+(\.[0-9]+)? ?[\+\-\*\/]? ?)+$")]
+    private static partial Regex InputRegex();
 }
