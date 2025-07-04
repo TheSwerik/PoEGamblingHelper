@@ -1,5 +1,5 @@
 [*]
-charset = utf-8-bom
+charset = utf-8
 end_of_line = crlf
 trim_trailing_whitespace = false
 insert_final_newline = false
@@ -524,7 +524,6 @@ dotnet_style_qualification_for_field = false:suggestion
 dotnet_style_qualification_for_method = false:suggestion
 dotnet_style_qualification_for_property = false:suggestion
 dotnet_style_require_accessibility_modifiers = for_non_interface_members:suggestion
-file_header_template = 
 fsharp_align_function_signature_to_indentation = false
 fsharp_alternative_long_member_definitions = false
 fsharp_indent_on_try_with = false
