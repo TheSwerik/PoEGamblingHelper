@@ -10,8 +10,8 @@ public class TempleController(ITempleRepository templeRepository) : ApiControlle
 {
     [HttpGet]
     [OutputCache(PolicyName = Constants.DataFetcherCacheTag)]
-    public TempleCost Get()
+    public TempleCost Get([FromQuery] string league)
     {
-        return templeRepository.GetCurrent();
+        return templeRepository.GetCurrent(league);
     }
 }

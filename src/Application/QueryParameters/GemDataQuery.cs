@@ -9,4 +9,5 @@ public class GemDataQuery
     public bool ShowVaal { get; set; } = false;
     public decimal? PricePerTryFrom { get; set; }
     public decimal? PricePerTryTo { get; set; }
+    public string League { get; set; } = null!;
 }

@@ -18,6 +18,8 @@ public class FilterModel
 
     public GemDataQuery ToQuery()
     {
+        Console.WriteLine(1);
+        Console.WriteLine(League);
         return new GemDataQuery
         {
             SearchText = Gem,
@@ -25,7 +27,8 @@ public class FilterModel
             GemType = GemType,
             OnlyShowProfitable = OnlyShowProfitable,
             PricePerTryFrom = PricePerTryFrom,
-            PricePerTryTo = PricePerTryTo
+            PricePerTryTo = PricePerTryTo,
+            League = League!
         };
     }
 }

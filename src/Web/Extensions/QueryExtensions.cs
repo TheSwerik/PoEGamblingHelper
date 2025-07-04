@@ -22,7 +22,7 @@ public static class QueryExtensions
                                   : $"&pricePerTryFrom={gemDataQuery.PricePerTryFrom}";
         var pricePerTryTo = gemDataQuery.PricePerTryTo is null ? "" : $"&pricePerTryTo={gemDataQuery.PricePerTryTo}";
         return
-            $"{start}sort={gemDataQuery.Sort}&gemType={gemDataQuery.GemType}&onlyShowProfitable={gemDataQuery.OnlyShowProfitable}&showVaal={gemDataQuery.ShowVaal}{searchText}{pricePerTryFrom}{pricePerTryTo}";
+            $"{start}sort={gemDataQuery.Sort}&gemType={gemDataQuery.GemType}&onlyShowProfitable={gemDataQuery.OnlyShowProfitable}&showVaal={gemDataQuery.ShowVaal}{searchText}{pricePerTryFrom}{pricePerTryTo}&league={gemDataQuery.League}";
     }
 
     public static string ToQueryString(this PageRequest pageRequest)
@@ -31,13 +31,13 @@ public static class QueryExtensions
     }
 
     public static string TradeUrl(this GemTradeData gemTradeData,
-                                  string currentLeague,
+                                  string league,
                                   bool accurateLevel = true,
                                   bool accurateQuality = false)
     {
         const string poeTradeUrl = "https://www.pathofexile.com/trade/search";
         const string queryKey = "?q=";
-        return $"{poeTradeUrl}/{currentLeague}{queryKey}{gemTradeData.TradeQuery(accurateLevel, accurateQuality)}";
+        return $"{poeTradeUrl}/{league}{queryKey}{gemTradeData.TradeQuery(accurateLevel, accurateQuality)}";
     }
 
     public static string TradeQuery(this GemTradeData gemTradeData,

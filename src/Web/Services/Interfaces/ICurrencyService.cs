@@ -4,5 +4,5 @@ namespace PoEGamblingHelper.Web.Services.Interfaces;
 
 public interface ICurrencyService
 {
-    public Task<List<Currency>?> GetAll();
+    public Task<List<Currency>?> GetAll(string league);
 }

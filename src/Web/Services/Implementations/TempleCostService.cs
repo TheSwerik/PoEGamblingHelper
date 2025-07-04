@@ -4,8 +4,10 @@ using PoEGamblingHelper.Web.Services.Interfaces;
 
 namespace PoEGamblingHelper.Web.Services.Implementations;
 
-public class TempleCostService
-    (HttpClient httpClient, IToastService toastService) : HttpService(httpClient, toastService), ITempleCostService
+public class TempleCostService(HttpClient httpClient, IToastService toastService) : HttpService(httpClient, toastService), ITempleCostService
 {
-    public async Task<TempleCost?> Get() { return await GetAsync<TempleCost>("temple"); }
+    public async Task<TempleCost?> Get(string league)
+    {
+        return await GetAsync<TempleCost>($"temple?league={league}");
+    }
 }

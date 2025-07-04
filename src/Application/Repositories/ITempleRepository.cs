@@ -4,5 +4,5 @@ namespace PoEGamblingHelper.Application.Repositories;
 
 public interface ITempleRepository
 {
-    TempleCost GetCurrent();
+    TempleCost GetCurrent(string league);
 }

@@ -4,5 +4,5 @@ namespace PoEGamblingHelper.Web.Services.Interfaces;
 
 public interface ITempleCostService
 {
-    public Task<TempleCost?> Get();
+    public Task<TempleCost?> Get(string league);
 }

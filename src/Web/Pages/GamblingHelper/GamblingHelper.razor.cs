@@ -34,7 +34,6 @@ public partial class GamblingHelper : IDisposable
 
     protected override async Task OnInitializedAsync()
     {
-        Console.WriteLine(1);
         var filterValues = await LocalStorage.GetItemAsync<FilterModel>("GemDataQuery");
         if (filterValues is not null) _filterModel = filterValues;
 
@@ -47,13 +46,19 @@ public partial class GamblingHelper : IDisposable
 
     private async Task LoadGamblingData()
     {
-        Console.WriteLine(3);
         try
         {
             _firstLoad = false;
             await InvokeAsync(StateHasChanged);
 
-            var currency = await CurrencyService.GetAll();
+            if (_filterModel.League is null)
+            {
+                var league = await LeagueService.GetCurrent();
+                if (league is null) throw new Exception("League not found");
+                _filterModel.League = league.Name;
+            }
+
+            var currency = await CurrencyService.GetAll(_filterModel.League);
             if (currency is null || currency.Count == 0) return;
             _currency = currency;
 
@@ -62,16 +67,8 @@ public partial class GamblingHelper : IDisposable
                                         : _currency.FirstOrDefault(c => c.Id.Equals(_filterModel.Currency.Id));
             _filterModel.Currency ??= _currency.First(c => c.Name.EqualsIgnoreCase("Divine Orb"));
 
-            var templeCost = await TempleCostService.Get();
+            var templeCost = await TempleCostService.Get(_filterModel.League);
             if (templeCost is not null) _templeCost = templeCost;
-
-            Console.WriteLine(4);
-            if (_filterModel.League is null)
-            {
-                var league = await LeagueService.GetCurrent();
-                if (league is not null) _filterModel.League = league.Name;
-                Console.WriteLine(5);
-            }
 
             var gemPage = _currentGemPage;
             _isOnLastPage = false;
@@ -104,6 +101,8 @@ public partial class GamblingHelper : IDisposable
     private async Task<bool> UpdateGems()
     {
         if (_isOnLastPage) return false;
+        Console.WriteLine(2);
+        Console.WriteLine(_filterModel.League);
         var gemPage = await GemService.GetAll(new PageRequest { PageSize = 20, PageNumber = _currentGemPage },
                                               _filterModel.ToQuery());
         if (gemPage is null) return false;

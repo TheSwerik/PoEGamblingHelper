@@ -6,19 +6,12 @@ using PoEGamblingHelper.Infrastructure.Database;
 
 namespace PoEGamblingHelper.Infrastructure.Repositories;
 
-public class TempleRepository : ITempleRepository
+public class TempleRepository(IDbContextFactory<ApplicationDbContext> dbContextFactory) : ITempleRepository
 {
-    private readonly IDbContextFactory<ApplicationDbContext> _dbContextFactory;
-
-    public TempleRepository(IDbContextFactory<ApplicationDbContext> dbContextFactory)
+    public TempleCost GetCurrent(string league)
     {
-        _dbContextFactory = dbContextFactory;
-    }
-
-    public TempleCost GetCurrent()
-    {
-        using var applicationDbContext = _dbContextFactory.CreateDbContext();
-        return applicationDbContext.TempleCost.OrderByDescending(cost => cost.TimeStamp).FirstOrDefault()
-               ?? throw new NoTempleDataException();
+        using var applicationDbContext = dbContextFactory.CreateDbContext();
+        return applicationDbContext.TempleCost.Where(c => c.League.Equals(league)).OrderByDescending(cost => cost.TimeStamp).FirstOrDefault() ??
+               throw new NoTempleDataException();
     }
 }
