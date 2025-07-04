@@ -3,26 +3,26 @@ using System.Net.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PoEGamblingHelper.Application.Exception;
-using PoEGamblingHelper.Domain.Entity;
 using PoEGamblingHelper.Infrastructure.Database;
 using PoEGamblingHelper.Infrastructure.Extensions;
 
 namespace PoEGamblingHelper.Infrastructure.DataFetcher;
 
 // ReSharper disable once SuggestBaseTypeForParameterInConstructor
-public class GemDataFetcher(ILogger<GemDataFetcher> logger,
-                            IDbContextFactory<ApplicationDbContext> applicationDbContextFactory,
-                            IHttpClientFactory httpClientFactory) : IDataFetcher
+public class GemDataFetcher(
+    ILogger<GemDataFetcher> logger,
+    IDbContextFactory<ApplicationDbContext> applicationDbContextFactory,
+    IHttpClientFactory httpClientFactory) : IDataFetcher
 {
-    public async Task Fetch(League league)
+    public async Task Fetch(string league)
     {
-        var response = await GetAsync(PoeToolUrls.PoeNinjaGemUrl + $"&league={league.Name}");
+        var response = await GetAsync(PoeToolUrls.PoeNinjaGemUrl + $"&league={league}");
         if (!response.IsSuccessStatusCode) throw new ApiDownException(PoeToolUrls.PoeNinjaGemUrl);
         var gemPriceData = await response.Content.ReadFromJsonAsync<GemPriceData>();
         if (gemPriceData is null) throw new ApiDownException(PoeToolUrls.PoeNinjaGemUrl);
         logger.LogInformation("Got data from {Result} gems", gemPriceData.Lines.Length);
 
-        await FetchGemTradeData(gemPriceData);
+        await FetchGemTradeData(league, gemPriceData);
         await FetchGemData(gemPriceData);
     }
 
@@ -59,30 +59,29 @@ public class GemDataFetcher(ILogger<GemDataFetcher> logger,
         await applicationDbContext.SaveChangesAsync();
     }
 
-    private async Task FetchGemTradeData(GemPriceData gemPriceData)
+    private async Task FetchGemTradeData(string league, GemPriceData gemPriceData)
     {
         await using var applicationDbContext = await applicationDbContextFactory.CreateDbContextAsync();
 
         var existingGemTradeData = applicationDbContext.GemTradeData
                                                        .AsNoTracking()
-                                                       .Select(gemTradeData => gemTradeData.Id)
                                                        .ToArray();
 
         var newGemTradeData = gemPriceData.Lines
-                                          .Where(gem => !existingGemTradeData.Contains(gem.Id))
+                                          .Where(gem => !existingGemTradeData.Any(g => g.Id.Equals(gem.Id) && g.League.Equals(league)))
                                           .ToArray();
 
         // Add
         await applicationDbContext.GemTradeData.AddRangeAsync(
-            newGemTradeData.Select(gemTradeData => gemTradeData.ToGemTradeData()));
+            newGemTradeData.Select(gemTradeData => gemTradeData.ToGemTradeData(league)));
         logger.LogInformation("Added {Result} new GemTradeData", newGemTradeData.Length);
 
         // Update
         var updatedGemTradeData = gemPriceData.Lines
-                                              .Where(gem => existingGemTradeData.Contains(gem.Id))
+                                              .Where(gem => existingGemTradeData.Any(g => g.Id.Equals(gem.Id) && g.League.Equals(league)))
                                               .ToArray();
         applicationDbContext.GemTradeData.UpdateRange(
-            updatedGemTradeData.Select(gemTradeData => gemTradeData.ToGemTradeData()));
+            updatedGemTradeData.Select(gemTradeData => gemTradeData.ToGemTradeData(league)));
         logger.LogInformation("Updated {Result} GemTradeData", updatedGemTradeData.Length);
 
         await applicationDbContext.SaveChangesAsync();

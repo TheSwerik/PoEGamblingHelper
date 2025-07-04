@@ -8,10 +8,13 @@ public class CurrencyConfiguration : IEntityTypeConfiguration<Currency>
 {
     public void Configure(EntityTypeBuilder<Currency> builder)
     {
-        builder.HasKey(c => c.Id);
+        builder.HasKey(c => new { c.Id, c.League });
         builder.Property(c => c.Id)
                .IsRequired()
                .ValueGeneratedOnAdd();
+
+        builder.Property(c => c.League)
+               .IsRequired();
 
         builder.Property(c => c.Name)
                .IsRequired();

@@ -8,10 +8,13 @@ public class TempleCostConfiguration : IEntityTypeConfiguration<TempleCost>
 {
     public void Configure(EntityTypeBuilder<TempleCost> builder)
     {
-        builder.HasKey(t => t.Id);
+        builder.HasKey(t => new { t.Id, t.League });
         builder.Property(t => t.Id)
                .IsRequired()
                .ValueGeneratedOnAdd();
+
+        builder.Property(t => t.League)
+               .IsRequired();
 
         builder.Property(t => t.TimeStamp)
                .IsRequired()

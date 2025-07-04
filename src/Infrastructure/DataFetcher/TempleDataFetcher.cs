@@ -9,23 +9,24 @@ using PoEGamblingHelper.Infrastructure.Database;
 namespace PoEGamblingHelper.Infrastructure.DataFetcher;
 
 // ReSharper disable once SuggestBaseTypeForParameterInConstructor
-public class TempleDataFetcher(ILogger<TempleDataFetcher> logger,
-                               IDbContextFactory<ApplicationDbContext> applicationDbContextFactory,
-                               IHttpClientFactory httpClientFactory) : IDataFetcher
+public class TempleDataFetcher(
+    ILogger<TempleDataFetcher> logger,
+    IDbContextFactory<ApplicationDbContext> applicationDbContextFactory,
+    IHttpClientFactory httpClientFactory) : IDataFetcher
 {
     private readonly MediaTypeHeaderValue _jsonMediaTypeHeader = MediaTypeHeaderValue.Parse("application/json");
 
     private readonly string _templeQuery =
         File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "/TempleQuery.json");
 
-    public async Task Fetch(League league)
+    public async Task Fetch(string league)
     {
         #region Fetch Temple IDs
 
         logger.LogDebug("Fetching Temple IDs...");
 
         TradeResults temples;
-        var requestUri = $"{PoeToolUrls.PoeApiTradeUrl}/search/{league.Name}";
+        var requestUri = $"{PoeToolUrls.PoeApiTradeUrl}/search/{league}";
         using (var request = new HttpRequestMessage(HttpMethod.Post, requestUri))
         {
             request.Content = new StringContent(_templeQuery, _jsonMediaTypeHeader);
@@ -56,8 +57,7 @@ public class TempleDataFetcher(ILogger<TempleDataFetcher> logger,
             var result = await SendAsync(request);
             if (!result.IsSuccessStatusCode) throw new ApiDownException(PoeToolUrls.PoeApiTradeUrl);
 
-            priceResults = await result.Content.ReadFromJsonAsync<TradeEntryResult>()
-                           ?? throw new ApiDownException(PoeToolUrls.PoeApiTradeUrl);
+            priceResults = await result.Content.ReadFromJsonAsync<TradeEntryResult>() ?? throw new ApiDownException(PoeToolUrls.PoeApiTradeUrl);
         }
 
         logger.LogDebug("Found {ResultLength} TemplePrices", priceResults.Result.Length);
@@ -73,8 +73,8 @@ public class TempleDataFetcher(ILogger<TempleDataFetcher> logger,
                                       )
                                       .ToArray();
 
-        await applicationDbContext.TempleCost.ExecuteDeleteAsync(); // Delete every Temple Entry
-        await applicationDbContext.TempleCost.AddAsync(new TempleCost { ChaosValue = chaosValues });
+        await applicationDbContext.TempleCost.Where(t => t.League.Equals(league)).ExecuteDeleteAsync(); // Delete every Temple Entry with same league
+        await applicationDbContext.TempleCost.AddAsync(new TempleCost { ChaosValue = chaosValues, League = league });
         await applicationDbContext.SaveChangesAsync();
 
         logger.LogInformation("Saved {PriceLength} TemplePrices", chaosValues.Length);

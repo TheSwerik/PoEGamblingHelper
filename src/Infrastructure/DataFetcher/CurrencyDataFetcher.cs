@@ -10,14 +10,15 @@ using PoEGamblingHelper.Infrastructure.Database;
 namespace PoEGamblingHelper.Infrastructure.DataFetcher;
 
 // ReSharper disable once SuggestBaseTypeForParameterInConstructor
-public class CurrencyDataFetcher(ILogger<CurrencyDataFetcher> logger,
-                                 IDbContextFactory<ApplicationDbContext> applicationDbContextFactory,
-                                 IHttpClientFactory httpClientFactory)
+public class CurrencyDataFetcher(
+    ILogger<CurrencyDataFetcher> logger,
+    IDbContextFactory<ApplicationDbContext> applicationDbContextFactory,
+    IHttpClientFactory httpClientFactory)
     : IDataFetcher
 {
-    public async Task Fetch(League league)
+    public async Task Fetch(string league)
     {
-        var response = await GetAsync($"{PoeToolUrls.PoeNinjaCurrencyUrl}&league={league.Name}");
+        var response = await GetAsync($"{PoeToolUrls.PoeNinjaCurrencyUrl}&league={league}");
         if (!response.IsSuccessStatusCode) throw new ApiDownException(PoeToolUrls.PoeNinjaCurrencyUrl);
         var currencyPriceData = await response.Content.ReadFromJsonAsync<CurrencyPriceData>();
         if (currencyPriceData is null) throw new ApiDownException(PoeToolUrls.PoeNinjaCurrencyUrl);
@@ -36,22 +37,21 @@ public class CurrencyDataFetcher(ILogger<CurrencyDataFetcher> logger,
 
         var existingCurrency = applicationDbContext.Currency
                                                    .AsNoTracking()
-                                                   .Select(currency => currency.Id)
                                                    .ToArray();
 
         var newPoeNinjaCurrencyData = currencyPriceData.Lines
                                                        .Where(currencyData =>
-                                                                  !existingCurrency.Contains(currencyData.DetailsId))
+                                                                  !existingCurrency.Any(c => c.Id.Equals(currencyData.DetailsId) && c.League.Equals(league)))
                                                        .ToArray();
         await applicationDbContext.Currency.AddRangeAsync(
-            newPoeNinjaCurrencyData.Select(poeNinjaData => poeNinjaData.ToCurrencyData()));
+            newPoeNinjaCurrencyData.Select(poeNinjaData => poeNinjaData.ToCurrencyData(league)));
         logger.LogInformation("Added {Result} new Currency", newPoeNinjaCurrencyData.Length);
 
         var updatedPoeNinjaCurrencyData = currencyPriceData.Lines
-                                                           .Where(gem => existingCurrency.Contains(gem.DetailsId))
+                                                           .Where(gem => existingCurrency.Any(c => c.Id.Equals(gem.DetailsId) && c.League.Equals(league)))
                                                            .ToArray();
         applicationDbContext.Currency.UpdateRange(
-            updatedPoeNinjaCurrencyData.Select(poeNinjaData => poeNinjaData.ToCurrencyData()));
+            updatedPoeNinjaCurrencyData.Select(poeNinjaData => poeNinjaData.ToCurrencyData(league)));
         logger.LogInformation("Updated {Result} Currency", updatedPoeNinjaCurrencyData.Length);
 
         await applicationDbContext.SaveChangesAsync();
@@ -60,16 +60,17 @@ public class CurrencyDataFetcher(ILogger<CurrencyDataFetcher> logger,
 
         // not EqualsIgnoreCase because of EntityFramework
         var chaos = applicationDbContext.Currency
-                                        .FirstOrDefault(currency => currency.Name.ToLower().Equals("chaos orb"));
+                                        .FirstOrDefault(currency => currency.Name.ToLower().Equals("chaos orb") && currency.League.Equals(league));
         if (chaos is not null) return;
         await applicationDbContext.Currency.AddAsync(new Currency
-                                                     {
-                                                         Name = "Chaos Orb",
-                                                         ChaosEquivalent = 1,
-                                                         Icon =
-                                                             "https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyRerollRare.png",
-                                                         Id = "chaos-orb"
-                                                     });
+        {
+            Name = "Chaos Orb",
+            ChaosEquivalent = 1,
+            Icon =
+                "https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyRerollRare.png",
+            Id = "chaos-orb",
+            League = league
+        });
         logger.LogInformation("Saved Chaos Orb");
 
         #endregion

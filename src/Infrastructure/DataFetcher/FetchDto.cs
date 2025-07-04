@@ -14,47 +14,50 @@ public class PoeNinjaCurrencyData
     public string DetailsId { get; init; }
     public string? Icon { get; set; }
 
-    public Currency ToCurrencyData()
+    public Currency ToCurrencyData(string league)
     {
         return new Currency
-               {
-                   Id = DetailsId,
-                   Name = CurrencyTypeName,
-                   ChaosEquivalent = ChaosEquivalent,
-                   Icon = Icon
-               };
+        {
+            Id = DetailsId,
+            Name = CurrencyTypeName,
+            ChaosEquivalent = ChaosEquivalent,
+            Icon = Icon,
+            League = league
+        };
     }
 }
 
 public record PoeNinjaCurrencyDetails(string Name, string? Icon);
 
-public record PoeNinjaGemData(long Id,
-                              string Name,
-                              string Icon,
-                              int GemLevel,
-                              int GemQuality,
-                              bool Corrupted,
-                              string DetailsId,
-                              decimal ChaosValue,
-                              decimal ExaltedValue,
-                              decimal DivineValue,
-                              int ListingCount)
+public record PoeNinjaGemData(
+    long Id,
+    string Name,
+    string Icon,
+    int GemLevel,
+    int GemQuality,
+    bool Corrupted,
+    string DetailsId,
+    decimal ChaosValue,
+    decimal ExaltedValue,
+    decimal DivineValue,
+    int ListingCount)
 {
-    public GemTradeData ToGemTradeData()
+    public GemTradeData ToGemTradeData(string league)
     {
         return new GemTradeData
-               {
-                   Id = Id,
-                   Name = Name,
-                   GemLevel = GemLevel,
-                   GemQuality = GemQuality,
-                   Corrupted = Corrupted,
-                   DetailsId = DetailsId,
-                   ChaosValue = ChaosValue,
-                   ExaltedValue = ExaltedValue,
-                   DivineValue = DivineValue,
-                   ListingCount = ListingCount
-               };
+        {
+            Id = Id,
+            Name = Name,
+            GemLevel = GemLevel,
+            GemQuality = GemQuality,
+            Corrupted = Corrupted,
+            DetailsId = DetailsId,
+            ChaosValue = ChaosValue,
+            ExaltedValue = ExaltedValue,
+            DivineValue = DivineValue,
+            ListingCount = ListingCount,
+            League = league
+        };
     }
 }
 
