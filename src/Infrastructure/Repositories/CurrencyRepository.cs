@@ -5,19 +5,12 @@ using PoEGamblingHelper.Infrastructure.Database;
 
 namespace PoEGamblingHelper.Infrastructure.Repositories;
 
-public class CurrencyRepository : ICurrencyRepository
+public class CurrencyRepository(IDbContextFactory<ApplicationDbContext> dbContextFactory) : ICurrencyRepository
 {
-    private readonly IDbContextFactory<ApplicationDbContext> _dbContextFactory;
-
-    public CurrencyRepository(IDbContextFactory<ApplicationDbContext> dbContextFactory)
+    public async IAsyncEnumerable<Currency> GetAll(string league)
     {
-        _dbContextFactory = dbContextFactory;
-    }
-
-    public async IAsyncEnumerable<Currency> GetAll()
-    {
-        await using var applicationDbContext = await _dbContextFactory.CreateDbContextAsync();
-        await foreach (var item in applicationDbContext.Currency.AsAsyncEnumerable())
+        await using var applicationDbContext = await dbContextFactory.CreateDbContextAsync();
+        await foreach (var item in applicationDbContext.Currency.Where(c => c.League.Equals(league)).AsAsyncEnumerable())
             yield return item;
     }
 }

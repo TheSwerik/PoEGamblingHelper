@@ -14,17 +14,19 @@ public class FilterModel
     public decimal? CurrencyValue { get; set; }
     public decimal? TempleCost { get; set; }
     public Currency? Currency { get; set; }
+    public string? League { get; set; }
 
     public GemDataQuery ToQuery()
     {
         return new GemDataQuery
-               {
-                   SearchText = Gem,
-                   Sort = Sort,
-                   GemType = GemType,
-                   OnlyShowProfitable = OnlyShowProfitable,
-                   PricePerTryFrom = PricePerTryFrom,
-                   PricePerTryTo = PricePerTryTo
-               };
+        {
+            SearchText = Gem,
+            Sort = Sort,
+            GemType = GemType,
+            OnlyShowProfitable = OnlyShowProfitable,
+            PricePerTryFrom = PricePerTryFrom,
+            PricePerTryTo = PricePerTryTo,
+            League = League!
+        };
     }
 }

@@ -4,5 +4,5 @@ namespace PoEGamblingHelper.Application.Repositories;
 
 public interface ICurrencyRepository
 {
-    IAsyncEnumerable<Currency> GetAll();
+    IAsyncEnumerable<Currency> GetAll(string league);
 }

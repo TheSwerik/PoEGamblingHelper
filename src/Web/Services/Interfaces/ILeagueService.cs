@@ -4,5 +4,6 @@ namespace PoEGamblingHelper.Web.Services.Interfaces;
 
 public interface ILeagueService
 {
-    public Task<League?> GetCurrent();
+    Task<League?> GetCurrent();
+    Task<string[]> GetCurrentLeagues();
 }

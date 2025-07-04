@@ -10,5 +10,8 @@ public class CurrencyController(ICurrencyRepository currencyRepository) : ApiCon
 {
     [HttpGet]
     [OutputCache(PolicyName = Constants.DataFetcherCacheTag)]
-    public IAsyncEnumerable<Currency> GetAll() { return currencyRepository.GetAll(); }
+    public IAsyncEnumerable<Currency> GetAll([FromQuery] string league)
+    {
+        return currencyRepository.GetAll(league);
+    }
 }

@@ -12,17 +12,16 @@ namespace PoEGamblingHelper.Web.Pages.GamblingHelper;
 
 public partial class GamblingHelper : IDisposable
 {
-    private readonly List<GemData> _gems = new();
-    private List<Currency> _currency = new();
-    private League _currentLeague = new();
+    private readonly List<GemData> _gems = [];
+    private List<Currency> _currency = [];
     private FilterModel _filterModel = new();
     private bool _firstLoad = true;
-    private TempleCost _templeCost = new() { ChaosValue = new[] { 0m } };
-    [Inject] private IGemService GemService { get; set; } = default!;
-    [Inject] private ITempleCostService TempleCostService { get; set; } = default!;
-    [Inject] private ICurrencyService CurrencyService { get; set; } = default!;
-    [Inject] private ILocalStorageService LocalStorage { get; set; } = default!;
-    [Inject] private ILeagueService LeagueService { get; set; } = default!;
+    private TempleCost _templeCost = new() { ChaosValue = [0m] };
+    [Inject] private IGemService GemService { get; set; } = null!;
+    [Inject] private ITempleCostService TempleCostService { get; set; } = null!;
+    [Inject] private ICurrencyService CurrencyService { get; set; } = null!;
+    [Inject] private ILocalStorageService LocalStorage { get; set; } = null!;
+    [Inject] private ILeagueService LeagueService { get; set; } = null!;
     [Inject] private IJSRuntime JsRuntime { get; set; } = null!;
     [Inject] private IUpdateService UpdateService { get; set; } = null!;
 
@@ -35,7 +34,6 @@ public partial class GamblingHelper : IDisposable
 
     protected override async Task OnInitializedAsync()
     {
-        await base.OnInitializedAsync();
         var filterValues = await LocalStorage.GetItemAsync<FilterModel>("GemDataQuery");
         if (filterValues is not null) _filterModel = filterValues;
 
@@ -43,6 +41,7 @@ public partial class GamblingHelper : IDisposable
         UpdateService.OnUiUpdate += async _ => await InvokeAsync(StateHasChanged);
         await UpdateService.Update();
         await InvokeAsync(StateHasChanged);
+        await base.OnInitializedAsync();
     }
 
     private async Task LoadGamblingData()
@@ -52,7 +51,14 @@ public partial class GamblingHelper : IDisposable
             _firstLoad = false;
             await InvokeAsync(StateHasChanged);
 
-            var currency = await CurrencyService.GetAll();
+            if (_filterModel.League is null)
+            {
+                var league = await LeagueService.GetCurrent();
+                if (league is null) throw new Exception("League not found");
+                _filterModel.League = league.Name;
+            }
+
+            var currency = await CurrencyService.GetAll(_filterModel.League);
             if (currency is null || currency.Count == 0) return;
             _currency = currency;
 
@@ -61,12 +67,8 @@ public partial class GamblingHelper : IDisposable
                                         : _currency.FirstOrDefault(c => c.Id.Equals(_filterModel.Currency.Id));
             _filterModel.Currency ??= _currency.First(c => c.Name.EqualsIgnoreCase("Divine Orb"));
 
-
-            var templeCost = await TempleCostService.Get();
+            var templeCost = await TempleCostService.Get(_filterModel.League);
             if (templeCost is not null) _templeCost = templeCost;
-
-            var league = await LeagueService.GetCurrent();
-            if (league is not null) _currentLeague = league;
 
             var gemPage = _currentGemPage;
             _isOnLastPage = false;
@@ -88,7 +90,7 @@ public partial class GamblingHelper : IDisposable
         }
     }
 
-    private async void OnFilterValuesChanged(FilterModel filterModel)
+    private async Task OnFilterValuesChanged(FilterModel filterModel)
     {
         _filterModel = filterModel;
         _currentGemPage = 0;
@@ -104,7 +106,6 @@ public partial class GamblingHelper : IDisposable
         if (gemPage is null) return false;
 
         _gems.AddRange(gemPage.Content);
-        Console.WriteLine(_gems.Count);
         _currentGemPage = gemPage.CurrentPage;
         _isOnLastPage = gemPage.LastPage;
         return true;
@@ -116,7 +117,7 @@ public partial class GamblingHelper : IDisposable
     private int _currentGemPage;
     private bool _isOnLastPage;
 
-    private async void OnScrollToBottom(object? sender, int positionY)
+    private async Task OnScrollToBottom(object? sender, int positionY)
     {
         if (_positionsY.Contains(positionY)) return;
         _positionsY.Add(positionY);

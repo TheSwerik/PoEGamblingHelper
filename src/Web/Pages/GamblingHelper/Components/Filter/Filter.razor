@@ -6,7 +6,7 @@
                 <input type="text" class="form-control" style="text-align: left" aria-label="Gem Search"
                        aria-describedby="reset-1" id="gem-search" value="@FilterModel.Gem"
                        @onchange="UpdateGemSearchText">
-                <button class="btn btn-primary btn-addon" type="button" id="reset-1" onclick="@ResetGemSearch">
+                <button class="btn btn-primary btn-addon" type="button" id="reset-1" @onclick="@ResetGemSearch">
                     <img src="icons/x-mark.svg" alt="" style="width: 1rem"/>
                 </button>
             </div>
@@ -140,7 +140,10 @@
             <label for="sorting">Sorting</label>
             <div class="dropdown w-100">
                 <button class="btn btn-primary dropdown-toggle w-100 d-flex justify-content-between align-items-center"
-                        type="button" data-bs-toggle="dropdown" aria-expanded="false" id="sorting">
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                        id="sorting">
                     @FilterModel.Sort.ToPrettyString()
                 </button>
                 <ul class="dropdown-menu">
@@ -149,6 +152,26 @@
                         <li>
                             <a class="dropdown-item" @onclick="() => UpdateSort(sort)">
                                 @sort.ToPrettyString()
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <label for="sorting">League</label>
+            <div class="dropdown w-100">
+                <button class="btn btn-primary dropdown-toggle w-100 d-flex justify-content-between align-items-center"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                        id="league">
+                    @FilterModel.League
+                </button>
+                <ul class="dropdown-menu">
+                    @foreach (var league in _leagues)
+                    {
+                        <li>
+                            <a class="dropdown-item" @onclick="() => UpdateLeague(league)">
+                                @league
                             </a>
                         </li>
                     }

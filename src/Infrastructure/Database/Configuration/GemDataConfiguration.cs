@@ -25,10 +25,13 @@ public class GemTradeDataConfiguration : IEntityTypeConfiguration<GemTradeData>
 {
     public void Configure(EntityTypeBuilder<GemTradeData> builder)
     {
-        builder.HasKey(g => g.Id);
+        builder.HasKey(g => new { g.Id, g.League });
         builder.Property(g => g.Id)
                .IsRequired()
                .ValueGeneratedOnAdd();
+
+        builder.Property(g => g.League)
+               .IsRequired();
 
         builder.Property(g => g.Name)
                .IsRequired();

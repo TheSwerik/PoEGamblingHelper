@@ -13,4 +13,5 @@ public class GemTradeData : Entity<long>
     public decimal ExaltedValue { get; set; }
     public decimal DivineValue { get; set; }
     public int ListingCount { get; set; }
+    public string League { get; set; } = null!;
 }

@@ -18,8 +18,8 @@ public partial class GemRepository(
     public Page<GemData> Search(GemDataQuery? query, PageRequest page)
     {
         return query is null
-            ? GetAll(page)
-            : GeneratePage(FilterGemData(query), page);
+                   ? GetAll(page)
+                   : GeneratePage(FilterGemData(query), page);
     }
 
     private Page<GemData> GetAll(PageRequest page)
@@ -34,12 +34,12 @@ public partial class GemRepository(
         query.PricePerTryFrom ??= decimal.MinValue;
         query.PricePerTryTo ??= decimal.MaxValue;
         var preFilterSqlQuery = PreFilterSqlQuery(query);
-        var templeCost = templeRepository.GetCurrent().AverageChaosValue();
+        var templeCost = templeRepository.GetCurrent(query.League).AverageChaosValue();
 
         using var applicationDbContext = dbContextFactory.CreateDbContext();
         return applicationDbContext.GemData
                                    .FromSqlRaw(preFilterSqlQuery)
-                                   .Include(gemData => gemData.Gems)
+                                   .Include(gemData => gemData.Gems.Where(g => g.League.Equals(query.League)))
                                    .AsEnumerable()
                                    .Where(gemData => PostFilterGemData(gemData, query, templeCost))
                                    .OrderBy(gemData => OrderGemData(gemData, query.Sort, templeCost))
@@ -58,14 +58,14 @@ public partial class GemRepository(
         const string isAwakened = """LOWER("Name") LIKE 'awakened%' """;
         const string isSupport = """LOWER("Name") LIKE '%support' """;
         var isGemTypeMatching = query.GemType switch
-                                {
-                                    GemType.All => true.ToString(),
-                                    GemType.Exceptional => isExceptional,
-                                    GemType.Awakened => isAwakened,
-                                    GemType.RegularSupport => isSupport,
-                                    GemType.Skill => $"NOT {isSupport}",
-                                    _ => throw new UnreachableException()
-                                };
+        {
+            GemType.All => true.ToString(),
+            GemType.Exceptional => isExceptional,
+            GemType.Awakened => isAwakened,
+            GemType.RegularSupport => isSupport,
+            GemType.Skill => $"NOT {isSupport}",
+            _ => throw new UnreachableException()
+        };
 
         return $"""
                     SELECT * FROM "GemData"
@@ -78,36 +78,35 @@ public partial class GemRepository(
     private static bool PostFilterGemData(GemData gemData, GemDataQuery query, decimal averageTempleCost)
     {
         var cost = gemData.RawCost();
-        return cost >= query.PricePerTryFrom
-               && cost <= query.PricePerTryTo
-               && (!query.OnlyShowProfitable || gemData.AvgProfitPerTry(templeCost: averageTempleCost) > 0);
+        return cost >= query.PricePerTryFrom &&
+               cost <= query.PricePerTryTo &&
+               (!query.OnlyShowProfitable || gemData.AvgProfitPerTry(templeCost: averageTempleCost) > 0);
     }
 
     private static decimal OrderGemData(GemData gemData, Sort sort, decimal averageTempleCost)
     {
         return sort switch
-               {
-                   Sort.CostPerTryAsc => gemData.RawCost(),
-                   Sort.CostPerTryDesc => -gemData.RawCost(),
-                   Sort.AverageProfitPerTryAsc => gemData.AvgProfitPerTry(templeCost: averageTempleCost),
-                   Sort.AverageProfitPerTryDesc => -gemData.AvgProfitPerTry(templeCost: averageTempleCost),
-                   Sort.MaxProfitPerTryAsc => gemData.Profit(ResultCase.Best, templeCost: averageTempleCost),
-                   Sort.MaxProfitPerTryDesc => -gemData.Profit(ResultCase.Best, templeCost: averageTempleCost),
-                   _ => 0m
-               };
+        {
+            Sort.CostPerTryAsc => gemData.RawCost(),
+            Sort.CostPerTryDesc => -gemData.RawCost(),
+            Sort.AverageProfitPerTryAsc => gemData.AvgProfitPerTry(templeCost: averageTempleCost),
+            Sort.AverageProfitPerTryDesc => -gemData.AvgProfitPerTry(templeCost: averageTempleCost),
+            Sort.MaxProfitPerTryAsc => gemData.Profit(ResultCase.Best, templeCost: averageTempleCost),
+            Sort.MaxProfitPerTryDesc => -gemData.Profit(ResultCase.Best, templeCost: averageTempleCost),
+            _ => 0m
+        };
     }
 
-    [GeneratedRegex("[^a-z ]")]
-    private static partial Regex SqlSanitizeRegex();
+    [GeneratedRegex("[^a-z ]")] private static partial Regex SqlSanitizeRegex();
 
     private static Page<GemData> GeneratePage(IReadOnlyCollection<GemData> gemData, PageRequest page)
     {
         var skipSize = page.PageSize * page.PageNumber;
         return new Page<GemData>
-               {
-                   Content = gemData.Skip(skipSize).Take(page.PageSize).ToImmutableList(),
-                   LastPage = skipSize + page.PageSize >= gemData.Count,
-                   CurrentPage = page.PageNumber
-               };
+        {
+            Content = gemData.Skip(skipSize).Take(page.PageSize).ToImmutableList(),
+            LastPage = skipSize + page.PageSize >= gemData.Count,
+            CurrentPage = page.PageNumber
+        };
     }
 }

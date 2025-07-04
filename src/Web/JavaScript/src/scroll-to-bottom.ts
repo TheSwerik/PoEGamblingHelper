@@ -9,19 +9,27 @@ declare global {
     }
 }
 
+function getMain() {
+    return document.getElementsByTagName('main')[0];
+}
 
-window.onscroll = () => {
+function onScroll() {
+    const main = getMain();
     if (window.scrollInfoService !== undefined)
-        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight)
-            window.scrollInfoService.invokeMethodAsync('OnScrollToBottom', window.scrollY);
+        if ((window.innerHeight + main.scrollTop) >= main.scrollHeight)
+            window.scrollInfoService.invokeMethodAsync('OnScrollToBottom', main.scrollTop);
 }
 
 
-window.RegisterScrollInfoService = (scrollInfoService: any) => window.scrollInfoService = scrollInfoService;
+window.RegisterScrollInfoService = function (scrollInfoService: any) {
+    window.scrollInfoService = scrollInfoService;
+    getMain().addEventListener("scroll", onScroll);
+}
 
 window.UnRegisterScrollInfoService = UnRegisterScrollInfoService;
 
 export function UnRegisterScrollInfoService() {
+    getMain().removeEventListener("scroll", onScroll);
     window.scrollInfoService = undefined;
 }
 

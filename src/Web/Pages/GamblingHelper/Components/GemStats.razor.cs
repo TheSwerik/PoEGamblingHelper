@@ -18,7 +18,6 @@ public partial class GemStats
 
     [Parameter] public FilterModel FilterModel { get; set; } = null!;
 
-    [Parameter] public League CurrentLeague { get; set; } = null!;
     [Inject] private ILocalStorageService LocalStorage { get; set; } = default!;
 
     private decimal FilterTempleCost()
@@ -37,14 +36,14 @@ public partial class GemStats
                 GemLevel = gemData.MaxLevel(),
                 GemQuality = 0
             };
-            return rawUrlGem.TradeUrl(CurrentLeague);
+            return rawUrlGem.TradeUrl(FilterModel.League!);
         }
 
         var resultGem = GemData.Gems
                                .Where(gem => gem.Corrupted &&
                                              gem.GemLevel == GemData.MaxLevel() + resultCase.Value.LevelModifier())
                                .MinBy(gem => gem.ChaosValue);
-        if (resultGem is not null) return resultGem.TradeUrl(CurrentLeague);
+        if (resultGem is not null) return resultGem.TradeUrl(FilterModel.League!);
 
         var urlGem = new GemTradeData
         {
@@ -53,7 +52,7 @@ public partial class GemStats
             GemLevel = gemData.MaxLevel() + resultCase.Value.LevelModifier(),
             GemQuality = 0
         };
-        return urlGem.TradeUrl(CurrentLeague);
+        return urlGem.TradeUrl(FilterModel.League!);
     }
 
     private string CurrencyValue(decimal chaosValue)
