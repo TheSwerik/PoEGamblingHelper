@@ -1,10 +1,11 @@
-﻿@using PoEGamblingHelper.Web.Extensions
-<div class="container">
+﻿<div class="container">
     <div class="row gx-5">
         <div class="col">
             <label for="gem-search">Gem to corrupt</label>
             <div class="input-group">
-                <input type="text" class="form-control" style="text-align: left" aria-label="Gem Search" aria-describedby="reset-1" id="gem-search" value="@FilterModel.Gem" @onchange="UpdateGemSearchText">
+                <input type="text" class="form-control" style="text-align: left" aria-label="Gem Search"
+                       aria-describedby="reset-1" id="gem-search" value="@FilterModel.Gem"
+                       @onchange="UpdateGemSearchText">
                 <button class="btn btn-primary btn-addon" type="button" id="reset-1" onclick="@ResetGemSearch">
                     <img src="icons/x-mark.svg" alt="" style="width: 1rem"/>
                 </button>
@@ -47,7 +48,8 @@
         <div class="col">
             <label for="currency">Currency</label>
             <div class="dropdown w-100">
-                <button class="btn btn-primary dropdown-toggle w-100 d-flex justify-content-between align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="currency">
+                <button class="btn btn-primary dropdown-toggle w-100 d-flex justify-content-between align-items-center"
+                        type="button" data-bs-toggle="dropdown" aria-expanded="false" id="currency">
                     @if (FilterModel.Currency is not null)
                     {
                         <p class="ms-0">
@@ -107,7 +109,9 @@
             <div class="d-flex flex-column w-100">
                 <label for="gem-type">Gem Type</label>
                 <div class="dropdown w-100">
-                    <button class="btn btn-primary dropdown-toggle w-100 d-flex justify-content-between align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="gem-type">
+                    <button
+                        class="btn btn-primary dropdown-toggle w-100 d-flex justify-content-between align-items-center"
+                        type="button" data-bs-toggle="dropdown" aria-expanded="false" id="gem-type">
                         @FilterModel.GemType.ToPrettyString()
                     </button>
                     <ul class="dropdown-menu">
@@ -124,7 +128,8 @@
             </div>
             <div class="w-100 mt-2 d-flex justify-content-between">
                 <div class="form-check ps-0 m-0 w-100 d-flex justify-content-end">
-                    <input class="form-check-input" type="checkbox" id="onlyProfitable" checked="@FilterModel.OnlyShowProfitable" @onchange="UpdateOnlyShowProfitable">
+                    <input class="form-check-input" type="checkbox" id="onlyProfitable"
+                           checked="@FilterModel.OnlyShowProfitable" @onchange="UpdateOnlyShowProfitable">
                     <label class="form-check-label" for="onlyProfitable">
                         Only Profitable
                     </label>
@@ -134,7 +139,8 @@
         <div class="col input-group d-flex flex-column">
             <label for="sorting">Sorting</label>
             <div class="dropdown w-100">
-                <button class="btn btn-primary dropdown-toggle w-100 d-flex justify-content-between align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="sorting">
+                <button class="btn btn-primary dropdown-toggle w-100 d-flex justify-content-between align-items-center"
+                        type="button" data-bs-toggle="dropdown" aria-expanded="false" id="sorting">
                     @FilterModel.Sort.ToPrettyString()
                 </button>
                 <ul class="dropdown-menu">
@@ -150,8 +156,12 @@
             </div>
         </div>
     </div>
-    <div class="row mt-3 mb-3 pointer" @onclick="@ToggleFilters" data-bs-toggle="collapse" data-bs-target="#collapsable"
-         aria-expanded="false" aria-controls="collapsable">
+    <div class="row mt-3 mb-3 pointer"
+         @onclick="@ToggleFilters"
+         data-bs-toggle="collapse"
+         data-bs-target="#collapsable"
+         aria-expanded="false"
+         aria-controls="collapsable">
         <hr class="col align-self-center m-0"/>
         <div class="angles angles-@(FiltersExpanded ? "up" : "down")"></div>
         <p class="col text-center">@(FiltersExpanded ? "Collapse" : "Expand")</p>
