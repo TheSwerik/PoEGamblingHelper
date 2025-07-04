@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using Blazored.LocalStorage;
+﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
 using PoEGamblingHelper.Application.Extensions;
 using PoEGamblingHelper.Domain.Entity;
@@ -69,7 +68,6 @@ public partial class GemStats
 
     private async Task UpdateRawValue(string? newValue)
     {
-        Console.WriteLine(1);
         if (string.IsNullOrWhiteSpace(newValue))
         {
             _values.RawValue = null;
@@ -77,55 +75,54 @@ public partial class GemStats
             return;
         }
 
-        Console.WriteLine(2);
-        if (!decimal.TryParse(newValue, out var value)) return;
-        Console.WriteLine(_values.RawValue);
-        Console.WriteLine(3);
-        _values.RawValue = (value * CurrencyValue()).ToString(CultureInfo.InvariantCulture);
-        Console.WriteLine(4);
-        Console.WriteLine(_values.RawValue);
+        var value = ToDecimal(newValue);
+        if (value is null) return;
+        _values.RawValue = (value * CurrencyValue()).ToString();
         await SaveValues();
     }
 
-    private async Task UpdateWorstCaseValue(ChangeEventArgs args)
+    private async Task UpdateWorstCaseValue(string? newValue)
     {
-        if (args.Value is null || string.IsNullOrWhiteSpace(args.Value.ToString()))
+        if (string.IsNullOrWhiteSpace(newValue))
         {
             _values.WorstCaseValue = null;
             await SaveValues();
             return;
         }
 
-        if (!decimal.TryParse(args.Value.ToString(), out var value)) return;
-        _values.WorstCaseValue = value * CurrencyValue();
+        var value = ToDecimal(newValue);
+        if (value is null) return;
+        _values.WorstCaseValue = (value * CurrencyValue()).ToString();
         await SaveValues();
     }
 
-    private async Task UpdateMiddleCaseValue(ChangeEventArgs args)
+    private async Task UpdateMiddleCaseValue(string? newValue)
     {
-        if (args.Value is null || string.IsNullOrWhiteSpace(args.Value.ToString()))
+        if (string.IsNullOrWhiteSpace(newValue))
         {
             _values.MiddleCaseValue = null;
             await SaveValues();
             return;
         }
 
-        if (!decimal.TryParse(args.Value.ToString(), out var value)) return;
-        _values.MiddleCaseValue = value * CurrencyValue();
+        var value = ToDecimal(newValue);
+        if (value is null) return;
+        _values.MiddleCaseValue = (value * CurrencyValue()).ToString();
         await SaveValues();
     }
 
-    private async Task UpdateBestCaseValue(ChangeEventArgs args)
+    private async Task UpdateBestCaseValue(string? newValue)
     {
-        if (args.Value is null || string.IsNullOrWhiteSpace(args.Value.ToString()))
+        if (string.IsNullOrWhiteSpace(newValue))
         {
             _values.BestCaseValue = null;
             await SaveValues();
             return;
         }
 
-        if (!decimal.TryParse(args.Value.ToString(), out var value)) return;
-        _values.BestCaseValue = value * CurrencyValue();
+        var value = ToDecimal(newValue);
+        if (value is null) return;
+        _values.BestCaseValue = (value * CurrencyValue()).ToString();
         await SaveValues();
     }
 
@@ -147,16 +144,25 @@ public partial class GemStats
         _values = values ?? new Values();
     }
 
-    private string GetCurrencyString(decimal? value)
+    private string GetCurrencyString(string? value)
     {
-        return value is null ? "" : CurrencyValue(value.Value);
+        var parsed = ToDecimal(value);
+        return parsed is null ? "" : CurrencyValue(parsed.Value);
+    }
+
+    private static decimal? ToDecimal(string? value)
+    {
+        if (value is null) return null;
+        var couldBeParsed = decimal.TryParse(value, out var parsed);
+        if (!couldBeParsed) return null;
+        return parsed;
     }
 
     private class Values
     {
         public string? RawValue { get; set; }
-        public decimal? WorstCaseValue { get; set; }
-        public decimal? MiddleCaseValue { get; set; }
-        public decimal? BestCaseValue { get; set; }
+        public string? WorstCaseValue { get; set; }
+        public string? MiddleCaseValue { get; set; }
+        public string? BestCaseValue { get; set; }
     }
 }
