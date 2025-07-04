@@ -101,8 +101,6 @@ public partial class GamblingHelper : IDisposable
     private async Task<bool> UpdateGems()
     {
         if (_isOnLastPage) return false;
-        Console.WriteLine(2);
-        Console.WriteLine(_filterModel.League);
         var gemPage = await GemService.GetAll(new PageRequest { PageSize = 20, PageNumber = _currentGemPage },
                                               _filterModel.ToQuery());
         if (gemPage is null) return false;

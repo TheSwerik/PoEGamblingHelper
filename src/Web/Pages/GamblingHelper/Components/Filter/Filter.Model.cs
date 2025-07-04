@@ -18,8 +18,6 @@ public class FilterModel
 
     public GemDataQuery ToQuery()
     {
-        Console.WriteLine(1);
-        Console.WriteLine(League);
         return new GemDataQuery
         {
             SearchText = Gem,
