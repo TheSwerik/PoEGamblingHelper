@@ -7,25 +7,17 @@ using PoEGamblingHelper.Infrastructure.Database;
 
 namespace PoEGamblingHelper.Infrastructure.Repositories;
 
-public class LeagueRepository : ILeagueRepository
+public class LeagueRepository(IDbContextFactory<ApplicationDbContext> dbContextFactory, IDateTimeService dateTimeService)
+    : ILeagueRepository
 {
-    private readonly IDateTimeService _dateTimeService;
-    private readonly IDbContextFactory<ApplicationDbContext> _dbContextFactory;
-
-    public LeagueRepository(IDbContextFactory<ApplicationDbContext> dbContextFactory, IDateTimeService dateTimeService)
-    {
-        _dbContextFactory = dbContextFactory;
-        _dateTimeService = dateTimeService;
-    }
-
     public League GetCurrent()
     {
-        return GetByStartDateBefore(_dateTimeService.UtcNow());
+        return GetByStartDateBefore(dateTimeService.UtcNow());
     }
 
     public League GetByStartDateBefore(DateTime dateTime)
     {
-        using var applicationDbContext = _dbContextFactory.CreateDbContext();
+        using var applicationDbContext = dbContextFactory.CreateDbContext();
         return applicationDbContext.League
                                    .Where(league => league.StartDate <= dateTime)
                                    .OrderByDescending(league => league.StartDate)
@@ -35,7 +27,7 @@ public class LeagueRepository : ILeagueRepository
 
     public async IAsyncEnumerable<League> GetAll()
     {
-        await using var applicationDbContext = await _dbContextFactory.CreateDbContextAsync();
+        await using var applicationDbContext = await dbContextFactory.CreateDbContextAsync();
         await foreach (var item in applicationDbContext.League.AsAsyncEnumerable().ConfigureAwait(false))
             yield return item;
     }

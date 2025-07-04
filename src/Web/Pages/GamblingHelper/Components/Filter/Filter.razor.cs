@@ -3,24 +3,32 @@ using Microsoft.AspNetCore.Components;
 using PoEGamblingHelper.Application.QueryParameters;
 using PoEGamblingHelper.Domain.Entity;
 using PoEGamblingHelper.Web.Extensions;
+using PoEGamblingHelper.Web.Services.Interfaces;
 
 namespace PoEGamblingHelper.Web.Pages.GamblingHelper.Components.Filter;
 
-public partial class Filter : ComponentBase
+public partial class Filter(ILeagueService leagueService) : ComponentBase
 {
     private readonly string[] _allowedFilterCurrencies = ["mirror-of-kalandra", "mirror-shard", "chaos-orb", "divine-orb"];
+
+    private string[] _leagues = [];
 
     [Parameter] public TempleCost TempleCost { get; set; } = null!;
     [Parameter] public FilterModel FilterModel { get; set; } = null!;
     [Parameter] public EventCallback<FilterModel> OnFilterValuesChanged { get; set; }
     [Parameter] public List<Currency> Currency { get; set; } = [];
     [Inject] private ILocalStorageService LocalStorage { get; set; } = null!;
-
     private bool FiltersExpanded { get; set; }
 
     private bool IsChaosSelected =>
         FilterModel.Currency is not null &&
         FilterModel.Currency.Name.Equals("chaos orb", StringComparison.InvariantCultureIgnoreCase);
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        _leagues = await leagueService.GetCurrentLeagues();
+    }
 
     private async Task SaveFilterValues()
     {
@@ -68,9 +76,7 @@ public partial class Filter : ComponentBase
 
     private string TempleTradeUrl()
     {
-        Console.WriteLine(2);
         if (FilterModel.League is null) return "";
-        Console.WriteLine(2.5);
         const string poeTradeUrl = "https://www.pathofexile.com/trade/search";
         const string queryKey = "?q=";
 
@@ -181,6 +187,12 @@ public partial class Filter : ComponentBase
     private async Task UpdateSort(Sort sort)
     {
         FilterModel.Sort = sort;
+        await SaveFilterValues();
+    }
+
+    private async Task UpdateLeague(string league)
+    {
+        FilterModel.League = league;
         await SaveFilterValues();
     }
 
