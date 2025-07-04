@@ -3,11 +3,9 @@
 
 @code {
 
-    [Inject]
-    private IScrollInfoService ScrollInfoService { get; set; } = default!;
+    [Inject] private IScrollInfoService ScrollInfoService { get; set; } = null!;
 
-    [Parameter]
-    public EventHandler<int> OnScrollToBottom { get; set; } = null!;
+    [Parameter] public Func<object?, int, Task> OnScrollToBottom { get; set; } = null!;
 
     protected override void OnInitialized() { ScrollInfoService.OnScrollToBottom += OnScrollToBottom; }
     public void Dispose() { ScrollInfoService.OnScrollToBottom -= OnScrollToBottom; }

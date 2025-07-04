@@ -18,7 +18,6 @@ public partial class Statistics : IDisposable
 
     private double LuckScore()
     {
-        Console.WriteLine(_data[2]);
         return _data.Length > 0
                    ? _data[2] / (double)_data.Sum()
                    : 0;
@@ -33,18 +32,18 @@ public partial class Statistics : IDisposable
     private string LuckAdjective()
     {
         return LuckScore() switch
-               {
-                   > 0.9 => "contacts at GGG",
-                   > 0.7 => "a hacked client",
-                   > 0.5 => "a streamer client",
-                   > 0.4 => "amazing",
-                   > 0.3 => "good",
-                   > 0.26 => "decent",
-                   > 0.24 => "average",
-                   > 0.2 => "bad",
-                   > 0.1 => "terrible",
-                   > 0 => "abominable",
-                   _ => "negative"
-               };
+        {
+            > 0.9 => "contacts at GGG",
+            > 0.7 => "a hacked client",
+            > 0.5 => "a streamer client",
+            > 0.4 => "amazing",
+            > 0.3 => "good",
+            > 0.26 => "decent",
+            > 0.24 => "average",
+            > 0.2 => "bad",
+            > 0.1 => "terrible",
+            > 0 => "abominable",
+            _ => "negative"
+        };
     }
 }

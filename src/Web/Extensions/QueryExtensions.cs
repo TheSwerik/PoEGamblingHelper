@@ -1,6 +1,5 @@
 ﻿using System.Web;
 using PoEGamblingHelper.Application.QueryParameters;
-using PoEGamblingHelper.Domain.Entity;
 using PoEGamblingHelper.Domain.Entity.Gem;
 
 namespace PoEGamblingHelper.Web.Extensions;
@@ -10,8 +9,8 @@ public static class QueryExtensions
     public static string ToQueryString(this GemDataQuery gemDataQuery, PageRequest? page)
     {
         return page is null
-            ? gemDataQuery.ToQueryString()
-            : $"{page.ToQueryString()}{gemDataQuery.ToQueryString(false)}";
+                   ? gemDataQuery.ToQueryString()
+                   : $"{page.ToQueryString()}{gemDataQuery.ToQueryString(false)}";
     }
 
     public static string ToQueryString(this GemDataQuery gemDataQuery, bool questionMark = true)
@@ -19,8 +18,8 @@ public static class QueryExtensions
         var start = questionMark ? "?" : "&";
         var searchText = gemDataQuery.SearchText == string.Empty ? "" : $"&searchText={gemDataQuery.SearchText}";
         var pricePerTryFrom = gemDataQuery.PricePerTryFrom is null
-            ? ""
-            : $"&pricePerTryFrom={gemDataQuery.PricePerTryFrom}";
+                                  ? ""
+                                  : $"&pricePerTryFrom={gemDataQuery.PricePerTryFrom}";
         var pricePerTryTo = gemDataQuery.PricePerTryTo is null ? "" : $"&pricePerTryTo={gemDataQuery.PricePerTryTo}";
         return
             $"{start}sort={gemDataQuery.Sort}&gemType={gemDataQuery.GemType}&onlyShowProfitable={gemDataQuery.OnlyShowProfitable}&showVaal={gemDataQuery.ShowVaal}{searchText}{pricePerTryFrom}{pricePerTryTo}";
@@ -32,13 +31,13 @@ public static class QueryExtensions
     }
 
     public static string TradeUrl(this GemTradeData gemTradeData,
-                                  League currentLeague,
+                                  string currentLeague,
                                   bool accurateLevel = true,
                                   bool accurateQuality = false)
     {
         const string poeTradeUrl = "https://www.pathofexile.com/trade/search";
         const string queryKey = "?q=";
-        return $"{poeTradeUrl}/{currentLeague.Name}{queryKey}{gemTradeData.TradeQuery(accurateLevel, accurateQuality)}";
+        return $"{poeTradeUrl}/{currentLeague}{queryKey}{gemTradeData.TradeQuery(accurateLevel, accurateQuality)}";
     }
 
     public static string TradeQuery(this GemTradeData gemTradeData,
@@ -59,23 +58,22 @@ public static class QueryExtensions
         var corruptedText = $"""
                              "corrupted": {gemTradeData.Corrupted.ToString().ToLower()}
                              """;
-        Console.WriteLine(gemTradeData.Corrupted);
 
         var minGemLevel = accurateLevel ? gemTradeData.GemLevel : int.MinValue;
         var maxGemLevel = accurateLevel ? gemTradeData.GemLevel : int.MaxValue;
         var levelText = !accurateLevel
-            ? string.Empty
-            : $$""","gem_level": {"min": {{minGemLevel}},"max": {{maxGemLevel}}}""";
+                            ? string.Empty
+                            : $$""","gem_level": {"min": {{minGemLevel}},"max": {{maxGemLevel}}}""";
 
         var minGemQuality = accurateQuality ? gemTradeData.GemQuality : int.MinValue;
         var maxGemQuality = accurateQuality ? gemTradeData.GemQuality : int.MaxValue;
         var qualityText = !accurateQuality
-            ? string.Empty
-            : $$""","quality": {"min": {{minGemQuality}},"max": {{maxGemQuality}}}""";
+                              ? string.Empty
+                              : $$""","quality": {"min": {{minGemQuality}},"max": {{maxGemQuality}}}""";
 
         var gemAlternateQualityText = gemAlternateQuality < 0
-            ? string.Empty
-            : $$""","gem_alternate_quality": {"option": "{{gemAlternateQuality}}"},""";
+                                          ? string.Empty
+                                          : $$""","gem_alternate_quality": {"option": "{{gemAlternateQuality}}"},""";
 
 
         return $$"""

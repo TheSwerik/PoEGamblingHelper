@@ -6,7 +6,7 @@
                 <input type="text" class="form-control" style="text-align: left" aria-label="Gem Search"
                        aria-describedby="reset-1" id="gem-search" value="@FilterModel.Gem"
                        @onchange="UpdateGemSearchText">
-                <button class="btn btn-primary btn-addon" type="button" id="reset-1" onclick="@ResetGemSearch">
+                <button class="btn btn-primary btn-addon" type="button" id="reset-1" @onclick="@ResetGemSearch">
                     <img src="icons/x-mark.svg" alt="" style="width: 1rem"/>
                 </button>
             </div>

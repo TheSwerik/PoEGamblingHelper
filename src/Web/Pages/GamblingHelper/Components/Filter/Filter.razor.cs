@@ -8,15 +8,13 @@ namespace PoEGamblingHelper.Web.Pages.GamblingHelper.Components.Filter;
 
 public partial class Filter : ComponentBase
 {
-    private readonly string[] _allowedFilterCurrencies =
-        { "mirror-of-kalandra", "mirror-shard", "chaos-orb", "divine-orb" };
+    private readonly string[] _allowedFilterCurrencies = ["mirror-of-kalandra", "mirror-shard", "chaos-orb", "divine-orb"];
 
     [Parameter] public TempleCost TempleCost { get; set; } = null!;
     [Parameter] public FilterModel FilterModel { get; set; } = null!;
     [Parameter] public EventCallback<FilterModel> OnFilterValuesChanged { get; set; }
-    [Parameter] public League CurrentLeague { get; set; } = null!;
-    [Parameter] public List<Currency> Currency { get; set; } = new();
-    [Inject] private ILocalStorageService LocalStorage { get; set; } = default!;
+    [Parameter] public List<Currency> Currency { get; set; } = [];
+    [Inject] private ILocalStorageService LocalStorage { get; set; } = null!;
 
     private bool FiltersExpanded { get; set; }
 
@@ -70,6 +68,9 @@ public partial class Filter : ComponentBase
 
     private string TempleTradeUrl()
     {
+        Console.WriteLine(2);
+        if (FilterModel.League is null) return "";
+        Console.WriteLine(2.5);
         const string poeTradeUrl = "https://www.pathofexile.com/trade/search";
         const string queryKey = "?q=";
 
@@ -94,7 +95,7 @@ public partial class Filter : ComponentBase
                         }
                     }
                     """.ToQueryUrl();
-        return $"{poeTradeUrl}/{CurrentLeague.Name}{queryKey}{query}";
+        return $"{poeTradeUrl}/{FilterModel.League}{queryKey}{query}";
     }
 
     private IEnumerable<Currency> GetAllowedFilterCurrencies()
@@ -187,25 +188,25 @@ public partial class Filter : ComponentBase
 
     #region Reset Inputs
 
-    private async void ResetTempleCost()
+    private async Task ResetTempleCost()
     {
         FilterModel.TempleCost = null;
         await SaveFilterValues();
     }
 
-    private async void ResetCurrencyValue()
+    private async Task ResetCurrencyValue()
     {
         FilterModel.CurrencyValue = null;
         await SaveFilterValues();
     }
 
-    private async void ResetGemSearch()
+    private async Task ResetGemSearch()
     {
         FilterModel.Gem = string.Empty;
         await SaveFilterValues();
     }
 
-    private async void ResetCostFilter()
+    private async Task ResetCostFilter()
     {
         FilterModel.PricePerTryFrom = null;
         FilterModel.PricePerTryTo = null;
