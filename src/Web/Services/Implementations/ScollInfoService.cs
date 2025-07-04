@@ -26,6 +26,6 @@ public class ScrollInfoService : IScrollInfoService, IDisposable
     public void JsOnScrollToBottom(int scrollY)
     {
         ScrollY = scrollY;
-        OnScrollToBottom?.Invoke(this, scrollY).RunSynchronously();
+        OnScrollToBottom?.Invoke(this, scrollY);
     }
 }
