@@ -17,8 +17,13 @@
                 </a>
             </label>
             <div class="input-group">
-                <input type="text" pattern="[0-9]+([.][0-9]{1,2}){0,1}?" class="form-control" aria-label="Temple Cost" aria-describedby="reset-2" id="temple-cost" value="@TempleCostString()" @onchange="UpdateTempleCost">
-                <button class="btn btn-primary btn-addon" type="button" id="reset-2" onclick="@ResetTempleCost">
+                <MathInput class="form-control"
+                           aria-label="Temple Cost"
+                           aria-describedby="reset-2"
+                           id="temple-cost"
+                           value="@TempleCostString()"
+                           ValueChanged="UpdateTempleCost"/>
+                <button class="btn btn-primary btn-addon" type="button" id="reset-2" @onclick="@ResetTempleCost">
                     <img src="icons/arrow-rotate-right.svg" alt="" style="width: 1rem"/>
                 </button>
             </div>
@@ -26,8 +31,15 @@
         <div class="col">
             <label for="chaos-per-currency">@CurrencyName()</label>
             <div class="input-group">
-                <input type="text" pattern="[0-9]+([.][0-9]{1,2}){0,1}?" class="form-control" aria-label="Chaos per Currency" aria-describedby="reset-3" id="chaos-per-currency" value="@CurrencyValueString()" @onchange="UpdateCurrencyValueChanged" disabled="@IsChaosSelected">
-                <button class="btn btn-primary btn-addon" type="button" id="reset-3" onclick="@ResetCurrencyValue" disabled="@IsChaosSelected">
+                <MathInput class="form-control"
+                           aria-label="Chaos per Currency"
+                           aria-describedby="reset-3"
+                           id="chaos-per-currency"
+                           disabled="@IsChaosSelected"
+                           value="@CurrencyValueString()"
+                           ValueChanged="UpdateCurrencyValueChanged"/>
+                <button class="btn btn-primary btn-addon" type="button" id="reset-3" @onclick="@ResetCurrencyValue"
+                        disabled="@IsChaosSelected">
                     <img src="icons/arrow-rotate-right.svg" alt="" style="width: 1rem"/>
                 </button>
             </div>
@@ -71,9 +83,20 @@
                         <label for="price-per-try-to">To</label>
                     </div>
                     <div class="d-flex flex-row input-group">
-                        <input type="number" class="form-control" aria-label="PricePerTry From" aria-describedby="reset-4" id="price-per-try-from" value="@CurrencyValue(FilterModel.PricePerTryFrom)" @onchange="UpdatePricePerTryFrom">
-                        <input type="number" class="form-control input-addon" aria-label="PricePerTry To" aria-describedby="reset-4" id="price-per-try-to" value="@CurrencyValue(FilterModel.PricePerTryTo)" @onchange="UpdatePricePerTryTo">
-                        <button class="btn btn-primary btn-addon" type="button" id="reset-4" onclick="@ResetCostFilter">
+                        <MathInput class="form-control"
+                                   aria-label="PricePerTry From"
+                                   aria-describedby="reset-4"
+                                   id="price-per-try-from"
+                                   value="@CurrencyValue(FilterModel.PricePerTryFrom)"
+                                   ValueChanged="UpdatePricePerTryFrom"/>
+                        <MathInput class="form-control input-addon"
+                                   aria-label="PricePerTry To"
+                                   aria-describedby="reset-4"
+                                   id="price-per-try-to"
+                                   value="@CurrencyValue(FilterModel.PricePerTryTo)"
+                                   ValueChanged="UpdatePricePerTryTo"/>
+                        <button class="btn btn-primary btn-addon" type="button" id="reset-4"
+                                @onclick="@ResetCostFilter">
                             <img src="icons/x-mark.svg" alt="" style="width: 1rem"/>
                         </button>
                     </div>
@@ -127,7 +150,8 @@
             </div>
         </div>
     </div>
-    <div class="row mt-3 mb-3 pointer" onclick="@ToggleFilters" data-bs-toggle="collapse" data-bs-target="#collapsable" aria-expanded="false" aria-controls="collapsable">
+    <div class="row mt-3 mb-3 pointer" @onclick="@ToggleFilters" data-bs-toggle="collapse" data-bs-target="#collapsable"
+         aria-expanded="false" aria-controls="collapsable">
         <hr class="col align-self-center m-0"/>
         <div class="angles angles-@(FiltersExpanded ? "up" : "down")"></div>
         <p class="col text-center">@(FiltersExpanded ? "Collapse" : "Expand")</p>
