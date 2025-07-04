@@ -18,9 +18,11 @@ public class FetchPriceDataJobTest
     {
         #region Creation
 
+        var league = new League { Name = "Standard" };
         var logger = new Mock<ILogger<FetchPriceDataJob>>();
         var cache = new Mock<IOutputCacheStore>();
         var leagueRepository = new Mock<ILeagueRepository>();
+        leagueRepository.Setup(s => s.GetCurrent()).Returns(league);
         var currencyDataFetcher = new Mock<IDataFetcher>();
         var templeDataFetcher = new Mock<IDataFetcher>();
         var gemDataFetcher = new Mock<IDataFetcher>();
@@ -50,7 +52,7 @@ public class FetchPriceDataJobTest
         Assert.Null(await Record.ExceptionAsync(async () => await service.StartAsync(CancellationToken.None)));
 
         leagueRepository.Invocations.Clear();
-        leagueRepository.Setup(s => s.GetCurrent()).Returns(new League());
+        leagueRepository.Setup(s => s.GetCurrent()).Returns(league);
 
         currencyDataFetcher.Setup(s => s.Fetch(It.IsAny<string>()))
                            .Throws(() => new ApiDownException("poedb.tw"));
