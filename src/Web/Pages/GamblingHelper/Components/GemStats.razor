@@ -26,12 +26,17 @@
                     {
                         <div class="d-flex justify-content-between align-items-center">
                             Price Raw:
-                            <input type="text" pattern="[0-9]+([.][0-9]{1,2}){0,1}?" style="width: 40%; height: 100%" value="@GetCurrencyString(_values.RawValue)" @onchange="UpdateRawValue"/>
+                            @* <input type="text" pattern="[0-9]+([.][0-9]{1,2}){0,1}?" style="width: 40%; height: 100%" value="@GetCurrencyString(_values.RawValue)" @onchange="UpdateRawValue"/> *@
+                            <MathInput style="width: 40%; height: 100%; padding-right: 8px !important;"
+                                       class="currency-input"
+                                       value="@GetCurrencyString(string.IsNullOrWhiteSpace(_values.RawValue) ? null : decimal.Parse(_values.RawValue))"
+                                       ValueChanged="e => UpdateRawValue(e)"/>
                         </div>
                     }
                     else
                     {
-                        <a href="@TradeUrl(GemData)" target="_blank" rel="noopener noreferrer">Price Raw: @CurrencyValue(_values.RawValue ?? GemData.RawCost())</a>
+                    <a href="@TradeUrl(GemData)" target="_blank" rel="noopener noreferrer">Price
+                        Raw: @CurrencyValue(_values.RawValue is null ? GemData.RawCost() : decimal.Parse(_values.RawValue))</a>
                     }
                 </p>
                 <p class="card-text">
@@ -39,7 +44,12 @@
                     {
                         <div class="d-flex justify-content-between align-items-center">
                             Worst Case:
-                            <input style="width: 40%; height: 100%" type="text" pattern="[0-9]+([.][0-9]{1,2}){0,1}?" value="@GetCurrencyString(_values.WorstCaseValue)" @onchange="UpdateWorstCaseValue"/>
+                            <input style="width: 40%; height: 100%; padding-right: 8px !important;"
+                                   type="text"
+                                   pattern="[0-9]+([.][0-9]{1,2}){0,1}?"
+                                   class="currency-input"
+                                   value="@GetCurrencyString(_values.WorstCaseValue)"
+                                   @onchange="UpdateWorstCaseValue"/>
                         </div>
                     }
                     else
@@ -52,7 +62,11 @@
                     {
                         <div class="d-flex justify-content-between align-items-center">
                             Middle Case:
-                            <input style="width: 40%; height: 100%" type="text" pattern="[0-9]+([.][0-9]{1,2}){0,1}?" value="@GetCurrencyString(_values.MiddleCaseValue)" @onchange="UpdateMiddleCaseValue"/>
+                            <input style="width: 40%; height: 100%; padding-right: 8px !important;"
+                                   type="text"
+                                   pattern="[0-9]+([.][0-9]{1,2}){0,1}?"
+                                   value="@GetCurrencyString(_values.MiddleCaseValue)"
+                                   @onchange="UpdateMiddleCaseValue"/>
                         </div>
                     }
                     else
@@ -65,7 +79,11 @@
                     {
                         <div class="d-flex justify-content-between align-items-center">
                             Best Case:
-                            <input style="width: 40%; height: 100%" type="text" pattern="[0-9]+([.][0-9]{1,2}){0,1}?" value="@GetCurrencyString(_values.BestCaseValue)" @onchange="UpdateBestCaseValue"/>
+                            <input style="width: 40%; height: 100%; padding-right: 8px !important;"
+                                   type="text"
+                                   pattern="[0-9]+([.][0-9]{1,2}){0,1}?" v
+                                   alue="@GetCurrencyString(_values.BestCaseValue)"
+                                   @onchange="UpdateBestCaseValue"/>
                         </div>
                     }
                     else
@@ -76,10 +94,14 @@
             </div>
             <div class="col">
                 <h5 class="card-title">Profit per Try</h5>
-                <p class="card-text">Cost: @CurrencyValue(GemData.CostPerTry(_values.RawValue, FilterTempleCost()))</p>
-                <p class="card-text">Worst Case: @CurrencyValue(_values.WorstCaseValue is null ? GemData.Profit(ResultCase.Worst, _values.RawValue, FilterTempleCost()) : GemData.Profit((decimal)_values.WorstCaseValue, _values.RawValue, FilterTempleCost()))</p>
-                <p class="card-text">Middle Case: @CurrencyValue(_values.MiddleCaseValue is null ? GemData.Profit(ResultCase.Middle, _values.RawValue, FilterTempleCost()) : GemData.Profit((decimal)_values.MiddleCaseValue, _values.RawValue, FilterTempleCost()))</p>
-                <p class="card-text">Best Case: @CurrencyValue(_values.BestCaseValue is null ? GemData.Profit(ResultCase.Best, _values.RawValue, FilterTempleCost()) : GemData.Profit((decimal)_values.BestCaseValue, _values.RawValue, FilterTempleCost()))</p>
+                <p class="card-text">
+                    Cost: @CurrencyValue(GemData.CostPerTry(_values.RawValue is null ? null : decimal.Parse(_values.RawValue), FilterTempleCost()))</p>
+                <p class="card-text">Worst
+                    Case: @CurrencyValue(_values.WorstCaseValue is null ? GemData.Profit(ResultCase.Worst, _values.RawValue is null ? null : decimal.Parse(_values.RawValue), FilterTempleCost()) : GemData.Profit((decimal)_values.WorstCaseValue, _values.RawValue is null ? null : decimal.Parse(_values.RawValue), FilterTempleCost()))</p>
+                <p class="card-text">Middle
+                    Case: @CurrencyValue(_values.MiddleCaseValue is null ? GemData.Profit(ResultCase.Middle, _values.RawValue is null ? null : decimal.Parse(_values.RawValue), FilterTempleCost()) : GemData.Profit((decimal)_values.MiddleCaseValue, _values.RawValue is null ? null : decimal.Parse(_values.RawValue), FilterTempleCost()))</p>
+                <p class="card-text">Best
+                    Case: @CurrencyValue(_values.BestCaseValue is null ? GemData.Profit(ResultCase.Best, _values.RawValue is null ? null : decimal.Parse(_values.RawValue), FilterTempleCost()) : GemData.Profit((decimal)_values.BestCaseValue, _values.RawValue is null ? null : decimal.Parse(_values.RawValue), FilterTempleCost()))</p>
             </div>
             <div class="col d-flex">
                 <div class="d-block align-self-end w-100" data-bs-toggle="tooltip" data-bs-title="This feature is not implemented yet">
@@ -89,7 +111,7 @@
             <div class="col d-flex flex-column justify-content-between">
                 <h5 class="card-title">Average Profit per Try</h5>
                 <button class="btn btn-secondary align-self-end w-100" id="avg-profit">
-                    @CurrencyValue(GemData.AvgProfitPerTry(_values.RawValue, _values.WorstCaseValue, _values.MiddleCaseValue, _values.BestCaseValue, FilterTempleCost()))
+                    @CurrencyValue(GemData.AvgProfitPerTry(_values.RawValue is null ? null : decimal.Parse(_values.RawValue), _values.WorstCaseValue, _values.MiddleCaseValue, _values.BestCaseValue, FilterTempleCost()))
                 </button>
             </div>
         </div>
