@@ -20,8 +20,9 @@ public class PoeNinjaGemDataTest
             0.5m,
             7
         );
+        var league = "Standard";
 
-        var gemTradeData = source.ToGemTradeData();
+        var gemTradeData = source.ToGemTradeData(league);
 
         gemTradeData.Id.ShouldBe(source.Id);
         gemTradeData.Name.ShouldBe(source.Name);
@@ -33,5 +34,6 @@ public class PoeNinjaGemDataTest
         gemTradeData.ExaltedValue.ShouldBe(source.ExaltedValue);
         gemTradeData.DivineValue.ShouldBe(source.DivineValue);
         gemTradeData.ListingCount.ShouldBe(source.ListingCount);
+        gemTradeData.League.ShouldBe(league);
     }
 }

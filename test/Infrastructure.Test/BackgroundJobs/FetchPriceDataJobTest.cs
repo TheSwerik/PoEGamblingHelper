@@ -52,27 +52,33 @@ public class FetchPriceDataJobTest
         leagueRepository.Invocations.Clear();
         leagueRepository.Setup(s => s.GetCurrent()).Returns(new League());
 
-        currencyDataFetcher.Setup(s => s.Fetch(It.IsAny<League>()))
+        currencyDataFetcher.Setup(s => s.Fetch(It.IsAny<string>()))
                            .Throws(() => new ApiDownException("poedb.tw"));
         Assert.Null(await Record.ExceptionAsync(async () => await service.StartAsync(CancellationToken.None)));
-        currencyDataFetcher.Setup(s => s.Fetch(It.IsAny<League>())).Throws(new PoeDbCannotParseException(""));
+        currencyDataFetcher.Setup(s => s.Fetch(It.IsAny<string>())).Throws(new PoeDbCannotParseException(""));
         Assert.Null(await Record.ExceptionAsync(async () => await service.StartAsync(CancellationToken.None)));
 
-        templeDataFetcher.Setup(s => s.Fetch(It.IsAny<League>()))
+        templeDataFetcher.Setup(s => s.Fetch(It.IsAny<string>()))
                          .Throws(() => new ApiDownException("pathofexile.com/trade"));
         Assert.Null(await Record.ExceptionAsync(async () => await service.StartAsync(CancellationToken.None)));
         templeDataFetcher.Invocations.Clear();
 
-        gemDataFetcher.Setup(s => s.Fetch(It.IsAny<League>()))
+        gemDataFetcher.Setup(s => s.Fetch(It.IsAny<string>()))
                       .Throws(() => new ApiDownException("poe.ninja"));
         Assert.Null(await Record.ExceptionAsync(async () => await service.StartAsync(CancellationToken.None)));
     }
 
     private class MockConfigurationSection : IConfigurationSection
     {
-        public IEnumerable<IConfigurationSection> GetChildren() { throw new NotImplementedException(); }
+        public IEnumerable<IConfigurationSection> GetChildren()
+        {
+            throw new NotImplementedException();
+        }
 
-        public IChangeToken GetReloadToken() { throw new NotImplementedException(); }
+        public IChangeToken GetReloadToken()
+        {
+            throw new NotImplementedException();
+        }
 
         public IConfigurationSection GetSection(string key)
         {

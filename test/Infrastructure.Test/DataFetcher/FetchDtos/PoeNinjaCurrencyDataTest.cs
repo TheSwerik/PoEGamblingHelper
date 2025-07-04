@@ -14,12 +14,14 @@ public class PoeNinjaCurrencyDataTest
             ChaosEquivalent = 200,
             DetailsId = "divine-orb"
         };
+        var league = "Standard";
 
-        var currency = source.ToCurrencyData();
+        var currency = source.ToCurrencyData(league);
 
         currency.Id.ShouldBe(source.DetailsId);
         currency.Icon.ShouldBe(source.Icon);
         currency.Name.ShouldBe(source.CurrencyTypeName);
         currency.ChaosEquivalent.ShouldBe(source.ChaosEquivalent);
+        currency.League.ShouldBe(league);
     }
 }
