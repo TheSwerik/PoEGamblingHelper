@@ -75,7 +75,7 @@ public partial class GemStats
             return;
         }
 
-        var value = ToDecimal(newValue);
+        var value = newValue.ToDecimal();
         if (value is null) return;
         _values.RawValue = (value * CurrencyValue()).ToString();
         await SaveValues();
@@ -90,7 +90,7 @@ public partial class GemStats
             return;
         }
 
-        var value = ToDecimal(newValue);
+        var value = newValue.ToDecimal();
         if (value is null) return;
         _values.WorstCaseValue = (value * CurrencyValue()).ToString();
         await SaveValues();
@@ -105,7 +105,7 @@ public partial class GemStats
             return;
         }
 
-        var value = ToDecimal(newValue);
+        var value = newValue.ToDecimal();
         if (value is null) return;
         _values.MiddleCaseValue = (value * CurrencyValue()).ToString();
         await SaveValues();
@@ -120,7 +120,7 @@ public partial class GemStats
             return;
         }
 
-        var value = ToDecimal(newValue);
+        var value = newValue.ToDecimal();
         if (value is null) return;
         _values.BestCaseValue = (value * CurrencyValue()).ToString();
         await SaveValues();
@@ -146,16 +146,8 @@ public partial class GemStats
 
     private string GetCurrencyString(string? value)
     {
-        var parsed = ToDecimal(value);
+        var parsed = value.ToDecimal();
         return parsed is null ? "" : CurrencyValue(parsed.Value);
-    }
-
-    private static decimal? ToDecimal(string? value)
-    {
-        if (value is null) return null;
-        var couldBeParsed = decimal.TryParse(value, out var parsed);
-        if (!couldBeParsed) return null;
-        return parsed;
     }
 
     private class Values

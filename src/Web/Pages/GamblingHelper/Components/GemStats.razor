@@ -1,5 +1,6 @@
 ﻿@using PoEGamblingHelper.Application.Extensions
 @using PoEGamblingHelper.Domain.Entity.Gem
+@using PoEGamblingHelper.Web.Extensions
 <div class="card mb-5" style="width: 45rem;">
     <div class="card-body">
         <div class="w-100 d-flex justify-content-between">
@@ -33,8 +34,10 @@
                 }
                 else
                 {
-                    <a href="@TradeUrl(GemData)" target="_blank" rel="noopener noreferrer">Price
-                        Raw: @CurrencyValue(ToDecimal(_values.RawValue) ?? GemData.RawCost())</a>
+                    <a href="@TradeUrl(GemData)" target="_blank" rel="noopener noreferrer">
+                        Price Raw:
+                        @CurrencyValue(_values.RawValue.ToDecimal() ?? GemData.RawCost())
+                    </a>
                 }
                 </p>
                 <p class="card-text">
@@ -49,8 +52,10 @@
                 }
                 else
                 {
-                    <a href="@TradeUrl(GemData, ResultCase.Worst)" target="_blank" rel="noopener noreferrer">Worst
-                        Case: @CurrencyValue(ToDecimal(_values.WorstCaseValue) ?? GemData.Value(ResultCase.Worst))</a>
+                    <a href="@TradeUrl(GemData, ResultCase.Worst)" target="_blank" rel="noopener noreferrer">
+                        Worst Case:
+                        @CurrencyValue(_values.WorstCaseValue.ToDecimal() ?? GemData.Value(ResultCase.Worst))
+                    </a>
                 }
                 </p>
                 <p class="card-text">
@@ -65,8 +70,10 @@
                 }
                 else
                 {
-                    <a href="@TradeUrl(GemData, ResultCase.Middle)" target="_blank" rel="noopener noreferrer">Middle
-                        Case: @CurrencyValue(ToDecimal(_values.MiddleCaseValue) ?? GemData.Value(ResultCase.Middle))</a>
+                    <a href="@TradeUrl(GemData, ResultCase.Middle)" target="_blank" rel="noopener noreferrer">
+                        Middle Case:
+                        @CurrencyValue(_values.MiddleCaseValue.ToDecimal() ?? GemData.Value(ResultCase.Middle))
+                    </a>
                 }
                 </p>
                 <p class="card-text">
@@ -81,26 +88,28 @@
                 }
                 else
                 {
-                    <a href="@TradeUrl(GemData, ResultCase.Best)" target="_blank" rel="noopener noreferrer">Best
-                        Case: @CurrencyValue(ToDecimal(_values.BestCaseValue) ?? GemData.Value(ResultCase.Best))</a>
+                    <a href="@TradeUrl(GemData, ResultCase.Best)" target="_blank" rel="noopener noreferrer">
+                        Best Case:
+                        @CurrencyValue(_values.BestCaseValue.ToDecimal() ?? GemData.Value(ResultCase.Best))
+                    </a>
                 }
                 </p>
             </div>
             <div class="col">
                 <h5 class="card-title">Profit per Try</h5>
                 <p class="card-text">
-                    Cost: @CurrencyValue(GemData.CostPerTry(ToDecimal(_values.RawValue), FilterTempleCost()))</p>
+                    Cost: @CurrencyValue(GemData.CostPerTry(_values.RawValue.ToDecimal(), FilterTempleCost()))</p>
                 <p class="card-text">
                     Worst Case:
-                    @CurrencyValue(_values.WorstCaseValue is null ? GemData.Profit(ResultCase.Worst, ToDecimal(_values.RawValue), FilterTempleCost()) : GemData.Profit(ToDecimal(_values.WorstCaseValue)!.Value, ToDecimal(_values.RawValue), FilterTempleCost()))
+                    @CurrencyValue(_values.WorstCaseValue is null ? GemData.Profit(ResultCase.Worst, _values.RawValue.ToDecimal(), FilterTempleCost()) : GemData.Profit(_values.WorstCaseValue.ToDecimal()!.Value, _values.RawValue.ToDecimal(), FilterTempleCost()))
                 </p>
                 <p class="card-text">
                     Middle Case:
-                    @CurrencyValue(_values.MiddleCaseValue is null ? GemData.Profit(ResultCase.Middle, ToDecimal(_values.RawValue), FilterTempleCost()) : GemData.Profit(ToDecimal(_values.MiddleCaseValue)!.Value, ToDecimal(_values.RawValue), FilterTempleCost()))
+                    @CurrencyValue(_values.MiddleCaseValue is null ? GemData.Profit(ResultCase.Middle, _values.RawValue.ToDecimal(), FilterTempleCost()) : GemData.Profit(_values.MiddleCaseValue.ToDecimal()!.Value, _values.RawValue.ToDecimal(), FilterTempleCost()))
                 </p>
                 <p class="card-text">
                     Best Case:
-                    @CurrencyValue(_values.BestCaseValue is null ? GemData.Profit(ResultCase.Best, ToDecimal(_values.RawValue), FilterTempleCost()) : GemData.Profit(ToDecimal(_values.BestCaseValue)!.Value, ToDecimal(_values.RawValue), FilterTempleCost()))
+                    @CurrencyValue(_values.BestCaseValue is null ? GemData.Profit(ResultCase.Best, _values.RawValue.ToDecimal(), FilterTempleCost()) : GemData.Profit(_values.BestCaseValue.ToDecimal()!.Value, _values.RawValue.ToDecimal(), FilterTempleCost()))
                 </p>
             </div>
             <div class="col d-flex">
@@ -112,7 +121,7 @@
             <div class="col d-flex flex-column justify-content-between">
                 <h5 class="card-title">Average Profit per Try</h5>
                 <button class="btn btn-secondary align-self-end w-100" id="avg-profit">
-                    @CurrencyValue(GemData.AvgProfitPerTry(ToDecimal(_values.RawValue), ToDecimal(_values.WorstCaseValue), ToDecimal(_values.MiddleCaseValue), ToDecimal(_values.BestCaseValue), FilterTempleCost()))
+                    @CurrencyValue(GemData.AvgProfitPerTry(_values.RawValue.ToDecimal(), _values.WorstCaseValue.ToDecimal(), _values.MiddleCaseValue.ToDecimal(), _values.BestCaseValue.ToDecimal(), FilterTempleCost()))
                 </button>
             </div>
         </div>
