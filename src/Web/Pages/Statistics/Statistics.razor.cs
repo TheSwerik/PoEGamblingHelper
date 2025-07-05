@@ -34,7 +34,7 @@ public partial class Statistics : IDisposable
 
     protected override async Task OnInitializedAsync()
     {
-        var result = await Repository.CreateSession(JsRuntime);
+        var result = await SessionRepository.Create(JsRuntime);
         Console.WriteLine(result);
     }
 
