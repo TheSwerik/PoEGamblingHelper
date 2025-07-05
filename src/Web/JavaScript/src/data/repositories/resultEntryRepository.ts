@@ -9,7 +9,7 @@ export function init(database: IDBDatabase): void {
 }
 
 export interface IResultRepository {
-    createResultEntry(data: CreateResultEntry): Promise<ResultEntry>
+    create(data: CreateResultEntry): Promise<ResultEntry>
 }
 
 export interface CreateResultEntry {
@@ -25,7 +25,7 @@ class ResultRepository implements IResultRepository {
     constructor(private readonly database: IDBDatabase) {
     }
 
-    async createResultEntry(data: CreateResultEntry): Promise<ResultEntry> {
+    async create(data: CreateResultEntry): Promise<ResultEntry> {
         const entry: ResultEntry = {
             id: undefined,
             timestamp: new Date(),

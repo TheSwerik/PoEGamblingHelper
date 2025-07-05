@@ -10,14 +10,14 @@ export function init(database: IDBDatabase): void {
 }
 
 export interface ISessionRepository {
-    createSession(): Promise<Session>
+    create(): Promise<Session>
 }
 
 class SessionRepository implements ISessionRepository {
     constructor(private readonly database: IDBDatabase) {
     }
 
-    async createSession(): Promise<Session> {
+    async create(): Promise<Session> {
         const session: Session = {
             id: undefined,
             timestamp: new Date(),
