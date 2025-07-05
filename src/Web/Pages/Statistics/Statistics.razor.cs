@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using PoEGamblingHelper.Web.Data;
 using PoEGamblingHelper.Web.Services.Interfaces;
 
 namespace PoEGamblingHelper.Web.Pages.Statistics;
@@ -33,10 +34,8 @@ public partial class Statistics : IDisposable
 
     protected override async Task OnInitializedAsync()
     {
-        var result = await JsRuntime.InvokeAsync<object>("createSession");
+        var result = await Repository.CreateSession(JsRuntime);
         Console.WriteLine(result);
-        var result2 = await JsRuntime.InvokeAsync<Session>("createSession");
-        Console.WriteLine(result2);
     }
 
     private string LuckAdjective()

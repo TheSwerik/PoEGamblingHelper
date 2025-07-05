@@ -2,7 +2,7 @@
 // ReSharper disable UnusedMember.Global
 // ReSharper disable NotAccessedPositionalProperty.Global
 
-namespace PoEGamblingHelper.Web.Pages.Statistics;
+namespace PoEGamblingHelper.Web.Data;
 
 internal record Session(int Id, DateTime TimeStamp, ResultEntry[] Results);
 
