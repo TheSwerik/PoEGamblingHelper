@@ -1,5 +1,6 @@
 ﻿import {migrateFromVersion} from "./migrations";
-import {initSessionRepository} from "./sessionRepository";
+import {init as initSessionRepository} from "../repositories/sessionRepository";
+import {init as initResultRepository} from "../repositories/resultEntryRepository";
 
 export const DatabaseVersion = 1;
 export const DatabaseName = 'GemCorruptionResults';
@@ -28,4 +29,5 @@ function migrateDatabase(event: IDBVersionChangeEvent) {
 
 function initRepositories(database: IDBDatabase) {
     initSessionRepository(database);
+    initResultRepository(database);
 }

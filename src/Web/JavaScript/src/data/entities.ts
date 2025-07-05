@@ -5,6 +5,7 @@
 }
 
 export interface ResultEntry {
+    sessionId: number | null;
     id: number;
     gemId: number;
     result: Result;
