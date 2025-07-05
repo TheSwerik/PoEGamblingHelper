@@ -1,0 +1,83 @@
+﻿<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>Document</title>
+</head>
+<body>
+<script>
+    let db;
+    const DBOpenRequest = window.indexedDB.open("testDb", 2);
+    // when no migration is needed:
+    DBOpenRequest.onsuccess = _ => db = DBOpenRequest.result;
+
+    DBOpenRequest.onupgradeneeded = (event) => {
+        debugger;
+        db = event.target.result;
+        console.log(db)
+        console.log(event)
+
+        if (event.oldVersion == 1) {
+            debugger;
+            const transaction = event.target.transaction;
+            const objectStore2 = transaction.objectStore('testClass');
+            const dataRequest = objectStore2.getAll();
+            dataRequest.onsuccess = (event) => {
+                debugger;
+                const data = dataRequest.result;
+
+                db.deleteObjectStore('testClass');
+                const objectStore = db.createObjectStore("testClass", {
+                    keyPath: "id", autoIncrement: true,
+                });
+                objectStore.createIndex("name", "name", {unique: false});
+                objectStore.createIndex("name2", "name2", {unique: false});
+
+                const objectStore3 = transaction.objectStore('testClass');
+                for (let datum of data) objectStore3.add(datum);
+            }
+
+        } else {
+            const objectStore = db.createObjectStore("testClass", {
+                keyPath: "id", autoIncrement: true,
+            });
+            objectStore.createIndex("name", "name", {unique: false});
+            objectStore.createIndex("name2", "name2", {unique: false});
+        }
+    }
+
+
+    setTimeout(() => {
+        const newItem = [
+            {
+                name: "testname",
+                testAttribute: "testAttribute"
+            },
+            {
+                id: 187,
+                name: "testname 2",
+                testAttribute: "testAttribute 2"
+            },
+        ];
+        const transaction = db.transaction(['testClass'], 'readwrite');
+        transaction.oncomplete = () => console.log("Transaction complete");
+        transaction.onerror = () => console.error("Transaction failed");
+
+        // Call an object store that's already been added to the database
+        const objectStore2 = transaction.objectStore('testClass');
+        console.log(objectStore2.indexNames);
+        console.log(objectStore2.keyPath);
+        console.log(objectStore2.name);
+        console.log(objectStore2.transaction);
+        console.log(objectStore2.autoIncrement);
+        objectStore2.onsuccess = () => console.log("objectStore2 complete");
+
+        // Make a request to add our newItem object to the object store
+        const objectStoreRequest = objectStore2.add(newItem[0]);
+        const objectStoreRequest2 = objectStore2.add(newItem[1]);
+    }, 10_000)
+
+
+</script>
+</body>
+</html>
