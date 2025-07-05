@@ -1,11 +1,14 @@
-﻿export function migrateFromVersion(db: IDBDatabase, previousVersion: number): void {
-    switch (previousVersion) {
-        case 0:
-            migrateFromScratch(db);
-            break;
-    }
+﻿import {instance as sessionRepository} from "./sessionRepository";
+
+export function migrateFromVersion(database: IDBDatabase, previousVersion: number): void {
+    if (previousVersion <= 0) migration1(database);
+    if (previousVersion < 1) migration2(database);
 }
 
-function migrateFromScratch(db: IDBDatabase): void {
+function migration1(database: IDBDatabase): void {
+    sessionRepository.createSessionStore(database);
+}
+
+function migration2(database: IDBDatabase): void {
 
 }

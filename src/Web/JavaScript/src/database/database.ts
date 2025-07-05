@@ -1,17 +1,31 @@
-﻿import {createSessionStore} from "./session";
+﻿import {migrateFromVersion} from "./migrations";
+import {initSessionRepository} from "./sessionRepository";
 
+export const DatabaseVersion = 1;
+export const DatabaseName = 'GemCorruptionResults';
 export let database: IDBDatabase;
-const DBOpenRequest = window.indexedDB.open('GemCorruptionResults', 1);
+
+const DBOpenRequest = window.indexedDB.open(DatabaseName, DatabaseVersion);
 DBOpenRequest.onerror = event => {
     throw event;
 }
-DBOpenRequest.onsuccess = _ => database = DBOpenRequest.result;
 
+// if no migration is needed:
+DBOpenRequest.onsuccess = _ => {
+    database = DBOpenRequest.result;
+    initRepositories(database);
+}
 
-DBOpenRequest.onupgradeneeded = _ => {
-    DBOpenRequest.onerror = event => {
-        throw event;
-    }
+// if migration is needed:
+DBOpenRequest.onupgradeneeded = migrateDatabase;
 
-    createSessionStore(database);
-};
+function migrateDatabase(event: IDBVersionChangeEvent) {
+    // @ts-ignore
+    database = event.target.result;
+    initRepositories(database);
+    migrateFromVersion(database, event.oldVersion);
+}
+
+function initRepositories(database: IDBDatabase) {
+    initSessionRepository(database);
+}
