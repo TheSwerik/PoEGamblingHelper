@@ -26,8 +26,7 @@ class ResultRepository implements IResultRepository {
     }
 
     async create(data: CreateResultEntry): Promise<ResultEntry> {
-        const entry: ResultEntry = {
-            id: undefined,
+        const entry: Omit<ResultEntry, 'id'> = {
             timestamp: new Date(),
             sessionId: data.sessionId,
             gemId: data.gemId,
@@ -43,10 +42,9 @@ class ResultRepository implements IResultRepository {
         const request = objectStore.add(entry);
         await WaitForReady(request);
 
-        console.log(request)
-        console.log(request.result)
-
-        // @ts-ignore
-        return request.result as Result;
+        return {
+            id: request.result as number,
+            ...entry
+        };
     }
 }

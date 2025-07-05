@@ -18,8 +18,7 @@ class SessionRepository implements ISessionRepository {
     }
 
     async create(): Promise<Session> {
-        const session: Session = {
-            id: undefined,
+        const session: Omit<Session, 'id'> = {
             timestamp: new Date(),
             results: [],
         }
@@ -27,13 +26,12 @@ class SessionRepository implements ISessionRepository {
         const transaction = this.database.transaction([storeName], "readwrite");
         const objectStore = transaction.objectStore(storeName);
 
-        const request: IDBRequest<IDBValidKey> = objectStore.add(session);
+        const request = objectStore.add(session);
         await WaitForReady(request);
 
-        console.log(request)
-        console.log(request.result)
-
-        // @ts-ignore
-        return request.result as Session;
+        return {
+            id: request.result as number,
+            ...session
+        };
     }
 }

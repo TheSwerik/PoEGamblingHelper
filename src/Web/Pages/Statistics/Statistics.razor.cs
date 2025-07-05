@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using PoEGamblingHelper.Web.Services.Interfaces;
 
 namespace PoEGamblingHelper.Web.Pages.Statistics;
@@ -7,6 +8,7 @@ public partial class Statistics : IDisposable
 {
     private readonly int[] _data = { Random.Shared.Next(10000), Random.Shared.Next(10000), Random.Shared.Next(10000) };
     private bool _isMyAccountSelected = true;
+    [Inject] IJSRuntime JsRuntime { get; set; } = null!;
     [Inject] private IUpdateService UpdateService { get; set; } = null!;
 
     public void Dispose()
@@ -27,6 +29,14 @@ public partial class Statistics : IDisposable
     {
         //UpdateService.OnUpdate += async _ => await LoadGamblingData();
         UpdateService.OnUiUpdate += async _ => await InvokeAsync(StateHasChanged);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await JsRuntime.InvokeAsync<object>("createSession");
+        Console.WriteLine(result);
+        var result2 = await JsRuntime.InvokeAsync<Session>("createSession");
+        Console.WriteLine(result2);
     }
 
     private string LuckAdjective()

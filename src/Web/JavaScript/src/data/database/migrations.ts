@@ -11,6 +11,7 @@ function migration1(database: IDBDatabase): void {
         autoIncrement: true,
         keyPath: 'id'
     });
+    sessionObjectStore.createIndex('id', 'id', {unique: true});
     sessionObjectStore.createIndex('timestamp', 'timestamp', {unique: false});
     sessionObjectStore.createIndex('results', 'results', {unique: false});
 
@@ -18,6 +19,7 @@ function migration1(database: IDBDatabase): void {
         autoIncrement: true,
         keyPath: 'id'
     });
+    resultEntryObjectStore.createIndex('id', 'id', {unique: true});
     resultEntryObjectStore.createIndex('gemId', 'gemId', {unique: false});
     resultEntryObjectStore.createIndex('timestamp', 'timestamp', {unique: false});
     resultEntryObjectStore.createIndex('result', 'result', {unique: false});
