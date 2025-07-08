@@ -3,6 +3,9 @@
 FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine as builder
 WORKDIR /build
 COPY ../../. .
+RUN apk add --no-cache nodejs npm
+RUN npm install -g yarn
+RUN yarn --version
 RUN dotnet publish -c Release -o /build/publish src/Web/Web.csproj
 
 #########################################################################
