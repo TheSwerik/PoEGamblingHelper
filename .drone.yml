@@ -9,7 +9,7 @@ trigger:
     - release
 steps:
   - name: run tests
-    image: mcr.microsoft.com/dotnet/sdk:7.0
+    image: mcr.microsoft.com/dotnet/sdk:9.0
     commands:
     - dotnet test
 ---
