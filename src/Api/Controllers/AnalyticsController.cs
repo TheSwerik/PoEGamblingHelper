@@ -4,11 +4,13 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PoEGamblingHelper.Application.Repositories;
+using PoEGamblingHelper.Application.Services;
 using PoEGamblingHelper.Domain.Entity.Analytics;
 
 namespace PoEGamblingHelper.Api.Controllers;
 
-public class AnalyticsController(IAnalyticsDayRepository analyticsRepository, IConfiguration configuration) : ApiControllerBase
+public class AnalyticsController(IAnalyticsDayRepository analyticsRepository, IConfiguration configuration, IDateTimeService dateTimeService)
+    : ApiControllerBase
 {
     [HttpGet]
     [Authorize]
@@ -21,28 +23,9 @@ public class AnalyticsController(IAnalyticsDayRepository analyticsRepository, IC
 
     [HttpGet("check")]
     [Authorize]
-    public async Task<bool> Check()
+    public Task<bool> Check()
     {
-        var claims = new List<Claim>
-        {
-            new(ClaimTypes.Name, "test")
-        };
-        var claimsIdentity = new ClaimsIdentity(
-            claims,
-            CookieAuthenticationDefaults.AuthenticationScheme);
-
-        var authProperties = new AuthenticationProperties
-        {
-            IsPersistent = true,
-            ExpiresUtc = DateTimeOffset.UtcNow.AddDays(30)
-        };
-
-        await HttpContext.SignInAsync(
-            CookieAuthenticationDefaults.AuthenticationScheme,
-            new ClaimsPrincipal(claimsIdentity),
-            authProperties);
-
-        return true;
+        return Task.FromResult(true);
     }
 
     [HttpGet("login")]
@@ -58,7 +41,8 @@ public class AnalyticsController(IAnalyticsDayRepository analyticsRepository, IC
         var authProperties = new AuthenticationProperties
         {
             IsPersistent = true,
-            ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30)
+            ExpiresUtc = dateTimeService.UtcNow().AddDays(30),
+            AllowRefresh = true
         };
 
         await HttpContext.SignInAsync(
