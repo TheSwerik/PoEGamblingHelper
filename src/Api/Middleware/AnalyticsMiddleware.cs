@@ -3,18 +3,14 @@ using PoEGamblingHelper.Application.Repositories;
 
 namespace PoEGamblingHelper.Api.Middleware;
 
-public class AnalyticsMiddleware
+public class AnalyticsMiddleware(RequestDelegate next)
 {
-    private readonly RequestDelegate _next;
-
-    public AnalyticsMiddleware(RequestDelegate next) { _next = next; }
-
     public async Task InvokeAsync(HttpContext httpContext, IViewRepository viewRepository)
     {
         var ip = httpContext.Request.GetRealIpAddress();
         if (ip is not null) await viewRepository.AddAsync(ip);
 
-        await _next(httpContext);
+        await next(httpContext);
     }
 }
 
