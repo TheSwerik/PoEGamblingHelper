@@ -1,6 +1,7 @@
-﻿using Domain.Entity.Abstract;
+﻿using System;
+using PoEGamblingHelper.Domain.Entity.Abstract;
 
-namespace Domain.Entity.Analytics;
+namespace PoEGamblingHelper.Domain.Entity.Analytics;
 
 public class View : Entity<Guid>
 {

@@ -1,30 +1,17 @@
-using Application.Services;
-using Domain.Entity;
-using Domain.Exception;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
+using PoEGamblingHelper.Application.Repositories;
+using PoEGamblingHelper.Domain.Entity;
+using PoEGamblingHelper.Infrastructure;
 
-namespace Api.Controllers;
+namespace PoEGamblingHelper.Api.Controllers;
 
-public class TempleController : ApiControllerBase
+public class TempleController(ITempleRepository templeRepository) : ApiControllerBase
 {
-    private readonly IAnalyticsService _analyticsService;
-    private readonly IApplicationDbContextFactory _applicationDbContextFactory;
-
-    public TempleController(IApplicationDbContextFactory applicationDbContextFactory,
-                            IAnalyticsService analyticsService)
-    {
-        _applicationDbContextFactory = applicationDbContextFactory;
-        _analyticsService = analyticsService;
-    }
-
     [HttpGet]
-    [OutputCache(PolicyName = "FetchData")]
-    public TempleCost Get()
+    [OutputCache(PolicyName = Constants.DataFetcherCacheTag)]
+    public TempleCost Get([FromQuery] string league)
     {
-        _analyticsService.AddView(Request.GetRealIpAddress());
-        using var applicationDbContext = _applicationDbContextFactory.CreateDbContext();
-        return applicationDbContext.TempleCost.OrderByDescending(cost => cost.TimeStamp).FirstOrDefault()
-               ?? throw new NoTempleDataException();
+        return templeRepository.GetCurrent(league);
     }
 }

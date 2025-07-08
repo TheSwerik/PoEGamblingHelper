@@ -1,11 +1,13 @@
 using Blazored.Toast.Services;
-using Domain.Entity;
-using Web.Services.Interfaces;
+using PoEGamblingHelper.Domain.Entity;
+using PoEGamblingHelper.Web.Services.Interfaces;
 
-namespace Web.Services.Implementations;
+namespace PoEGamblingHelper.Web.Services.Implementations;
 
-public class TempleCostService : HttpService, ITempleCostService
+public class TempleCostService(HttpClient httpClient, IToastService toastService) : HttpService(httpClient, toastService), ITempleCostService
 {
-    public TempleCostService(HttpClient httpClient, IToastService toastService) : base(httpClient, toastService) { }
-    public async Task<TempleCost?> Get() { return await GetAsync<TempleCost>("temple"); }
+    public async Task<TempleCost?> Get(string league)
+    {
+        return await GetAsync<TempleCost>($"temple?league={league}");
+    }
 }

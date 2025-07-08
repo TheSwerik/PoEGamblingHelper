@@ -92,3 +92,5 @@ steps:
         from_secret: REGISTRY_PASSWORD
       POSTGRES_PASSWORD:
         from_secret: POSTGRES_PASSWORD
+      API_KEY:
+        from_secret: API_KEY

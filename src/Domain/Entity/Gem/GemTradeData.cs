@@ -1,10 +1,10 @@
-﻿using Domain.Entity.Abstract;
+﻿using PoEGamblingHelper.Domain.Entity.Abstract;
 
-namespace Domain.Entity.Gem;
+namespace PoEGamblingHelper.Domain.Entity.Gem;
 
 public class GemTradeData : Entity<long>
 {
-    public string Name { get; set; } = string.Empty;
+    public string Name { get; set; } = null!;
     public int GemLevel { get; set; }
     public int GemQuality { get; set; }
     public bool Corrupted { get; set; }
@@ -13,4 +13,5 @@ public class GemTradeData : Entity<long>
     public decimal ExaltedValue { get; set; }
     public decimal DivineValue { get; set; }
     public int ListingCount { get; set; }
+    public string League { get; set; } = null!;
 }
