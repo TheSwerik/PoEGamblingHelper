@@ -5,7 +5,6 @@ WORKDIR /build
 COPY ../../. .
 RUN apk add --no-cache nodejs npm
 RUN npm install -g yarn
-RUN yarn --version
 RUN dotnet publish -c Release -o /build/publish src/Api/Api.csproj
 
 #########################################################################

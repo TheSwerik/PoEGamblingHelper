@@ -11,6 +11,8 @@ steps:
   - name: run tests
     image: mcr.microsoft.com/dotnet/sdk:9.0
     commands:
+      - apk add --no-cache nodejs npm
+      - npm install -g yarn
     - dotnet test
 ---
 kind: pipeline
