@@ -13,7 +13,7 @@ steps:
     commands:
       - apk add --no-cache nodejs npm
       - npm install -g yarn
-    - dotnet test
+      - dotnet test
 ---
 kind: pipeline
 type: docker
