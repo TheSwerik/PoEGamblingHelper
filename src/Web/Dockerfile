@@ -1,8 +1,10 @@
 ﻿# syntax=docker/dockerfile:1.4.3
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0-alpine as builder
+FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine as builder
 WORKDIR /build
 COPY ../../. .
+RUN apk add --no-cache nodejs npm
+RUN npm install -g yarn
 RUN dotnet publish -c Release -o /build/publish src/Web/Web.csproj
 
 #########################################################################
