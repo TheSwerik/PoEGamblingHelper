@@ -1,0 +1,128 @@
+﻿@using PoEGamblingHelper.Application.Extensions
+@using PoEGamblingHelper.Domain.Entity.Gem
+<div class="card mb-5" style="width: 45rem;">
+    <div class="card-body">
+        <div class="w-100 d-flex justify-content-between">
+            <h3 class="card-title wrap-ellipsis">
+                <img src="@GemData.Icon" alt="Gem-Icon" class="icon"/>@GemData.Name
+            </h3>
+            <div class="d-flex justify-content-end" style="width: min-content">
+                @if (_isEditing)
+                {
+                    <button class="edit-button" @onclick="ResetValues">
+                        <div class="edit-icon reset-icon"></div>
+                    </button>
+                }
+                <button class="edit-button" @onclick="() => _isEditing = !_isEditing">
+                    <div class="edit-icon @(_isEditing ? "check-mark-icon" : "pen-icon")"></div>
+                </button>
+            </div>
+        </div>
+        <div class="row gy-5">
+            <div class="col">
+                <h5 class="card-title">Value</h5>
+                <p class="card-text">
+                    @if (_isEditing)
+                    {
+                    <div class="d-flex justify-content-between align-items-center">
+                        Price Raw:
+                        <MathInput style="width: 40%; height: 100%; padding-right: 8px !important;"
+                                   value="@GetCurrencyString(_values.RawValue)"
+                                   ValueChanged="UpdateRawValue"/>
+                    </div>
+                }
+                else
+                {
+                    <a href="@TradeUrl(GemData)" target="_blank" rel="noopener noreferrer">
+                        Price Raw:
+                        @CurrencyValue(_values.RawValue.ToDecimal() ?? GemData.RawCost())
+                    </a>
+                }
+                </p>
+                <p class="card-text">
+                    @if (_isEditing)
+                    {
+                    <div class="d-flex justify-content-between align-items-center">
+                        Worst Case:
+                        <MathInput style="width: 40%; height: 100%; padding-right: 8px !important;"
+                                   value="@GetCurrencyString(_values.WorstCaseValue)"
+                                   ValueChanged="UpdateWorstCaseValue"/>
+                    </div>
+                }
+                else
+                {
+                    <a href="@TradeUrl(GemData, ResultCase.Worst)" target="_blank" rel="noopener noreferrer">
+                        Worst Case:
+                        @CurrencyValue(_values.WorstCaseValue.ToDecimal() ?? GemData.Value(ResultCase.Worst))
+                    </a>
+                }
+                </p>
+                <p class="card-text">
+                    @if (_isEditing)
+                    {
+                    <div class="d-flex justify-content-between align-items-center">
+                        Middle Case:
+                        <MathInput style="width: 40%; height: 100%; padding-right: 8px !important;"
+                                   value="@GetCurrencyString(_values.MiddleCaseValue)"
+                                   ValueChanged="UpdateMiddleCaseValue"/>
+                    </div>
+                }
+                else
+                {
+                    <a href="@TradeUrl(GemData, ResultCase.Middle)" target="_blank" rel="noopener noreferrer">
+                        Middle Case:
+                        @CurrencyValue(_values.MiddleCaseValue.ToDecimal() ?? GemData.Value(ResultCase.Middle))
+                    </a>
+                }
+                </p>
+                <p class="card-text">
+                    @if (_isEditing)
+                    {
+                    <div class="d-flex justify-content-between align-items-center">
+                        Best Case:
+                        <MathInput style="width: 40%; height: 100%; padding-right: 8px !important;"
+                                   value="@GetCurrencyString(_values.BestCaseValue)"
+                                   ValueChanged="UpdateBestCaseValue"/>
+                    </div>
+                }
+                else
+                {
+                    <a href="@TradeUrl(GemData, ResultCase.Best)" target="_blank" rel="noopener noreferrer">
+                        Best Case:
+                        @CurrencyValue(_values.BestCaseValue.ToDecimal() ?? GemData.Value(ResultCase.Best))
+                    </a>
+                }
+                </p>
+            </div>
+            <div class="col">
+                <h5 class="card-title">Profit per Try</h5>
+                <p class="card-text">
+                    Cost: @CurrencyValue(GemData.CostPerTry(_values.RawValue.ToDecimal(), FilterTempleCost()))</p>
+                <p class="card-text">
+                    Worst Case:
+                    @CurrencyValue(_values.WorstCaseValue is null ? GemData.Profit(ResultCase.Worst, _values.RawValue.ToDecimal(), FilterTempleCost()) : GemData.Profit(_values.WorstCaseValue.ToDecimal()!.Value, _values.RawValue.ToDecimal(), FilterTempleCost()))
+                </p>
+                <p class="card-text">
+                    Middle Case:
+                    @CurrencyValue(_values.MiddleCaseValue is null ? GemData.Profit(ResultCase.Middle, _values.RawValue.ToDecimal(), FilterTempleCost()) : GemData.Profit(_values.MiddleCaseValue.ToDecimal()!.Value, _values.RawValue.ToDecimal(), FilterTempleCost()))
+                </p>
+                <p class="card-text">
+                    Best Case:
+                    @CurrencyValue(_values.BestCaseValue is null ? GemData.Profit(ResultCase.Best, _values.RawValue.ToDecimal(), FilterTempleCost()) : GemData.Profit(_values.BestCaseValue.ToDecimal()!.Value, _values.RawValue.ToDecimal(), FilterTempleCost()))
+                </p>
+            </div>
+            <div class="col d-flex">
+                <div class="d-block align-self-end w-100" data-bs-toggle="tooltip"
+                     data-bs-title="This feature is not implemented yet">
+                    <button class="btn btn-primary w-100" disabled>+ Value</button>
+                </div>
+            </div>
+            <div class="col d-flex flex-column justify-content-between">
+                <h5 class="card-title">Average Profit per Try</h5>
+                <button class="btn btn-secondary align-self-end w-100" id="avg-profit">
+                    @CurrencyValue(GemData.AvgProfitPerTry(_values.RawValue.ToDecimal(), _values.WorstCaseValue.ToDecimal(), _values.MiddleCaseValue.ToDecimal(), _values.BestCaseValue.ToDecimal(), FilterTempleCost()))
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

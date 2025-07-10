@@ -1,7 +1,7 @@
-﻿namespace Web.Services.Interfaces;
+﻿namespace PoEGamblingHelper.Web.Services.Interfaces;
 
 public interface IScrollInfoService
 {
     int ScrollY { get; }
-    event EventHandler<int> OnScrollToBottom;
+    event Func<object?, int, Task> OnScrollToBottom;
 }

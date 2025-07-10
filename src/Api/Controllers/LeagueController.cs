@@ -1,40 +1,23 @@
-using Application.Services;
-using Domain.Entity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
+using PoEGamblingHelper.Application.Repositories;
+using PoEGamblingHelper.Domain.Entity;
+using PoEGamblingHelper.Infrastructure;
 
-namespace Api.Controllers;
+namespace PoEGamblingHelper.Api.Controllers;
 
-public class LeagueController : ApiControllerBase
+public class LeagueController(ILeagueRepository leagueRepository) : ApiControllerBase
 {
-    private readonly IAnalyticsService _analyticsService;
-    private readonly IApplicationDbContextFactory _applicationDbContextFactory;
-    private readonly ILeagueService _leagueService;
-
-    public LeagueController(ILeagueService leagueService, IApplicationDbContextFactory applicationDbContextFactory,
-                            IAnalyticsService analyticsService)
+    [HttpGet]
+    public IAsyncEnumerable<League> GetAll()
     {
-        _leagueService = leagueService;
-        _applicationDbContextFactory = applicationDbContextFactory;
-        _analyticsService = analyticsService;
+        return leagueRepository.GetAll();
     }
 
-    [HttpGet]
-    public async IAsyncEnumerable<League> GetAllLeagues()
+    [HttpGet("current")]
+    [OutputCache(PolicyName = Constants.DataFetcherCacheTag)]
+    public League GetCurrent()
     {
-        await _analyticsService.AddView(Request.GetRealIpAddress());
-        using var applicationDbContext = _applicationDbContextFactory.CreateDbContext();
-        await foreach (var item in applicationDbContext.League.AsAsyncEnumerable().ConfigureAwait(false))
-            yield return item;
-    }
-
-    [HttpGet]
-    [Route("current")]
-    [OutputCache(PolicyName = "FetchData")]
-    public League GetCurrentLeague()
-    {
-        _analyticsService.AddView(Request.GetRealIpAddress());
-        using var applicationDbContext = _applicationDbContextFactory.CreateDbContext();
-        return _leagueService.GetCurrentLeague(applicationDbContext.League);
+        return leagueRepository.GetCurrent();
     }
 }
