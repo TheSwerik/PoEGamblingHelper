@@ -1,31 +1,53 @@
 name: Deploy to GitHub Pages
 on:
   push:
-    branches: [ main ]
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
-  deploy-to-github-pages:
-    # use ubuntu-latest image to run steps on
+  deploy:
+#TODO
+#    environment:
+#      name: github-pages
+#      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-        
-    - name: Setup .NET Core SDK
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 7.0.100
-        
-    - name: Tests
-      run: dotnet test
-        
-    - name: Publish .NET Core Project
-      run: dotnet publish src/Web/Web.csproj -c Debug -o release --nologo
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Add .nojekyll file
-      run: touch release/wwwroot/.nojekyll
-      
-    - name: Commit wwwroot to GitHub Pages
-      uses: JamesIves/github-pages-deploy-action@3.7.1
-      with:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        BRANCH: gh-pages
-        FOLDER: release/wwwroot
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Tests
+        run: dotnet test
+
+      - name: Publish .NET Core Project
+        run: dotnet publish src/Web/Web.csproj -c Debug -o release --nologo
+
+      - name: Add .nojekyll file
+        run: touch release/wwwroot/.nojekyll
+        
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+        
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'release/wwwroot'
+          
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

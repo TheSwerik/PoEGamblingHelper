@@ -11,6 +11,7 @@ services:
     environment:
       DOTNET_SYSTEM_GLOBALIZATION_INVARIANT: true
       POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+      ApiKey: $API_KEY
     restart: unless-stopped
     deploy:
       mode: replicated

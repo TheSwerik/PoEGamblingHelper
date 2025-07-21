@@ -1,7 +1,7 @@
 ﻿using Microsoft.JSInterop;
-using Web.Services.Interfaces;
+using PoEGamblingHelper.Web.Services.Interfaces;
 
-namespace Web.Services.Implementations;
+namespace PoEGamblingHelper.Web.Services.Implementations;
 
 public class ScrollInfoService : IScrollInfoService, IDisposable
 {
@@ -18,7 +18,7 @@ public class ScrollInfoService : IScrollInfoService, IDisposable
         await _jsRuntime.InvokeVoidAsync("UnRegisterScrollInfoService", DotNetObjectReference.Create(this));
     }
 
-    public event EventHandler<int>? OnScrollToBottom;
+    public event Func<object?, int, Task>? OnScrollToBottom;
 
     public int ScrollY { get; private set; }
 

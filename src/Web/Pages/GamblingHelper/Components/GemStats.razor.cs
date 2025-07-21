@@ -1,0 +1,159 @@
+﻿using Blazored.LocalStorage;
+using Microsoft.AspNetCore.Components;
+using PoEGamblingHelper.Application.Extensions;
+using PoEGamblingHelper.Domain.Entity;
+using PoEGamblingHelper.Domain.Entity.Gem;
+using PoEGamblingHelper.Web.Extensions;
+using PoEGamblingHelper.Web.Pages.GamblingHelper.Components.Filter;
+
+namespace PoEGamblingHelper.Web.Pages.GamblingHelper.Components;
+
+public partial class GemStats
+{
+    private bool _isEditing = false;
+    private Values _values = new();
+    [Parameter] public GemData GemData { get; set; } = null!;
+
+    [Parameter] public TempleCost TempleCost { get; set; } = null!;
+
+    [Parameter] public FilterModel FilterModel { get; set; } = null!;
+
+    [Inject] private ILocalStorageService LocalStorage { get; set; } = default!;
+
+    private decimal FilterTempleCost()
+    {
+        return FilterModel.TempleCost ?? TempleCost.AverageChaosValue();
+    }
+
+    private string TradeUrl(GemData gemData, ResultCase? resultCase = null)
+    {
+        if (resultCase is null) // raw gem
+        {
+            var rawUrlGem = new GemTradeData
+            {
+                Name = gemData.Name,
+                Corrupted = false,
+                GemLevel = gemData.MaxLevel(),
+                GemQuality = 0
+            };
+            return rawUrlGem.TradeUrl(FilterModel.League!);
+        }
+
+        var resultGem = GemData.Gems
+                               .Where(gem => gem.Corrupted &&
+                                             gem.GemLevel == GemData.MaxLevel() + resultCase.Value.LevelModifier())
+                               .MinBy(gem => gem.ChaosValue);
+        if (resultGem is not null) return resultGem.TradeUrl(FilterModel.League!);
+
+        var urlGem = new GemTradeData
+        {
+            Name = gemData.Name,
+            Corrupted = true,
+            GemLevel = gemData.MaxLevel() + resultCase.Value.LevelModifier(),
+            GemQuality = 0
+        };
+        return urlGem.TradeUrl(FilterModel.League!);
+    }
+
+    private string CurrencyValue(decimal chaosValue)
+    {
+        return (chaosValue / CurrencyValue()).Round(2);
+    }
+
+    private decimal CurrencyValue()
+    {
+        return FilterModel.CurrencyValue ?? FilterModel.Currency?.ChaosEquivalent ?? 1;
+    }
+
+    private async Task UpdateRawValue(string? newValue)
+    {
+        if (string.IsNullOrWhiteSpace(newValue))
+        {
+            _values.RawValue = null;
+            await SaveValues();
+            return;
+        }
+
+        var value = newValue.ToDecimal();
+        if (value is null) return;
+        _values.RawValue = (value * CurrencyValue()).ToString();
+        await SaveValues();
+    }
+
+    private async Task UpdateWorstCaseValue(string? newValue)
+    {
+        if (string.IsNullOrWhiteSpace(newValue))
+        {
+            _values.WorstCaseValue = null;
+            await SaveValues();
+            return;
+        }
+
+        var value = newValue.ToDecimal();
+        if (value is null) return;
+        _values.WorstCaseValue = (value * CurrencyValue()).ToString();
+        await SaveValues();
+    }
+
+    private async Task UpdateMiddleCaseValue(string? newValue)
+    {
+        if (string.IsNullOrWhiteSpace(newValue))
+        {
+            _values.MiddleCaseValue = null;
+            await SaveValues();
+            return;
+        }
+
+        var value = newValue.ToDecimal();
+        if (value is null) return;
+        _values.MiddleCaseValue = (value * CurrencyValue()).ToString();
+        await SaveValues();
+    }
+
+    private async Task UpdateBestCaseValue(string? newValue)
+    {
+        if (string.IsNullOrWhiteSpace(newValue))
+        {
+            _values.BestCaseValue = null;
+            await SaveValues();
+            return;
+        }
+
+        var value = newValue.ToDecimal();
+        if (value is null) return;
+        _values.BestCaseValue = (value * CurrencyValue()).ToString();
+        await SaveValues();
+    }
+
+    private async Task ResetValues()
+    {
+        _values = new Values();
+        await LocalStorage.RemoveItemAsync(GemData.Id.ToString());
+        _isEditing = false;
+    }
+
+    private async Task SaveValues()
+    {
+        await LocalStorage.SetItemAsync(GemData.Id.ToString(), _values);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var values = await LocalStorage.GetItemAsync<Values>(GemData.Id.ToString());
+        _values = values ?? new Values();
+    }
+
+    private string GetCurrencyString(string? value)
+    {
+        var parsed = value.ToDecimal();
+        return parsed is null ? "" : CurrencyValue(parsed.Value);
+    }
+
+    private class Values
+    {
+        public string? RawValue { get; set; }
+        public string? WorstCaseValue { get; set; }
+        public string? MiddleCaseValue { get; set; }
+        public string? BestCaseValue { get; set; }
+    }
+}

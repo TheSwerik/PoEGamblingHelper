@@ -6,7 +6,10 @@
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
     <title>PoE GamblingHelper</title>
     <base href="/"/>
-    <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet"/>
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+          integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="_content/Blazor.Bootstrap/blazor.bootstrap.css" rel="stylesheet"/>
     <link href="css/app.css" rel="stylesheet"/>
     <link href="Web.styles.css" rel="stylesheet"/>
 
@@ -29,10 +32,23 @@
     <a class="dismiss">🗙</a>
 </div>
 <script src="_framework/blazor.webassembly.js"></script>
-<script src="js/bootstrap/bootstrap.bundle.min.js"></script>
+<script crossorigin="anonymous"
+        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Add chart.js reference if chart components are used in your application. -->
+<script crossorigin="anonymous"
+        integrity="sha512-gQhCDsnnnUfaRzD8k1L5llCCV6O9HN09zClIzzeJ8OJ9MpGmIlCxm+pdCkqTwqJ4JcjbojFr79rl2F1mzcoLMQ=="
+        referrerpolicy="no-referrer" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.0.1/chart.umd.js"></script>
+<!-- Add chartjs-plugin-datalabels.min.js reference if chart components with data label feature is used in your application. -->
+<script crossorigin="anonymous"
+        integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig=="
+        referrerpolicy="no-referrer"
+        src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
+<!-- Add sortable.js reference if SortableList component is used in your application. -->
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+<script src="_content/Blazor.Bootstrap/blazor.bootstrap.js"></script>
 <script src="js/tooltip.js"></script>
-<script src="js/theme.js"></script>
-<script src="js/scroll-to-bottom.js"></script>
+<script src="js/bundle.js"></script>
 </body>
 
 </html>

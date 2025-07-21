@@ -1,7 +1,6 @@
-using Domain.QueryParameters;
-using FluentAssertions;
+using PoEGamblingHelper.Application.QueryParameters;
 
-namespace Domain.Test.QueryParameters;
+namespace PoEGamblingHelper.Domain.Test.QueryParameters;
 
 public class PageRequestTest
 {
@@ -9,18 +8,24 @@ public class PageRequestTest
     public void SetPageSizeTest()
     {
         var pageRequest = new PageRequest
-                          {
-                              PageNumber = 0,
-                              PageSize = 0
-                          };
+        {
+            PageNumber = 0,
+            PageSize = -1
+        };
+        pageRequest.PageSize.ShouldBe(0);
 
-        pageRequest.PageSize = -1;
-        pageRequest.PageSize.Should().Be(0);
+        pageRequest = new PageRequest
+        {
+            PageNumber = 0,
+            PageSize = 0
+        };
+        pageRequest.PageSize.ShouldBe(0);
 
-        pageRequest.PageSize = 0;
-        pageRequest.PageSize.Should().Be(0);
-
-        pageRequest.PageSize = 1;
-        pageRequest.PageSize.Should().Be(1);
+        pageRequest = new PageRequest
+        {
+            PageNumber = 0,
+            PageSize = 1
+        };
+        pageRequest.PageSize.ShouldBe(1);
     }
 }
