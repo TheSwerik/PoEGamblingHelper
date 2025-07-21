@@ -23,9 +23,9 @@ public class AnalyticsController(IAnalyticsDayRepository analyticsRepository, IC
 
     [HttpGet("check")]
     [Authorize]
-    public Task<bool> Check()
+    public IActionResult Check()
     {
-        return Task.FromResult(true);
+        return Ok();
     }
 
     [HttpGet("login")]
