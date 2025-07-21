@@ -9,6 +9,6 @@ RUN dotnet publish -c Release -o /build/publish src/Api/Api.csproj
 
 FROM mcr.microsoft.com/dotnet/aspnet:9.0-alpine AS final
 WORKDIR /app
-EXPOSE 80
+EXPOSE 8080
 COPY --from=builder /build/publish .
 ENTRYPOINT ["dotnet", "Api.dll"]
